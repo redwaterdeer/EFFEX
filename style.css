@@ -654,9 +654,10 @@ table {
   .order-summary-ym__select {
     width: 100%;
     min-width: 0;
-    height: 44px;
+    height: var(--order-mobile-ym-box-h, 42px);
     font-size: 16px;
     padding: 0 34px 0 12px;
+    box-sizing: border-box;
   }
 
   .order-summary-toggle {
@@ -666,7 +667,7 @@ table {
   .order-summary-toggle__btn {
     flex: 1 1 0;
     min-width: 0;
-    min-height: 42px;
+    min-height: var(--order-mobile-ym-box-h, 42px);
     font-size: 15px;
   }
 
@@ -4098,6 +4099,11 @@ table {
 }
 
 @media (max-width: 768px) {
+  :root {
+    --order-mobile-ym-box-h: 48px;
+    --order-summary-logo-band-h: 54px;
+  }
+
   html,
   body {
     overflow: auto;
@@ -4192,9 +4198,11 @@ table {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 40px;
+    min-height: var(--order-mobile-ym-box-h, 48px);
+    height: var(--order-mobile-ym-box-h, 48px);
+    max-height: var(--order-mobile-ym-box-h, 48px);
     min-width: 64px;
-    padding: 8px 10px;
+    padding: 0 10px;
     border: 1px solid #c9c9c9;
     background: #f7f7f7;
     border-radius: 8px;
@@ -4203,9 +4211,20 @@ table {
     line-height: 1.2;
     white-space: nowrap;
     flex: 0 0 auto;
+    box-sizing: border-box;
     touch-action: manipulation;
     pointer-events: auto;
     -webkit-tap-highlight-color: transparent;
+  }
+
+  /* 3~7번: 메뉴 흰 박스 상하 높이 = 연도(ym) 박스 — 글자 크기는 유지 */
+  .order-topbar:not(#screen-order-summary > .order-topbar) .order-topbar__menu .order-topbar__link {
+    min-height: var(--order-mobile-ym-box-h, 48px);
+    height: var(--order-mobile-ym-box-h, 48px);
+    max-height: var(--order-mobile-ym-box-h, 48px);
+    padding-top: 0;
+    padding-bottom: 0;
+    box-sizing: border-box;
   }
 
   .order-topbar__menu .order-topbar__link--active {
@@ -4296,7 +4315,7 @@ table {
   .order-summary-ym__select {
     width: 100%;
     min-width: 0;
-    height: 48px;
+    height: var(--order-mobile-ym-box-h);
     font-size: 16px;
     padding-right: 34px;
   }
@@ -4351,10 +4370,23 @@ table {
   }
 
   .order-topbar__menu .order-topbar__link {
-    min-height: 38px;
+    min-height: var(--order-mobile-ym-box-h);
+    height: var(--order-mobile-ym-box-h);
+    max-height: var(--order-mobile-ym-box-h);
     min-width: 58px;
-    padding: 7px 9px;
+    padding: 0 9px;
     font-size: 13px;
+    box-sizing: border-box;
+  }
+
+  /* 3~7번: 상단 메뉴 흰 박스 높이 = 연도 선택 박스 (8번 상단 메뉴는 전용 규칙) */
+  .order-topbar:not(#screen-order-summary > .order-topbar) .order-topbar__menu .order-topbar__link {
+    min-height: var(--order-mobile-ym-box-h);
+    height: var(--order-mobile-ym-box-h);
+    max-height: var(--order-mobile-ym-box-h);
+    padding-top: 0;
+    padding-bottom: 0;
+    box-sizing: border-box;
   }
 
   .order-topbar__aside {
@@ -4369,7 +4401,7 @@ table {
   }
 
   .order-summary-ym__select {
-    height: 42px;
+    height: var(--order-mobile-ym-box-h);
     font-size: 15px;
   }
 
@@ -4401,16 +4433,18 @@ table {
     font-size: 12px;
   }
 
-  /* 8번 집계표: 모바일·태블릿(≤768px) — 로그인 문구 제거·상단바 축소 (PC 769px+ 미적용) */
+  /* 8번 집계표: 모바일·태블릿(≤768px) — 회색 로고 밴드 높이 유지 (PC 769px+ 미적용) */
   #screen-order-summary > .order-topbar {
     grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-rows: minmax(var(--order-summary-logo-band-h), var(--order-summary-logo-band-h)) auto !important;
     grid-template-areas:
       "logo"
       "menu" !important;
     gap: 4px !important;
-    padding: 5px 8px 6px !important;
+    padding: 0 8px 6px !important;
     height: auto !important;
     min-height: 0 !important;
+    overflow: visible !important;
   }
 
   #screen-order-summary .order-topbar__logo {
@@ -4418,27 +4452,48 @@ table {
     grid-area: logo !important;
     transform: none !important;
     margin: 0 !important;
-    height: 54px !important;
-    max-height: 54px !important;
-    width: min(268px, 74vw) !important;
-    overflow: hidden !important;
+    display: block !important;
+    height: var(--order-summary-logo-band-h) !important;
+    min-height: var(--order-summary-logo-band-h) !important;
+    max-height: var(--order-summary-logo-band-h) !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow: visible !important;
+    align-self: stretch !important;
+    box-sizing: border-box !important;
+    padding: 0 !important;
   }
 
   #screen-order-summary .order-topbar__logo .order-topbar__logo-img {
-    height: 54px !important;
-    max-height: 54px !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    object-fit: contain !important;
     object-position: left center !important;
-    transform: scale(1.26) !important;
+    transform: none !important;
     transform-origin: left center !important;
   }
 
+  #screen-order-summary .order-topbar__logo .order-topbar__logo-img--inactive {
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+
   #screen-order-summary .order-topbar__menu .order-topbar__link {
-    min-height: 52px !important;
+    min-height: var(--order-mobile-ym-box-h) !important;
+    height: var(--order-mobile-ym-box-h) !important;
     min-width: 82px !important;
-    padding: 10px 11px !important;
+    padding: 0 11px !important;
     font-size: 17px !important;
     border-radius: 12px !important;
     letter-spacing: -0.03em !important;
+    box-sizing: border-box !important;
   }
 
   #screen-order-summary .order-topbar__menu {
@@ -4516,6 +4571,10 @@ table {
 }
 
 @media (max-width: 480px) {
+  :root {
+    --order-mobile-ym-box-h: 42px;
+  }
+
   /* 8번 집계표: 공통 480px 상단(3행 aside) 규칙 제외 */
   #screen-order-summary > .order-topbar {
     grid-template-columns: minmax(0, 1fr) !important;
@@ -4570,13 +4629,25 @@ table {
   }
 
   .order-topbar__menu .order-topbar__link {
-    min-height: 40px;
+    min-height: var(--order-mobile-ym-box-h);
+    height: var(--order-mobile-ym-box-h);
+    max-height: var(--order-mobile-ym-box-h);
     min-width: 62px;
-    padding: 8px 10px;
+    padding: 0 10px;
     border-radius: 9px;
     font-size: 13px;
     font-weight: 700;
     pointer-events: auto;
+    box-sizing: border-box;
+  }
+
+  .order-topbar:not(#screen-order-summary > .order-topbar) .order-topbar__menu .order-topbar__link {
+    min-height: var(--order-mobile-ym-box-h);
+    height: var(--order-mobile-ym-box-h);
+    max-height: var(--order-mobile-ym-box-h);
+    padding-top: 0;
+    padding-bottom: 0;
+    box-sizing: border-box;
   }
 
   .order-topbar__aside {
@@ -4596,7 +4667,7 @@ table {
   }
 
   .order-summary-ym__select {
-    height: 42px;
+    height: var(--order-mobile-ym-box-h);
     font-size: 14px;
   }
 
@@ -4665,10 +4736,22 @@ table {
   .order-topbar__menu .order-topbar__link {
     min-width: 0;
     width: 100%;
-    min-height: 36px;
-    padding: 5px 6px;
+    min-height: var(--order-mobile-ym-box-h);
+    height: var(--order-mobile-ym-box-h);
+    max-height: var(--order-mobile-ym-box-h);
+    padding: 0 6px;
     font-size: 13px;
     border-radius: 8px;
+    box-sizing: border-box;
+  }
+
+  .order-topbar:not(#screen-order-summary > .order-topbar) .order-topbar__menu .order-topbar__link {
+    min-height: var(--order-mobile-ym-box-h);
+    height: var(--order-mobile-ym-box-h);
+    max-height: var(--order-mobile-ym-box-h);
+    padding-top: 0;
+    padding-bottom: 0;
+    box-sizing: border-box;
   }
 
   /* 3) 로그인 문구를 로고 행 우측 정렬 (8번 집계표 제외) */
@@ -4793,6 +4876,12 @@ table {
     overflow-y: auto !important;
   }
 
+  /* 8번: 상단 회색바(로고 행)는 잘리지 않도록 — 본문만 가로 숨김 */
+  #screen-order-summary > .order-topbar {
+    overflow-x: visible !important;
+    overflow-y: visible !important;
+  }
+
   #screen-order-summary.is-active {
     padding-top: 2px !important;
   }
@@ -4809,12 +4898,13 @@ table {
     --order-summary-col-gap: 2px;
     /* 로고 밴드: 모바일 8번만 (PC 미적용) — 상단 회색바(로고 행) 높이 고정 */
     --order-summary-logo-band-h: 54px;
+    --order-mobile-ym-box-h: 42px;
   }
 
   #screen-order-summary .order-topbar {
     display: grid !important;
     grid-template-columns: minmax(0, 1fr) !important;
-    grid-template-rows: var(--order-summary-logo-band-h) auto !important;
+    grid-template-rows: minmax(var(--order-summary-logo-band-h), var(--order-summary-logo-band-h)) auto !important;
     grid-template-areas:
       "logo"
       "menu" !important;
@@ -4830,38 +4920,39 @@ table {
   #screen-order-summary .order-topbar__logo {
     grid-area: logo !important;
     position: relative !important;
-    display: flex !important;
-    align-items: center !important;
+    display: block !important;
     align-self: stretch !important;
-    justify-content: flex-start !important;
-    justify-self: start !important;
-    width: min(460px, 98vw) !important;
+    justify-self: stretch !important;
+    width: 100% !important;
+    max-width: 100% !important;
     height: var(--order-summary-logo-band-h) !important;
+    min-height: var(--order-summary-logo-band-h) !important;
     max-height: var(--order-summary-logo-band-h) !important;
     margin-top: 0 !important;
     margin-bottom: 0 !important;
-    overflow: hidden !important;
+    overflow: visible !important;
     line-height: 0 !important;
-    padding: 0 0 0 2px !important;
+    padding: 0 !important;
     box-sizing: border-box !important;
   }
 
-  /* 로고: 회색 밴드(54px) 높이 유지, 밴드 안에서 최대 크기 */
+  /* 로고: 회색 밴드(54px) 높이 유지, 밴드 안에서 contain으로 최대 표시(잘림 방지) */
   #screen-order-summary .order-topbar__logo .order-topbar__logo-img {
     position: absolute !important;
-    top: 50% !important;
-    left: 2px !important;
-    right: auto !important;
-    bottom: auto !important;
-    inset: auto !important;
-    transform: translateY(-50%) scale(1.28) !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    transform: none !important;
     transform-origin: left center !important;
-    width: auto !important;
-    height: var(--order-summary-logo-band-h) !important;
-    max-width: calc(100% - 2px) !important;
-    max-height: var(--order-summary-logo-band-h) !important;
     object-fit: contain !important;
     object-position: left center !important;
+    pointer-events: none !important;
+  }
+
+  #screen-order-summary .order-topbar__logo .order-topbar__logo-img--inactive {
+    visibility: hidden !important;
     pointer-events: none !important;
   }
 
@@ -4911,7 +5002,7 @@ table {
     grid-area: menu !important;
     display: grid !important;
     grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
-    grid-auto-rows: minmax(54px, auto) !important;
+    grid-auto-rows: var(--order-mobile-ym-box-h) !important;
     width: 100% !important;
     margin: 0 !important;
     gap: 4px !important;
@@ -4940,8 +5031,9 @@ table {
     box-sizing: border-box !important;
     min-width: 0 !important;
     width: 100% !important;
-    min-height: 54px !important;
-    padding: 11px 2px !important;
+    min-height: var(--order-mobile-ym-box-h) !important;
+    height: var(--order-mobile-ym-box-h) !important;
+    padding: 0 2px !important;
     font-size: clamp(15px, 3.45vw, 17px) !important;
     font-weight: 600 !important;
     line-height: 1.12 !important;
@@ -5050,9 +5142,14 @@ table {
   #screen-order-summary .order-summary-metric-select {
     width: 100% !important;
     min-width: 0 !important;
-    height: 42px !important;
+    height: var(--order-mobile-ym-box-h) !important;
     padding-right: 32px !important;
     font-size: 14px !important;
+  }
+
+  #screen-order-summary .order-summary-ym__select {
+    height: var(--order-mobile-ym-box-h) !important;
+    box-sizing: border-box !important;
   }
 
   #screen-order-summary .order-summary-table-wrap {
@@ -5304,6 +5401,37 @@ table {
   }
 }
 
+/* 모바일 전용: 3~7번 메뉴 흰 박스 높이 = 8번 연도(ym) 박스, 글자 크기는 기존 유지 (PC 769px+ 미변경) */
+@media (max-width: 768px) {
+  .order-page:not(.order-summary-page) .order-topbar__menu .order-topbar__link {
+    height: var(--order-mobile-ym-box-h) !important;
+    min-height: var(--order-mobile-ym-box-h) !important;
+    max-height: var(--order-mobile-ym-box-h) !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    line-height: 1 !important;
+    box-sizing: border-box !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-width: 1px !important;
+    overflow: hidden !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .order-page:not(.order-summary-page) .order-topbar__menu .order-topbar__link {
+    height: var(--order-mobile-ym-box-h) !important;
+    min-height: var(--order-mobile-ym-box-h) !important;
+    max-height: var(--order-mobile-ym-box-h) !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    line-height: 1 !important;
+    box-sizing: border-box !important;
+    border-width: 1px !important;
+    overflow: hidden !important;
+  }
+}
+
 /* 8번 집계표: 초소형 모바일 — 메뉴 글자 잘림 방지 (PC·769px+ 미적용) */
 @media (max-width: 360px) {
   #screen-order-summary .order-topbar__menu {
@@ -5311,8 +5439,9 @@ table {
   }
 
   #screen-order-summary .order-topbar__menu .order-topbar__link {
-    min-height: 44px !important;
-    padding: 8px 3px !important;
+    min-height: var(--order-mobile-ym-box-h) !important;
+    height: var(--order-mobile-ym-box-h) !important;
+    padding: 0 3px !important;
     font-size: 13px !important;
     letter-spacing: -0.04em !important;
   }

@@ -2240,6 +2240,19 @@ function updateOrderLoginMessage() {
   var active = document.querySelector(".screen.is-active");
   var el = active ? active.querySelector(".order-topbar__login-msg") : null;
   if (!el) return;
+  /* 모바일 8번 집계표: 상단 로그인 문구 미표시 (PC 769px+·다른 화면은 유지) */
+  if (
+    active.id === "screen-order-summary" &&
+    typeof window.matchMedia === "function" &&
+    window.matchMedia("(max-width: 768px)").matches
+  ) {
+    el.textContent = "";
+    el.setAttribute("hidden", "");
+    el.setAttribute("aria-hidden", "true");
+    return;
+  }
+  el.removeAttribute("hidden");
+  el.removeAttribute("aria-hidden");
   var auth = getAuth();
   if (auth) {
     var id = auth.userId || auth.name || "사용자";

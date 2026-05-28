@@ -4400,9 +4400,125 @@ table {
   .order-summary-table__sales-unit {
     font-size: 12px;
   }
+
+  /* 8번 집계표: 모바일·태블릿(≤768px) — 로그인 문구 제거·상단바 축소 (PC 769px+ 미적용) */
+  #screen-order-summary > .order-topbar {
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-areas:
+      "logo"
+      "menu" !important;
+    gap: 4px !important;
+    padding: 5px 8px 6px !important;
+    height: auto !important;
+    min-height: 0 !important;
+  }
+
+  #screen-order-summary .order-topbar__logo {
+    position: relative !important;
+    grid-area: logo !important;
+    transform: none !important;
+    margin: 0 !important;
+    height: 32px !important;
+    width: min(168px, 48vw) !important;
+  }
+
+  #screen-order-summary .order-topbar__menu {
+    grid-area: menu !important;
+    position: relative !important;
+    left: auto !important;
+    transform: none !important;
+    width: 100% !important;
+    margin: 0 !important;
+  }
+
+  #screen-order-summary .order-topbar__login-msg,
+  #screen-order-summary #summaryLoginMsg {
+    display: none !important;
+    visibility: hidden !important;
+    position: absolute !important;
+    width: 0 !important;
+    height: 0 !important;
+    max-height: 0 !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    clip-path: inset(50%) !important;
+    white-space: nowrap !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    font-size: 0 !important;
+    line-height: 0 !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+
+  #screen-order-summary .order-topbar__aside {
+    position: fixed !important;
+    left: 50% !important;
+    right: auto !important;
+    top: auto !important;
+    bottom: 10px !important;
+    width: auto !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    transform: translateX(-50%) !important;
+    z-index: 80 !important;
+    display: inline-flex !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0 !important;
+    grid-area: unset !important;
+    pointer-events: none !important;
+  }
+
+  #screen-order-summary .order-topbar__account-actions {
+    display: inline-flex !important;
+    pointer-events: none !important;
+  }
+
+  #screen-order-summary .order-topbar__account-actions .order-topbar__edit-profile,
+  #screen-order-summary .order-topbar__account-actions .order-topbar__logout {
+    pointer-events: auto !important;
+    font-size: 13px !important;
+    line-height: 1.2 !important;
+    min-height: auto !important;
+    padding: 0 !important;
+  }
+
+  #screen-order-summary .order-topbar__account-actions .order-topbar__edit-profile::after {
+    content: "|" !important;
+    margin-left: 6px !important;
+    margin-right: 6px !important;
+    color: #666 !important;
+    font-weight: 400 !important;
+  }
 }
 
 @media (max-width: 480px) {
+  /* 8번 집계표: 공통 480px 상단(3행 aside) 규칙 제외 */
+  #screen-order-summary > .order-topbar {
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-areas:
+      "logo"
+      "menu" !important;
+  }
+
+  #screen-order-summary .order-topbar__login-msg,
+  #screen-order-summary #summaryLoginMsg {
+    display: none !important;
+    visibility: hidden !important;
+    position: absolute !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    font-size: 0 !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+
   .order-page__num {
     top: 7px;
     right: 8px;
@@ -4536,8 +4652,8 @@ table {
     border-radius: 8px;
   }
 
-  /* 3) 로그인 문구를 로고 행 우측 정렬 */
-  .order-topbar {
+  /* 3) 로그인 문구를 로고 행 우측 정렬 (8번 집계표 제외) */
+  .order-topbar:not(#screen-order-summary > .order-topbar) {
     grid-template-columns: minmax(0, 1fr) auto;
     grid-template-areas:
       "logo login"
@@ -4554,7 +4670,7 @@ table {
     width: min(220px, 64vw);
   }
 
-  .order-topbar__aside {
+  .order-topbar:not(#screen-order-summary > .order-topbar) .order-topbar__aside {
     grid-area: login;
     width: auto;
     justify-content: flex-end;
@@ -4562,16 +4678,37 @@ table {
     gap: 0;
   }
 
-  .order-topbar__login-msg {
+  .order-topbar:not(#screen-order-summary > .order-topbar) .order-topbar__login-msg {
     font-size: 12px;
     line-height: 1.25;
     white-space: nowrap;
     text-align: right;
   }
 
-  /* 4) 가입수정/로그아웃 하단 중앙 고정 */
-  .order-topbar__edit-profile,
-  .order-topbar__logout {
+  /* 8번 집계표: 공통 모바일 상단(login 영역) 레이아웃 미적용 */
+  #screen-order-summary > .order-topbar {
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-areas:
+      "logo"
+      "menu" !important;
+  }
+
+  #screen-order-summary .order-topbar__login-msg,
+  #screen-order-summary #summaryLoginMsg {
+    display: none !important;
+    visibility: hidden !important;
+    position: absolute !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    font-size: 0 !important;
+    opacity: 0 !important;
+  }
+
+  /* 4) 가입수정/로그아웃 하단 중앙 고정 (8번 집계표는 전용 규칙) */
+  .order-topbar:not(#screen-order-summary > .order-topbar) .order-topbar__edit-profile,
+  .order-topbar:not(#screen-order-summary > .order-topbar) .order-topbar__logout {
     position: fixed;
     bottom: 10px;
     z-index: 60;
@@ -4582,12 +4719,12 @@ table {
     padding: 0;
   }
 
-  .order-topbar__edit-profile {
+  .order-topbar:not(#screen-order-summary > .order-topbar) .order-topbar__edit-profile {
     left: 50%;
     transform: translateX(-120%);
   }
 
-  .order-topbar__logout {
+  .order-topbar:not(#screen-order-summary > .order-topbar) .order-topbar__logout {
     left: 50%;
     transform: translateX(20%);
   }
@@ -4651,22 +4788,23 @@ table {
     /* 목대(행 헤더) 열 폭 — 경계선은 목대|시공오더 열 사이 간격 정중앙 */
     --order-summary-frozen-width: 52px;
     --order-summary-col-gap: 2px;
-    /* 로고 밴드: 잘리지 않는 범위에서 모바일 8번만 확대 (PC 미적용) */
-    --order-summary-logo-band-h: 162px;
+    /* 로고 밴드: 모바일 8번만 (PC 미적용) — 상단 회색바 높이 축소 */
+    --order-summary-logo-band-h: 54px;
   }
 
   #screen-order-summary .order-topbar {
     display: grid !important;
-    grid-template-columns: minmax(0, 1fr) auto !important;
+    grid-template-columns: minmax(0, 1fr) !important;
     grid-template-rows: var(--order-summary-logo-band-h) auto !important;
     grid-template-areas:
-      "logo login"
-      "menu menu" !important;
+      "logo"
+      "menu" !important;
     align-items: center !important;
-    row-gap: 8px !important;
-    column-gap: 8px !important;
-    padding: 8px 8px 10px !important;
+    row-gap: 0 !important;
+    column-gap: 0 !important;
+    padding: 1px 6px 2px !important;
     height: auto !important;
+    min-height: 0 !important;
     overflow: visible !important;
   }
 
@@ -4707,25 +4845,46 @@ table {
     pointer-events: none !important;
   }
 
-  #screen-order-summary .order-topbar__aside {
-    grid-area: login !important;
-    width: auto !important;
-    justify-content: flex-end !important;
-    align-items: center !important;
-    align-self: center !important;
-    min-height: 0 !important;
-    height: var(--order-summary-logo-band-h) !important;
-    gap: 0 !important;
+  /* 로그인 문구 숨김 (가입수정/로그아웃은 하단 고정) */
+  #screen-order-summary .order-topbar__login-msg,
+  #screen-order-summary #summaryLoginMsg {
+    display: none !important;
+    visibility: hidden !important;
+    position: absolute !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    clip-path: inset(50%) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    font-size: 0 !important;
+    line-height: 0 !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
   }
 
-  #screen-order-summary .order-topbar__login-msg {
-    font-size: 12px !important;
-    line-height: 1.2 !important;
-    white-space: nowrap !important;
-    text-align: right !important;
-    margin-left: auto !important;
-    align-self: center !important;
-    padding-top: 0 !important;
+  #screen-order-summary .order-topbar__aside {
+    position: fixed !important;
+    left: 50% !important;
+    right: auto !important;
+    top: auto !important;
+    bottom: 10px !important;
+    width: auto !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    transform: translateX(-50%) !important;
+    z-index: 80 !important;
+    display: inline-flex !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0 !important;
+    grid-area: unset !important;
+    pointer-events: none !important;
   }
 
   #screen-order-summary .order-topbar__menu {
@@ -4734,7 +4893,7 @@ table {
     grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
     width: 100% !important;
     margin: 0 !important;
-    gap: 4px !important;
+    gap: 2px !important;
     overflow: clip !important;
     padding-bottom: 0 !important;
     align-items: stretch !important;
@@ -4759,10 +4918,10 @@ table {
   #screen-order-summary .order-topbar__menu .order-topbar__link {
     min-width: 0 !important;
     width: 100% !important;
-    min-height: 29px !important;
-    padding: 2px 1px !important;
-    font-size: 10px !important;
-    border-radius: 7px !important;
+    min-height: 16px !important;
+    padding: 0 1px !important;
+    font-size: 9px !important;
+    border-radius: 5px !important;
     justify-content: center !important;
   }
 
@@ -4778,16 +4937,12 @@ table {
     align-items: center !important;
     justify-content: center !important;
     gap: 0 !important;
-    position: fixed !important;
-    left: 50% !important;
-    right: auto !important;
-    bottom: 10px !important;
+    position: static !important;
     width: auto !important;
-    max-width: calc(100% - 16px) !important;
+    max-width: none !important;
     margin: 0 !important;
     padding: 0 !important;
-    transform: translateX(-50%) !important;
-    z-index: 80 !important;
+    transform: none !important;
     pointer-events: none !important;
   }
 

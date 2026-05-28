@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>로그인 - EFFEX 시공관리</title>
+    <link rel="stylesheet" href="css/variables.css" />
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/login.css" />
+  </head>
+  <body>
+    <span class="login-screen__page-num" aria-hidden="true">1</span>
+    <div class="login-screen">
+      <div class="login-screen__inner">
+        <header class="login-screen__logo">
+          <img src="https://i.ibb.co/wZ4mNscs/3.png" alt="EFFEX" />
+        </header>
+
+        <p class="login-screen__slogan">
+          <span class="login-screen__slogan-line1">꿈이 있는 사람의</span>
+          <span class="login-screen__slogan-line2">성공을 약속하는 기업</span>
+        </p>
+
+        <form class="login-form" id="loginForm">
+          <input type="hidden" id="loginRole" value="admin" />
+
+          <div class="login-form__field">
+            <label class="login-form__label" for="userId"><span>ID</span></label>
+            <span class="login-form__divider" aria-hidden="true"></span>
+            <div class="login-form__input-wrap">
+              <input type="text" id="userId" autocomplete="username" />
+            </div>
+          </div>
+
+          <div class="login-form__field">
+            <label class="login-form__label" for="password"><span>PW</span></label>
+            <span class="login-form__divider" aria-hidden="true"></span>
+            <div class="login-form__input-wrap">
+              <input type="password" id="password" autocomplete="current-password" />
+            </div>
+          </div>
+
+          <div class="login-form__actions">
+            <button type="button" class="login-form__btn" id="btnSignup">신규가입</button>
+            <button type="submit" class="login-form__btn">로그인</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/users.js"></script>
+    <script src="js/login.js"></script>
+  </body>
+</html>

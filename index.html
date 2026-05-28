@@ -891,13 +891,23 @@
               role="group"
               aria-label="집계 표시"
             >
+              <div class="order-summary-ym__field order-summary-metric-select-wrap">
+                <select
+                  id="orderSummaryMetricSelect"
+                  class="order-summary-ym__select order-summary-metric-select"
+                  aria-label="집계 표시 방식"
+                >
+                  <option value="count" selected>건수/금액</option>
+                  <option value="ratio">비율</option>
+                </select>
+              </div>
               <button
                 type="button"
                 class="order-summary-toggle__btn order-summary-toggle__btn--active"
                 data-summary-metric="count"
                 aria-pressed="true"
               >
-                건수 / 금액
+                건수/금액
               </button>
               <button
                 type="button"

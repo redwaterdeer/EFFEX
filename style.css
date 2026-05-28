@@ -4637,6 +4637,12 @@ table {
     right: 8px !important;
   }
 
+  #screen-order-summary {
+    /* 목대(행 헤더) 열 폭 — 경계선은 목대|시공오더 열 사이 간격 정중앙 */
+    --order-summary-frozen-width: 88px;
+    --order-summary-col-gap: 2px;
+  }
+
   #screen-order-summary .order-topbar {
     display: grid !important;
     grid-template-columns: minmax(0, 1fr) auto !important;
@@ -4646,17 +4652,17 @@ table {
     align-items: center !important;
     row-gap: 8px !important;
     column-gap: 8px !important;
-    padding: 6px 8px 10px !important;
+    padding: 22px 8px 10px !important;
     height: auto !important;
     overflow: visible !important;
   }
 
   #screen-order-summary .order-topbar__logo {
     grid-area: logo !important;
-    width: min(286px, 82vw) !important;
-    height: 82px !important;
+    width: min(356px, 93vw) !important;
+    height: 114px !important;
     align-self: start !important;
-    margin-top: -22px !important;
+    margin-top: -40px !important;
     overflow: visible !important;
   }
 
@@ -4665,6 +4671,7 @@ table {
     object-position: left top !important;
     width: 100% !important;
     height: 100% !important;
+    max-height: 100% !important;
   }
 
   #screen-order-summary .order-topbar__aside {
@@ -4803,46 +4810,60 @@ table {
     overflow-x: auto !important;
     overflow-y: hidden !important;
     width: 100% !important;
+    max-width: 100% !important;
     margin-left: 0 !important;
     padding-left: 0 !important;
     padding-right: 0 !important;
     background: #d9d9d9 !important;
     -webkit-overflow-scrolling: touch !important;
-  }
-
-  #screen-order-summary .order-summary-table-wrap::before {
-    content: "" !important;
-    position: absolute !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 64px !important;
-    height: 100% !important;
-    background: #d9d9d9 !important;
-    pointer-events: none !important;
-    z-index: 18 !important;
+    overscroll-behavior-x: contain !important;
   }
 
   #screen-order-summary .order-summary-table {
     width: max-content !important;
     min-width: max-content !important;
     table-layout: auto !important;
-    border-spacing: 2px 2px !important;
+    border-spacing: var(--order-summary-col-gap) var(--order-summary-col-gap) !important;
     background: #d9d9d9 !important;
   }
 
   #screen-order-summary .order-summary-table__corner,
   #screen-order-summary .order-summary-table__row-head {
-    min-width: 64px !important;
-    width: 64px !important;
+    min-width: var(--order-summary-frozen-width) !important;
+    width: var(--order-summary-frozen-width) !important;
+    max-width: var(--order-summary-frozen-width) !important;
     position: sticky !important;
     left: 0 !important;
     z-index: 20 !important;
     overflow: visible !important;
+    box-sizing: border-box !important;
+    border-right: none !important;
+    box-shadow: none !important;
+  }
+
+  /* 목대(행 헤더) | 시공오더 열 사이 — border-spacing 간격 정중앙 고정선 */
+  #screen-order-summary .order-summary-table__row-head::after,
+  #screen-order-summary .order-summary-table thead tr:nth-child(2) th:nth-child(1)::after,
+  #screen-order-summary .order-summary-table thead tr:nth-child(1) th:first-child::after {
+    content: "" !important;
+    position: absolute !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    left: 100% !important;
+    margin-left: calc(var(--order-summary-col-gap) / 2) !important;
+    width: 2px !important;
+    transform: translateX(-50%) !important;
+    background: #707070 !important;
+    pointer-events: none !important;
+    z-index: 25 !important;
   }
 
   #screen-order-summary .order-summary-table__corner {
     background: #d9d9d9 !important;
-    box-shadow: 10px 0 0 #d9d9d9 !important;
+    box-shadow: none !important;
+    position: sticky !important;
+    left: 0 !important;
+    z-index: 21 !important;
   }
 
   #screen-order-summary .order-summary-table__row-head {
@@ -4852,6 +4873,45 @@ table {
     padding: 8px 4px !important;
     transform: none !important;
     border: 1px solid var(--color-navy-dark) !important;
+    border-right: none !important;
+    position: sticky !important;
+    left: 0 !important;
+  }
+
+  /* 모바일 8번: 목대(행 헤더) | 시공오더 — 1열 고정·2열부터 가로 스크롤 */
+  #screen-order-summary .order-summary-table thead tr:nth-child(2) th:nth-child(1) {
+    position: sticky !important;
+    left: 0 !important;
+    z-index: 21 !important;
+    min-width: var(--order-summary-frozen-width) !important;
+    width: var(--order-summary-frozen-width) !important;
+    max-width: var(--order-summary-frozen-width) !important;
+    background: #d9d9d9 !important;
+    border: none !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+  }
+
+  #screen-order-summary .order-summary-table thead tr:nth-child(2) th:nth-child(n + 2),
+  #screen-order-summary .order-summary-table tbody td {
+    position: static !important;
+    left: auto !important;
+    z-index: 1 !important;
+  }
+
+  #screen-order-summary .order-summary-table tbody td:nth-child(n + 2) {
+    position: static !important;
+  }
+
+  #screen-order-summary .order-summary-table thead tr:nth-child(1) th:first-child {
+    position: sticky !important;
+    left: 0 !important;
+    z-index: 21 !important;
+  }
+
+  #screen-order-summary .order-summary-table thead tr:nth-child(1) th:nth-child(n + 2) {
+    position: static !important;
+    left: auto !important;
   }
 
   #screen-order-summary .order-summary-table__row-head span {

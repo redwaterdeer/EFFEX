@@ -4651,7 +4651,8 @@ table {
     /* 목대(행 헤더) 열 폭 — 경계선은 목대|시공오더 열 사이 간격 정중앙 */
     --order-summary-frozen-width: 52px;
     --order-summary-col-gap: 2px;
-    --order-summary-logo-band-h: 62px;
+    /* 로고 밴드: 잘리지 않는 범위에서 모바일 8번만 확대 (PC 미적용) */
+    --order-summary-logo-band-h: 162px;
   }
 
   #screen-order-summary .order-topbar {
@@ -4677,14 +4678,14 @@ table {
     align-self: stretch !important;
     justify-content: flex-start !important;
     justify-self: start !important;
-    width: min(168px, 48vw) !important;
+    width: min(360px, 86vw) !important;
     height: var(--order-summary-logo-band-h) !important;
     max-height: var(--order-summary-logo-band-h) !important;
     margin-top: 0 !important;
     margin-bottom: 0 !important;
     overflow: visible !important;
     line-height: 0 !important;
-    padding: 0 !important;
+    padding: 0 0 0 2px !important;
     box-sizing: border-box !important;
   }
 
@@ -4692,15 +4693,15 @@ table {
   #screen-order-summary .order-topbar__logo .order-topbar__logo-img {
     position: absolute !important;
     top: 50% !important;
-    left: 0 !important;
+    left: 2px !important;
     right: auto !important;
     bottom: auto !important;
     inset: auto !important;
     transform: translateY(-50%) !important;
     width: auto !important;
     height: auto !important;
-    max-width: 100% !important;
-    max-height: var(--order-summary-logo-band-h) !important;
+    max-width: calc(100% - 4px) !important;
+    max-height: calc(var(--order-summary-logo-band-h) - 4px) !important;
     object-fit: contain !important;
     object-position: left center !important;
     pointer-events: none !important;

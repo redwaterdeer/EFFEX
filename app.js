@@ -183,14 +183,7 @@ function getAssignPicker(pageKey) {
   return assignPickerStates[pageKey || activeAssignPageKey];
 }
 
-var NAV_ITEMS = [
-  { id: "dashboard", label: "대시보드", roles: ["admin", "partner", "worker"] },
-  { id: "projects", label: "현장 관리", roles: ["admin", "partner"] },
-  { id: "partners", label: "시공협력사", roles: ["admin"] },
-  { id: "workers", label: "시공사원", roles: ["admin", "partner"] },
-  { id: "schedule", label: "일정·공정", roles: ["admin", "partner", "worker"] },
-  { id: "notices", label: "공지·알림", roles: ["admin", "partner", "worker"] },
-];
+var NAV_ITEMS = [];
 
 var MOCK = {
   projects: [
@@ -223,7 +216,7 @@ var MOCK = {
   ],
 };
 
-var SIDEBAR_AUTH_PAGES = ["dashboard", "projects", "project-detail", "partners", "workers", "schedule", "notices"];
+var SIDEBAR_AUTH_PAGES = [];
 var AUTH_PAGES = [
   "order",
   "order-summary",
@@ -2664,19 +2657,31 @@ function registerOrder() {
   resetOrderForm();
 }
 
+function getEventTargetElement(event) {
+  var target = event && event.target;
+  if (!target) return null;
+  return target.nodeType === 1 ? target : target.parentElement || null;
+}
+
 function initOrderNavDelegation() {
   if (initializedScreens.orderNav) return;
   initializedScreens.orderNav = true;
+  var lastNavHandledAt = 0;
+  var lastNavTarget = "";
+  var touchMoved = false;
 
-  document.addEventListener("click", function (e) {
-    var editProfile = e.target.closest("[data-action='signup-edit']");
+  function handleOrderTopbarNav(e) {
+    var target = getEventTargetElement(e);
+    if (!target) return;
+
+    var editProfile = target.closest("[data-action='signup-edit']");
     if (editProfile && editProfile.closest(".order-topbar__aside")) {
       e.preventDefault();
       if (getAuth()) goToSignupEdit();
       return;
     }
 
-    var link = e.target.closest("[data-order-nav]");
+    var link = target.closest("[data-order-nav]");
     if (!link || !link.closest(".order-page")) return;
     e.preventDefault();
     var nav = link.getAttribute("data-order-nav");
@@ -2713,6 +2718,71 @@ function initOrderNavDelegation() {
       return;
     }
     alert("준비 중인 메뉴입니다.");
+  }
+
+  function shouldSkipDuplicate(e, targetKey) {
+    var now = Date.now();
+    var duplicate =
+      now - lastNavHandledAt < 450 &&
+      targetKey &&
+      lastNavTarget &&
+      targetKey === lastNavTarget;
+    if (!duplicate) return false;
+    if (e && typeof e.preventDefault === "function") e.preventDefault();
+    return true;
+  }
+
+  function markHandled(targetKey) {
+    lastNavHandledAt = Date.now();
+    lastNavTarget = targetKey || "";
+  }
+
+  function getNavTargetKey(e) {
+    var target = getEventTargetElement(e);
+    if (!target) return "";
+    var navLink = target.closest("[data-order-nav]");
+    if (navLink) return "nav:" + (navLink.getAttribute("data-order-nav") || "");
+    var editProfile = target.closest("[data-action='signup-edit']");
+    if (editProfile) return "action:signup-edit";
+    return "";
+  }
+
+  function runOrderNavDelegation(e) {
+    if (e && e.type === "touchmove") {
+      touchMoved = true;
+      return;
+    }
+    if (e && e.type === "touchstart") {
+      touchMoved = false;
+      return;
+    }
+    if (e && e.type === "touchend" && touchMoved) return;
+    var key = getNavTargetKey(e);
+    if (shouldSkipDuplicate(e, key)) return;
+    if (key) markHandled(key);
+    handleOrderTopbarNav(e);
+  }
+
+  // iOS/모바일 환경에서 click 누락이 발생할 수 있어 touchend도 함께 처리
+  document.addEventListener("click", runOrderNavDelegation);
+  document.addEventListener("pointerup", runOrderNavDelegation);
+  document.addEventListener("touchstart", runOrderNavDelegation, { passive: true });
+  document.addEventListener("touchmove", runOrderNavDelegation, { passive: true });
+  document.addEventListener("touchend", runOrderNavDelegation, { passive: false });
+
+  // 모바일 브라우저에서 문서 위임이 누락되는 케이스를 막기 위해
+  // 상단 메뉴/가입수정에도 직접 이벤트를 보조로 바인딩한다.
+  var topbarTargets = document.querySelectorAll(
+    ".order-page [data-order-nav], .order-page [data-action='signup-edit']"
+  );
+  topbarTargets.forEach(function (el) {
+    if (!el || el.dataset.orderNavBound === "1") return;
+    el.dataset.orderNavBound = "1";
+    el.addEventListener("click", runOrderNavDelegation);
+    el.addEventListener("pointerup", runOrderNavDelegation);
+    el.addEventListener("touchstart", runOrderNavDelegation, { passive: true });
+    el.addEventListener("touchmove", runOrderNavDelegation, { passive: true });
+    el.addEventListener("touchend", runOrderNavDelegation, { passive: false });
   });
 }
 
@@ -6925,7 +6995,9 @@ function buildSignupRecord() {
 
 /* 전역 이벤트 */
 document.addEventListener("click", function (e) {
-  var nav = e.target.closest("[data-nav]");
+  var target = getEventTargetElement(e);
+  if (!target) return;
+  var nav = target.closest("[data-nav]");
   if (nav) {
     e.preventDefault();
     var page = nav.getAttribute("data-nav");

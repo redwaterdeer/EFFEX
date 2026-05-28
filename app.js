@@ -1965,7 +1965,7 @@ function buildOrderSummaryCellInnerHtml(metricKey, text, mode) {
       (mode === "count"
         ? "order-summary-table__cell-box--sales-count"
         : "order-summary-table__cell-box--sales-ratio");
-    if (mode === "count" && text) {
+    if (mode === "count" && text && text !== "-" && /[1-9]/.test(String(text))) {
       return (
         '<div class="' +
         salesBoxClass +

@@ -4653,10 +4653,11 @@ table {
 
   #screen-order-summary .order-topbar__logo {
     grid-area: logo !important;
-    width: min(220px, 67vw) !important;
-    height: 56px !important;
+    width: min(286px, 82vw) !important;
+    height: 82px !important;
     align-self: start !important;
-    margin-top: -12px !important;
+    margin-top: -22px !important;
+    overflow: visible !important;
   }
 
   #screen-order-summary .order-topbar__logo .order-topbar__logo-img {
@@ -4874,21 +4875,53 @@ table {
   #screen-order-summary .order-summary-table__cell-box {
     width: 100% !important;
     min-width: 100% !important;
-    padding: 0 !important;
+    min-height: 48px !important;
+    height: 48px !important;
+    padding: 0 4px !important;
     transform: none !important;
     border-radius: 0 !important;
     background: #fff !important;
     border: 1px solid #b8b8b8 !important;
+    box-sizing: border-box !important;
   }
 
-  #screen-order-summary .order-summary-table tbody td:nth-child(3) {
+  /* 모바일 8번: 시공오더 헤더 박스 = 아래 내용칸 박스와 동일 폭·높이 */
+  #screen-order-summary .order-summary-table thead tr:nth-child(2) th:nth-child(2),
+  #screen-order-summary .order-summary-table tbody td:nth-child(2) {
     min-width: 94px !important;
     width: 94px !important;
+    max-width: 94px !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+    vertical-align: middle !important;
   }
 
-  #screen-order-summary .order-summary-table tbody td:nth-child(3) .order-summary-table__cell-box {
-    padding-left: 0 !important;
-    padding-right: 0 !important;
+  #screen-order-summary .order-summary-table thead tr:nth-child(2) th:nth-child(2) {
+    background: transparent !important;
+    border: none !important;
+    transform: none !important;
+  }
+
+  #screen-order-summary .order-summary-table thead tr:nth-child(2) th:nth-child(2) span {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    min-width: 100% !important;
+    min-height: 48px !important;
+    height: 48px !important;
+    padding: 0 4px !important;
+    box-sizing: border-box !important;
+    background: var(--color-navy) !important;
+    color: #fff !important;
+    border: 1px solid var(--color-navy-dark) !important;
+    transform: none !important;
+  }
+
+  #screen-order-summary .order-summary-table tbody td:nth-child(2) .order-summary-table__cell-box {
+    min-height: 48px !important;
+    height: 48px !important;
+    padding: 0 4px !important;
   }
 
   /* 모바일 8번: "미마감" 열 데이터 박스 폭을 헤더 폭과 동일하게 고정 */

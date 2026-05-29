@@ -4411,8 +4411,10 @@ table {
 
   #screen-order-summary {
     --order-summary-mobile-col-w: 88px;
-    /* 상단 집계(연·월·건수) = 목대~기타(행) = 시공오더~시공매출(열) 공통 간격 */
-    --order-summary-mobile-box-gap: 14px;
+    /* 상단 집계·집계표 셀 박스 간격: 기준 3.5px 대비 50% (좌우·상하 동일) */
+    --order-summary-mobile-box-gap: 1.75px;
+    --order-summary-mobile-topbar-gap: 3.5px;
+    --order-summary-mobile-ym-font-size: 15px;
     background: #ffffff !important;
     background-color: #ffffff !important;
   }
@@ -4424,8 +4426,8 @@ table {
       "logo"
       "menu" !important;
     align-items: start !important;
-    row-gap: calc(var(--order-summary-mobile-box-gap) + 6px) !important;
-    column-gap: var(--order-summary-mobile-box-gap) !important;
+    row-gap: calc(var(--order-summary-mobile-topbar-gap) + 6px) !important;
+    column-gap: var(--order-summary-mobile-topbar-gap) !important;
     padding: 2px 8px 6px !important;
     height: auto !important;
     min-height: 0 !important;
@@ -4444,7 +4446,7 @@ table {
     height: auto !important;
     min-height: 0 !important;
     align-self: start !important;
-    margin-top: -20px !important;
+    margin-top: 10px !important;
     margin-bottom: 0 !important;
     padding-top: 0 !important;
     background: transparent !important;
@@ -4485,7 +4487,7 @@ table {
     grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
     width: 100% !important;
     margin: 0 !important;
-    gap: var(--order-summary-mobile-box-gap) !important;
+    gap: var(--order-summary-mobile-topbar-gap) !important;
     overflow: clip !important;
     padding-bottom: 0 !important;
     align-items: stretch !important;
@@ -4512,7 +4514,7 @@ table {
     width: 100% !important;
     min-height: 54px !important;
     padding: 11px 6px !important;
-    font-size: clamp(17px, 4.65vw, 19px) !important;
+    font-size: clamp(10px, 2.85vw, 12px) !important;
     line-height: 1.35 !important;
     border-radius: 6px !important;
     justify-content: center !important;
@@ -4575,7 +4577,7 @@ table {
     width: 100% !important;
     min-width: 0 !important;
     height: 44px !important;
-    font-size: 15px !important;
+    font-size: var(--order-summary-mobile-ym-font-size) !important;
     border-radius: 8px !important;
     border: 1px solid #b8b8b8 !important;
     background: #ffffff !important;
@@ -4583,20 +4585,34 @@ table {
   }
 
   #screen-order-summary .order-summary-metric-mobile {
-    flex: 1 1 38% !important;
+    flex: 1 1 30% !important;
+  }
+
+  /* 4) 연도(2026년) 박스 가로만 소폭 확대 */
+  #screen-order-summary .order-summary-ym__row > .order-summary-ym__field:first-child {
+    flex: 1 1 44% !important;
+    min-width: 0 !important;
   }
 
   #screen-order-summary
-    .order-summary-ym__field:not(.order-summary-metric-mobile) {
-    flex: 1 1 31% !important;
+    .order-summary-ym__row
+    > .order-summary-ym__field:nth-child(2):not(.order-summary-metric-mobile) {
+    flex: 1 1 26% !important;
+  }
+
+  /* 3) 연·월·건수/금액 셀렉트 글자 크기 통일 (2026년 기준) */
+  #screen-order-summary .order-summary-ym__row .order-summary-ym__select {
+    font-size: var(--order-summary-mobile-ym-font-size) !important;
+    font-weight: 600 !important;
+    line-height: 1.2 !important;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
 
   #screen-order-summary .order-summary-metric-mobile .order-summary-ym__select {
     height: 44px !important;
-    padding: 0 20px 0 4px !important;
-    font-size: 12px !important;
-    line-height: 1.2 !important;
-    letter-spacing: -0.04em !important;
+    padding: 0 28px 0 8px !important;
+    letter-spacing: 0 !important;
     white-space: nowrap !important;
     text-overflow: clip !important;
     overflow: visible !important;

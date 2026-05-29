@@ -4547,21 +4547,27 @@ table {
   }
 
   #screen-order-summary .order-summary-ym__row {
-    display: flex !important;
-    flex-wrap: nowrap !important;
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    align-items: stretch !important;
     width: 100% !important;
     gap: var(--order-summary-mobile-box-gap) !important;
   }
 
-  #screen-order-summary .order-summary-ym__field {
-    flex: 1 1 33.33% !important;
+  #screen-order-summary .order-summary-ym__row > .order-summary-ym__field,
+  #screen-order-summary
+    .order-summary-ym__row
+    > .order-summary-ym__field.order-summary-metric-mobile {
+    display: flex !important;
+    flex: none !important;
     min-width: 0 !important;
     max-width: none !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
   }
 
   #screen-order-summary .order-summary-metric-mobile {
-    display: inline-flex !important;
-    flex: 1 1 33.33% !important;
+    display: flex !important;
   }
 
   #screen-order-summary .order-summary-toggle--desktop,
@@ -4576,7 +4582,9 @@ table {
   #screen-order-summary .order-summary-ym__select {
     width: 100% !important;
     min-width: 0 !important;
+    max-width: 100% !important;
     height: 44px !important;
+    box-sizing: border-box !important;
     font-size: var(--order-summary-mobile-ym-font-size) !important;
     border-radius: 8px !important;
     border: 1px solid #b8b8b8 !important;
@@ -4584,40 +4592,30 @@ table {
     background-color: #ffffff !important;
   }
 
-  #screen-order-summary .order-summary-metric-mobile {
-    flex: 1 1 30% !important;
-  }
-
-  /* 4) 연도(2026년) 박스 가로만 소폭 확대 */
-  #screen-order-summary .order-summary-ym__row > .order-summary-ym__field:first-child {
-    flex: 1 1 44% !important;
-    min-width: 0 !important;
-  }
-
-  #screen-order-summary
-    .order-summary-ym__row
-    > .order-summary-ym__field:nth-child(2):not(.order-summary-metric-mobile) {
-    flex: 1 1 26% !important;
-  }
-
-  /* 3) 연·월·건수/금액 셀렉트 글자 크기 통일 (2026년 기준) */
+  /* 3) 연·월·건수/금액 — 박스 가로 1:1:1, 글자·패딩 통일 */
   #screen-order-summary .order-summary-ym__row .order-summary-ym__select {
+    flex: none !important;
+    width: 100% !important;
     font-size: var(--order-summary-mobile-ym-font-size) !important;
     font-weight: 600 !important;
     line-height: 1.2 !important;
+    padding: 0 22px 0 6px !important;
+    letter-spacing: 0 !important;
+    white-space: nowrap !important;
+    text-overflow: ellipsis !important;
+    overflow: hidden !important;
+    text-align: center !important;
+    text-align-last: center !important;
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
   }
 
+  #screen-order-summary .order-summary-ym__field::after {
+    right: 8px !important;
+  }
+
   #screen-order-summary .order-summary-metric-mobile .order-summary-ym__select {
     height: 44px !important;
-    padding: 0 28px 0 8px !important;
-    letter-spacing: 0 !important;
-    white-space: nowrap !important;
-    text-overflow: clip !important;
-    overflow: visible !important;
-    text-align: center !important;
-    text-align-last: center !important;
   }
 
   #screen-order-summary .order-summary-table-wrap {

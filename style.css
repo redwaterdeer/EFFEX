@@ -3028,7 +3028,54 @@ table {
 .assign-table tbody tr.assign-table__row-main:has(.assign-delete-check:hover) .assign-partner-select,
 .assign-table tbody tr.assign-table__row-main:has(.assign-detail-link:hover) .assign-worker-select,
 .assign-table tbody tr.assign-table__row-main:has(.assign-delete-check:hover) .assign-worker-select {
-  background: #eef4fc;
+  background-color: #eef4fc;
+}
+
+/* 4번 PC: 시공협력사 드롭다운 호버 — 상세(보기)와 동일한 행·셀 강조 (#eef4fc) */
+@media (min-width: 769px) {
+  #screen-order-assign
+    .assign-table
+    tbody
+    tr.assign-table__row-main:has(.assign-partner-select:hover:not(:disabled))
+    .assign-cell-box,
+  #screen-order-assign
+    .assign-table
+    tbody
+    tr.assign-table__row-main:has(.assign-table__cell-partner:hover)
+    .assign-cell-box {
+    background: #eef4fc;
+  }
+
+  #screen-order-assign
+    .assign-table
+    tbody
+    tr.assign-table__row-main:has(.assign-partner-select:hover:not(:disabled))
+    .assign-stack-item,
+  #screen-order-assign
+    .assign-table
+    tbody
+    tr.assign-table__row-main:has(.assign-table__cell-partner:hover)
+    .assign-stack-item,
+  #screen-order-assign
+    .assign-table
+    tbody
+    tr.assign-table__row-main:has(.assign-partner-select:hover:not(:disabled))
+    .assign-partner-select,
+  #screen-order-assign
+    .assign-table
+    tbody
+    tr.assign-table__row-main:has(.assign-table__cell-partner:hover)
+    .assign-partner-select {
+    background-color: #eef4fc;
+  }
+
+  #screen-order-assign .assign-table__cell-partner:hover .assign-partner-select:not(:disabled),
+  #screen-order-assign .assign-partner-select:hover:not(:disabled) {
+    background-color: #eef4fc;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23333' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+  }
 }
 
 .assign-table tbody tr.assign-table__row-main:not(:last-child) td {

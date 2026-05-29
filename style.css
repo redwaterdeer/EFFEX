@@ -4026,7 +4026,7 @@ table {
 @media (max-width: 768px) {
   :root {
     --order-mobile-ym-box-h: 48px;
-    --order-summary-logo-band-h: 54px;
+    --order-summary-logo-band-h: 48px;
   }
 
   html,
@@ -4078,7 +4078,7 @@ table {
       "menu menu";
     align-items: center;
     gap: 8px;
-    padding: 10px 10px 12px;
+    padding: 12px 10px 12px;
     height: auto;
     overflow: visible;
     isolation: isolate;
@@ -4091,8 +4091,8 @@ table {
       "logo"
       "menu" !important;
     align-items: stretch !important;
-    gap: 4px !important;
-    padding: 0 8px 6px !important;
+    gap: 8px !important;
+    padding: 12px 10px 8px !important;
     height: auto !important;
     overflow: visible !important;
     isolation: isolate;
@@ -4103,12 +4103,25 @@ table {
     grid-area: logo;
     transform: none;
     margin: 0;
-    height: 42px;
-    width: min(190px, 52vw);
+    justify-self: start;
+    align-self: start;
+    width: 40vw;
+    max-width: 40vw;
+    height: var(--order-mobile-ym-box-h, 48px);
+    min-height: var(--order-mobile-ym-box-h, 48px);
+    max-height: var(--order-mobile-ym-box-h, 48px);
+    padding: 0;
+    box-sizing: border-box;
+    line-height: 0;
     z-index: 1;
   }
 
   .order-topbar__logo-img {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
     object-position: left center;
   }
 
@@ -4307,12 +4320,12 @@ table {
   /* 8번 집계표: 모바일·태블릿(≤768px) — 회색 로고 밴드 높이 유지 (PC 769px+ 미적용) */
   #screen-order-summary > .order-topbar {
     grid-template-columns: minmax(0, 1fr) !important;
-    grid-template-rows: minmax(var(--order-summary-logo-band-h), var(--order-summary-logo-band-h)) auto !important;
+    grid-template-rows: auto auto !important;
     grid-template-areas:
       "logo"
       "menu" !important;
-    gap: 4px !important;
-    padding: 0 8px 6px !important;
+    gap: 8px !important;
+    padding: 12px 10px 8px !important;
     height: auto !important;
     min-height: 0 !important;
     overflow: visible !important;
@@ -4326,33 +4339,36 @@ table {
     margin: 0 !important;
     display: block !important;
     flex-shrink: 0 !important;
+    justify-self: start !important;
+    align-self: start !important;
     height: var(--order-summary-logo-band-h) !important;
     min-height: var(--order-summary-logo-band-h) !important;
     max-height: var(--order-summary-logo-band-h) !important;
-    width: 100% !important;
-    max-width: 100% !important;
+    width: 40vw !important;
+    max-width: 40vw !important;
     overflow: visible !important;
-    align-self: stretch !important;
     box-sizing: border-box !important;
-    padding: 0 34px 0 4px !important;
+    padding: 0 !important;
+    line-height: 0 !important;
     z-index: 5 !important;
   }
 
   #screen-order-summary
     .order-topbar__logo.order-topbar__logo--active
     .order-topbar__logo-img--active {
-    position: absolute !important;
-    top: 50% !important;
-    left: 2px !important;
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
     right: auto !important;
     bottom: auto !important;
-    width: auto !important;
+    display: block !important;
+    width: 100% !important;
     height: var(--order-summary-logo-band-h) !important;
-    max-width: calc(100% - 4px) !important;
+    max-width: 100% !important;
     max-height: var(--order-summary-logo-band-h) !important;
     object-fit: contain !important;
     object-position: left center !important;
-    transform: translateY(-50%) scale(1.12) !important;
+    transform: none !important;
     transform-origin: left center !important;
     pointer-events: none !important;
   }
@@ -4460,6 +4476,11 @@ table {
 @media (max-width: 480px) {
   :root {
     --order-mobile-ym-box-h: 42px;
+    --order-summary-logo-band-h: 48px;
+  }
+
+  #screen-order-summary {
+    --order-mobile-ym-box-h: 48px;
   }
 
   /* 8번 집계표: 공통 480px 상단(3행 aside) 규칙 제외 */
@@ -4496,14 +4517,28 @@ table {
       "logo"
       "menu"
       "aside";
-    padding: 8px 8px 10px;
+    padding: 10px 8px 10px;
     gap: 7px;
   }
 
   .order-topbar__logo {
     justify-self: start;
-    height: 34px;
-    width: min(150px, 52vw);
+    align-self: start;
+    width: 40vw;
+    max-width: 40vw;
+    height: var(--order-mobile-ym-box-h, 42px);
+    min-height: var(--order-mobile-ym-box-h, 42px);
+    max-height: var(--order-mobile-ym-box-h, 42px);
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  #screen-order-summary .order-topbar__logo {
+    width: 40vw !important;
+    max-width: 40vw !important;
+    height: var(--order-summary-logo-band-h) !important;
+    min-height: var(--order-summary-logo-band-h) !important;
+    max-height: var(--order-summary-logo-band-h) !important;
   }
 
   .order-topbar:not(#screen-order-summary > .order-topbar) .order-topbar__menu {
@@ -4627,13 +4662,20 @@ table {
     align-items: center;
     row-gap: 7px;
     column-gap: 8px;
-    padding: 8px 8px 10px;
+    padding: 10px 8px 10px;
   }
 
   .order-topbar__logo {
     grid-area: logo;
-    height: 48px;
-    width: min(220px, 64vw);
+    justify-self: start;
+    align-self: start;
+    width: 40vw;
+    max-width: 40vw;
+    height: var(--order-mobile-ym-box-h, 42px);
+    min-height: var(--order-mobile-ym-box-h, 42px);
+    max-height: var(--order-mobile-ym-box-h, 42px);
+    padding: 0;
+    box-sizing: border-box;
   }
 
   .order-topbar:not(#screen-order-summary > .order-topbar) .order-topbar__aside {
@@ -4733,8 +4775,8 @@ table {
 
   #screen-order-summary .order-page__num {
     font-size: 84px !important;
-    top: 0 !important;
-    right: 6px !important;
+    top: 6px !important;
+    right: 10px !important;
     line-height: 1 !important;
     max-height: var(--order-summary-logo-band-h) !important;
     overflow: hidden !important;
@@ -4745,22 +4787,22 @@ table {
     /* 목대(행 헤더) 열 폭 — 경계선은 목대|시공오더 열 사이 간격 정중앙 */
     --order-summary-frozen-width: 52px;
     --order-summary-col-gap: 2px;
-    /* 로고 밴드: 모바일 8번만 (PC 미적용) — 상단 회색바(로고 행) 높이 고정 */
-    --order-summary-logo-band-h: 54px;
-    --order-mobile-ym-box-h: 42px;
+    /* 로고: 메뉴 버튼 높이와 동일 (모바일 8번만, PC 미적용) */
+    --order-summary-logo-band-h: var(--order-mobile-ym-box-h, 48px);
+    --order-mobile-ym-box-h: 48px;
   }
 
   #screen-order-summary .order-topbar {
     display: grid !important;
     grid-template-columns: minmax(0, 1fr) !important;
-    grid-template-rows: minmax(var(--order-summary-logo-band-h), var(--order-summary-logo-band-h)) auto !important;
+    grid-template-rows: auto auto !important;
     grid-template-areas:
       "logo"
       "menu" !important;
     align-items: stretch !important;
-    row-gap: 5px !important;
+    row-gap: 8px !important;
     column-gap: 0 !important;
-    padding: 0 4px 4px !important;
+    padding: 12px 10px 8px !important;
     height: auto !important;
     min-height: 0 !important;
     overflow: visible !important;
@@ -4770,11 +4812,11 @@ table {
     grid-area: logo !important;
     position: relative !important;
     display: block !important;
-    align-self: stretch !important;
-    justify-self: stretch !important;
+    align-self: start !important;
+    justify-self: start !important;
     flex-shrink: 0 !important;
-    width: 100% !important;
-    max-width: 100% !important;
+    width: 40vw !important;
+    max-width: 40vw !important;
     height: var(--order-summary-logo-band-h) !important;
     min-height: var(--order-summary-logo-band-h) !important;
     max-height: var(--order-summary-logo-band-h) !important;
@@ -4782,25 +4824,26 @@ table {
     margin-bottom: 0 !important;
     overflow: visible !important;
     line-height: 0 !important;
-    padding: 0 34px 0 4px !important;
+    padding: 0 !important;
     box-sizing: border-box !important;
     z-index: 5 !important;
   }
 
-  /* 로고: 회색 밴드(54px) 높이 유지, 밴드 안에서 최대 확대(잘림·가림 방지) */
+  /* 로고: 좌상단 정렬, 높이 = 메뉴 버튼(시안) */
   #screen-order-summary
     .order-topbar__logo.order-topbar__logo--active
     .order-topbar__logo-img--active {
-    position: absolute !important;
-    top: 50% !important;
-    left: 2px !important;
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
     right: auto !important;
     bottom: auto !important;
-    width: auto !important;
+    display: block !important;
+    width: 100% !important;
     height: var(--order-summary-logo-band-h) !important;
-    max-width: calc(100% - 4px) !important;
+    max-width: 100% !important;
     max-height: var(--order-summary-logo-band-h) !important;
-    transform: translateY(-50%) scale(1.15) !important;
+    transform: none !important;
     transform-origin: left center !important;
     object-fit: contain !important;
     object-position: left center !important;

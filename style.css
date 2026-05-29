@@ -605,12 +605,12 @@ table {
 }
 
 @media (max-width: 480px) {
-  .order-topbar:not(#screen-order-summary > .order-topbar) .order-topbar__menu {
+  .order-topbar .order-topbar__menu {
     grid-template-columns: repeat(5, minmax(52px, 1fr));
     column-gap: 4px;
   }
 
-  .order-topbar:not(#screen-order-summary > .order-topbar) .order-topbar__menu .order-topbar__link {
+  .order-topbar .order-topbar__menu .order-topbar__link {
     font-size: 12px;
   }
 
@@ -1879,10 +1879,6 @@ table {
   border-radius: 999px;
   overflow: hidden;
   background: #e8e8e8;
-}
-
-.order-summary-metric-select-wrap {
-  display: none;
 }
 
 .order-summary-toggle__btn {
@@ -4026,7 +4022,6 @@ table {
 @media (max-width: 768px) {
   :root {
     --order-mobile-ym-box-h: 48px;
-    --order-summary-logo-band-h: 36px;
   }
 
   html,
@@ -4070,7 +4065,7 @@ table {
     font-size: 46px;
   }
 
-  .order-topbar:not(#screen-order-summary > .order-topbar) {
+  .order-topbar {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     grid-template-areas:
@@ -4084,21 +4079,8 @@ table {
     isolation: isolate;
   }
 
-  #screen-order-summary > .order-topbar {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: stretch !important;
-    gap: 0 !important;
-    padding: 0 !important;
-    height: auto !important;
-    min-height: 0 !important;
-    max-height: none !important;
-    overflow: visible !important;
-    background: transparent !important;
-    isolation: isolate;
-  }
 
-  .order-topbar:not(#screen-order-summary > .order-topbar) .order-topbar__logo {
+  .order-topbar .order-topbar__logo {
     position: relative;
     grid-area: logo;
     transform: none;
@@ -4125,7 +4107,7 @@ table {
     object-position: left center;
   }
 
-  .order-topbar:not(#screen-order-summary > .order-topbar) .order-topbar__menu {
+  .order-topbar .order-topbar__menu {
     grid-area: menu;
     position: relative;
     left: auto;
@@ -4142,7 +4124,7 @@ table {
     z-index: 3;
   }
 
-  .order-topbar:not(#screen-order-summary > .order-topbar) .order-topbar__menu::-webkit-scrollbar {
+  .order-topbar .order-topbar__menu::-webkit-scrollbar {
     display: none;
   }
 
@@ -4170,7 +4152,7 @@ table {
   }
 
   /* 3~7번: 메뉴 흰 박스 상하 높이 = 연도(ym) 박스 — 글자 크기는 유지 */
-  .order-topbar:not(#screen-order-summary > .order-topbar) .order-topbar__menu .order-topbar__link {
+  .order-topbar .order-topbar__menu .order-topbar__link {
     min-height: var(--order-mobile-ym-box-h, 48px);
     height: var(--order-mobile-ym-box-h, 48px);
     max-height: var(--order-mobile-ym-box-h, 48px);
@@ -4185,7 +4167,7 @@ table {
     color: #fff;
   }
 
-  .order-topbar:not(#screen-order-summary > .order-topbar) .order-topbar__aside {
+  .order-topbar .order-topbar__aside {
     grid-area: aside;
     position: relative;
     margin: 0;
@@ -4202,14 +4184,14 @@ table {
     line-height: 1.25;
   }
 
-  .order-topbar:not(#screen-order-summary > .order-topbar) .order-topbar__edit-profile,
-  .order-topbar:not(#screen-order-summary > .order-topbar) .order-topbar__logout {
+  .order-topbar .order-topbar__edit-profile,
+  .order-topbar .order-topbar__logout {
     min-height: 28px;
     padding: 3px 5px;
   }
 
   .order-body,
-  .assign-body:not(.order-summary-body) {
+  .assign-body {
     padding: 12px 8px 18px;
   }
 
@@ -4262,8 +4244,7 @@ table {
     box-sizing: border-box;
   }
 
-  /* 3~7번: 상단 메뉴 흰 박스 높이 = 연도 선택 박스 (8번 상단 메뉴는 전용 규칙) */
-  .order-topbar:not(#screen-order-summary > .order-topbar) .order-topbar__menu .order-topbar__link {
+  .order-topbar .order-topbar__menu .order-topbar__link {
     min-height: var(--order-mobile-ym-box-h);
     height: var(--order-mobile-ym-box-h);
     max-height: var(--order-mobile-ym-box-h);
@@ -4283,487 +4264,15 @@ table {
     font-size: 13px;
   }
 
-  .order-summary-ym__select {
-    height: var(--order-mobile-ym-box-h);
-    font-size: 15px;
-  }
-
-  .order-summary-toggle__btn {
-    min-height: 40px;
-    font-size: 14px;
-  }
-
-  /* 8번 집계표는 하단 모바일 전용 규칙 사용 (PC 5열 min-width 미적용) */
-  .order-page:not(.order-summary-page) .order-summary-table {
-    min-width: 640px;
-    border-spacing: 8px;
-  }
-
-  .order-page:not(.order-summary-page) .order-summary-table__col-head,
-  .order-page:not(.order-summary-page) .order-summary-table__row-head {
-    font-size: 13px;
-    padding: 9px 6px;
-  }
-
-  .order-page:not(.order-summary-page) .order-summary-table tbody .order-summary-table__cell-box {
-    min-height: 52px;
-  }
-
-  .order-page:not(.order-summary-page) .order-summary-table__cell-box span {
-    font-size: 13px;
-  }
-
-  .order-page:not(.order-summary-page) .order-summary-table__sales-unit {
-    font-size: 12px;
-  }
-
-  /* 8번 집계표: 모바일(≤768px) — 회색바=로고만, 메뉴는 바 아래 (PC 769px+ 미적용) */
-  #screen-order-summary > .order-topbar {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 0 !important;
-    padding: 0 !important;
-    height: auto !important;
-    min-height: 0 !important;
-    overflow: visible !important;
-    align-items: stretch !important;
-    background: transparent !important;
-  }
-
-  #screen-order-summary .order-topbar__logo {
-    position: relative !important;
-    transform: none !important;
-    margin: 0 !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    flex: 0 0 var(--order-summary-logo-band-h) !important;
-    flex-shrink: 0 !important;
-    width: 100% !important;
-    max-width: none !important;
-    height: var(--order-summary-logo-band-h) !important;
-    min-height: var(--order-summary-logo-band-h) !important;
-    max-height: var(--order-summary-logo-band-h) !important;
-    overflow: hidden !important;
-    box-sizing: border-box !important;
-    padding: 2px 10px !important;
-    line-height: 0 !important;
-    z-index: 5 !important;
-    order: 1 !important;
-    background: linear-gradient(to right, #d9d9d9, #adacac) !important;
-  }
-
-  #screen-order-summary
-    .order-topbar__logo.order-topbar__logo--active
-    .order-topbar__logo-img--active {
-    position: static !important;
-    top: auto !important;
-    left: auto !important;
-    right: auto !important;
-    bottom: auto !important;
-    display: block !important;
-    width: auto !important;
-    max-width: min(82vw, 340px) !important;
-    height: calc(var(--order-summary-logo-band-h) - 2px) !important;
-    max-height: calc(var(--order-summary-logo-band-h) - 2px) !important;
-    object-fit: contain !important;
-    object-position: center center !important;
-    transform: none !important;
-    transform-origin: center center !important;
-    pointer-events: none !important;
-  }
-
-  #screen-order-summary .order-topbar__logo .order-topbar__logo-img--inactive {
-    visibility: hidden !important;
-    pointer-events: none !important;
-  }
-
-  /* 8번: 가입수정/로그아웃은 회색바 밖(하단 고정) */
-  #screen-order-summary .order-topbar__aside {
-    order: 99 !important;
-  }
-
-  /* 8번: 오더등록~통계 — 회색바(로고) 아래 별도 행 */
-  #screen-order-summary .order-topbar__menu {
-    position: relative !important;
-    top: auto !important;
-    right: auto !important;
-    bottom: auto !important;
-    left: auto !important;
-    transform: none !important;
-    display: grid !important;
-    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
-    gap: 4px !important;
-    width: 100% !important;
-    margin: 0 !important;
-    padding: 8px 8px 6px !important;
-    box-sizing: border-box !important;
-    background: #d9d9d9 !important;
-    overflow: visible !important;
-    flex: 0 0 auto !important;
-    order: 2 !important;
-    z-index: 4 !important;
-  }
-
-  #screen-order-summary .order-topbar__menu .order-topbar__link {
-    min-height: var(--order-mobile-ym-box-h) !important;
-    height: var(--order-mobile-ym-box-h) !important;
-    min-width: 0 !important;
-    width: 100% !important;
-    flex: unset !important;
-    padding: 0 3px !important;
-    font-size: clamp(11px, 2.7vw, 15px) !important;
-    border-radius: 10px !important;
-    letter-spacing: -0.03em !important;
-    box-sizing: border-box !important;
-  }
-
-  #screen-order-summary .order-topbar__login-msg,
-  #screen-order-summary #summaryLoginMsg {
-    display: none !important;
-    visibility: hidden !important;
-    position: absolute !important;
-    width: 0 !important;
-    height: 0 !important;
-    max-height: 0 !important;
-    overflow: hidden !important;
-    clip: rect(0, 0, 0, 0) !important;
-    clip-path: inset(50%) !important;
-    white-space: nowrap !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    border: 0 !important;
-    font-size: 0 !important;
-    line-height: 0 !important;
-    opacity: 0 !important;
-    pointer-events: none !important;
-  }
-
-  #screen-order-summary .order-topbar__aside {
-    position: fixed !important;
-    left: 50% !important;
-    right: auto !important;
-    top: auto !important;
-    bottom: 8px !important;
-    width: auto !important;
-    max-width: calc(100vw - 16px) !important;
-    height: auto !important;
-    margin: 0 !important;
-    padding: 10px 0 0 !important;
-    transform: translateX(-50%) !important;
-    z-index: 80 !important;
-    display: inline-flex !important;
-    flex-wrap: nowrap !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 0 !important;
-    grid-area: unset !important;
-    pointer-events: none !important;
-    border-top: 1px solid #b0b0b0 !important;
-    box-sizing: border-box !important;
-  }
-
-  #screen-order-summary .order-topbar__account-actions {
-    display: inline-flex !important;
-    justify-content: center !important;
-    pointer-events: none !important;
-  }
-
-  #screen-order-summary .order-topbar__account-actions .order-topbar__edit-profile,
-  #screen-order-summary .order-topbar__account-actions .order-topbar__logout {
-    pointer-events: auto !important;
-    font-size: 13px !important;
-    line-height: 1.2 !important;
-    min-height: auto !important;
-    padding: 0 !important;
-  }
-
-  #screen-order-summary .order-topbar__account-actions .order-topbar__edit-profile::after {
-    content: "|" !important;
-    margin-left: 6px !important;
-    margin-right: 6px !important;
-    color: #b0b0b0 !important;
-    font-weight: 400 !important;
-  }
 }
 
 @media (max-width: 480px) {
   :root {
     --order-mobile-ym-box-h: 42px;
-    --order-summary-logo-band-h: 32px;
   }
 
-  #screen-order-summary {
-    --order-mobile-ym-box-h: 42px;
-    --order-summary-logo-band-h: 32px;
-  }
-
-  /* 8번 집계표: 공통 480px 상단(3행 aside) 규칙 제외 */
-  #screen-order-summary > .order-topbar {
-    display: flex !important;
-    flex-direction: column !important;
-    padding: 0 !important;
-    gap: 0 !important;
-  }
-
-  #screen-order-summary .order-topbar__login-msg,
-  #screen-order-summary #summaryLoginMsg {
-    display: none !important;
-    visibility: hidden !important;
-    position: absolute !important;
-    width: 0 !important;
-    height: 0 !important;
-    overflow: hidden !important;
-    clip: rect(0, 0, 0, 0) !important;
-    font-size: 0 !important;
-    opacity: 0 !important;
-    pointer-events: none !important;
-  }
-
-  .order-page__num {
-    top: 7px;
-    right: 8px;
-    font-size: 42px;
-  }
-
-  .order-topbar:not(#screen-order-summary > .order-topbar) {
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-areas:
-      "logo"
-      "menu"
-      "aside";
-    padding: 10px 8px 10px;
-    gap: 7px;
-  }
-
-  .order-topbar:not(#screen-order-summary > .order-topbar) .order-topbar__logo {
-    justify-self: start;
-    align-self: start;
-    width: 40vw;
-    max-width: 40vw;
-    height: var(--order-mobile-ym-box-h, 42px);
-    min-height: var(--order-mobile-ym-box-h, 42px);
-    max-height: var(--order-mobile-ym-box-h, 42px);
-    padding: 0;
-    box-sizing: border-box;
-  }
-
-  #screen-order-summary .order-topbar__logo {
-    width: 100% !important;
-    max-width: none !important;
-    height: var(--order-summary-logo-band-h) !important;
-    min-height: var(--order-summary-logo-band-h) !important;
-    max-height: var(--order-summary-logo-band-h) !important;
-    padding: 2px 10px !important;
-  }
-
-  #screen-order-summary
-    .order-topbar__logo.order-topbar__logo--active
-    .order-topbar__logo-img--active {
-    width: auto !important;
-    max-width: min(84vw, 320px) !important;
-    height: calc(var(--order-summary-logo-band-h) - 4px) !important;
-    max-height: calc(var(--order-summary-logo-band-h) - 4px) !important;
-    object-fit: contain !important;
-    object-position: center center !important;
-  }
-
-  #screen-order-summary .order-topbar__menu {
-    background: #d9d9d9 !important;
-    padding: 8px 8px 6px !important;
-    top: auto !important;
-    left: auto !important;
-    transform: none !important;
-  }
-
-  #screen-order-summary .order-summary-toolbar {
-    column-gap: 5px !important;
-    row-gap: 6px !important;
-  }
-
-  #screen-order-summary .order-summary-metric-select,
-  #screen-order-summary .order-summary-ym__select {
-    font-size: clamp(11px, 2.85vw, 13px) !important;
-    padding-left: 7px !important;
-    padding-right: 26px !important;
-  }
-
-  .order-topbar:not(#screen-order-summary > .order-topbar) .order-topbar__menu {
-    width: 100%;
-    gap: 6px;
-    padding-bottom: 2px;
-    z-index: 8;
-    pointer-events: auto;
-    touch-action: pan-x;
-  }
-
-  .order-topbar:not(#screen-order-summary > .order-topbar) .order-topbar__menu .order-topbar__link {
-    min-height: var(--order-mobile-ym-box-h);
-    height: var(--order-mobile-ym-box-h);
-    max-height: var(--order-mobile-ym-box-h);
-    min-width: 62px;
-    padding: 0 10px;
-    border-radius: 9px;
-    font-size: 13px;
-    font-weight: 700;
-    pointer-events: auto;
-    box-sizing: border-box;
-  }
-
-  .order-topbar:not(#screen-order-summary > .order-topbar) .order-topbar__menu .order-topbar__link {
-    min-height: var(--order-mobile-ym-box-h);
-    height: var(--order-mobile-ym-box-h);
-    max-height: var(--order-mobile-ym-box-h);
-    padding-top: 0;
-    padding-bottom: 0;
-    box-sizing: border-box;
-  }
-
-  .order-topbar__aside {
-    width: 100%;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 8px;
-    z-index: 7;
-    pointer-events: auto;
-  }
-
-  .order-topbar__login-msg,
-  .order-topbar__edit-profile,
-  .order-topbar__logout {
-    font-size: 12px;
-    line-height: 1.3;
-  }
-
-  .order-summary-ym__select {
-    height: var(--order-mobile-ym-box-h);
-    font-size: 14px;
-  }
-
-  .order-summary-toggle__btn {
-    min-height: 40px;
-    font-size: 13px;
-  }
-
-}
-
-/* 모바일(요청 반영): 상단/하단 배치 및 집계표 첫 열 고정 */
-@media (max-width: 480px) {
-  /* 1) 우측 상단 숫자(8) 크기 확대 */
-  .order-page__num {
-    top: 4px;
-    right: 8px;
-    font-size: 62px;
-  }
-
-  /* 2) 메뉴 3+2 행 — 8번 집계표 제외(5버튼 1행 유지) */
-  .order-topbar:not(#screen-order-summary > .order-topbar) .order-topbar__menu {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 8px;
-    width: calc(100% - 24px);
-    margin: 0 auto;
-    overflow: visible;
-    padding-bottom: 0;
-  }
-
-  .order-topbar:not(#screen-order-summary > .order-topbar)
-    .order-topbar__menu
-    .order-topbar__link:nth-child(4) {
-    grid-column: 1 / 2;
-  }
-
-  .order-topbar:not(#screen-order-summary > .order-topbar)
-    .order-topbar__menu
-    .order-topbar__link:nth-child(5) {
-    grid-column: 2 / 3;
-  }
-
-  .order-topbar:not(#screen-order-summary > .order-topbar) .order-topbar__menu .order-topbar__link {
-    min-width: 0;
-    width: 100%;
-    min-height: var(--order-mobile-ym-box-h);
-    height: var(--order-mobile-ym-box-h);
-    max-height: var(--order-mobile-ym-box-h);
-    padding: 0 6px;
-    font-size: 13px;
-    border-radius: 8px;
-    box-sizing: border-box;
-  }
-
-  .order-topbar:not(#screen-order-summary > .order-topbar) .order-topbar__menu .order-topbar__link {
-    min-height: var(--order-mobile-ym-box-h);
-    height: var(--order-mobile-ym-box-h);
-    max-height: var(--order-mobile-ym-box-h);
-    padding-top: 0;
-    padding-bottom: 0;
-    box-sizing: border-box;
-  }
-
-  /* 3) 로그인 문구를 로고 행 우측 정렬 (8번 집계표 제외) */
-  .order-topbar:not(#screen-order-summary > .order-topbar) {
-    grid-template-columns: minmax(0, 1fr) auto;
-    grid-template-areas:
-      "logo login"
-      "menu menu";
-    align-items: center;
-    row-gap: 7px;
-    column-gap: 8px;
-    padding: 10px 8px 10px;
-  }
-
-  .order-topbar:not(#screen-order-summary > .order-topbar) .order-topbar__logo {
-    grid-area: logo;
-    justify-self: start;
-    align-self: start;
-    width: 40vw;
-    max-width: 40vw;
-    height: var(--order-mobile-ym-box-h, 42px);
-    min-height: var(--order-mobile-ym-box-h, 42px);
-    max-height: var(--order-mobile-ym-box-h, 42px);
-    padding: 0;
-    box-sizing: border-box;
-  }
-
-  .order-topbar:not(#screen-order-summary > .order-topbar) .order-topbar__aside {
-    grid-area: login;
-    width: auto;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 0;
-  }
-
-  .order-topbar:not(#screen-order-summary > .order-topbar) .order-topbar__login-msg {
-    font-size: 12px;
-    line-height: 1.25;
-    white-space: nowrap;
-    text-align: right;
-  }
-
-  /* 8번 집계표: 공통 모바일 상단(login 영역) 레이아웃 미적용 */
-  #screen-order-summary > .order-topbar {
-    display: flex !important;
-    flex-direction: column !important;
-    padding: 0 !important;
-    gap: 0 !important;
-  }
-
-  #screen-order-summary .order-topbar__login-msg,
-  #screen-order-summary #summaryLoginMsg {
-    display: none !important;
-    visibility: hidden !important;
-    position: absolute !important;
-    width: 0 !important;
-    height: 0 !important;
-    overflow: hidden !important;
-    clip: rect(0, 0, 0, 0) !important;
-    font-size: 0 !important;
-    opacity: 0 !important;
-  }
-
-  /* 4) 가입수정/로그아웃 하단 중앙 고정 (8번 집계표는 전용 규칙) */
-  .order-topbar:not(#screen-order-summary > .order-topbar) .order-topbar__edit-profile,
-  .order-topbar:not(#screen-order-summary > .order-topbar) .order-topbar__logout {
+  .order-topbar .order-topbar__edit-profile,
+  .order-topbar .order-topbar__logout {
     position: fixed;
     bottom: 10px;
     z-index: 60;
@@ -4774,12 +4283,12 @@ table {
     padding: 0;
   }
 
-  .order-topbar:not(#screen-order-summary > .order-topbar) .order-topbar__edit-profile {
+  .order-topbar .order-topbar__edit-profile {
     left: 50%;
     transform: translateX(-120%);
   }
 
-  .order-topbar:not(#screen-order-summary > .order-topbar) .order-topbar__logout {
+  .order-topbar .order-topbar__logout {
     left: 50%;
     transform: translateX(20%);
   }
@@ -4791,684 +4300,136 @@ table {
 
 }
 
-/* 8번 집계표: 모바일 시안 전체 (≤768px, PC 769px+ 미변경) */
+/* 8번 집계표 — 금일 오후 모바일 전용 변경 이전 (PC·3~7번 모바일 유지) */
 @media (max-width: 768px) {
-  html,
-  body {
-    overflow-x: hidden !important;
-  }
-
-  #screen-order-summary.is-active {
-    display: flex !important;
-    flex-direction: column !important;
-    min-height: 100dvh;
-    min-height: 100svh;
-    background: #d9d9d9 !important;
-    overflow-x: hidden !important;
-    padding-top: 2px !important;
-  }
-
-  #screen-order-summary {
-    overflow-x: hidden !important;
-    overflow-y: auto !important;
-  }
-
-  /* 8번: 상단 회색바(로고 행)는 잘리지 않도록 — 본문만 가로 숨김 */
   #screen-order-summary > .order-topbar {
-    overflow-x: visible !important;
-    overflow-y: visible !important;
-    flex-shrink: 0 !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    height: auto;
+    overflow: visible;
+    isolation: auto;
   }
 
-  #screen-order-summary .order-page__num {
-    font-size: clamp(52px, 14vw, 72px) !important;
-    top: 4px !important;
-    right: 8px !important;
-    line-height: 1 !important;
-    max-height: var(--order-summary-logo-band-h) !important;
-    overflow: hidden !important;
-    z-index: 4 !important;
+  #screen-order-summary .order-topbar .order-topbar__logo {
+    position: static;
+    grid-area: auto;
+    transform: none;
+    margin: 0;
+    justify-self: auto;
+    align-self: auto;
+    width: min(100%, clamp(504px, 63vw, 678px));
+    max-width: 100%;
+    height: clamp(198px, 33.6vh, 264px);
+    min-height: 0;
+    max-height: none;
+    padding: 0;
+    box-sizing: border-box;
+    line-height: 0;
+    z-index: 1;
   }
 
-  #screen-order-summary {
-    /* 목대(행 헤더) 열 폭 — 경계선은 목대|시공오더 열 사이 간격 정중앙 */
-    --order-summary-frozen-width: 52px;
-    --order-summary-col-gap: 2px;
-    /* 8번 모바일: 회색바(로고만) — 메뉴는 바 아래 별도 행 */
-    --order-summary-logo-band-h: 36px;
-    --order-mobile-ym-box-h: 44px;
+  #screen-order-summary .order-topbar__logo-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: left center;
   }
 
-  #screen-order-summary .order-topbar {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: stretch !important;
-    gap: 0 !important;
-    padding: 0 !important;
-    height: auto !important;
-    min-height: 0 !important;
-    max-height: none !important;
-    overflow: visible !important;
-    background: transparent !important;
-  }
-
-  #screen-order-summary .order-topbar__logo {
-    position: relative !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    flex: 0 0 var(--order-summary-logo-band-h) !important;
-    flex-shrink: 0 !important;
-    width: 100% !important;
-    max-width: none !important;
-    height: var(--order-summary-logo-band-h) !important;
-    min-height: var(--order-summary-logo-band-h) !important;
-    max-height: var(--order-summary-logo-band-h) !important;
-    margin: 0 !important;
-    overflow: hidden !important;
-    line-height: 0 !important;
-    padding: 2px 10px !important;
-    box-sizing: border-box !important;
-    z-index: 5 !important;
-    order: 1 !important;
-    background: linear-gradient(to right, #d9d9d9, #adacac) !important;
-  }
-
-  /* 로고: 회색바(로고만) 안에서 가로·세로 중앙, 크기 확대 */
-  #screen-order-summary
-    .order-topbar__logo.order-topbar__logo--active
-    .order-topbar__logo-img--active {
-    position: static !important;
-    top: auto !important;
-    left: auto !important;
-    right: auto !important;
-    bottom: auto !important;
-    display: block !important;
-    width: auto !important;
-    max-width: min(82vw, 340px) !important;
-    height: calc(var(--order-summary-logo-band-h) - 2px) !important;
-    max-height: calc(var(--order-summary-logo-band-h) - 2px) !important;
-    transform: none !important;
-    transform-origin: center center !important;
-    object-fit: contain !important;
-    object-position: center center !important;
-    pointer-events: none !important;
-  }
-
-  #screen-order-summary .order-topbar__logo .order-topbar__logo-img--inactive {
-    visibility: hidden !important;
-    pointer-events: none !important;
-  }
-
-  /* 로그인 문구 숨김 (가입수정/로그아웃은 하단 고정) */
-  #screen-order-summary .order-topbar__login-msg,
-  #screen-order-summary #summaryLoginMsg {
-    display: none !important;
-    visibility: hidden !important;
-    position: absolute !important;
-    width: 0 !important;
-    height: 0 !important;
-    overflow: hidden !important;
-    clip: rect(0, 0, 0, 0) !important;
-    clip-path: inset(50%) !important;
-    white-space: nowrap !important;
-    border: 0 !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    font-size: 0 !important;
-    line-height: 0 !important;
-    opacity: 0 !important;
-    pointer-events: none !important;
-  }
-
-  #screen-order-summary .order-topbar__aside {
-    position: fixed !important;
-    left: 50% !important;
-    right: auto !important;
-    top: auto !important;
-    bottom: 8px !important;
-    width: auto !important;
-    max-width: calc(100vw - 16px) !important;
-    height: auto !important;
-    margin: 0 !important;
-    padding: 10px 0 0 !important;
-    transform: translateX(-50%) !important;
-    z-index: 80 !important;
-    display: inline-flex !important;
-    flex-wrap: nowrap !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 0 !important;
-    grid-area: unset !important;
-    pointer-events: none !important;
-    border-top: 1px solid #b0b0b0 !important;
-    box-sizing: border-box !important;
-  }
-
-  /* 오더등록~통계: 회색 그라데이션 바 아래 (바와 분리된 별도 행) */
-  #screen-order-summary .order-topbar__menu {
-    position: relative !important;
-    top: auto !important;
-    right: auto !important;
-    bottom: auto !important;
-    left: auto !important;
-    transform: none !important;
-    display: grid !important;
-    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
-    grid-auto-rows: var(--order-mobile-ym-box-h) !important;
-    width: 100% !important;
-    margin: 0 !important;
-    gap: 4px !important;
-    overflow: visible !important;
-    padding: 8px 8px 6px !important;
-    box-sizing: border-box !important;
-    background: #d9d9d9 !important;
-    align-items: stretch !important;
-    flex: 0 0 auto !important;
-    order: 2 !important;
-    z-index: 4 !important;
-  }
-
-  #screen-order-summary .order-topbar__aside {
-    order: 99 !important;
-  }
-
-  #screen-order-summary .order-topbar__menu .order-topbar__link[data-order-nav="order"] {
-    order: 1 !important;
-  }
-  #screen-order-summary .order-topbar__menu .order-topbar__link[data-order-nav="assign"] {
-    order: 2 !important;
-  }
-  #screen-order-summary .order-topbar__menu .order-topbar__link[data-order-nav="status"] {
-    order: 3 !important;
-  }
-  #screen-order-summary .order-topbar__menu .order-topbar__link[data-order-nav="open"] {
-    order: 4 !important;
-  }
-  #screen-order-summary .order-topbar__menu .order-topbar__link[data-order-nav="stats"] {
-    order: 5 !important;
+  #screen-order-summary .order-topbar .order-topbar__menu {
+    position: static;
+    left: auto;
+    transform: none;
+    margin: 0;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 5.75em;
+    column-gap: 1rem;
+    width: max-content;
+    max-width: 100%;
+    overflow: visible;
+    z-index: 3;
   }
 
   #screen-order-summary .order-topbar__menu .order-topbar__link {
-    box-sizing: border-box !important;
-    min-width: 0 !important;
-    width: 100% !important;
-    min-height: var(--order-mobile-ym-box-h) !important;
-    height: var(--order-mobile-ym-box-h) !important;
-    padding: 0 2px !important;
-    font-size: clamp(15px, 3.45vw, 17px) !important;
-    font-weight: 600 !important;
-    line-height: 1.12 !important;
-    letter-spacing: -0.028em !important;
-    border: 1px solid #c9c9c9 !important;
-    background: #f7f7f7 !important;
-    border-radius: 12px !important;
-    justify-content: center !important;
-    align-items: center !important;
-    text-align: center !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    min-height: auto;
+    height: auto;
+    max-height: none;
+    min-width: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+    border-radius: 0;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.2;
+    box-sizing: border-box;
   }
 
-  #screen-order-summary .order-topbar__menu .order-topbar__link--active {
-    border-color: #9a9a9a !important;
-    background: #9a9a9a !important;
-    color: #fff !important;
+  #screen-order-summary .order-topbar .order-topbar__aside {
+    position: static;
+    grid-area: auto;
+    margin: 0;
+    width: auto;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: clamp(12px, 1.5vw, 20px);
+    z-index: 3;
   }
 
-  #screen-order-summary .order-topbar__menu .order-topbar__link:nth-child(4),
-  #screen-order-summary .order-topbar__menu .order-topbar__link:nth-child(5) {
-    grid-column: auto !important;
-  }
-
-  #screen-order-summary .order-topbar__account-actions {
-    display: inline-flex !important;
-    flex-direction: row !important;
-    flex-wrap: nowrap !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 0 !important;
-    position: static !important;
-    width: auto !important;
-    max-width: none !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    transform: none !important;
-    pointer-events: none !important;
-  }
-
-  #screen-order-summary .order-topbar__account-actions .order-topbar__edit-profile,
-  #screen-order-summary .order-topbar__account-actions .order-topbar__logout {
-    position: static !important;
-    left: auto !important;
-    right: auto !important;
-    bottom: auto !important;
-    transform: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    min-height: auto !important;
-    max-width: none !important;
-    background: transparent !important;
-    font-size: 13px !important;
-    line-height: 1.2 !important;
-    pointer-events: auto !important;
-    flex: 0 0 auto !important;
-  }
-
-  #screen-order-summary .order-topbar__account-actions .order-topbar__edit-profile::after {
-    content: "|" !important;
-    margin-left: 6px !important;
-    margin-right: 6px !important;
-    color: #b0b0b0 !important;
-    font-weight: 400 !important;
-    pointer-events: none !important;
-  }
-
-  #screen-order-summary .order-summary-body {
-    flex: 1 1 auto !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: stretch !important;
-    width: 100% !important;
-    max-width: 100vw !important;
-    min-height: 0 !important;
-    padding: 8px 6px 56px !important;
-    overflow-x: hidden !important;
-    overflow-y: auto !important;
-    background: #d9d9d9 !important;
-    box-sizing: border-box !important;
-  }
-
-  #screen-order-summary .assign-panel.order-summary-panel {
-    flex: 1 1 auto !important;
-    display: flex !important;
-    flex-direction: column !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    margin: 0 !important;
-    padding: 10px 8px !important;
-    border: 1px solid #b0b0b0 !important;
-    background: #d9d9d9 !important;
-    box-sizing: border-box !important;
-    overflow-x: hidden !important;
+  #screen-order-summary .order-topbar__login-msg {
+    display: inline;
   }
 
   #screen-order-summary .order-summary-toolbar {
-    display: grid !important;
-    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-    grid-template-rows: auto !important;
-    width: 100% !important;
-    column-gap: 6px !important;
-    row-gap: 8px !important;
-    align-items: stretch !important;
-    margin-bottom: 10px !important;
-    box-sizing: border-box !important;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
   }
 
-  #screen-order-summary .order-summary-ym,
   #screen-order-summary .order-summary-ym__row {
-    display: contents !important;
-  }
-
-  #screen-order-summary .order-summary-ym__field {
-    position: relative !important;
-    display: block !important;
-    min-width: 0 !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    overflow: hidden !important;
-    box-sizing: border-box !important;
-    isolation: isolate !important;
-  }
-
-  #screen-order-summary .order-summary-ym__row .order-summary-ym__field:nth-child(1) {
-    grid-column: 1 / 2 !important;
-    grid-row: 1 !important;
-  }
-
-  #screen-order-summary .order-summary-ym__row .order-summary-ym__field:nth-child(2) {
-    grid-column: 2 / 3 !important;
-    grid-row: 1 !important;
+    flex-wrap: nowrap;
   }
 
   #screen-order-summary .order-summary-toggle {
-    grid-column: 3 / 4 !important;
-    grid-row: 1 !important;
-    width: 100% !important;
-    min-width: 0 !important;
-    max-width: 100% !important;
-    display: block !important;
-    border: none !important;
-    background: transparent !important;
-    border-radius: 0 !important;
-    overflow: hidden !important;
-    box-sizing: border-box !important;
-    position: relative !important;
-    isolation: isolate !important;
-    margin: 0 !important;
-    padding: 0 !important;
+    align-self: auto;
   }
 
   #screen-order-summary .order-summary-toggle__btn {
-    display: none !important;
-    visibility: hidden !important;
-    position: absolute !important;
-    width: 0 !important;
-    height: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    overflow: hidden !important;
-    pointer-events: none !important;
-  }
-
-  #screen-order-summary .order-summary-metric-select-wrap {
-    display: block !important;
-    width: 100% !important;
-    min-width: 0 !important;
-    max-width: 100% !important;
-    box-sizing: border-box !important;
-    margin: 0 !important;
-    padding: 0 !important;
-  }
-
-  #screen-order-summary .order-summary-metric-select-wrap.order-summary-ym__field {
-    display: block !important;
-  }
-
-  #screen-order-summary .order-summary-metric-select,
-  #screen-order-summary .order-summary-ym__select {
-    display: block !important;
-    width: 100% !important;
-    min-width: 0 !important;
-    max-width: 100% !important;
-    height: var(--order-mobile-ym-box-h) !important;
-    min-height: var(--order-mobile-ym-box-h) !important;
-    max-height: var(--order-mobile-ym-box-h) !important;
-    box-sizing: border-box !important;
-    font-size: clamp(11px, 2.85vw, 14px) !important;
-    padding-left: 8px !important;
-    padding-right: 28px !important;
-    text-overflow: ellipsis !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-  }
-
-  #screen-order-summary .order-summary-ym__field::after {
-    right: 9px !important;
-  }
-
-  #screen-order-summary .order-summary-metric-select-wrap.order-summary-ym__field::after {
-    right: 9px !important;
-  }
-
-  #screen-order-summary .order-summary-table-wrap {
-    position: relative !important;
-    flex: 0 0 auto !important;
-    overflow-x: hidden !important;
-    overflow-y: visible !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    margin: 0 auto !important;
-    padding: 0 !important;
-    background: #d9d9d9 !important;
-    box-sizing: border-box !important;
+    min-height: clamp(36px, 4.2vh, 44px);
+    font-size: clamp(13px, 1vw, 16px);
   }
 
   #screen-order-summary .order-summary-table {
-    width: 100% !important;
-    min-width: 0 !important;
-    max-width: 100% !important;
-    table-layout: fixed !important;
-    border-spacing: 4px !important;
-    border-collapse: separate !important;
-    margin: 0 auto !important;
-    background: #d9d9d9 !important;
-  }
-
-  /* 모바일 시안: 시공오더·미배정·미마감 3열만 표시 */
-  #screen-order-summary .order-summary-table thead tr:nth-child(1) th:nth-child(n + 5),
-  #screen-order-summary .order-summary-table thead tr:nth-child(2) th:nth-child(n + 5),
-  #screen-order-summary .order-summary-table tbody td:nth-child(n + 5) {
-    display: none !important;
-  }
-
-  #screen-order-summary .order-summary-table__unit-row {
-    display: none !important;
-  }
-
-  #screen-order-summary .order-summary-table__corner,
-  #screen-order-summary .order-summary-table__row-head,
-  #screen-order-summary .order-summary-table thead tr:nth-child(2) th:nth-child(1) {
-    position: static !important;
-    left: auto !important;
-    width: 20% !important;
-    min-width: 0 !important;
-    max-width: 20% !important;
-    overflow: hidden !important;
-    box-sizing: border-box !important;
-    background: #d9d9d9 !important;
-    border: none !important;
-    box-shadow: none !important;
-  }
-
-  #screen-order-summary .order-summary-table__row-head {
-    background: var(--color-navy) !important;
-    text-align: center !important;
-    padding: 2px 0 !important;
-    transform: none !important;
-    border-style: solid !important;
-    border-color: var(--color-navy-dark) !important;
-    border-width: 1px 0 1px 1px !important;
-    border-right: 1px solid #d9d9d9 !important;
-  }
-
-  #screen-order-summary .order-summary-table thead tr:nth-child(2) th:nth-child(n + 2):nth-child(-n + 4),
-  #screen-order-summary .order-summary-table tbody td:nth-child(n + 2):nth-child(-n + 4) {
-    width: calc(80% / 3) !important;
-    min-width: 0 !important;
-    max-width: calc(80% / 3) !important;
-    position: static !important;
-    left: auto !important;
-    z-index: 1 !important;
-  }
-
-  #screen-order-summary .order-summary-table__row-head::after,
-  #screen-order-summary .order-summary-table thead tr:nth-child(2) th:nth-child(1)::after,
-  #screen-order-summary .order-summary-table thead tr:nth-child(1) th:first-child::after {
-    display: none !important;
-    content: none !important;
-  }
-
-  #screen-order-summary .order-summary-table__row-head span {
-    display: flex !important;
-    width: 100% !important;
-    justify-content: center !important;
-    align-items: center !important;
-    text-align: center !important;
-    transform: none !important;
-    font-size: 10px !important;
-    line-height: 1.05 !important;
-    padding: 0 !important;
-    box-sizing: border-box !important;
-  }
-
-  #screen-order-summary .order-summary-table__col-head,
-  #screen-order-summary .order-summary-table__cell {
-    min-width: 0 !important;
-    white-space: nowrap !important;
-    position: static !important;
-    left: auto !important;
-    z-index: 1 !important;
-  }
-
-  #screen-order-summary .order-summary-table__cell-box {
-    width: 100% !important;
-    min-width: 100% !important;
-    min-height: 48px !important;
-    height: 48px !important;
-    padding: 0 4px !important;
-    transform: none !important;
-    border-radius: 0 !important;
-    background: #fff !important;
-    border: 1px solid #b8b8b8 !important;
-    box-sizing: border-box !important;
-  }
-
-  /* 모바일 8번: 시공오더 헤더 박스 = 아래 내용칸 박스와 동일 폭·높이 */
-  #screen-order-summary .order-summary-table thead tr:nth-child(2) th:nth-child(2),
-  #screen-order-summary .order-summary-table tbody td:nth-child(2) {
-    min-width: 0 !important;
-    width: calc(80% / 3) !important;
-    max-width: calc(80% / 3) !important;
-    padding: 0 !important;
-    box-sizing: border-box !important;
-    vertical-align: middle !important;
-  }
-
-  #screen-order-summary .order-summary-table thead tr:nth-child(2) th:nth-child(2) {
-    background: transparent !important;
-    border: none !important;
-    transform: none !important;
-  }
-
-  #screen-order-summary .order-summary-table thead tr:nth-child(2) th:nth-child(2) span {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    width: 100% !important;
-    min-width: 100% !important;
-    min-height: 48px !important;
-    height: 48px !important;
-    padding: 0 4px !important;
-    box-sizing: border-box !important;
-    background: var(--color-navy) !important;
-    color: #fff !important;
-    border: 1px solid var(--color-navy-dark) !important;
-    border-left: 1px solid #d9d9d9 !important;
-    transform: none !important;
-  }
-
-  #screen-order-summary .order-summary-table tbody td:nth-child(2) .order-summary-table__cell-box {
-    min-height: 48px !important;
-    height: 48px !important;
-    padding: 0 4px !important;
-    border-left: 1px solid #d9d9d9 !important;
-  }
-
-  /* 모바일 8번: "미마감" 열 데이터 박스 폭을 헤더 폭과 동일하게 고정 */
-  #screen-order-summary .order-summary-table tbody td:nth-child(4) {
-    min-width: 0 !important;
-    width: calc(80% / 3) !important;
-    max-width: calc(80% / 3) !important;
-  }
-
-  #screen-order-summary .order-summary-table tbody td:nth-child(4) .order-summary-table__cell-box {
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-  }
-
-  #screen-order-summary .order-summary-table__cell-box span {
-    white-space: nowrap !important;
-    word-break: keep-all !important;
-    transform: none !important;
-  }
-
-  #screen-order-summary .order-summary-table__col-head span {
-    white-space: nowrap !important;
-    word-break: keep-all !important;
-    transform: none !important;
-  }
-
-  #screen-order-summary .order-summary-table__col-head {
-    transform: none !important;
-    border-radius: 0 !important;
-    clip-path: none !important;
-    background: var(--color-navy) !important;
-    border: 1px solid #707070 !important;
-  }
-
-  #screen-order-summary .assign-panel,
-  #screen-order-summary .assign-panel.order-summary-panel {
-    overflow-x: visible !important;
-    background: #d9d9d9 !important;
-  }
-
-  #screen-order-summary .order-summary-body,
-  #screen-order-summary .order-summary-content,
-  #screen-order-summary .order-summary-panel,
-  #screen-order-summary .order-summary-table tbody tr,
-  #screen-order-summary .order-summary-table tbody td {
-    background: #d9d9d9 !important;
-  }
-
-  #screen-order-summary .order-summary-table tbody td {
-    background: transparent !important;
-  }
-
-  #screen-order-summary .order-summary-table tbody .order-summary-table__row-head {
-    background: var(--color-navy) !important;
-  }
-}
-
-/* 모바일 전용: 3~7번 메뉴 흰 박스 높이 = 8번 연도(ym) 박스, 글자 크기는 기존 유지 (PC 769px+ 미변경) */
-@media (max-width: 768px) {
-  .order-page:not(.order-summary-page) .order-topbar__menu .order-topbar__link {
-    height: var(--order-mobile-ym-box-h) !important;
-    min-height: var(--order-mobile-ym-box-h) !important;
-    max-height: var(--order-mobile-ym-box-h) !important;
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
-    line-height: 1 !important;
-    box-sizing: border-box !important;
-    align-items: center !important;
-    justify-content: center !important;
-    border-width: 1px !important;
-    overflow: hidden !important;
+    min-width: 0;
+    border-spacing: clamp(14px, 1.8vh, 20px);
   }
 }
 
 @media (max-width: 480px) {
-  .order-page:not(.order-summary-page) .order-topbar__menu .order-topbar__link {
-    height: var(--order-mobile-ym-box-h) !important;
-    min-height: var(--order-mobile-ym-box-h) !important;
-    max-height: var(--order-mobile-ym-box-h) !important;
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
-    line-height: 1 !important;
-    box-sizing: border-box !important;
-    border-width: 1px !important;
-    overflow: hidden !important;
-  }
-}
-
-/* 8번 집계표: 초소형 모바일 — 메뉴 글자 잘림 방지 (PC·769px+ 미적용) */
-@media (max-width: 360px) {
-  #screen-order-summary {
-    --order-summary-logo-band-h: 30px;
+  #screen-order-summary .order-topbar .order-topbar__edit-profile,
+  #screen-order-summary .order-topbar .order-topbar__logout {
+    position: static;
+    bottom: auto;
+    left: auto;
+    transform: none;
+    z-index: auto;
+    background: transparent;
+    font-size: clamp(13px, 1vw, 16px);
+    line-height: 1.25;
+    min-height: auto;
+    padding: 0;
   }
 
-  #screen-order-summary .order-topbar__menu {
-    gap: 4px !important;
-  }
-
-  #screen-order-summary .order-topbar__menu .order-topbar__link {
-    min-height: var(--order-mobile-ym-box-h) !important;
-    height: var(--order-mobile-ym-box-h) !important;
-    padding: 0 3px !important;
-    font-size: 13px !important;
-    letter-spacing: -0.04em !important;
-  }
-
-  #screen-order-summary .order-summary-toolbar {
-    column-gap: 4px !important;
-  }
-
-  #screen-order-summary .order-summary-metric-select,
-  #screen-order-summary .order-summary-ym__select {
-    font-size: 11px !important;
-    padding-left: 6px !important;
-    padding-right: 24px !important;
+  #screen-order-summary .assign-body {
+    padding-bottom: 18px;
   }
 }
 

@@ -805,37 +805,35 @@
         </nav>
         <div class="order-topbar__aside">
           <span class="order-topbar__login-msg" id="summaryLoginMsg"></span>
-          <div class="order-topbar__account-actions">
-            <a
-              href="#"
-              class="order-topbar__link order-topbar__edit-profile"
-              data-action="signup-edit"
-              >가입수정</a
+          <a
+            href="#"
+            class="order-topbar__link order-topbar__edit-profile"
+            data-action="signup-edit"
+            >가입수정</a
+          >
+          <a
+            href="#"
+            class="order-topbar__link order-topbar__logout"
+            data-logout
+          >
+            <span>로그아웃</span>
+            <svg
+              class="order-topbar__logout-icon"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              aria-hidden="true"
             >
-            <a
-              href="#"
-              class="order-topbar__link order-topbar__logout"
-              data-logout
-            >
-              <span>로그아웃</span>
-              <svg
-                class="order-topbar__logout-icon"
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                aria-hidden="true"
-              >
-                <path
-                  d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-            </a>
-          </div>
+              <path
+                d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </a>
         </div>
       </header>
 
@@ -870,16 +868,6 @@
               role="group"
               aria-label="집계 표시"
             >
-              <div class="order-summary-ym__field order-summary-metric-select-wrap">
-                <select
-                  id="orderSummaryMetricSelect"
-                  class="order-summary-ym__select order-summary-metric-select"
-                  aria-label="집계 표시 방식"
-                >
-                  <option value="count" selected>건수/금액</option>
-                  <option value="ratio">비율</option>
-                </select>
-              </div>
               <button
                 type="button"
                 class="order-summary-toggle__btn order-summary-toggle__btn--active"
@@ -942,7 +930,6 @@
               <tbody id="orderSummaryTableBody"></tbody>
             </table>
           </div>
-        </div>
         </div>
       </main>
     </section>

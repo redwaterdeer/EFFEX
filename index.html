@@ -340,12 +340,6 @@
           <span class="order-topbar__login-msg" id="orderLoginMsg"></span>
           <a
             href="#"
-            class="order-topbar__link order-topbar__edit-profile"
-            data-action="signup-edit"
-            >가입수정</a
-          >
-          <a
-            href="#"
             class="order-topbar__link order-topbar__logout"
             data-logout
           >
@@ -758,6 +752,14 @@
             등록
           </button>
         </div>
+
+        <footer class="order-footer assign-footer">
+          <a href="#" class="order-footer__link" id="btnEditProfile"
+            >가입 수정</a
+          >
+          <span class="order-footer__sep">/</span>
+          <a href="#" class="order-footer__link" data-logout>로그 아웃</a>
+        </footer>
         </div>
       </main>
     </section>
@@ -807,12 +809,6 @@
           <span class="order-topbar__login-msg" id="summaryLoginMsg"></span>
           <a
             href="#"
-            class="order-topbar__link order-topbar__edit-profile"
-            data-action="signup-edit"
-            >가입수정</a
-          >
-          <a
-            href="#"
             class="order-topbar__link order-topbar__logout"
             data-logout
           >
@@ -840,28 +836,6 @@
       <main class="assign-body order-summary-body">
         <div class="assign-panel order-summary-panel">
           <div class="order-summary-toolbar">
-            <div class="order-summary-ym" aria-label="집계 기간">
-              <div class="order-summary-ym__row">
-                <div class="order-summary-ym__field">
-                  <select
-                    id="orderSummaryYear"
-                    class="order-summary-ym__select"
-                    aria-label="연도"
-                  >
-                    <option value="2026" selected>2026년</option>
-                  </select>
-                </div>
-                <div class="order-summary-ym__field">
-                  <select
-                    id="orderSummaryMonth"
-                    class="order-summary-ym__select"
-                    aria-label="월"
-                  >
-                    <option value="all" selected>전체</option>
-                  </select>
-                </div>
-              </div>
-            </div>
             <div
               class="order-summary-toggle"
               id="orderSummaryMetricToggle"
@@ -931,6 +905,14 @@
             </table>
           </div>
         </div>
+
+        <footer class="order-footer assign-footer">
+          <a href="#" class="order-footer__link" id="btnEditProfileSummary"
+            >가입 수정</a
+          >
+          <span class="order-footer__sep">/</span>
+          <a href="#" class="order-footer__link" data-logout>로그 아웃</a>
+        </footer>
         </div>
       </main>
     </section>
@@ -976,12 +958,6 @@
         </nav>
         <div class="order-topbar__aside">
           <span class="order-topbar__login-msg" id="assignLoginMsg"></span>
-          <a
-            href="#"
-            class="order-topbar__link order-topbar__edit-profile"
-            data-action="signup-edit"
-            >가입수정</a
-          >
           <a
             href="#"
             class="order-topbar__link order-topbar__logout"
@@ -1124,6 +1100,14 @@
             저장
           </button>
         </div>
+
+        <footer class="order-footer assign-footer">
+          <a href="#" class="order-footer__link" id="btnEditProfileAssign"
+            >가입 수정</a
+          >
+          <span class="order-footer__sep">/</span>
+          <a href="#" class="order-footer__link" data-logout>로그 아웃</a>
+        </footer>
       </main>
     </section>
 
@@ -1168,12 +1152,6 @@
         </nav>
         <div class="order-topbar__aside">
           <span class="order-topbar__login-msg" id="statusLoginMsg"></span>
-          <a
-            href="#"
-            class="order-topbar__link order-topbar__edit-profile"
-            data-action="signup-edit"
-            >가입수정</a
-          >
           <a
             href="#"
             class="order-topbar__link order-topbar__logout"
@@ -1343,6 +1321,14 @@
             저장
           </button>
         </div>
+
+        <footer class="order-footer assign-footer">
+          <a href="#" class="order-footer__link" id="btnEditProfileStatus"
+            >가입 수정</a
+          >
+          <span class="order-footer__sep">/</span>
+          <a href="#" class="order-footer__link" data-logout>로그 아웃</a>
+        </footer>
       </main>
     </section>
 
@@ -1387,12 +1373,6 @@
         </nav>
         <div class="order-topbar__aside">
           <span class="order-topbar__login-msg" id="openLoginMsg"></span>
-          <a
-            href="#"
-            class="order-topbar__link order-topbar__edit-profile"
-            data-action="signup-edit"
-            >가입수정</a
-          >
           <a
             href="#"
             class="order-topbar__link order-topbar__logout"
@@ -1562,6 +1542,14 @@
             저장
           </button>
         </div>
+
+        <footer class="order-footer assign-footer">
+          <a href="#" class="order-footer__link" id="btnEditProfileOpen"
+            >가입 수정</a
+          >
+          <span class="order-footer__sep">/</span>
+          <a href="#" class="order-footer__link" data-logout>로그 아웃</a>
+        </footer>
       </main>
     </section>
 
@@ -1603,12 +1591,6 @@
         </nav>
         <div class="order-topbar__aside">
           <span class="order-topbar__login-msg" id="statsLoginMsg"></span>
-          <a
-            href="#"
-            class="order-topbar__link order-topbar__edit-profile"
-            data-action="signup-edit"
-            >가입수정</a
-          >
           <a
             href="#"
             class="order-topbar__link order-topbar__logout"
@@ -1660,14 +1642,6 @@
               >
                 <span>미마감</span>
               </button>
-              <button
-                type="button"
-                class="stats-mode-nav__btn"
-                data-stats-mode="ratio"
-                aria-pressed="false"
-              >
-                <span>비율</span>
-              </button>
             </nav>
 
             <div class="stats-content">
@@ -1717,6 +1691,7 @@
                       <select id="statsAggregate" class="order-select">
                         <option value="count" selected>시공건수</option>
                         <option value="sales">시공매출</option>
+                        <option value="ratio">비율</option>
                       </select>
                     </div>
                   </div>
@@ -1894,15 +1869,19 @@
                     </thead>
                     <tbody id="statsTableBody"></tbody>
                   </table>
-                  <p class="stats-ratio-formula" id="statsRatioFormula" hidden>
-                    ■ 배정 모드 비율= (오더번호 계 ÷ (소속 시공사원 수 × 근무일수)) × 100<br />
-                    ■ 미마감 모드 비율 = (미마감 계 ÷ (소속 시공사원 수 × 오더건수)) × 100
-                  </p>
                 </div>
               </div>
             </div>
           </div>
         </div>
+
+        <footer class="order-footer assign-footer">
+          <a href="#" class="order-footer__link" id="btnEditProfileStats"
+            >가입 수정</a
+          >
+          <span class="order-footer__sep">/</span>
+          <a href="#" class="order-footer__link" data-logout>로그 아웃</a>
+        </footer>
       </main>
     </section>
 
@@ -2437,48 +2416,6 @@
       </div>
     </section>
 
-    <!-- 8번: 집계표 내역 리스트 -->
-    <div class="modal-overlay" id="modal-order-summary-list">
-      <div class="modal order-summary-list-modal">
-        <h2 class="modal__title" id="orderSummaryListTitle">집계 내역</h2>
-        <p class="order-summary-list-modal__meta" id="orderSummaryListMeta"></p>
-        <div class="order-summary-list-modal__body">
-          <table class="order-summary-list-table">
-            <thead>
-              <tr>
-                <th scope="col">No</th>
-                <th scope="col">오더번호</th>
-                <th scope="col">시공일자</th>
-                <th scope="col">현장명</th>
-                <th scope="col">시공협력사</th>
-                <th
-                  scope="col"
-                  class="order-summary-list-table__col-sales"
-                  id="orderSummaryListSalesHead"
-                  hidden
-                >
-                  시공매출
-                </th>
-              </tr>
-            </thead>
-            <tbody id="orderSummaryListBody"></tbody>
-          </table>
-          <p id="orderSummaryListEmpty" class="order-summary-list-modal__empty" hidden>
-            해당 내역이 없습니다.
-          </p>
-        </div>
-        <div class="modal__actions">
-          <button
-            type="button"
-            class="assign-detail-modal__close"
-            data-modal-close="modal-order-summary-list"
-          >
-            닫기
-          </button>
-        </div>
-      </div>
-    </div>
-
     <!-- 4번: 오더 상세 팝업 -->
     <div class="modal-overlay" id="modal-assign-detail">
       <div class="modal assign-detail-modal">
@@ -2494,138 +2431,17 @@
               </div>
             </div>
             <div class="order-field order-field--modal-inline">
+              <div class="order-field__label"><span>시공구분</span></div>
+              <span class="order-field__divider" aria-hidden="true"></span>
+              <div class="order-field__control order-field__control--md">
+                <span class="modal-field-value" id="assignDetailScope"></span>
+              </div>
+            </div>
+            <div class="order-field order-field--modal-inline">
               <div class="order-field__label"><span>현장명</span></div>
               <span class="order-field__divider" aria-hidden="true"></span>
               <div class="order-field__control order-field__control--md">
                 <span class="modal-field-value" id="assignDetailSite"></span>
-              </div>
-            </div>
-          </div>
-
-          <div class="order-field order-field--scope">
-            <div class="order-field__label"><span>시공구분</span></div>
-            <span class="order-field__divider" aria-hidden="true"></span>
-            <div class="order-field__control">
-              <div
-                class="order-scope-options"
-                id="assignDetailScopeGroup"
-                role="group"
-                aria-label="시공구분"
-              >
-                <button
-                  type="button"
-                  class="order-scope-option"
-                  data-value="kitchen-wood"
-                  disabled
-                >
-                  <span>주방 목대</span
-                  ><span class="order-scope-option__dot"></span>
-                </button>
-                <button
-                  type="button"
-                  class="order-scope-option"
-                  data-value="kitchen-top"
-                  disabled
-                >
-                  <span>주방 상판</span
-                  ><span class="order-scope-option__dot"></span>
-                </button>
-                <button
-                  type="button"
-                  class="order-scope-option"
-                  data-value="kitchen-product"
-                  disabled
-                >
-                  <span>주방 상품</span
-                  ><span class="order-scope-option__dot"></span>
-                </button>
-                <button
-                  type="button"
-                  class="order-scope-option"
-                  data-value="etc"
-                  disabled
-                >
-                  <span>기타</span><span class="order-scope-option__dot"></span>
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div class="order-field order-field--scope-sales">
-            <div class="order-field__label"><span>시공매출</span></div>
-            <span class="order-field__divider" aria-hidden="true"></span>
-            <div class="order-field__control">
-              <div
-                class="order-scope-sales-options"
-                id="assignDetailScopeSalesList"
-                role="group"
-                aria-label="시공매출"
-              >
-                <div
-                  class="order-scope-sales-cell"
-                  data-scope-key="kitchen-wood"
-                >
-                  <input
-                    type="text"
-                    id="assignDetailSales-kitchen-wood"
-                    class="order-scope-sales-input"
-                    data-scope-key="kitchen-wood"
-                    inputmode="numeric"
-                    placeholder="숫자만 입력"
-                    title="주방 목대 시공매출"
-                    autocomplete="off"
-                    readonly
-                    disabled
-                  />
-                </div>
-                <div
-                  class="order-scope-sales-cell"
-                  data-scope-key="kitchen-top"
-                >
-                  <input
-                    type="text"
-                    id="assignDetailSales-kitchen-top"
-                    class="order-scope-sales-input"
-                    data-scope-key="kitchen-top"
-                    inputmode="numeric"
-                    placeholder="숫자만 입력"
-                    title="주방 상판 시공매출"
-                    autocomplete="off"
-                    readonly
-                    disabled
-                  />
-                </div>
-                <div
-                  class="order-scope-sales-cell"
-                  data-scope-key="kitchen-product"
-                >
-                  <input
-                    type="text"
-                    id="assignDetailSales-kitchen-product"
-                    class="order-scope-sales-input"
-                    data-scope-key="kitchen-product"
-                    inputmode="numeric"
-                    placeholder="숫자만 입력"
-                    title="주방 상품 시공매출"
-                    autocomplete="off"
-                    readonly
-                    disabled
-                  />
-                </div>
-                <div class="order-scope-sales-cell" data-scope-key="etc">
-                  <input
-                    type="text"
-                    id="assignDetailSales-etc"
-                    class="order-scope-sales-input"
-                    data-scope-key="etc"
-                    inputmode="numeric"
-                    placeholder="숫자만 입력"
-                    title="기타 시공매출"
-                    autocomplete="off"
-                    readonly
-                    disabled
-                  />
-                </div>
               </div>
             </div>
           </div>
@@ -2869,31 +2685,6 @@
           </div>
           <div
             id="statusDetailWorkBlocks"
-            class="status-detail-modal__work-blocks"
-          ></div>
-        </section>
-
-        <section
-          class="status-detail-modal__section status-detail-modal__section--action"
-          id="statusDetailActionSection"
-          aria-labelledby="statusSectionActionTitle"
-          hidden
-        >
-          <div class="status-detail-modal__section-head">
-            <h3
-              class="status-detail-modal__section-title"
-              id="statusSectionActionTitle"
-            >
-              조치정보
-            </h3>
-            <div
-              id="statusDetailActionRoundTags"
-              class="status-detail-modal__scope-tags"
-              aria-label="조치 차수"
-            ></div>
-          </div>
-          <div
-            id="statusDetailActionBlocks"
             class="status-detail-modal__work-blocks"
           ></div>
         </section>

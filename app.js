@@ -17,9 +17,9 @@ var MASTER_ACCOUNT = {
 };
 
 var ROLES = {
-  admin: { label: "관리자", home: "order-summary" },
-  partner: { label: "시공협력사", home: "order-summary" },
-  worker: { label: "시공사원", home: "order-summary" },
+  admin: { label: "관리자", home: "order" },
+  partner: { label: "시공협력사", home: "order" },
+  worker: { label: "시공사원", home: "order" },
 };
 
 var ORDER_REGIONS = {
@@ -110,7 +110,6 @@ var statusActionDatePickerState = {
 };
 
 var statusActionDatePickerScopeKey = "";
-var statusDetailActiveActionRound = {};
 
 var STATUS_ACCIDENT_TYPE_OPTIONS = [
   "",
@@ -123,7 +122,7 @@ var STATUS_ACCIDENT_TYPE_OPTIONS = [
   "기타",
 ];
 
-var STATUS_ACTION_RESULT_OPTIONS = ["", "조치완료", "재미결"];
+var STATUS_ACTION_RESULT_OPTIONS = ["", "조치완결", "재미결"];
 
 var activeAssignPageKey = "assign";
 
@@ -139,6 +138,7 @@ var ASSIGN_PAGE_CONFIG = {
       calendar: "assignMonthCalendar",
       tableBody: "assignTableBody",
       saveBtn: "btnAssignSave",
+      editProfile: "btnEditProfileAssign",
     },
   },
   status: {
@@ -152,6 +152,7 @@ var ASSIGN_PAGE_CONFIG = {
       calendar: "statusMonthCalendar",
       tableBody: "statusTableBody",
       saveBtn: "btnStatusSave",
+      editProfile: "btnEditProfileStatus",
     },
   },
   open: {
@@ -165,6 +166,7 @@ var ASSIGN_PAGE_CONFIG = {
       calendar: "openMonthCalendar",
       tableBody: "openTableBody",
       saveBtn: "btnOpenSave",
+      editProfile: "btnEditProfileOpen",
     },
   },
 };
@@ -183,7 +185,14 @@ function getAssignPicker(pageKey) {
   return assignPickerStates[pageKey || activeAssignPageKey];
 }
 
-var NAV_ITEMS = [];
+var NAV_ITEMS = [
+  { id: "dashboard", label: "대시보드", roles: ["admin", "partner", "worker"] },
+  { id: "projects", label: "현장 관리", roles: ["admin", "partner"] },
+  { id: "partners", label: "시공협력사", roles: ["admin"] },
+  { id: "workers", label: "시공사원", roles: ["admin", "partner"] },
+  { id: "schedule", label: "일정·공정", roles: ["admin", "partner", "worker"] },
+  { id: "notices", label: "공지·알림", roles: ["admin", "partner", "worker"] },
+];
 
 var MOCK = {
   projects: [
@@ -216,7 +225,7 @@ var MOCK = {
   ],
 };
 
-var SIDEBAR_AUTH_PAGES = [];
+var SIDEBAR_AUTH_PAGES = ["dashboard", "projects", "project-detail", "partners", "workers", "schedule", "notices"];
 var AUTH_PAGES = [
   "order",
   "order-summary",
@@ -226,20 +235,11 @@ var AUTH_PAGES = [
   "order-stats",
 ].concat(SIDEBAR_AUTH_PAGES);
 var summaryMetricState = "count";
-var orderSummaryFilterState = { year: 2026, month: "all" };
-var orderSummaryListContext = { scopeKey: "", metricKey: "" };
-var ORDER_SUMMARY_MONTH_ALL = "all";
 var STATS_FILTER_ALL = "__all__";
 var ORDER_YEAR_MIN = 2026;
 var ORDER_YEAR_MAX = 2046;
-var ORDER_YEAR_SELECT_IDS = [
-  "assignYear",
-  "statusYear",
-  "openYear",
-  "statsYear",
-  "orderSummaryYear",
-];
-var statsPickerState = { year: 2026, mode: "assign", view: "assign" };
+var ORDER_YEAR_SELECT_IDS = ["assignYear", "statusYear", "openYear", "statsYear"];
+var statsPickerState = { year: 2026, mode: "assign" };
 var initializedScreens = {};
 var canEnterSignup = false;
 var signupEditMode = false;
@@ -251,81 +251,6 @@ function getAuth() {
   } catch (e) {
     return null;
   }
-}
-
-function getCurrentPartnerUserId() {
-  var auth = getAuth();
-  if (!auth || auth.role !== "partner") return "";
-  return (auth.userId || "").trim();
-}
-
-function isOrderAssignedToPartner(order, partnerId) {
-  var target = (partnerId || "").trim();
-  if (!target) return false;
-  if (((order.assignedPartner || "").trim()) === target) return true;
-  var partners = normalizeOrderAssignedPartners(order);
-  var keys = Object.keys(partners || {});
-  var i;
-  for (i = 0; i < keys.length; i++) {
-    if (((partners[keys[i]] || "").trim()) === target) return true;
-  }
-  return false;
-}
-
-function canCurrentUserViewOrder(order) {
-  var auth = getAuth();
-  if (!auth) return false;
-  if (auth.role === "partner") {
-    var partnerUserId = getCurrentPartnerUserId();
-    if (!partnerUserId) return false;
-    return isOrderAssignedToPartner(order, partnerUserId);
-  }
-  if (auth.role === "worker") {
-    return isOrderAssignedToWorker(order, getCurrentWorkerIdentity());
-  }
-  return true;
-}
-
-function getVisibleOrdersForCurrentUser() {
-  return getStoredOrders().filter(function (order) {
-    return canCurrentUserViewOrder(order);
-  });
-}
-
-function canAccessOrderPageByRole(page) {
-  var auth = getAuth();
-  if (!auth) return false;
-  if (auth.role === "admin") return true;
-  return page !== "order" && page !== "order-assign";
-}
-
-function getCurrentWorkerIdentity() {
-  var auth = getAuth();
-  if (!auth || auth.role !== "worker") return { userId: "", name: "" };
-  return {
-    userId: (auth.userId || "").trim(),
-    name: (auth.name || "").trim(),
-  };
-}
-
-function isOrderAssignedToWorker(order, workerIdentity) {
-  var workerId = (workerIdentity && workerIdentity.userId) || "";
-  var workerName = (workerIdentity && workerIdentity.name) || "";
-  if (!workerId && !workerName) return false;
-
-  var normalizedWorker = (order.constructionWorker || "").trim();
-  if (normalizedWorker && (normalizedWorker === workerId || normalizedWorker === workerName)) {
-    return true;
-  }
-
-  var info = normalizeOrderScopeWorkInfo(order);
-  var keys = Object.keys(info || {});
-  var i;
-  for (i = 0; i < keys.length; i++) {
-    var v = ((info[keys[i]] && info[keys[i]].worker) || "").trim();
-    if (v && (v === workerId || v === workerName)) return true;
-  }
-  return false;
 }
 
 function setAuth(user) {
@@ -405,7 +330,6 @@ function authenticateLogin(userId, password) {
       name: found.name || found.userId,
       role: found.role,
       roleLabel: roleInfo.label,
-      partnerUserId: found.partnerUserId || "",
       isMaster: false,
     },
   };
@@ -626,11 +550,6 @@ function showScreen(page, params) {
   if (AUTH_PAGES.indexOf(page) >= 0 && !getAuth()) {
     page = "login";
     screenId = "screen-login";
-  }
-
-  if (AUTH_PAGES.indexOf(page) >= 0 && getAuth() && !canAccessOrderPageByRole(page)) {
-    page = "order-status";
-    screenId = "screen-order-status";
   }
 
   document.querySelectorAll(".screen").forEach(function (el) {
@@ -1522,17 +1441,14 @@ function bindOrderScopeSalesInput(el) {
 }
 
 function bindOrderScopeSalesInputs() {
-  var list = getOrderScopeSalesListElement();
-  if (!list) return;
-  list.querySelectorAll(".order-scope-sales-input").forEach(bindOrderScopeSalesInput);
+  document.querySelectorAll(".order-scope-sales-input").forEach(bindOrderScopeSalesInput);
 }
 
 function updateOrderScopeSalesEnabled() {
   var active = getOrderScopeValues();
-  var list = getOrderScopeSalesListElement();
   ORDER_SCOPE_CODE_ORDER.forEach(function (key) {
     var input = document.getElementById("orderSales-" + key);
-    if (!input || (list && !list.contains(input))) return;
+    if (!input) return;
     var on = active.indexOf(key) >= 0;
     input.disabled = !on;
     if (!on) input.value = "";
@@ -1607,58 +1523,7 @@ function getOrderScopeSalesAmount(order, scopeKey) {
   return total / keys.length;
 }
 
-function populateOrderSummaryMonthSelect(selectEl, selectedMonth) {
-  if (!selectEl) return;
-  var current =
-    selectedMonth != null && selectedMonth !== ""
-      ? String(selectedMonth)
-      : selectEl.value || ORDER_SUMMARY_MONTH_ALL;
-  var html =
-    '<option value="' +
-    ORDER_SUMMARY_MONTH_ALL +
-    '"' +
-    (current === ORDER_SUMMARY_MONTH_ALL ? " selected" : "") +
-    ">전체</option>";
-  var m;
-  for (m = 1; m <= 12; m++) {
-    html +=
-      '<option value="' +
-      m +
-      '"' +
-      (String(m) === current ? " selected" : "") +
-      ">" +
-      m +
-      "월</option>";
-  }
-  selectEl.innerHTML = html;
-  selectEl.value = current;
-}
-
-function syncOrderSummaryFilterFromControls() {
-  var yearEl = document.getElementById("orderSummaryYear");
-  var monthEl = document.getElementById("orderSummaryMonth");
-  orderSummaryFilterState.year = clampOrderYear(
-    yearEl ? yearEl.value : orderSummaryFilterState.year
-  );
-  orderSummaryFilterState.month = monthEl
-    ? monthEl.value || ORDER_SUMMARY_MONTH_ALL
-    : orderSummaryFilterState.month;
-  return orderSummaryFilterState;
-}
-
-function orderMatchesOrderSummaryDateFilter(order, year, month) {
-  if (!order.constructDate) return false;
-  var parts = String(order.constructDate).split("-");
-  if (parts.length < 2) return false;
-  var orderYear = parseInt(parts[0], 10);
-  var orderMonth = parseInt(parts[1], 10);
-  if (orderYear !== year) return false;
-  if (month === ORDER_SUMMARY_MONTH_ALL || month === "" || month == null) return true;
-  return orderMonth === parseInt(month, 10);
-}
-
-function buildOrderSummaryData(filters) {
-  var activeFilters = filters || orderSummaryFilterState;
+function buildOrderSummaryData() {
   var data = {};
   var totalSales = 0;
   var i;
@@ -1668,16 +1533,7 @@ function buildOrderSummaryData(filters) {
     data[key] = { order: 0, unassigned: 0, open: 0, pending: 0, sales: 0 };
   });
 
-  getVisibleOrdersForCurrentUser().forEach(function (order) {
-    if (
-      !orderMatchesOrderSummaryDateFilter(
-        order,
-        activeFilters.year,
-        activeFilters.month
-      )
-    ) {
-      return;
-    }
+  getStoredOrders().forEach(function (order) {
     var scopeKeys = getOrderScopeKeys(order.scope);
     for (i = 0; i < scopeKeys.length; i++) {
       scopeKey = scopeKeys[i];
@@ -1708,296 +1564,42 @@ function formatOrderSummarySalesDisplay(amount) {
   return formatStatsSalesInMillion(amount);
 }
 
-function getOrderSummaryOrderRatioDenominator(year) {
-  var y = clampOrderYear(year != null ? year : new Date().getFullYear());
-  var holidaySet = getStatsKrHolidaySet(y);
-  var businessDays = countStatsBusinessDaysInYear(y, holidaySet);
+function getOrderSummaryOrderRatioDenominator() {
+  var year = new Date().getFullYear();
+  var holidaySet = getStatsKrHolidaySet(year);
+  var businessDays = countStatsBusinessDaysInYear(year, holidaySet);
   if (businessDays < 1) businessDays = 1;
-  var partnerUserId = getCurrentPartnerUserId();
-  var workerCount = getRegisteredWorkers(partnerUserId || "").length;
+  var workerCount = getRegisteredWorkers().length;
   if (workerCount < 1) workerCount = 1;
   return workerCount * businessDays;
 }
 
-function formatOrderSummaryCellValue(
-  metricKey,
-  rawValue,
-  rowOrder,
-  totalSales,
-  mode,
-  summaryYear
-) {
-  function normalizeSummaryText(text) {
-    var s = text == null ? "" : String(text).trim();
-    if (!s) return "-";
-    if (s === "0" || s === "0건" || s === "0.0%") return "-";
-    return text;
-  }
-
+function formatOrderSummaryCellValue(metricKey, rawValue, rowOrder, totalSales, mode) {
   if (mode === "ratio") {
     if (metricKey === "sales") {
-      if (!totalSales) return "-";
-      return normalizeSummaryText(formatStatsPercent((rawValue / totalSales) * 100));
+      if (!totalSales) return "";
+      return formatStatsPercent((rawValue / totalSales) * 100);
     }
     if (metricKey === "order") {
-      var orderDenom = getOrderSummaryOrderRatioDenominator(summaryYear);
-      if (!orderDenom) return "-";
-      return normalizeSummaryText(formatStatsPercent((rawValue / orderDenom) * 100));
+      var orderDenom = getOrderSummaryOrderRatioDenominator();
+      if (!orderDenom) return "";
+      return formatStatsPercent((rawValue / orderDenom) * 100);
     }
-    if (!rowOrder) return "-";
-    return normalizeSummaryText(formatStatsPercent((rawValue / rowOrder) * 100));
+    if (!rowOrder) return "";
+    return formatStatsPercent((rawValue / rowOrder) * 100);
   }
   if (metricKey === "sales") {
-    return normalizeSummaryText(formatOrderSummarySalesDisplay(rawValue));
+    return formatOrderSummarySalesDisplay(rawValue);
   }
-  return normalizeSummaryText(rawValue > 0 ? String(rawValue) + "건" : "");
-}
-
-var ORDER_SUMMARY_METRIC_LABELS = {
-  order: "시공오더",
-  unassigned: "미배정",
-  open: "미마감",
-  pending: "미결",
-  sales: "시공매출",
-};
-
-function orderHasSummaryScope(order, scopeKey) {
-  return getOrderScopeKeys(order.scope).indexOf(scopeKey) >= 0;
-}
-
-function orderMatchesOrderSummaryScopeMetric(order, scopeKey, metricKey) {
-  if (!orderHasSummaryScope(order, scopeKey)) return false;
-  if (metricKey === "order") return true;
-  if (metricKey === "unassigned") return !isOrderScopeAssigned(order, scopeKey);
-  if (metricKey === "open") return isOrderScopeOpenForStats(order, scopeKey);
-  if (metricKey === "pending") {
-    return (
-      isOrderScopeOpenForStats(order, scopeKey) &&
-      !hasOrderScopeActionCompleted(order, scopeKey)
-    );
-  }
-  if (metricKey === "sales") return true;
-  return false;
-}
-
-function getOrdersForOrderSummaryCell(scopeKey, metricKey, filters) {
-  return getVisibleOrdersForCurrentUser().filter(function (order) {
-    if (!orderMatchesOrderSummaryDateFilter(order, filters.year, filters.month)) return false;
-    return orderMatchesOrderSummaryScopeMetric(order, scopeKey, metricKey);
-  });
-}
-
-function formatOrderSummaryFilterPeriodLabel(filters) {
-  var monthLabel =
-    filters.month === ORDER_SUMMARY_MONTH_ALL ? "전체" : filters.month + "월";
-  return filters.year + "년 " + monthLabel;
-}
-
-function getOrderScopePartnerDisplay(order, scopeKey) {
-  var partners = normalizeOrderAssignedPartners(order);
-  return getPartnerDisplayName(partners[scopeKey] || order.assignedPartner || "");
-}
-
-function parseOrderConstructDateParts(order) {
-  var iso = order && order.constructDate;
-  if (!iso) return null;
-  var match = String(iso).match(/^(\d{4})-(\d{2})-(\d{2})$/);
-  if (!match) return null;
-  return {
-    year: parseInt(match[1], 10),
-    month: parseInt(match[2], 10),
-    day: parseInt(match[3], 10),
-  };
-}
-
-function applyAssignPickerForOrder(pageKey, order) {
-  var parts = parseOrderConstructDateParts(order);
-  var picker = getAssignPicker(pageKey);
-  var cfg = getAssignConfig(pageKey);
-  if (parts) {
-    picker.year = parts.year;
-    picker.month = parts.month;
-    picker.day = parts.day;
-  }
-  var yearEl = document.getElementById(cfg.ids.year);
-  var monthEl = document.getElementById(cfg.ids.month);
-  if (yearEl) yearEl.value = String(picker.year);
-  if (monthEl) monthEl.value = String(picker.month);
-}
-
-function applyOpenActionFilterToControls(actionFilter) {
-  var picker = getAssignPicker("open");
-  picker.actionFilter = actionFilter || "pending";
-  var group = document.getElementById("openActionFilter");
-  if (!group) return;
-  group.querySelectorAll("[data-open-action-filter]").forEach(function (btn) {
-    var active = btn.getAttribute("data-open-action-filter") === picker.actionFilter;
-    btn.classList.toggle("assign-open-filter__btn--active", active);
-    btn.setAttribute("aria-pressed", active ? "true" : "false");
-  });
-}
-
-function focusAssignTableOrderRow(pageKey, orderIndex) {
-  var cfg = getAssignConfig(pageKey);
-  var tbody = document.getElementById(cfg.ids.tableBody);
-  if (!tbody) return;
-  var row = tbody.querySelector(
-    'tr.assign-table__row-main[data-order-index="' + orderIndex + '"]'
-  );
-  if (!row) return;
-  row.classList.add("assign-table__row-main--highlight");
-  row.scrollIntoView({ block: "nearest", behavior: "smooth" });
-  window.setTimeout(function () {
-    row.classList.remove("assign-table__row-main--highlight");
-  }, 2500);
-}
-
-function navigateToAssignScreenForOrder(pageKey, orderIndex) {
-  var list = getStoredOrders();
-  var order = list[orderIndex];
-  if (!order) return;
-
-  applyAssignPickerForOrder(pageKey, order);
-  showScreen(pageKey === "assign" ? "order-assign" : "order-open");
-  window.requestAnimationFrame(function () {
-    focusAssignTableOrderRow(pageKey, orderIndex);
-  });
-}
-
-function openOrderDetailFromSummaryList(orderIndex, scopeKey, metricKey) {
-  var list = getStoredOrders();
-  if (!list[orderIndex]) return;
-
-  closeModal("modal-order-summary-list");
-
-  if (metricKey === "unassigned") {
-    navigateToAssignScreenForOrder("assign", orderIndex);
-    return;
-  }
-
-  if (metricKey === "pending") {
-    applyOpenActionFilterToControls("pending");
-    navigateToAssignScreenForOrder("open", orderIndex);
-  }
-}
-
-function openOrderSummaryListModal(scopeKey, metricKey) {
-  var filters = syncOrderSummaryFilterFromControls();
-  var scopeLabel = ASSIGN_SCOPE_LABELS[scopeKey] || ORDER_SCOPE_LABELS[scopeKey] || scopeKey;
-  var metricLabel = ORDER_SUMMARY_METRIC_LABELS[metricKey] || metricKey;
-  var titleEl = document.getElementById("orderSummaryListTitle");
-  var metaEl = document.getElementById("orderSummaryListMeta");
-  var bodyEl = document.getElementById("orderSummaryListBody");
-  var emptyEl = document.getElementById("orderSummaryListEmpty");
-  var salesHead = document.getElementById("orderSummaryListSalesHead");
-  var orders = getOrdersForOrderSummaryCell(scopeKey, metricKey, filters);
-  var showSales = metricKey === "sales";
-  var rowNavigates =
-    metricKey === "unassigned" || metricKey === "pending";
-  var html = "";
-  var i;
-
-  orderSummaryListContext.scopeKey = scopeKey;
-  orderSummaryListContext.metricKey = metricKey;
-
-  if (titleEl) {
-    titleEl.textContent = scopeLabel + " · " + metricLabel;
-  }
-  if (metaEl) {
-    metaEl.textContent =
-      formatOrderSummaryFilterPeriodLabel(filters) + " · 총 " + orders.length + "건";
-  }
-  if (salesHead) salesHead.hidden = !showSales;
-
-  for (i = 0; i < orders.length; i++) {
-    var order = orders[i];
-    var orderIndex = getOrderIndexInStorage(order.orderNo);
-    var salesCell = "";
-    if (showSales) {
-      var salesAmount = getOrderScopeSalesAmount(order, scopeKey);
-      salesCell =
-        "<td>" +
-        escapeHtml(formatOrderSummarySalesDisplay(salesAmount) || "-") +
-        "</td>";
-    }
-    html +=
-      "<tr" +
-      (rowNavigates && orderIndex >= 0
-        ? ' class="order-summary-list-table__row--clickable" data-order-index="' +
-          orderIndex +
-          '"'
-        : "") +
-      ">" +
-      "<td>" +
-      (i + 1) +
-      "</td>" +
-      "<td>" +
-      escapeHtml(order.orderNo || "") +
-      "</td>" +
-      "<td>" +
-      escapeHtml(
-        order.constructDate ? formatOrderConstructDateDisplay(order.constructDate) : ""
-      ) +
-      "</td>" +
-      "<td>" +
-      escapeHtml(order.siteName || "") +
-      "</td>" +
-      "<td>" +
-      escapeHtml(getOrderScopePartnerDisplay(order, scopeKey)) +
-      "</td>" +
-      salesCell +
-      "</tr>";
-  }
-
-  if (bodyEl) bodyEl.innerHTML = html;
-  if (emptyEl) emptyEl.hidden = orders.length > 0;
-  if (bodyEl && bodyEl.closest("table")) {
-    bodyEl.closest("table").hidden = orders.length === 0;
-  }
-
-  openModal("modal-order-summary-list");
-}
-
-function buildOrderSummaryCellInnerHtml(metricKey, text, mode) {
-  if (metricKey === "sales") {
-    var salesBoxClass =
-      "order-summary-table__cell-box order-summary-table__cell-box--sales " +
-      (mode === "count"
-        ? "order-summary-table__cell-box--sales-count"
-        : "order-summary-table__cell-box--sales-ratio");
-    if (mode === "count" && text && text !== "-" && /[1-9]/.test(String(text))) {
-      return (
-        '<div class="' +
-        salesBoxClass +
-        '"><span>' +
-        escapeHtml(text) +
-        '</span><span class="order-summary-table__sales-unit">백만원</span></div>'
-      );
-    }
-    return (
-      '<div class="' +
-      salesBoxClass +
-      '"><span>' +
-      escapeHtml(text) +
-      "</span></div>"
-    );
-  }
-  var boxClass = "order-summary-table__cell-box";
-  if (metricKey === "unassigned" || metricKey === "pending") {
-    boxClass += " order-summary-table__cell-box--alert";
-  }
-  return (
-    '<div class="' + boxClass + '"><span>' + escapeHtml(text) + "</span></div>"
-  );
+  return rawValue > 0 ? String(rawValue) + "건" : "";
 }
 
 function renderOrderSummaryTable() {
   var tbody = document.getElementById("orderSummaryTableBody");
   if (!tbody) return;
 
-  var filters = syncOrderSummaryFilterFromControls();
   var mode = summaryMetricState === "ratio" ? "ratio" : "count";
-  var summary = buildOrderSummaryData(filters);
+  var summary = buildOrderSummaryData();
   var html = "";
   var metrics = [
     { key: "order", label: "시공오더" },
@@ -2030,31 +1632,40 @@ function renderOrderSummaryTable() {
         value,
         row.order,
         summary.totalSales,
-        mode,
-        filters.year
+        mode
       );
-      var cellInner = buildOrderSummaryCellInnerHtml(metric.key, text, mode);
-      var cellClass =
-        metric.key === "sales"
-          ? "order-summary-table__cell order-summary-table__cell--sales"
-          : "order-summary-table__cell";
-      var canOpenList =
-        value > 0 &&
-        (metric.key === "unassigned" || metric.key === "pending");
-      html +=
-        '<td class="' +
-        cellClass +
-        '">' +
-        '<button type="button" class="order-summary-table__cell-btn"' +
-        ' data-summary-scope="' +
-        escapeHtml(scopeKey) +
-        '" data-summary-metric="' +
-        escapeHtml(metric.key) +
-        '"' +
-        (canOpenList ? "" : " disabled") +
-        ">" +
-        cellInner +
-        "</button></td>";
+      if (metric.key === "sales") {
+        var salesBoxClass =
+          "order-summary-table__cell-box order-summary-table__cell-box--sales " +
+          (mode === "count"
+            ? "order-summary-table__cell-box--sales-count"
+            : "order-summary-table__cell-box--sales-ratio");
+        if (mode === "count" && text) {
+          html +=
+            '<td class="order-summary-table__cell order-summary-table__cell--sales">' +
+            '<div class="' +
+            salesBoxClass +
+            '">' +
+            "<span>" +
+            escapeHtml(text) +
+            '</span><span class="order-summary-table__sales-unit">백만원</span>' +
+            "</div></td>";
+        } else {
+          html +=
+            '<td class="order-summary-table__cell order-summary-table__cell--sales">' +
+            '<div class="' +
+            salesBoxClass +
+            '">' +
+            "<span>" +
+            escapeHtml(text) +
+            "</span></div></td>";
+        }
+      } else {
+        html +=
+          '<td class="order-summary-table__cell"><div class="order-summary-table__cell-box"><span>' +
+          escapeHtml(text) +
+          "</span></div></td>";
+      }
     });
 
     html += "</tr>";
@@ -2070,68 +1681,6 @@ function syncOrderSummaryMetricFromControls() {
   summaryMetricState = active
     ? active.getAttribute("data-summary-metric") || "count"
     : "count";
-}
-
-function initOrderSummaryYearMonthFilters() {
-  if (initializedScreens.orderSummaryYm) return;
-  initializedScreens.orderSummaryYm = true;
-
-  var yearEl = document.getElementById("orderSummaryYear");
-  var monthEl = document.getElementById("orderSummaryMonth");
-  if (!yearEl || !monthEl) return;
-
-  populateOrderYearSelect(yearEl, orderSummaryFilterState.year);
-  populateOrderSummaryMonthSelect(monthEl, orderSummaryFilterState.month);
-
-  yearEl.addEventListener("change", function () {
-    syncOrderSummaryFilterFromControls();
-    renderOrderSummaryTable();
-  });
-
-  monthEl.addEventListener("change", function () {
-    syncOrderSummaryFilterFromControls();
-    renderOrderSummaryTable();
-  });
-}
-
-function initOrderSummaryTableClicks() {
-  if (initializedScreens.orderSummaryTable) return;
-  initializedScreens.orderSummaryTable = true;
-
-  var wrap = document.querySelector("#screen-order-summary .order-summary-table-wrap");
-  if (!wrap) return;
-
-  wrap.addEventListener("click", function (e) {
-    var btn = e.target.closest(".order-summary-table__cell-btn");
-    if (!btn || btn.disabled) return;
-    e.preventDefault();
-    openOrderSummaryListModal(
-      btn.getAttribute("data-summary-scope") || "",
-      btn.getAttribute("data-summary-metric") || ""
-    );
-  });
-}
-
-function initOrderSummaryListRowClicks() {
-  if (initializedScreens.orderSummaryList) return;
-  initializedScreens.orderSummaryList = true;
-
-  var bodyEl = document.getElementById("orderSummaryListBody");
-  if (!bodyEl) return;
-
-  bodyEl.addEventListener("click", function (e) {
-    var row = e.target.closest("tr.order-summary-list-table__row--clickable");
-    if (!row) return;
-    var metricKey = orderSummaryListContext.metricKey;
-    if (metricKey !== "unassigned" && metricKey !== "pending") return;
-    var orderIndex = parseInt(row.getAttribute("data-order-index"), 10);
-    if (isNaN(orderIndex) || orderIndex < 0) return;
-    openOrderDetailFromSummaryList(
-      orderIndex,
-      orderSummaryListContext.scopeKey || "",
-      metricKey
-    );
-  });
 }
 
 function initOrderSummaryMetricToggle() {
@@ -2161,16 +1710,20 @@ function initOrderSummaryPage(screen) {
   initLogout(screen);
   initOrderNavDelegation();
   initOrderSummaryMetricToggle();
-  initOrderSummaryYearMonthFilters();
-  initOrderSummaryTableClicks();
-  initOrderSummaryListRowClicks();
 
   if (!initializedScreens.orderSummary) {
     initializedScreens.orderSummary = true;
+
+    var editProfile = document.getElementById("btnEditProfileSummary");
+    if (editProfile) {
+      editProfile.addEventListener("click", function (e) {
+        e.preventDefault();
+        goToSignupEdit();
+      });
+    }
   }
 
   syncOrderSummaryMetricFromControls();
-  syncOrderSummaryFilterFromControls();
   renderOrderSummaryTable();
 }
 
@@ -2193,8 +1746,6 @@ function updateOrderTopbarActive(activeNav, screenEl) {
   if (!screenEl) return;
   var isHomeActive = activeNav === "home";
   var logo = screenEl.querySelector(".order-topbar__logo");
-  var auth = getAuth();
-  var hideRestrictedNav = !!auth && (auth.role === "partner" || auth.role === "worker");
 
   if (logo) {
     logo.classList.toggle("order-topbar__logo--active", isHomeActive);
@@ -2203,11 +1754,6 @@ function updateOrderTopbarActive(activeNav, screenEl) {
   screenEl.querySelectorAll("[data-order-nav]").forEach(function (link) {
     var nav = link.getAttribute("data-order-nav");
     if (nav === "home") return;
-    if (hideRestrictedNav && (nav === "order" || nav === "assign")) {
-      link.style.display = "none";
-      return;
-    }
-    link.style.display = "";
     var isActive = !isHomeActive && nav === activeNav;
     link.classList.toggle("order-topbar__link--active", isActive);
   });
@@ -2283,19 +1829,9 @@ function generateOrderNumber() {
   return num;
 }
 
-function getOrderScopeGroupElement() {
-  return document.getElementById("orderScopeGroup");
-}
-
-function getOrderScopeSalesListElement() {
-  return document.getElementById("orderScopeSalesList");
-}
-
 function getOrderScopeValues() {
-  var group = getOrderScopeGroupElement();
-  if (!group) return [];
   var values = [];
-  group.querySelectorAll(".order-scope-option--active").forEach(function (btn) {
+  document.querySelectorAll(".order-scope-option--active").forEach(function (btn) {
     values.push(btn.getAttribute("data-value"));
   });
   return values;
@@ -2592,15 +2128,12 @@ function updateOrderFieldFilledStates() {
 function resetOrderForm() {
   setOrderConstructDate("");
 
-  var scopeGroup = getOrderScopeGroupElement();
-  if (scopeGroup) {
-    scopeGroup.querySelectorAll(".order-scope-option").forEach(function (btn) {
-      btn.classList.toggle(
-        "order-scope-option--active",
-        btn.getAttribute("data-value") === "kitchen-product"
-      );
-    });
-  }
+  document.querySelectorAll(".order-scope-option").forEach(function (btn) {
+    btn.classList.toggle(
+      "order-scope-option--active",
+      btn.getAttribute("data-value") === "kitchen-product"
+    );
+  });
 
   var siteName = document.getElementById("orderSiteName");
   var address = document.getElementById("orderAddress");
@@ -2609,12 +2142,9 @@ function resetOrderForm() {
   if (address) address.value = "";
   if (issue) issue.value = "";
 
-  var salesList = getOrderScopeSalesListElement();
-  if (salesList) {
-    salesList.querySelectorAll(".order-scope-sales-input").forEach(function (input) {
-      input.value = "";
-    });
-  }
+  document.querySelectorAll(".order-scope-sales-input").forEach(function (input) {
+    input.value = "";
+  });
   updateOrderScopeSalesEnabled();
 
   ["orderDrawing1", "orderDrawing2", "orderDrawing3"].forEach(function (id) {
@@ -2657,47 +2187,20 @@ function registerOrder() {
   resetOrderForm();
 }
 
-function getEventTargetElement(event) {
-  var target = event && event.target;
-  if (!target) return null;
-  return target.nodeType === 1 ? target : target.parentElement || null;
-}
-
 function initOrderNavDelegation() {
   if (initializedScreens.orderNav) return;
   initializedScreens.orderNav = true;
-  var lastNavHandledAt = 0;
-  var lastNavTarget = "";
-  var touchMoved = false;
 
-  function handleOrderTopbarNav(e) {
-    var target = getEventTargetElement(e);
-    if (!target) return;
-
-    var editProfile = target.closest("[data-action='signup-edit']");
-    if (editProfile && editProfile.closest(".order-topbar__aside")) {
-      e.preventDefault();
-      if (getAuth()) goToSignupEdit();
-      return;
-    }
-
-    var link = target.closest("[data-order-nav]");
+  document.addEventListener("click", function (e) {
+    var link = e.target.closest("[data-order-nav]");
     if (!link || !link.closest(".order-page")) return;
     e.preventDefault();
     var nav = link.getAttribute("data-order-nav");
     if (nav === "order") {
-      if (!canAccessOrderPageByRole("order")) {
-        showScreen("order-status");
-        return;
-      }
       showScreen("order");
       return;
     }
     if (nav === "assign") {
-      if (!canAccessOrderPageByRole("order-assign")) {
-        showScreen("order-status");
-        return;
-      }
       showScreen("order-assign");
       return;
     }
@@ -2718,71 +2221,6 @@ function initOrderNavDelegation() {
       return;
     }
     alert("준비 중인 메뉴입니다.");
-  }
-
-  function shouldSkipDuplicate(e, targetKey) {
-    var now = Date.now();
-    var duplicate =
-      now - lastNavHandledAt < 450 &&
-      targetKey &&
-      lastNavTarget &&
-      targetKey === lastNavTarget;
-    if (!duplicate) return false;
-    if (e && typeof e.preventDefault === "function") e.preventDefault();
-    return true;
-  }
-
-  function markHandled(targetKey) {
-    lastNavHandledAt = Date.now();
-    lastNavTarget = targetKey || "";
-  }
-
-  function getNavTargetKey(e) {
-    var target = getEventTargetElement(e);
-    if (!target) return "";
-    var navLink = target.closest("[data-order-nav]");
-    if (navLink) return "nav:" + (navLink.getAttribute("data-order-nav") || "");
-    var editProfile = target.closest("[data-action='signup-edit']");
-    if (editProfile) return "action:signup-edit";
-    return "";
-  }
-
-  function runOrderNavDelegation(e) {
-    if (e && e.type === "touchmove") {
-      touchMoved = true;
-      return;
-    }
-    if (e && e.type === "touchstart") {
-      touchMoved = false;
-      return;
-    }
-    if (e && e.type === "touchend" && touchMoved) return;
-    var key = getNavTargetKey(e);
-    if (shouldSkipDuplicate(e, key)) return;
-    if (key) markHandled(key);
-    handleOrderTopbarNav(e);
-  }
-
-  // iOS/모바일 환경에서 click 누락이 발생할 수 있어 touchend도 함께 처리
-  document.addEventListener("click", runOrderNavDelegation);
-  document.addEventListener("pointerup", runOrderNavDelegation);
-  document.addEventListener("touchstart", runOrderNavDelegation, { passive: true });
-  document.addEventListener("touchmove", runOrderNavDelegation, { passive: true });
-  document.addEventListener("touchend", runOrderNavDelegation, { passive: false });
-
-  // 모바일 브라우저에서 문서 위임이 누락되는 케이스를 막기 위해
-  // 상단 메뉴/가입수정에도 직접 이벤트를 보조로 바인딩한다.
-  var topbarTargets = document.querySelectorAll(
-    ".order-page [data-order-nav], .order-page [data-action='signup-edit']"
-  );
-  topbarTargets.forEach(function (el) {
-    if (!el || el.dataset.orderNavBound === "1") return;
-    el.dataset.orderNavBound = "1";
-    el.addEventListener("click", runOrderNavDelegation);
-    el.addEventListener("pointerup", runOrderNavDelegation);
-    el.addEventListener("touchstart", runOrderNavDelegation, { passive: true });
-    el.addEventListener("touchmove", runOrderNavDelegation, { passive: true });
-    el.addEventListener("touchend", runOrderNavDelegation, { passive: false });
   });
 }
 
@@ -3140,99 +2578,29 @@ function isOrderOpen(order) {
   return isOrderAssigned(order) && hasOrderScopeAccidentType(order) && !isOrderClosed(order);
 }
 
-function getOrderProgressScopeKeys(order) {
-  return getOrderScopeKeys(order.scope);
-}
-
-function hasScopeWorkerSaved(order, scopeKey) {
-  var info = normalizeOrderScopeWorkInfo(order);
-  if (scopeKey) return !!((info[scopeKey] && info[scopeKey].worker) || "").trim();
-  return !!(order.constructionWorker || "").trim();
-}
-
-function hasAllOrderScopeWorkersSaved(order) {
-  var keys = getOrderProgressScopeKeys(order);
-  var i;
-  if (!keys.length) return hasScopeWorkerSaved(order, "");
-  for (i = 0; i < keys.length; i++) {
-    if (!hasScopeWorkerSaved(order, keys[i])) return false;
-  }
-  return true;
-}
-
-function hasScopeAccidentTypeRegistered(order, scopeKey) {
-  var info = normalizeOrderScopeWorkInfo(order);
-  var data = scopeKey ? info[scopeKey] || {} : info[""] || {};
-  var type = (data.accidentType || order.accidentType || "").trim();
-  return !!type && type !== "선택";
-}
-
-function hasAnyOrderScopeAccidentRegistered(order) {
-  var keys = getOrderProgressScopeKeys(order);
-  var i;
-  if (!keys.length) return hasScopeAccidentTypeRegistered(order, "");
-  for (i = 0; i < keys.length; i++) {
-    if (hasScopeAccidentTypeRegistered(order, keys[i])) return true;
-  }
-  return false;
-}
-
-function isConstructDatePlusOneDayPassed(constructDateIso) {
-  if (!constructDateIso || !/^\d{4}-\d{2}-\d{2}$/.test(constructDateIso)) return false;
-  var parts = constructDateIso.split("-");
-  var threshold = new Date(
-    parseInt(parts[0], 10),
-    parseInt(parts[1], 10) - 1,
-    parseInt(parts[2], 10)
-  );
-  threshold.setDate(threshold.getDate() + 1);
-  threshold.setHours(0, 0, 0, 0);
-  var today = new Date();
-  today.setHours(0, 0, 0, 0);
-  return today.getTime() >= threshold.getTime();
-}
-
-function hasAllOrderScopesActionCompleted(order) {
-  var keys = getOrderProgressScopeKeys(order);
-  var info = normalizeOrderScopeWorkInfo(order);
-  var i;
-  if (!keys.length) return isScopeActionResultCompleted(info[""] || {});
-  for (i = 0; i < keys.length; i++) {
-    if (!isScopeActionResultCompleted(info[keys[i]] || {})) return false;
-  }
-  return true;
-}
-
-function computeOrderProgressStatus(order) {
-  if (hasAllOrderScopesActionCompleted(order)) return "조치완료";
-  if (!hasAllOrderScopeWorkersSaved(order)) return "배정대기";
-  if (hasAnyOrderScopeAccidentRegistered(order)) return "시공미결";
-  if (isConstructDatePlusOneDayPassed(order.constructDate)) return "시공완료";
-  return "배정완료";
-}
-
-function applyComputedProgressStatusToOrder(order) {
-  var info = normalizeOrderScopeWorkInfo(order);
-  var keys = getOrderProgressScopeKeys(order);
-  var progress = computeOrderProgressStatus(order);
-  var i;
-
-  if (!keys.length) {
-    if (!info[""]) info[""] = getOrderScopeWorkData(order, "");
-    info[""].progress = progress;
-  } else {
-    for (i = 0; i < keys.length; i++) {
-      if (!info[keys[i]]) info[keys[i]] = getOrderScopeWorkData(order, keys[i]);
-      info[keys[i]].progress = progress;
-    }
-  }
-
-  order.scopeWorkInfo = info;
-  order.progressStatus = progress;
-}
-
 function hasOrderActionCompleted(order) {
-  return hasAllOrderScopesActionCompleted(order);
+  var keys = getOrderScopeKeys(order.scope);
+  var info = order.scopeWorkInfo;
+  var i;
+  var d;
+  var type;
+  var progress;
+
+  if (info && typeof info === "object" && keys.length) {
+    for (i = 0; i < keys.length; i++) {
+      type = ((info[keys[i]] && info[keys[i]].accidentType) || "").trim();
+      if (!type || type === "선택") continue;
+      d = info[keys[i]] || {};
+      if ((d.actionSchedule || "").trim() || (d.actionContent || "").trim()) return true;
+      progress = (d.progress || "").trim();
+      if (progress === "완료" || progress === "조치완료" || progress === "완료됨") return true;
+    }
+    return false;
+  }
+
+  if ((order.actionSchedule || "").trim() || (order.actionContent || "").trim()) return true;
+  progress = (order.progressStatus || "").trim();
+  return progress === "완료" || progress === "조치완료" || progress === "완료됨";
 }
 
 function matchesOpenActionFilter(order, actionFilter) {
@@ -3261,7 +2629,20 @@ function syncOpenActionFilterFromControls() {
 }
 
 function hasOrderWorkerAssigned(order) {
-  return hasAllOrderScopeWorkersSaved(order);
+  var info = normalizeOrderScopeWorkInfo(order);
+  var keys = getOrderScopeKeys(order.scope);
+  var i;
+  var w;
+
+  if (keys.length) {
+    for (i = 0; i < keys.length; i++) {
+      w = ((info[keys[i]] && info[keys[i]].worker) || "").trim();
+      if (w) return true;
+    }
+    return false;
+  }
+
+  return !!(order.constructionWorker || "").trim();
 }
 
 function getStatusWorkerFilter() {
@@ -3270,11 +2651,6 @@ function getStatusWorkerFilter() {
 }
 
 function syncStatusWorkerFilterFromControls() {
-  var auth = getAuth();
-  if (auth && auth.role === "worker") {
-    getAssignPicker("status").workerFilter = "assigned";
-    return;
-  }
   var group = document.getElementById("statusWorkerFilter");
   var picker = getAssignPicker("status");
   if (!group) {
@@ -3295,7 +2671,7 @@ function matchesStatusWorkerFilter(order) {
 
 function getOrdersForAssignDate(year, month, day, filterMode) {
   var iso = toConstructDateIso(year, month, day);
-  return getVisibleOrdersForCurrentUser().filter(function (order) {
+  return getStoredOrders().filter(function (order) {
     if (order.constructDate !== iso) return false;
     if (filterMode === "assigned") {
       return isOrderAssigned(order) && matchesStatusWorkerFilter(order);
@@ -3555,7 +2931,6 @@ function normalizeOrderScopeWorkInfo(order) {
     actionWorker: order.actionWorker || "",
     actionContent: order.actionContent || "",
     actionResult: order.actionResult || "",
-    actionPartner: order.actionPartner || "",
   };
 
   if (keys.length) {
@@ -3569,7 +2944,6 @@ function normalizeOrderScopeWorkInfo(order) {
         actionWorker: legacy.actionWorker,
         actionContent: legacy.actionContent,
         actionResult: legacy.actionResult,
-        actionPartner: legacy.actionPartner,
       };
     });
   } else {
@@ -3591,7 +2965,6 @@ function getOrderScopeWorkData(order, scopeKey) {
     actionWorker: data.actionWorker || "",
     actionContent: data.actionContent || "",
     actionResult: data.actionResult || "",
-    actionPartner: data.actionPartner || "",
   };
 }
 
@@ -3610,95 +2983,6 @@ function syncOrderLegacyWorkFields(order) {
   order.actionWorker = data.actionWorker || "";
   order.actionContent = data.actionContent || "";
   order.actionResult = data.actionResult || "";
-  order.actionPartner = data.actionPartner || "";
-}
-
-function createEmptyActionRoundData() {
-  return {
-    actionSchedule: "",
-    actionPartner: "",
-    actionWorker: "",
-    actionContent: "",
-    actionResult: "",
-  };
-}
-
-function normalizeActionRounds(workData) {
-  var data = workData || {};
-  if (data.actionRounds && typeof data.actionRounds === "object" && !Array.isArray(data.actionRounds)) {
-    return data.actionRounds;
-  }
-  return {
-    1: {
-      actionSchedule: data.actionSchedule || "",
-      actionPartner: data.actionPartner || "",
-      actionWorker: data.actionWorker || "",
-      actionContent: data.actionContent || "",
-      actionResult: data.actionResult || "",
-    },
-  };
-}
-
-function getActionRoundData(rounds, roundNum) {
-  var key = String(roundNum);
-  var round = rounds[key] || rounds[roundNum];
-  if (!round || typeof round !== "object") return createEmptyActionRoundData();
-  return {
-    actionSchedule: round.actionSchedule || "",
-    actionPartner: round.actionPartner || "",
-    actionWorker: round.actionWorker || "",
-    actionContent: round.actionContent || "",
-    actionResult: round.actionResult || "",
-  };
-}
-
-function getVisibleActionRoundNumbers(rounds) {
-  var nums = [1];
-  var round = 1;
-  while (round < 50) {
-    if (getActionRoundData(rounds, round).actionResult === "재미결") {
-      round += 1;
-      nums.push(round);
-    } else {
-      break;
-    }
-  }
-  return nums;
-}
-
-function isScopeActionResultCompleted(workData) {
-  var rounds = normalizeActionRounds(workData || {});
-  var nums = getVisibleActionRoundNumbers(rounds);
-  var latestRound = nums[nums.length - 1];
-  var result = getActionRoundData(rounds, latestRound).actionResult;
-  return result === "조치완료" || result === "조치완결";
-}
-
-function syncFlatActionFieldsFromRounds(entry) {
-  var rounds = entry.actionRounds || normalizeActionRounds(entry);
-  var nums = getVisibleActionRoundNumbers(rounds);
-  var latest = nums[nums.length - 1];
-  var data = getActionRoundData(rounds, latest);
-  entry.actionSchedule = data.actionSchedule || "";
-  entry.actionPartner = data.actionPartner || "";
-  entry.actionWorker = data.actionWorker || "";
-  entry.actionContent = data.actionContent || "";
-  entry.actionResult = data.actionResult || "";
-}
-
-function getActiveStatusDetailScopeKey() {
-  var activeTag = document.querySelector(
-    "#statusDetailWorkScopeTags .status-detail-modal__scope-tag--active"
-  );
-  if (activeTag) return activeTag.getAttribute("data-scope-key") || "";
-  var activeBlock = document.querySelector(
-    "#statusDetailWorkBlocks .status-detail-modal__work-block:not([hidden])"
-  );
-  return activeBlock ? activeBlock.getAttribute("data-scope-key") || "" : "";
-}
-
-function getActiveActionRoundForScope(scopeKey) {
-  return statusDetailActiveActionRound[scopeKey] || 1;
 }
 
 function getStatusActionResultOptionsHtml(selected) {
@@ -3741,8 +3025,9 @@ function buildStatusDetailWorkBlockHtml(scopeKey, scopeLabel, partnerText, workD
   var scheduleDisplay = scheduleIso ? formatOrderConstructDateDisplay(scheduleIso) : "";
   var scopeKeyAttr = escapeHtml(scopeKey);
   var workerReadOnlyAttr = isOpenMode ? " readonly" : "";
+  var progressReadOnlyAttr = isOpenMode ? " readonly" : "";
   var accidentContentReadOnlyAttr = isOpenMode ? " readonly" : "";
-  var progressStatus = options.progressStatus || workData.progress || "";
+  var actionWorkerOptions = getAssignWorkerOptions(workData.actionWorker || "", partnerUserId, scopeKey);
   var accidentTypeFieldHtml = isOpenMode
     ? '<input type="text" class="modal-field-input status-detail-accident-type-readonly" value="' +
       escapeHtml(workData.accidentType || "") +
@@ -3754,19 +3039,6 @@ function buildStatusDetailWorkBlockHtml(scopeKey, scopeLabel, partnerText, workD
       '">' +
       getStatusAccidentTypeOptionsHtml(workData.accidentType) +
       "</select>";
-
-  var actionFieldsHtml = isOpenMode
-    ? ""
-    : buildStatusDetailActionFieldsInnerHtml(
-        scopeKeyAttr,
-        scopeLabel,
-        scheduleIso,
-        scheduleDisplay,
-        partnerUserId,
-        scopeKey,
-        workData,
-        false
-      );
 
   return (
     '<div class="status-detail-modal__work-block" data-scope-key="' +
@@ -3801,11 +3073,13 @@ function buildStatusDetailWorkBlockHtml(scopeKey, scopeLabel, partnerText, workD
     '<div class="order-field__label"><span>진행상태</span></div>' +
     '<span class="order-field__divider" aria-hidden="true"></span>' +
     '<div class="order-field__control order-field__control--md">' +
-    '<span class="modal-field-value status-detail-progress" aria-label="' +
+    '<input type="text" class="modal-field-input status-detail-progress" value="' +
+    escapeHtml(workData.progress) +
+    '"' +
+    progressReadOnlyAttr +
+    '" aria-label="' +
     escapeHtml(scopeLabel + " 진행상태") +
-    '">' +
-    escapeHtml(progressStatus) +
-    "</span></div></div>" +
+    '" /></div></div>' +
     '<div class="order-field">' +
     '<div class="order-field__label"><span>사고유형</span></div>' +
     '<span class="order-field__divider" aria-hidden="true"></span>' +
@@ -3823,41 +3097,6 @@ function buildStatusDetailWorkBlockHtml(scopeKey, scopeLabel, partnerText, workD
     ' aria-label="' +
     escapeHtml(scopeLabel + " 사고내용") +
     '" /></div></div>' +
-    actionFieldsHtml +
-    "</div></div>"
-  );
-}
-
-function refreshStatusDetailActionWorkerSelect(panel) {
-  if (!panel) return;
-  var block = panel.closest(".status-detail-modal__work-block");
-  var partnerEl = panel.querySelector(".status-detail-action-partner");
-  var workerEl = panel.querySelector(".status-detail-action-worker");
-  if (!workerEl) return;
-  var scopeKey = block ? block.getAttribute("data-scope-key") || "" : "";
-  var partnerId = partnerEl ? partnerEl.value || "" : "";
-  var selectedWorker = workerEl.value || "";
-  workerEl.innerHTML = getAssignWorkerOptions(selectedWorker, partnerId, scopeKey);
-}
-
-function buildStatusDetailActionFieldsInnerHtml(
-  scopeKeyAttr,
-  scopeLabel,
-  scheduleIso,
-  scheduleDisplay,
-  partnerUserId,
-  scopeKey,
-  workData,
-  includeResult
-) {
-  var actionPartnerId = (workData.actionPartner || partnerUserId || "").trim();
-  var actionPartnerOptions = getAssignPartnerOptions(actionPartnerId, scopeKey);
-  var actionWorkerOptions = getAssignWorkerOptions(
-    workData.actionWorker || "",
-    actionPartnerId,
-    scopeKey
-  );
-  var actionDateFieldHtml =
     '<div class="order-field order-field--date">' +
     '<div class="order-field__label"><span>조치일자</span></div>' +
     '<span class="order-field__divider" aria-hidden="true"></span>' +
@@ -3875,19 +3114,7 @@ function buildStatusDetailActionFieldsInnerHtml(
     '<svg class="order-date-btn__icon" width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">' +
     '<rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/>' +
     '<path d="M3 10h18M8 2v4M16 2v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>' +
-    "</svg></button></div></div>";
-  var actionPartnerFieldHtml = includeResult
-    ? '<div class="order-field">' +
-      '<div class="order-field__label"><span>시공협력사</span></div>' +
-      '<span class="order-field__divider" aria-hidden="true"></span>' +
-      '<div class="order-field__control order-field__control--md">' +
-      '<select class="modal-field-input status-detail-action-partner" aria-label="' +
-      escapeHtml(scopeLabel + " 시공협력사") +
-      '">' +
-      actionPartnerOptions +
-      "</select></div></div>"
-    : "";
-  var actionWorkerFieldHtml =
+    "</svg></button></div></div>" +
     '<div class="order-field">' +
     '<div class="order-field__label"><span>조치사원</span></div>' +
     '<span class="order-field__divider" aria-hidden="true"></span>' +
@@ -3896,8 +3123,7 @@ function buildStatusDetailActionFieldsInnerHtml(
     escapeHtml(scopeLabel + " 조치사원") +
     '">' +
     actionWorkerOptions +
-    "</select></div></div>";
-  var actionContentFieldHtml =
+    "</select></div></div>" +
     '<div class="order-field">' +
     '<div class="order-field__label"><span>조치내용</span></div>' +
     '<span class="order-field__divider" aria-hidden="true"></span>' +
@@ -3906,128 +3132,20 @@ function buildStatusDetailActionFieldsInnerHtml(
     escapeHtml(workData.actionContent) +
     '" aria-label="' +
     escapeHtml(scopeLabel + " 조치내용") +
-    '" /></div></div>';
-  var actionResultFieldHtml =
-    '<div class="order-field">' +
-    '<div class="order-field__label"><span>조치결과</span></div>' +
-    '<span class="order-field__divider" aria-hidden="true"></span>' +
-    '<div class="order-field__control order-field__control--md">' +
-    '<select class="modal-field-input status-detail-action-result" aria-label="' +
-    escapeHtml(scopeLabel + " 조치결과") +
-    '">' +
-    getStatusActionResultOptionsHtml(workData.actionResult) +
-    "</select></div></div>";
-
-  return (
-    actionDateFieldHtml +
-    actionPartnerFieldHtml +
-    actionWorkerFieldHtml +
-    actionContentFieldHtml +
-    (includeResult ? actionResultFieldHtml : "")
+    '" /></div></div>' +
+    (isOpenMode
+      ? '<div class="order-field">' +
+        '<div class="order-field__label"><span>조치결과</span></div>' +
+        '<span class="order-field__divider" aria-hidden="true"></span>' +
+        '<div class="order-field__control order-field__control--md">' +
+        '<select class="modal-field-input status-detail-action-result" aria-label="' +
+        escapeHtml(scopeLabel + " 조치결과") +
+        '">' +
+        getStatusActionResultOptionsHtml(workData.actionResult) +
+        "</select></div></div>"
+      : "") +
+    "</div></div>"
   );
-}
-
-function buildStatusDetailActionBlockHtml(scopeKey, scopeLabel, partnerUserId, workData) {
-  var rounds = normalizeActionRounds(workData);
-  var roundNums = getVisibleActionRoundNumbers(rounds);
-  var scopeKeyAttr = escapeHtml(scopeKey);
-  var html =
-    '<div class="status-detail-modal__work-block" data-scope-key="' + scopeKeyAttr + '">';
-  var i;
-
-  for (i = 0; i < roundNums.length; i++) {
-    var roundNum = roundNums[i];
-    var roundData = getActionRoundData(rounds, roundNum);
-    var scheduleIso = parseStatusActionScheduleIso(roundData.actionSchedule);
-    var scheduleDisplay = scheduleIso ? formatOrderConstructDateDisplay(scheduleIso) : "";
-    var roundLabel = scopeLabel ? scopeLabel + " " + roundNum + "차" : roundNum + "차";
-
-    html +=
-      '<div class="status-detail-modal__action-round-panel" data-action-round="' +
-      roundNum +
-      '"' +
-      (roundNum === 1 ? "" : " hidden") +
-      ">" +
-      buildStatusDetailActionFieldsInnerHtml(
-        scopeKeyAttr,
-        roundLabel,
-        scheduleIso,
-        scheduleDisplay,
-        partnerUserId,
-        scopeKey,
-        roundData,
-        true
-      ) +
-      "</div>";
-  }
-
-  html += "</div>";
-  return html;
-}
-
-function renderStatusDetailActionRoundTags(scopeKey) {
-  var container = document.getElementById("statusDetailActionRoundTags");
-  if (!container) return;
-
-  var block = document.querySelector(
-    '#statusDetailActionBlocks .status-detail-modal__work-block[data-scope-key="' + scopeKey + '"]'
-  );
-  if (!block) {
-    container.innerHTML = "";
-    return;
-  }
-
-  var panels = block.querySelectorAll(".status-detail-modal__action-round-panel");
-  var nums = [];
-  var i;
-
-  for (i = 0; i < panels.length; i++) {
-    nums.push(parseInt(panels[i].getAttribute("data-action-round"), 10));
-  }
-  nums.sort(function (a, b) {
-    return a - b;
-  });
-
-  container.innerHTML = nums
-    .map(function (n) {
-      return (
-        '<button type="button" class="status-detail-modal__scope-tag status-detail-modal__action-round-tag" data-action-round="' +
-        n +
-        '" aria-pressed="false">' +
-        n +
-        "차</button>"
-      );
-    })
-    .join("");
-}
-
-function setActiveStatusDetailActionRound(scopeKey, roundNum) {
-  statusDetailActiveActionRound[scopeKey] = roundNum;
-
-  var block = document.querySelector(
-    '#statusDetailActionBlocks .status-detail-modal__work-block[data-scope-key="' + scopeKey + '"]'
-  );
-  if (block) {
-    var panels = block.querySelectorAll(".status-detail-modal__action-round-panel");
-    var i;
-    for (i = 0; i < panels.length; i++) {
-      var panelRound = parseInt(panels[i].getAttribute("data-action-round"), 10);
-      panels[i].hidden = panelRound !== roundNum;
-    }
-  }
-
-  var tags = document.querySelectorAll(
-    "#statusDetailActionRoundTags .status-detail-modal__action-round-tag"
-  );
-  var j;
-  for (j = 0; j < tags.length; j++) {
-    var tagRound = parseInt(tags[j].getAttribute("data-action-round"), 10);
-    var tagActive = tagRound === roundNum;
-    tags[j].classList.toggle("status-detail-modal__scope-tag--active", tagActive);
-    tags[j].setAttribute("aria-pressed", tagActive ? "true" : "false");
-  }
-
-  closeStatusActionDatePicker();
 }
 
 function renderStatusDetailScopeTags(keys) {
@@ -4055,9 +3173,6 @@ function renderStatusDetailScopeTags(keys) {
 function setActiveStatusDetailScope(scopeKey) {
   var tags = document.querySelectorAll("#statusDetailWorkScopeTags .status-detail-modal__scope-tag");
   var blocks = document.querySelectorAll("#statusDetailWorkBlocks .status-detail-modal__work-block");
-  var actionBlocks = document.querySelectorAll(
-    "#statusDetailActionBlocks .status-detail-modal__work-block"
-  );
   var i;
 
   for (i = 0; i < tags.length; i++) {
@@ -4074,76 +3189,7 @@ function setActiveStatusDetailScope(scopeKey) {
     blocks[i].classList.toggle("status-detail-modal__work-block--active", blockActive);
   }
 
-  for (i = 0; i < actionBlocks.length; i++) {
-    var actionBlockKey = actionBlocks[i].getAttribute("data-scope-key") || "";
-    var actionBlockActive = actionBlockKey === scopeKey;
-    actionBlocks[i].hidden = !actionBlockActive;
-    actionBlocks[i].classList.toggle("status-detail-modal__work-block--active", actionBlockActive);
-  }
-
-  if (activeAssignPageKey === "open") {
-    var activeRound = statusDetailActiveActionRound[scopeKey] || 1;
-    var actionBlock = document.querySelector(
-      '#statusDetailActionBlocks .status-detail-modal__work-block[data-scope-key="' + scopeKey + '"]'
-    );
-    if (actionBlock) {
-      var actionPanels = actionBlock.querySelectorAll(".status-detail-modal__action-round-panel");
-      var maxRound = 1;
-      var p;
-      for (p = 0; p < actionPanels.length; p++) {
-        maxRound = Math.max(
-          maxRound,
-          parseInt(actionPanels[p].getAttribute("data-action-round"), 10) || 1
-        );
-      }
-      if (activeRound > maxRound) activeRound = maxRound;
-    }
-    renderStatusDetailActionRoundTags(scopeKey);
-    setActiveStatusDetailActionRound(scopeKey, activeRound);
-  }
-
   closeStatusActionDatePicker();
-}
-
-function renderStatusDetailActionBlocks(order) {
-  var container = document.getElementById("statusDetailActionBlocks");
-  var section = document.getElementById("statusDetailActionSection");
-  var isOpenMode = activeAssignPageKey === "open";
-
-  if (section) section.hidden = !isOpenMode;
-  if (!container) return;
-
-  if (!isOpenMode) {
-    container.innerHTML = "";
-    return;
-  }
-
-  var keys = getOrderAccidentScopeKeys(order);
-  var partners = normalizeOrderAssignedPartners(order);
-  var scopeWorkInfo = normalizeOrderScopeWorkInfo(order);
-  var html = "";
-
-  if (!keys.length) {
-    container.innerHTML = buildStatusDetailActionBlockHtml(
-      "",
-      "",
-      order.assignedPartner || "",
-      scopeWorkInfo[""] || getOrderScopeWorkData(order, "")
-    );
-    statusDetailActiveActionRound[""] = 1;
-    return;
-  }
-
-  keys.forEach(function (key) {
-    html += buildStatusDetailActionBlockHtml(
-      key,
-      ASSIGN_SCOPE_LABELS[key] || key,
-      partners[key] || order.assignedPartner || "",
-      scopeWorkInfo[key] || getOrderScopeWorkData(order, key)
-    );
-  });
-
-  container.innerHTML = html;
 }
 
 function renderStatusDetailWorkBlocks(order) {
@@ -4155,7 +3201,6 @@ function renderStatusDetailWorkBlocks(order) {
   var partners = normalizeOrderAssignedPartners(order);
   var scopeWorkInfo = normalizeOrderScopeWorkInfo(order);
   var isOpenMode = activeAssignPageKey === "open";
-  var progressStatus = computeOrderProgressStatus(order);
   var html = "";
   var activeKey = "";
 
@@ -4167,13 +3212,8 @@ function renderStatusDetailWorkBlocks(order) {
       "",
       getPartnerDisplayName(order.assignedPartner),
       scopeWorkInfo[""] || getOrderScopeWorkData(order, ""),
-      {
-        isOpenMode: isOpenMode,
-        partnerUserId: order.assignedPartner || "",
-        progressStatus: progressStatus,
-      }
+      { isOpenMode: isOpenMode, partnerUserId: order.assignedPartner || "" }
     );
-    renderStatusDetailActionBlocks(order);
     setActiveStatusDetailScope("");
     return;
   }
@@ -4184,37 +3224,20 @@ function renderStatusDetailWorkBlocks(order) {
       ASSIGN_SCOPE_LABELS[key] || key,
       getPartnerDisplayName(partners[key] || ""),
       scopeWorkInfo[key] || getOrderScopeWorkData(order, key),
-      {
-        isOpenMode: isOpenMode,
-        partnerUserId: partners[key] || order.assignedPartner || "",
-        progressStatus: progressStatus,
-      }
+      { isOpenMode: isOpenMode, partnerUserId: partners[key] || order.assignedPartner || "" }
     );
   });
 
   container.innerHTML = html;
-  renderStatusDetailActionBlocks(order);
   activeKey = keys[0];
   setActiveStatusDetailScope(activeKey);
 }
 
-function getStatusDetailScopeBlock(scopeKey) {
-  var selector = '.status-detail-modal__work-block[data-scope-key="' + scopeKey + '"]';
-  return (
-    document.querySelector("#statusDetailActionBlocks " + selector) ||
-    document.querySelector("#statusDetailWorkBlocks " + selector)
-  );
-}
-
 function getStatusActionScheduleInput(scopeKey) {
-  var block = getStatusDetailScopeBlock(scopeKey);
-  if (!block) return null;
-  var round = getActiveActionRoundForScope(scopeKey);
-  var panel = block.querySelector(
-    '.status-detail-modal__action-round-panel[data-action-round="' + round + '"]'
+  var block = document.querySelector(
+    '.status-detail-modal__work-block[data-scope-key="' + scopeKey + '"]'
   );
-  if (panel) return panel.querySelector(".status-detail-action-schedule");
-  return block.querySelector(".status-detail-action-schedule");
+  return block ? block.querySelector(".status-detail-action-schedule") : null;
 }
 
 function getStatusActionScheduleIso(scopeKey) {
@@ -4709,88 +3732,35 @@ function saveStatusDetailFromModal() {
   if (!orders[idx]) return;
 
   var scopeWorkInfo = {};
-
-  function ensureScopeWorkEntry(key) {
-    if (!scopeWorkInfo[key]) {
-      scopeWorkInfo[key] = {
-        worker: "",
-        progress: "",
-        accidentType: "",
-        accidentContent: "",
-        actionSchedule: "",
-        actionWorker: "",
-        actionContent: "",
-        actionResult: "",
-        actionPartner: "",
-        actionRounds: null,
-      };
-    }
-    return scopeWorkInfo[key];
-  }
-
-  function readStatusDetailActionFieldsFromPanel(panel, roundEntry) {
-    var scheduleInput = panel.querySelector(".status-detail-action-schedule");
-    var actionPartnerEl = panel.querySelector(".status-detail-action-partner");
-    var actionWorkerEl = panel.querySelector(".status-detail-action-worker");
-    var actionContentEl = panel.querySelector(".status-detail-action-content");
-    var actionResultEl = panel.querySelector(".status-detail-action-result");
-
-    roundEntry.actionSchedule = scheduleInput ? scheduleInput.getAttribute("data-iso") || "" : "";
-    roundEntry.actionPartner = actionPartnerEl ? actionPartnerEl.value : "";
-    roundEntry.actionWorker = actionWorkerEl ? actionWorkerEl.value.trim() : "";
-    roundEntry.actionContent = actionContentEl ? actionContentEl.value.trim() : "";
-    roundEntry.actionResult = actionResultEl ? actionResultEl.value : "";
-  }
-
-  function readStatusDetailActionFieldsFromBlock(block, entry) {
-    var panel = block.querySelector(".status-detail-modal__action-round-panel");
-    if (panel) {
-      entry.actionRounds = {};
-      block.querySelectorAll(".status-detail-modal__action-round-panel").forEach(function (roundPanel) {
-        var roundKey = roundPanel.getAttribute("data-action-round");
-        if (roundKey === null) return;
-        var roundEntry = createEmptyActionRoundData();
-        readStatusDetailActionFieldsFromPanel(roundPanel, roundEntry);
-        entry.actionRounds[roundKey] = roundEntry;
-      });
-      syncFlatActionFieldsFromRounds(entry);
-      return;
-    }
-
-    readStatusDetailActionFieldsFromPanel(block, entry);
-  }
-
   document
     .querySelectorAll("#statusDetailWorkBlocks .status-detail-modal__work-block")
     .forEach(function (block) {
       var scopeKey = block.getAttribute("data-scope-key");
       if (scopeKey === null) return;
-      var entry = ensureScopeWorkEntry(scopeKey);
+      var scheduleInput = block.querySelector(".status-detail-action-schedule");
       var typeEl =
         block.querySelector(".status-detail-accident-type") ||
         block.querySelector(".status-detail-accident-type-readonly");
       var contentEl = block.querySelector(".status-detail-accident-content");
       var workerEl = block.querySelector(".status-detail-worker");
+      var progressEl = block.querySelector(".status-detail-progress");
+      var actionWorkerEl = block.querySelector(".status-detail-action-worker");
+      var actionContentEl = block.querySelector(".status-detail-action-content");
+      var actionResultEl = block.querySelector(".status-detail-action-result");
 
-      entry.worker = workerEl ? workerEl.value.trim() : "";
-      entry.accidentType = typeEl ? typeEl.value : "";
-      entry.accidentContent = contentEl ? contentEl.value.trim() : "";
-
-      if (block.querySelector(".status-detail-action-schedule")) {
-        readStatusDetailActionFieldsFromBlock(block, entry);
-      }
-    });
-
-  document
-    .querySelectorAll("#statusDetailActionBlocks .status-detail-modal__work-block")
-    .forEach(function (block) {
-      var scopeKey = block.getAttribute("data-scope-key");
-      if (scopeKey === null) return;
-      readStatusDetailActionFieldsFromBlock(block, ensureScopeWorkEntry(scopeKey));
+      scopeWorkInfo[scopeKey] = {
+        worker: workerEl ? workerEl.value.trim() : "",
+        progress: progressEl ? progressEl.value.trim() : "",
+        accidentType: typeEl ? typeEl.value : "",
+        accidentContent: contentEl ? contentEl.value.trim() : "",
+        actionSchedule: scheduleInput ? scheduleInput.getAttribute("data-iso") || "" : "",
+        actionWorker: actionWorkerEl ? actionWorkerEl.value.trim() : "",
+        actionContent: actionContentEl ? actionContentEl.value.trim() : "",
+        actionResult: actionResultEl ? actionResultEl.value : "",
+      };
     });
 
   orders[idx].scopeWorkInfo = scopeWorkInfo;
-  applyComputedProgressStatusToOrder(orders[idx]);
   syncOrderLegacyWorkFields(orders[idx]);
   var scopePhotos = {};
   document
@@ -4839,26 +3809,9 @@ function initStatusDetailModal() {
   }
 
   var workBlocks = document.getElementById("statusDetailWorkBlocks");
-  var actionBlocks = document.getElementById("statusDetailActionBlocks");
   var popup = document.getElementById("statusActionDatePickerPopup");
   var prevBtn = document.getElementById("statusActionDatePickerPrev");
   var nextBtn = document.getElementById("statusActionDatePickerNext");
-
-  function bindStatusActionDatePickerClick(container) {
-    if (!container) return;
-    container.addEventListener("click", function (e) {
-      var pickerBtn = e.target.closest("[data-status-action-picker]");
-      if (!pickerBtn) return;
-      e.preventDefault();
-      e.stopPropagation();
-      var scopeKey = pickerBtn.getAttribute("data-status-action-picker") || "";
-      if (popup && !popup.hidden && statusActionDatePickerScopeKey === scopeKey) {
-        closeStatusActionDatePicker();
-        return;
-      }
-      openStatusActionDatePicker(scopeKey);
-    });
-  }
 
   var scopeTags = document.getElementById("statusDetailWorkScopeTags");
   if (scopeTags) {
@@ -4870,31 +3823,18 @@ function initStatusDetailModal() {
     });
   }
 
-  bindStatusActionDatePickerClick(workBlocks);
-  bindStatusActionDatePickerClick(actionBlocks);
-
-  var actionRoundTags = document.getElementById("statusDetailActionRoundTags");
-  if (actionRoundTags) {
-    actionRoundTags.addEventListener("click", function (e) {
-      var tagBtn = e.target.closest(".status-detail-modal__action-round-tag");
-      if (!tagBtn) return;
+  if (workBlocks) {
+    workBlocks.addEventListener("click", function (e) {
+      var pickerBtn = e.target.closest("[data-status-action-picker]");
+      if (!pickerBtn) return;
       e.preventDefault();
-      var roundNum = parseInt(tagBtn.getAttribute("data-action-round"), 10);
-      if (!roundNum) return;
-      setActiveStatusDetailActionRound(getActiveStatusDetailScopeKey(), roundNum);
-    });
-  }
-
-  if (actionBlocks) {
-    actionBlocks.addEventListener("change", function (e) {
-      var partnerEl = e.target.closest(".status-detail-action-partner");
-      if (!partnerEl) return;
-      var panel = partnerEl.closest(".status-detail-modal__action-round-panel");
-      if (!panel) panel = partnerEl.closest(".status-detail-modal__work-block");
-      if (!panel) return;
-      var workerEl = panel.querySelector(".status-detail-action-worker");
-      if (workerEl) workerEl.value = "";
-      refreshStatusDetailActionWorkerSelect(panel);
+      e.stopPropagation();
+      var scopeKey = pickerBtn.getAttribute("data-status-action-picker") || "";
+      if (popup && !popup.hidden && statusActionDatePickerScopeKey === scopeKey) {
+        closeStatusActionDatePicker();
+        return;
+      }
+      openStatusActionDatePicker(scopeKey);
     });
   }
 
@@ -4946,57 +3886,19 @@ function openStatusDetailModal(order) {
   setModalDrawingDisplay("statusDetailDown2", order.drawing2, order.drawing2Data || "");
   setModalDrawingDisplay("statusDetailDown3", order.drawing3, order.drawing3Data || "");
 
-  statusDetailActiveActionRound = {};
   closeStatusActionDatePicker();
   openModal("modal-status-detail");
 }
 
-function renderAssignDetailScopeAndSales(order) {
-  var activeKeys = getOrderScopeKeys(order.scope);
-  var scopeSales = order.scopeSales || {};
-  var scopeGroup = document.getElementById("assignDetailScopeGroup");
-
-  if (scopeGroup) {
-    scopeGroup.querySelectorAll(".order-scope-option").forEach(function (btn) {
-      var key = btn.getAttribute("data-value") || "";
-      btn.classList.toggle("order-scope-option--active", activeKeys.indexOf(key) >= 0);
-      btn.disabled = true;
-    });
-  }
-
-  ORDER_SCOPE_CODE_ORDER.forEach(function (key) {
-    var input = document.getElementById("assignDetailSales-" + key);
-    if (!input) return;
-    var on = activeKeys.indexOf(key) >= 0;
-    var cell = input.closest(".order-scope-sales-cell");
-    var raw = scopeSales[key];
-    var display = "";
-
-    if (on) {
-      if (raw != null && raw !== "") {
-        display = formatOrderSales(String(raw));
-      } else if (activeKeys.length === 1) {
-        var total = order.salesAmount || orderSalesDigitsOnly(order.sales || "");
-        display = total ? formatOrderSales(String(total)) : "";
-      }
-    }
-
-    input.value = display;
-    input.disabled = true;
-    input.readOnly = true;
-    if (cell) {
-      cell.classList.toggle("order-scope-sales-cell--active", on);
-    }
-  });
-}
-
 function openAssignDetailModal(order) {
   var orderNoEl = document.getElementById("assignDetailOrderNo");
+  var scopeEl = document.getElementById("assignDetailScope");
   var siteEl = document.getElementById("assignDetailSite");
   var addressEl = document.getElementById("assignDetailAddress");
   var issueEl = document.getElementById("assignDetailIssue");
-  if (!orderNoEl || !siteEl || !addressEl || !issueEl) return;
+  if (!orderNoEl || !scopeEl || !siteEl || !addressEl || !issueEl) return;
 
+  var scopeText = formatAssignScopeLabels(order.scope);
   var addressText = [order.city, order.district, order.address].filter(Boolean).join(" ");
   var idx = getOrderIndexInStorage(order.orderNo);
   var idxEl = document.getElementById("assignDetailOrderIndex");
@@ -5004,11 +3906,11 @@ function openAssignDetailModal(order) {
   if (idxEl) idxEl.value = idx >= 0 ? String(idx) : "";
 
   orderNoEl.textContent = order.orderNo || "";
+  scopeEl.textContent = scopeText;
   siteEl.textContent = order.siteName || "";
   addressEl.textContent = addressText;
   issueEl.textContent = order.issue || "";
 
-  renderAssignDetailScopeAndSales(order);
   loadAssignDetailDrawingDraft(order);
   applyAssignDetailDrawingDraft();
 
@@ -5138,6 +4040,14 @@ function initOrderAssignPage(screen) {
     initAssignDateControls("assign");
     initAssignDetailDrawingHandlers();
 
+    var editProfile = document.getElementById("btnEditProfileAssign");
+    if (editProfile) {
+      editProfile.addEventListener("click", function (e) {
+        e.preventDefault();
+        goToSignupEdit();
+      });
+    }
+
     var btnSave = document.getElementById("btnAssignSave");
     if (btnSave) {
       btnSave.addEventListener("click", function () {
@@ -5157,7 +4067,6 @@ function initOrderStatusPage(screen) {
 
   initLogout(screen);
   initOrderNavDelegation();
-  updateStatusWorkerFilterVisibilityByRole();
 
   if (!initializedScreens.orderStatus) {
     initializedScreens.orderStatus = true;
@@ -5174,6 +4083,13 @@ function initOrderStatusPage(screen) {
       });
     }
 
+    var editProfile = document.getElementById("btnEditProfileStatus");
+    if (editProfile) {
+      editProfile.addEventListener("click", function (e) {
+        e.preventDefault();
+        goToSignupEdit();
+      });
+    }
 
     var btnSave = document.getElementById("btnStatusSave");
     if (btnSave) {
@@ -5212,23 +4128,6 @@ function initStatusWorkerFilterControls() {
   });
 }
 
-function updateStatusWorkerFilterVisibilityByRole() {
-  var auth = getAuth();
-  var group = document.getElementById("statusWorkerFilter");
-  if (!group) return;
-  var isWorkerRole = !!auth && auth.role === "worker";
-  group.style.display = isWorkerRole ? "none" : "";
-  if (isWorkerRole) {
-    group.querySelectorAll(".assign-open-filter__btn").forEach(function (el) {
-      var active = el.getAttribute("data-status-worker-filter") === "assigned";
-      el.classList.toggle("assign-open-filter__btn--active", active);
-      el.setAttribute("aria-pressed", active ? "true" : "false");
-    });
-    var picker = getAssignPicker("status");
-    if (picker) picker.workerFilter = "assigned";
-  }
-}
-
 function initOpenActionFilterControls() {
   if (initializedScreens.openActionFilter) return;
   initializedScreens.openActionFilter = true;
@@ -5256,15 +4155,12 @@ function syncStatsModeFromControls() {
   var group = document.getElementById("statsModeNav");
   if (!group) {
     statsPickerState.mode = statsPickerState.mode || "assign";
-    statsPickerState.view = statsPickerState.view || "assign";
     return;
   }
   var active = group.querySelector(".stats-mode-nav__btn--active");
-  var view = active ? active.getAttribute("data-stats-mode") || "assign" : "assign";
-  statsPickerState.view = view;
-  if (view === "assign" || view === "open") {
-    statsPickerState.mode = view;
-  }
+  statsPickerState.mode = active
+    ? active.getAttribute("data-stats-mode") || "assign"
+    : "assign";
 }
 
 var STATS_KR_HOLIDAY_ISO = {
@@ -5420,7 +4316,7 @@ function countStatsAssignedItemScopesForRowMonth(filters, rowKey, dimension, mon
   var count = 0;
   var month = monthIndex + 1;
 
-  getVisibleOrdersForCurrentUser().forEach(function (order) {
+  getStoredOrders().forEach(function (order) {
     if (!order.constructDate) return;
     var parts = String(order.constructDate).split("-");
     if (parts.length < 2) return;
@@ -5568,32 +4464,16 @@ function applyStatsOpenRatioRates(result, filters) {
 
 function getStatsFilterValues() {
   syncStatsModeFromControls();
-  var auth = getAuth();
-  var isPartnerRole = !!auth && auth.role === "partner";
-  var isWorkerRole = !!auth && auth.role === "worker";
   var partnerEl = document.getElementById("statsPartner");
   var workerEl = document.getElementById("statsWorker");
   var yearEl = document.getElementById("statsYear");
   var itemEl = document.getElementById("statsItem");
   var aggregateEl = document.getElementById("statsAggregate");
   var rankEl = document.getElementById("statsRank");
-  var metric = aggregateEl ? aggregateEl.value : "count";
-  if (metric !== "count" && metric !== "sales") metric = "count";
-  if (statsPickerState.view === "ratio") metric = "ratio";
-  var partnerValue = partnerEl ? partnerEl.value : STATS_FILTER_ALL;
-  if (isPartnerRole) {
-    partnerValue = (auth.userId || "").trim() || STATS_FILTER_ALL;
-  } else if (isWorkerRole) {
-    partnerValue = (auth.partnerUserId || "").trim() || STATS_FILTER_ALL;
-  }
-  var workerValue = workerEl ? workerEl.value : STATS_FILTER_ALL;
-  if (isWorkerRole) {
-    workerValue = (auth.userId || "").trim() || STATS_FILTER_ALL;
-  }
   return {
-    partner: partnerValue,
-    worker: workerValue,
-    metric: metric,
+    partner: partnerEl ? partnerEl.value : STATS_FILTER_ALL,
+    worker: workerEl ? workerEl.value : STATS_FILTER_ALL,
+    metric: aggregateEl ? aggregateEl.value : "count",
     year: yearEl ? clampOrderYear(yearEl.value) : statsPickerState.year,
     item: resolveStatsItemValue(itemEl ? itemEl.value : ""),
     mode: statsPickerState.mode || "assign",
@@ -5769,7 +4649,7 @@ function getStatsPartnerMatrix(filters) {
     rowLabels[partners[i].userId] = getPartnerDisplayLabel(partners[i].userId);
   }
 
-  getVisibleOrdersForCurrentUser().forEach(function (order) {
+  getStoredOrders().forEach(function (order) {
     if (!order.constructDate) return;
     var parts = String(order.constructDate).split("-");
     if (parts.length < 2) return;
@@ -5834,7 +4714,7 @@ function getStatsWorkerMatrix(filters) {
     rowLabels[workers[i].userId] = getWorkerDisplayLabel(workers[i].userId);
   }
 
-  getVisibleOrdersForCurrentUser().forEach(function (order) {
+  getStoredOrders().forEach(function (order) {
     if (!order.constructDate) return;
     var parts = String(order.constructDate).split("-");
     if (parts.length < 2) return;
@@ -5902,7 +4782,7 @@ function getStatsScopeMatrix(filters) {
   var colTotals = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
   var grandTotalRef = { value: 0 };
 
-  getVisibleOrdersForCurrentUser().forEach(function (order) {
+  getStoredOrders().forEach(function (order) {
     if (!order.constructDate) return;
     var parts = String(order.constructDate).split("-");
     if (parts.length < 2) return;
@@ -5992,18 +4872,6 @@ function updateStatsUnitLabel(metric) {
   }
 }
 
-function updateStatsRatioFormula(filters) {
-  var el = document.getElementById("statsRatioFormula");
-  if (!el) return;
-  el.hidden = !filters || filters.metric !== "ratio";
-}
-
-function updateStatsAggregateControlState() {
-  var aggregateEl = document.getElementById("statsAggregate");
-  if (!aggregateEl) return;
-  aggregateEl.disabled = statsPickerState.view === "ratio";
-}
-
 function formatStatsValue(value, metric) {
   if (metric === "ratio") {
     return formatStatsPercent(value);
@@ -6017,25 +4885,6 @@ function formatStatsValue(value, metric) {
 function populateStatsPartnerSelect() {
   var select = document.getElementById("statsPartner");
   if (!select) return;
-  var auth = getAuth();
-  var isPartnerRole = !!auth && auth.role === "partner";
-  var isWorkerRole = !!auth && auth.role === "worker";
-  var field = select.closest(".order-field");
-  if (field) field.style.display = isPartnerRole || isWorkerRole ? "none" : "";
-
-  if (isPartnerRole || isWorkerRole) {
-    var partnerId = isPartnerRole
-      ? (auth.userId || "").trim()
-      : (auth.partnerUserId || "").trim();
-    if (partnerId) {
-      select.innerHTML = '<option value="' + escapeHtml(partnerId) + '">내 협력사</option>';
-      select.value = partnerId;
-    } else {
-      select.innerHTML = '<option value="' + STATS_FILTER_ALL + '">전체</option>';
-      select.value = STATS_FILTER_ALL;
-    }
-    return;
-  }
 
   var current = select.value || STATS_FILTER_ALL;
   var html = '<option value="' + STATS_FILTER_ALL + '">전체</option>';
@@ -6058,33 +4907,15 @@ function populateStatsPartnerSelect() {
 }
 
 function populateStatsWorkerSelect() {
-  var auth = getAuth();
-  var isPartnerRole = !!auth && auth.role === "partner";
-  var isWorkerRole = !!auth && auth.role === "worker";
   var partnerEl = document.getElementById("statsPartner");
   var select = document.getElementById("statsWorker");
   if (!select) return;
-  var field = select.closest(".order-field");
-  if (field) field.style.display = isWorkerRole ? "none" : "";
 
-  var partnerId = isPartnerRole
-    ? (auth.userId || "").trim()
-    : isWorkerRole
-    ? (auth.partnerUserId || "").trim()
-    : partnerEl
-    ? partnerEl.value
-    : STATS_FILTER_ALL;
+  var partnerId = partnerEl ? partnerEl.value : STATS_FILTER_ALL;
   var current = select.value || STATS_FILTER_ALL;
   var html = '<option value="' + STATS_FILTER_ALL + '">전체</option>';
 
-  if (isWorkerRole) {
-    var selfId = (auth.userId || "").trim();
-    var selfName = (auth.name || auth.userId || "").trim();
-    if (selfId) {
-      html += '<option value="' + escapeHtml(selfId) + '">' + escapeHtml(selfName) + "</option>";
-      current = selfId;
-    }
-  } else if (partnerId && partnerId !== STATS_FILTER_ALL) {
+  if (partnerId && partnerId !== STATS_FILTER_ALL) {
     getRegisteredWorkers(partnerId).forEach(function (w) {
       var name = w.name || w.userId;
       html +=
@@ -6131,24 +4962,9 @@ function populateStatsItemSelect() {
 }
 
 function updateStatsWorkerControlState() {
-  var auth = getAuth();
-  var isPartnerRole = !!auth && auth.role === "partner";
-  var isWorkerRole = !!auth && auth.role === "worker";
   var partnerEl = document.getElementById("statsPartner");
   var workerEl = document.getElementById("statsWorker");
   if (!partnerEl || !workerEl) return;
-
-  if (isWorkerRole) {
-    workerEl.disabled = true;
-    populateStatsWorkerSelect();
-    return;
-  }
-
-  if (isPartnerRole) {
-    workerEl.disabled = false;
-    populateStatsWorkerSelect();
-    return;
-  }
 
   var isAll = partnerEl.value === STATS_FILTER_ALL;
   workerEl.disabled = isAll;
@@ -6284,28 +5100,10 @@ function getStatsChartTickTopPct(tickValue, axisMax) {
   return (1 - tickValue / axisMax) * 100;
 }
 
-function isStatsDisplayZeroText(text, metric) {
-  var s = (text == null ? "" : String(text)).trim();
-  if (!s) return true;
-  if (metric === "ratio") {
-    // e.g. "0.0%"
-    return /^0(\.0+)?%$/.test(s);
-  }
-  // count/sales: formatStatsValue returns "0" when rounded to zero
-  return s === "0";
-}
-
-function normalizeStatsDisplayText(text, metric) {
-  return isStatsDisplayZeroText(text, metric) ? "-" : text;
-}
-
 function buildStatsChartScopeHtml(axisMax, filters, ratioScale) {
   var tickValues = ratioScale
     ? getStatsRatioTickValues(ratioScale.axisMax, ratioScale.step)
     : getStatsChartTickValues(axisMax, filters);
-  tickValues = tickValues.filter(function (v) {
-    return v !== 0;
-  });
   var html =
     '<div class="stats-chart-scope">' +
     '<div class="stats-chart-yaxis" aria-hidden="true">' +
@@ -6314,16 +5112,12 @@ function buildStatsChartScopeHtml(axisMax, filters, ratioScale) {
   var topPct;
   for (i = 0; i < tickValues.length; i++) {
     topPct = getStatsChartTickTopPct(tickValues[i], axisMax);
-    var tickText = normalizeStatsDisplayText(
-      formatStatsValue(tickValues[i], filters.metric),
-      filters.metric
-    );
     html +=
       '<span class="stats-chart-yaxis__tick" style="top:' +
       topPct +
       '%">' +
       '<span class="stats-chart-yaxis__tick-label">' +
-      escapeHtml(tickText) +
+      escapeHtml(formatStatsValue(tickValues[i], filters.metric)) +
       "</span>" +
       '<span class="stats-chart-yaxis__tick-mark" aria-hidden="true"></span>' +
       "</span>";
@@ -6367,30 +5161,27 @@ function renderStatsChart() {
     var value = months[m];
     var heightPct = axisMax > 0 ? (value / axisMax) * 100 : 0;
     var valueText = formatStatsValue(value, filters.metric);
-    var valueDisplayText = normalizeStatsDisplayText(valueText, filters.metric);
     var valueBottom = heightPct > 0 ? heightPct : 0;
     var valueHtml = "";
-    var isZeroText = isStatsDisplayZeroText(valueText, filters.metric);
 
     if (value > 0) {
       valueHtml =
         '<span class="stats-chart__bar-value" style="bottom:calc(' +
         valueBottom +
         '% + 4px)">' +
-        escapeHtml(valueDisplayText) +
+        escapeHtml(valueText) +
         "</span>";
     }
 
-    var titleAttr = ' title="' + escapeHtml(valueDisplayText) + '"';
     cells[m].innerHTML =
       '<div class="stats-chart__plot">' +
       '<div class="stats-chart__bar-area">' +
       valueHtml +
       '<div class="stats-chart__bar" style="height:' +
       heightPct +
-      '%"' +
-      titleAttr +
-      '></div>' +
+      '%" title="' +
+      escapeHtml(valueText) +
+      '"></div>' +
       "</div></div>";
   }
 }
@@ -6428,23 +5219,15 @@ function renderStatsTable() {
       escapeHtml(label) +
       "</td>";
     for (m = 0; m < 12; m++) {
-      var monthText = normalizeStatsDisplayText(
-        formatStatsValue(rowMonths[m], filters.metric),
-        filters.metric
-      );
       html +=
         '<td class="assign-table__td stats-table__month-col">' +
-        escapeHtml(monthText) +
+        escapeHtml(formatStatsValue(rowMonths[m], filters.metric)) +
         "</td>";
     }
     if (showTotals) {
-      var rowTotalText = normalizeStatsDisplayText(
-        formatStatsValue(rowTotals[key] || 0, filters.metric),
-        filters.metric
-      );
       html +=
         '<td class="assign-table__td assign-table__td--total stats-table__total-col">' +
-        escapeHtml(rowTotalText) +
+        escapeHtml(formatStatsValue(rowTotals[key] || 0, filters.metric)) +
         "</td>";
     }
     html += "</tr>";
@@ -6455,22 +5238,14 @@ function renderStatsTable() {
     html += '<td class="assign-table__td stats-table__rank-col"></td>';
     html += '<td class="assign-table__td assign-table__td--scope">합계</td>';
     for (m = 0; m < 12; m++) {
-      var colTotalText = normalizeStatsDisplayText(
-        formatStatsValue(colTotals[m], filters.metric),
-        filters.metric
-      );
       html +=
         '<td class="assign-table__td assign-table__td--total stats-table__month-col">' +
-        escapeHtml(colTotalText) +
+        escapeHtml(formatStatsValue(colTotals[m], filters.metric)) +
         "</td>";
     }
-    var grandTotalText = normalizeStatsDisplayText(
-      formatStatsValue(grandTotal, filters.metric),
-      filters.metric
-    );
     html +=
       '<td class="assign-table__td assign-table__td--total stats-table__total-col">' +
-      escapeHtml(grandTotalText) +
+      escapeHtml(formatStatsValue(grandTotal, filters.metric)) +
       "</td>";
     html += "</tr>";
   }
@@ -6482,9 +5257,7 @@ function renderStatsTable() {
 function renderStatsView() {
   syncStatsPickerFromControls();
   var filters = getStatsFilterValues();
-  updateStatsAggregateControlState();
   updateStatsUnitLabel(filters.metric);
-  updateStatsRatioFormula(filters);
   updateStatsTotalsVisibility(filters);
   renderStatsChart();
   renderStatsTable();
@@ -6562,6 +5335,13 @@ function initOrderStatsPage(screen) {
   if (!initializedScreens.orderStats) {
     initializedScreens.orderStats = true;
 
+    var editProfile = document.getElementById("btnEditProfileStats");
+    if (editProfile) {
+      editProfile.addEventListener("click", function (e) {
+        e.preventDefault();
+        goToSignupEdit();
+      });
+    }
   }
 
   var yearEl = document.getElementById("statsYear");
@@ -6587,6 +5367,13 @@ function initOrderOpenPage(screen) {
     initOpenActionFilterControls();
     initStatusDetailModal();
 
+    var editProfile = document.getElementById("btnEditProfileOpen");
+    if (editProfile) {
+      editProfile.addEventListener("click", function (e) {
+        e.preventDefault();
+        goToSignupEdit();
+      });
+    }
 
     var btnSave = document.getElementById("btnOpenSave");
     if (btnSave) {
@@ -6605,63 +5392,66 @@ function initOrderOpenPage(screen) {
 /* 3번: 오더등록 */
 function initOrderPage(screen) {
   if (!getAuth()) return;
+  if (initializedScreens.order) return;
+  initializedScreens.order = true;
 
-  if (!initializedScreens.order) {
-    initializedScreens.order = true;
+  initLogout(screen);
 
-    initLogout(screen);
+  document.querySelectorAll(".order-scope-option").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      btn.classList.toggle("order-scope-option--active");
+      updateOrderScopeSalesEnabled();
+    });
+  });
 
-    var scopeGroup = getOrderScopeGroupElement();
-    if (scopeGroup) {
-      scopeGroup.querySelectorAll(".order-scope-option").forEach(function (btn) {
-        btn.addEventListener("click", function () {
-          btn.classList.toggle("order-scope-option--active");
-          updateOrderScopeSalesEnabled();
-        });
-      });
-    }
+  bindOrderScopeSalesInputs();
+  updateOrderScopeSalesEnabled();
 
-    bindOrderScopeSalesInputs();
+  initOrderRegionSelects();
 
-    initOrderRegionSelects();
-
-    var orderForm = document.getElementById("orderForm");
-    if (orderForm) {
-      orderForm.addEventListener("input", updateOrderFieldFilledStates);
-      orderForm.addEventListener("change", updateOrderFieldFilledStates);
-    }
-
-    var districtSelect = document.getElementById("orderDistrict");
-    if (districtSelect) {
-      districtSelect.addEventListener("change", updateOrderFieldFilledStates);
-    }
-
-    initOrderDatePicker();
-
-    bindDrawingUpload("orderDrawing1", "orderDrawingFile1", "btnOrderUpload1");
-    bindDrawingUpload("orderDrawing2", "orderDrawingFile2", "btnOrderUpload2");
-    bindDrawingUpload("orderDrawing3", "orderDrawingFile3", "btnOrderUpload3");
-    bindOrderDrawingDelete(1);
-    bindOrderDrawingDelete(2);
-    bindOrderDrawingDelete(3);
-
-    initOrderNavDelegation();
-
-    var btnRegister = document.getElementById("btnOrderRegister");
-    if (btnRegister) {
-      btnRegister.addEventListener("click", function () {
-        registerOrder();
-      });
-    }
-
-    if (orderForm) {
-      orderForm.addEventListener("submit", function (e) {
-        e.preventDefault();
-      });
-    }
+  var orderForm = document.getElementById("orderForm");
+  if (orderForm) {
+    orderForm.addEventListener("input", updateOrderFieldFilledStates);
+    orderForm.addEventListener("change", updateOrderFieldFilledStates);
   }
 
-  updateOrderScopeSalesEnabled();
+  var districtSelect = document.getElementById("orderDistrict");
+  if (districtSelect) {
+    districtSelect.addEventListener("change", updateOrderFieldFilledStates);
+  }
+
+  initOrderDatePicker();
+
+  bindDrawingUpload("orderDrawing1", "orderDrawingFile1", "btnOrderUpload1");
+  bindDrawingUpload("orderDrawing2", "orderDrawingFile2", "btnOrderUpload2");
+  bindDrawingUpload("orderDrawing3", "orderDrawingFile3", "btnOrderUpload3");
+  bindOrderDrawingDelete(1);
+  bindOrderDrawingDelete(2);
+  bindOrderDrawingDelete(3);
+
+  var editProfile = document.getElementById("btnEditProfile");
+  if (editProfile) {
+    editProfile.addEventListener("click", function (e) {
+      e.preventDefault();
+      goToSignupEdit();
+    });
+  }
+
+  initOrderNavDelegation();
+
+  var btnRegister = document.getElementById("btnOrderRegister");
+  if (btnRegister) {
+    btnRegister.addEventListener("click", function () {
+      registerOrder();
+    });
+  }
+
+  if (orderForm) {
+    orderForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+    });
+  }
+
   updateOrderFieldFilledStates();
 }
 
@@ -6995,9 +5785,7 @@ function buildSignupRecord() {
 
 /* 전역 이벤트 */
 document.addEventListener("click", function (e) {
-  var target = getEventTargetElement(e);
-  if (!target) return;
-  var nav = target.closest("[data-nav]");
+  var nav = e.target.closest("[data-nav]");
   if (nav) {
     e.preventDefault();
     var page = nav.getAttribute("data-nav");

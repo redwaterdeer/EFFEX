@@ -5,6 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>EFFEX 시공관리</title>
     <link rel="stylesheet" href="style.css" />
+    <!-- style.css / app.js 가 GitHub에 없을 때: 활성 화면만 표시 -->
+    <style id="critical-fallback">
+      .screen {
+        display: none !important;
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background: #f4f5f7;
+      }
+      .screen.is-active {
+        display: block !important;
+      }
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        font-family: "Malgun Gothic", "Noto Sans KR", sans-serif;
+        background: #f4f5f7;
+        color: #333;
+      }
+    </style>
   </head>
   <body>
     <!-- 1. 로그인 -->
@@ -338,6 +361,12 @@
         </nav>
         <div class="order-topbar__aside">
           <span class="order-topbar__login-msg" id="orderLoginMsg"></span>
+          <a
+            href="#"
+            class="order-topbar__link order-topbar__edit-profile"
+            data-action="signup-edit"
+            >가입수정</a
+          >
           <a
             href="#"
             class="order-topbar__link order-topbar__logout"
@@ -752,14 +781,6 @@
             등록
           </button>
         </div>
-
-        <footer class="order-footer assign-footer">
-          <a href="#" class="order-footer__link" id="btnEditProfile"
-            >가입 수정</a
-          >
-          <span class="order-footer__sep">/</span>
-          <a href="#" class="order-footer__link" data-logout>로그 아웃</a>
-        </footer>
         </div>
       </main>
     </section>
@@ -809,6 +830,12 @@
           <span class="order-topbar__login-msg" id="summaryLoginMsg"></span>
           <a
             href="#"
+            class="order-topbar__link order-topbar__edit-profile"
+            data-action="signup-edit"
+            >가입수정</a
+          >
+          <a
+            href="#"
             class="order-topbar__link order-topbar__logout"
             data-logout
           >
@@ -836,6 +863,28 @@
       <main class="assign-body order-summary-body">
         <div class="assign-panel order-summary-panel">
           <div class="order-summary-toolbar">
+            <div class="order-summary-ym" aria-label="집계 기간">
+              <div class="order-summary-ym__row">
+                <div class="order-summary-ym__field">
+                  <select
+                    id="orderSummaryYear"
+                    class="order-summary-ym__select"
+                    aria-label="연도"
+                  >
+                    <option value="2026" selected>2026년</option>
+                  </select>
+                </div>
+                <div class="order-summary-ym__field">
+                  <select
+                    id="orderSummaryMonth"
+                    class="order-summary-ym__select"
+                    aria-label="월"
+                  >
+                    <option value="all" selected>전체</option>
+                  </select>
+                </div>
+              </div>
+            </div>
             <div
               class="order-summary-toggle"
               id="orderSummaryMetricToggle"
@@ -905,14 +954,6 @@
             </table>
           </div>
         </div>
-
-        <footer class="order-footer assign-footer">
-          <a href="#" class="order-footer__link" id="btnEditProfileSummary"
-            >가입 수정</a
-          >
-          <span class="order-footer__sep">/</span>
-          <a href="#" class="order-footer__link" data-logout>로그 아웃</a>
-        </footer>
         </div>
       </main>
     </section>
@@ -958,6 +999,12 @@
         </nav>
         <div class="order-topbar__aside">
           <span class="order-topbar__login-msg" id="assignLoginMsg"></span>
+          <a
+            href="#"
+            class="order-topbar__link order-topbar__edit-profile"
+            data-action="signup-edit"
+            >가입수정</a
+          >
           <a
             href="#"
             class="order-topbar__link order-topbar__logout"
@@ -1100,14 +1147,6 @@
             저장
           </button>
         </div>
-
-        <footer class="order-footer assign-footer">
-          <a href="#" class="order-footer__link" id="btnEditProfileAssign"
-            >가입 수정</a
-          >
-          <span class="order-footer__sep">/</span>
-          <a href="#" class="order-footer__link" data-logout>로그 아웃</a>
-        </footer>
       </main>
     </section>
 
@@ -1152,6 +1191,12 @@
         </nav>
         <div class="order-topbar__aside">
           <span class="order-topbar__login-msg" id="statusLoginMsg"></span>
+          <a
+            href="#"
+            class="order-topbar__link order-topbar__edit-profile"
+            data-action="signup-edit"
+            >가입수정</a
+          >
           <a
             href="#"
             class="order-topbar__link order-topbar__logout"
@@ -1321,14 +1366,6 @@
             저장
           </button>
         </div>
-
-        <footer class="order-footer assign-footer">
-          <a href="#" class="order-footer__link" id="btnEditProfileStatus"
-            >가입 수정</a
-          >
-          <span class="order-footer__sep">/</span>
-          <a href="#" class="order-footer__link" data-logout>로그 아웃</a>
-        </footer>
       </main>
     </section>
 
@@ -1373,6 +1410,12 @@
         </nav>
         <div class="order-topbar__aside">
           <span class="order-topbar__login-msg" id="openLoginMsg"></span>
+          <a
+            href="#"
+            class="order-topbar__link order-topbar__edit-profile"
+            data-action="signup-edit"
+            >가입수정</a
+          >
           <a
             href="#"
             class="order-topbar__link order-topbar__logout"
@@ -1542,14 +1585,6 @@
             저장
           </button>
         </div>
-
-        <footer class="order-footer assign-footer">
-          <a href="#" class="order-footer__link" id="btnEditProfileOpen"
-            >가입 수정</a
-          >
-          <span class="order-footer__sep">/</span>
-          <a href="#" class="order-footer__link" data-logout>로그 아웃</a>
-        </footer>
       </main>
     </section>
 
@@ -1591,6 +1626,12 @@
         </nav>
         <div class="order-topbar__aside">
           <span class="order-topbar__login-msg" id="statsLoginMsg"></span>
+          <a
+            href="#"
+            class="order-topbar__link order-topbar__edit-profile"
+            data-action="signup-edit"
+            >가입수정</a
+          >
           <a
             href="#"
             class="order-topbar__link order-topbar__logout"
@@ -1642,6 +1683,14 @@
               >
                 <span>미마감</span>
               </button>
+              <button
+                type="button"
+                class="stats-mode-nav__btn"
+                data-stats-mode="ratio"
+                aria-pressed="false"
+              >
+                <span>비율</span>
+              </button>
             </nav>
 
             <div class="stats-content">
@@ -1691,7 +1740,6 @@
                       <select id="statsAggregate" class="order-select">
                         <option value="count" selected>시공건수</option>
                         <option value="sales">시공매출</option>
-                        <option value="ratio">비율</option>
                       </select>
                     </div>
                   </div>
@@ -1869,552 +1917,60 @@
                     </thead>
                     <tbody id="statsTableBody"></tbody>
                   </table>
+                  <p class="stats-ratio-formula" id="statsRatioFormula" hidden>
+                    ■ 배정 모드 비율= (오더번호 계 ÷ (소속 시공사원 수 × 근무일수)) × 100<br />
+                    ■ 미마감 모드 비율 = (미마감 계 ÷ (소속 시공사원 수 × 오더건수)) × 100
+                  </p>
                 </div>
               </div>
             </div>
           </div>
         </div>
-
-        <footer class="order-footer assign-footer">
-          <a href="#" class="order-footer__link" id="btnEditProfileStats"
-            >가입 수정</a
-          >
-          <span class="order-footer__sep">/</span>
-          <a href="#" class="order-footer__link" data-logout>로그 아웃</a>
-        </footer>
       </main>
     </section>
 
-    <!-- 대시보드 (관리) -->
-    <section
-      id="screen-dashboard"
-      class="screen"
-      data-title="대시보드"
-      data-header-title="대시보드"
-      data-header-breadcrumb="홈 / 대시보드"
-    >
-      <div class="app">
-        <aside class="sidebar">
-          <div class="sidebar__logo">
-            <a href="#" data-nav="dashboard"
-              ><img src="https://i.ibb.co/wZ4mNscs/3.png" alt="EFFEX"
-            /></a>
-          </div>
-          <nav class="sidebar__nav js-sidebar-nav"></nav>
-          <div class="sidebar__footer">EFFEX 시공관리 v1.0</div>
-        </aside>
-        <div class="main">
-          <header class="header">
-            <div>
-              <h1 class="header__title" data-page-title>대시보드</h1>
-              <p class="header__breadcrumb" data-page-breadcrumb>
-                홈 / 대시보드
-              </p>
-            </div>
-            <div class="header__actions">
-              <input
-                type="search"
-                class="header__search"
-                placeholder="검색..."
-              />
-              <div class="header__user">
-                <div>
-                  <div data-user-name></div>
-                  <div class="header__role" data-user-role></div>
-                </div>
-                <div class="header__avatar" data-user-avatar></div>
-              </div>
-              <a href="#" class="btn btn--outline btn--sm" data-logout
-                >로그아웃</a
-              >
-            </div>
-          </header>
-          <main class="content">
-            <div class="grid-stats" id="stats-grid"></div>
-            <div class="grid-2">
-              <section class="card">
-                <h2 class="card__title">최근 현장</h2>
-                <table class="data-table">
-                  <thead>
-                    <tr>
-                      <th>현장명</th>
-                      <th>협력사</th>
-                      <th>진행률</th>
-                      <th>상태</th>
-                    </tr>
-                  </thead>
-                  <tbody id="recent-projects"></tbody>
-                </table>
-              </section>
-              <section class="card">
-                <h2 class="card__title">오늘 일정</h2>
-                <table class="data-table">
-                  <thead>
-                    <tr>
-                      <th>시간</th>
-                      <th>현장</th>
-                      <th>공정</th>
-                    </tr>
-                  </thead>
-                  <tbody id="today-schedule"></tbody>
-                </table>
-              </section>
-            </div>
-            <section class="card">
-              <h2 class="card__title">미처리 알림</h2>
-              <table class="data-table">
-                <thead>
-                  <tr>
-                    <th>유형</th>
-                    <th>내용</th>
-                    <th>현장</th>
-                    <th>일시</th>
-                  </tr>
-                </thead>
-                <tbody id="recent-notices"></tbody>
-              </table>
-            </section>
-          </main>
-        </div>
-      </div>
-    </section>
 
-    <!-- 현장 관리 -->
-    <section
-      id="screen-projects"
-      class="screen"
-      data-title="현장 관리"
-      data-header-title="현장 관리"
-      data-header-breadcrumb="홈 / 현장 관리"
-    >
-      <div class="app">
-        <aside class="sidebar">
-          <div class="sidebar__logo">
-            <a href="#" data-nav="dashboard"
-              ><img src="https://i.ibb.co/wZ4mNscs/3.png" alt="EFFEX"
-            /></a>
-          </div>
-          <nav class="sidebar__nav js-sidebar-nav"></nav>
-          <div class="sidebar__footer">EFFEX 시공관리 v1.0</div>
-        </aside>
-        <div class="main">
-          <header class="header">
-            <div>
-              <h1 class="header__title" data-page-title>현장 관리</h1>
-              <p class="header__breadcrumb" data-page-breadcrumb>
-                홈 / 현장 관리
-              </p>
-            </div>
-            <div class="header__actions">
-              <div class="header__user">
-                <div>
-                  <div data-user-name></div>
-                  <div class="header__role" data-user-role></div>
-                </div>
-                <div class="header__avatar" data-user-avatar></div>
-              </div>
-              <a href="#" class="btn btn--outline btn--sm" data-logout
-                >로그아웃</a
-              >
-            </div>
-          </header>
-          <main class="content">
-            <div class="content__toolbar">
-              <div class="filter-bar">
-                <select class="form-select" id="filterStatus">
-                  <option value="">전체 상태</option>
-                  <option value="progress">진행중</option>
-                  <option value="done">완료</option>
-                  <option value="delay">지연</option>
-                </select>
-                <input
-                  type="search"
-                  class="form-input"
-                  id="filterSearch"
-                  placeholder="현장명 검색"
-                  style="width: 220px"
-                />
-              </div>
-              <button type="button" class="btn btn--primary" id="btnAddProject">
-                + 현장 등록
-              </button>
-            </div>
-            <section class="card">
-              <table class="data-table">
-                <thead>
-                  <tr>
-                    <th>코드</th>
-                    <th>현장명</th>
-                    <th>주소</th>
-                    <th>고객</th>
-                    <th>협력사</th>
-                    <th>시작일</th>
-                    <th>진행률</th>
-                    <th>상태</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody id="projects-table"></tbody>
-              </table>
-              <nav class="pagination">
-                <button
-                  type="button"
-                  class="pagination__btn pagination__btn--active"
+    <!-- 8번: 집계표 내역 리스트 -->
+    <div class="modal-overlay" id="modal-order-summary-list">
+      <div class="modal order-summary-list-modal">
+        <h2 class="modal__title" id="orderSummaryListTitle">집계 내역</h2>
+        <p class="order-summary-list-modal__meta" id="orderSummaryListMeta"></p>
+        <div class="order-summary-list-modal__body">
+          <table class="order-summary-list-table">
+            <thead>
+              <tr>
+                <th scope="col">No</th>
+                <th scope="col">오더번호</th>
+                <th scope="col">시공일자</th>
+                <th scope="col">현장명</th>
+                <th scope="col">시공협력사</th>
+                <th
+                  scope="col"
+                  class="order-summary-list-table__col-sales"
+                  id="orderSummaryListSalesHead"
+                  hidden
                 >
-                  1
-                </button>
-                <button type="button" class="pagination__btn">2</button>
-              </nav>
-            </section>
-          </main>
+                  시공매출
+                </th>
+              </tr>
+            </thead>
+            <tbody id="orderSummaryListBody"></tbody>
+          </table>
+          <p id="orderSummaryListEmpty" class="order-summary-list-modal__empty" hidden>
+            해당 내역이 없습니다.
+          </p>
+        </div>
+        <div class="modal__actions">
+          <button
+            type="button"
+            class="assign-detail-modal__close"
+            data-modal-close="modal-order-summary-list"
+          >
+            닫기
+          </button>
         </div>
       </div>
-    </section>
-
-    <!-- 현장 상세 -->
-    <section
-      id="screen-project-detail"
-      class="screen"
-      data-title="현장 상세"
-      data-header-title="현장 상세"
-      data-header-breadcrumb="홈 / 현장 관리 / 상세"
-    >
-      <div class="app">
-        <aside class="sidebar">
-          <div class="sidebar__logo">
-            <a href="#" data-nav="dashboard"
-              ><img src="https://i.ibb.co/wZ4mNscs/3.png" alt="EFFEX"
-            /></a>
-          </div>
-          <nav class="sidebar__nav js-sidebar-nav"></nav>
-          <div class="sidebar__footer">EFFEX 시공관리 v1.0</div>
-        </aside>
-        <div class="main">
-          <header class="header">
-            <div>
-              <h1 class="header__title" data-page-title>현장 상세</h1>
-              <p class="header__breadcrumb" data-page-breadcrumb>
-                홈 / 현장 관리 / 상세
-              </p>
-            </div>
-            <div class="header__actions">
-              <a href="#" class="btn btn--outline btn--sm" data-nav="projects"
-                >목록</a
-              >
-              <a href="#" class="btn btn--outline btn--sm" data-logout
-                >로그아웃</a
-              >
-            </div>
-          </header>
-          <main class="content">
-            <div id="project-detail"></div>
-            <section class="card" style="margin-top: 18px">
-              <h2 class="card__title">공정 일정</h2>
-              <table class="data-table">
-                <thead>
-                  <tr>
-                    <th>공정</th>
-                    <th>시작</th>
-                    <th>종료</th>
-                    <th>상태</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>철거</td>
-                    <td>2026-04-01</td>
-                    <td>2026-04-10</td>
-                    <td><span class="badge badge--done">완료</span></td>
-                  </tr>
-                  <tr>
-                    <td>목공</td>
-                    <td>2026-04-11</td>
-                    <td>2026-05-05</td>
-                    <td><span class="badge badge--done">완료</span></td>
-                  </tr>
-                  <tr>
-                    <td>도배·도장</td>
-                    <td>2026-05-06</td>
-                    <td>2026-05-25</td>
-                    <td><span class="badge badge--progress">진행중</span></td>
-                  </tr>
-                  <tr>
-                    <td>마감</td>
-                    <td>2026-05-26</td>
-                    <td>2026-06-30</td>
-                    <td><span class="badge badge--wait">대기</span></td>
-                  </tr>
-                </tbody>
-              </table>
-            </section>
-          </main>
-        </div>
-      </div>
-    </section>
-
-    <!-- 시공협력사 -->
-    <section
-      id="screen-partners"
-      class="screen"
-      data-title="시공협력사"
-      data-header-title="시공협력사"
-      data-header-breadcrumb="홈 / 시공협력사"
-    >
-      <div class="app">
-        <aside class="sidebar">
-          <div class="sidebar__logo">
-            <a href="#" data-nav="dashboard"
-              ><img src="https://i.ibb.co/wZ4mNscs/3.png" alt="EFFEX"
-            /></a>
-          </div>
-          <nav class="sidebar__nav js-sidebar-nav"></nav>
-          <div class="sidebar__footer">EFFEX 시공관리 v1.0</div>
-        </aside>
-        <div class="main">
-          <header class="header">
-            <div>
-              <h1 class="header__title" data-page-title>시공협력사</h1>
-              <p class="header__breadcrumb" data-page-breadcrumb>
-                홈 / 시공협력사
-              </p>
-            </div>
-            <div class="header__actions">
-              <div class="header__user">
-                <div>
-                  <div data-user-name></div>
-                  <div class="header__role" data-user-role></div>
-                </div>
-                <div class="header__avatar" data-user-avatar></div>
-              </div>
-              <a href="#" class="btn btn--outline btn--sm" data-logout
-                >로그아웃</a
-              >
-            </div>
-          </header>
-          <main class="content">
-            <div class="content__toolbar">
-              <input
-                type="search"
-                class="form-input"
-                placeholder="업체명 검색"
-                style="width: 260px"
-                id="partnerSearch"
-              />
-              <button type="button" class="btn btn--primary">
-                + 협력사 등록
-              </button>
-            </div>
-            <section class="card">
-              <table class="data-table">
-                <thead>
-                  <tr>
-                    <th>코드</th>
-                    <th>업체명</th>
-                    <th>대표</th>
-                    <th>연락처</th>
-                    <th>현장</th>
-                    <th>사원</th>
-                    <th>상태</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody id="partners-table"></tbody>
-              </table>
-            </section>
-          </main>
-        </div>
-      </div>
-    </section>
-
-    <!-- 시공사원 -->
-    <section
-      id="screen-workers"
-      class="screen"
-      data-title="시공사원"
-      data-header-title="시공사원"
-      data-header-breadcrumb="홈 / 시공사원"
-    >
-      <div class="app">
-        <aside class="sidebar">
-          <div class="sidebar__logo">
-            <a href="#" data-nav="dashboard"
-              ><img src="https://i.ibb.co/wZ4mNscs/3.png" alt="EFFEX"
-            /></a>
-          </div>
-          <nav class="sidebar__nav js-sidebar-nav"></nav>
-          <div class="sidebar__footer">EFFEX 시공관리 v1.0</div>
-        </aside>
-        <div class="main">
-          <header class="header">
-            <div>
-              <h1 class="header__title" data-page-title>시공사원</h1>
-              <p class="header__breadcrumb" data-page-breadcrumb>
-                홈 / 시공사원
-              </p>
-            </div>
-            <div class="header__actions">
-              <div class="header__user">
-                <div>
-                  <div data-user-name></div>
-                  <div class="header__role" data-user-role></div>
-                </div>
-                <div class="header__avatar" data-user-avatar></div>
-              </div>
-              <a href="#" class="btn btn--outline btn--sm" data-logout
-                >로그아웃</a
-              >
-            </div>
-          </header>
-          <main class="content">
-            <div class="content__toolbar">
-              <div class="filter-bar">
-                <select class="form-select">
-                  <option>전체 협력사</option>
-                  <option>(주)한빛인테리어</option>
-                  <option>미래시공</option>
-                </select>
-              </div>
-              <button type="button" class="btn btn--primary">
-                + 사원 등록
-              </button>
-            </div>
-            <section class="card">
-              <table class="data-table">
-                <thead>
-                  <tr>
-                    <th>사원번호</th>
-                    <th>이름</th>
-                    <th>소속</th>
-                    <th>연락처</th>
-                    <th>배정 현장</th>
-                    <th>출근</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody id="workers-table"></tbody>
-              </table>
-            </section>
-          </main>
-        </div>
-      </div>
-    </section>
-
-    <!-- 일정·공정 -->
-    <section
-      id="screen-schedule"
-      class="screen"
-      data-title="일정·공정"
-      data-header-title="일정·공정"
-      data-header-breadcrumb="홈 / 일정·공정"
-    >
-      <div class="app">
-        <aside class="sidebar">
-          <div class="sidebar__logo">
-            <a href="#" data-nav="dashboard"
-              ><img src="https://i.ibb.co/wZ4mNscs/3.png" alt="EFFEX"
-            /></a>
-          </div>
-          <nav class="sidebar__nav js-sidebar-nav"></nav>
-          <div class="sidebar__footer">EFFEX 시공관리 v1.0</div>
-        </aside>
-        <div class="main">
-          <header class="header">
-            <div>
-              <h1 class="header__title" data-page-title>일정·공정</h1>
-              <p class="header__breadcrumb" data-page-breadcrumb>
-                홈 / 일정·공정
-              </p>
-            </div>
-            <div class="header__actions">
-              <a href="#" class="btn btn--outline btn--sm" data-logout
-                >로그아웃</a
-              >
-            </div>
-          </header>
-          <main class="content">
-            <div class="content__toolbar">
-              <div class="filter-bar">
-                <select class="form-select">
-                  <option>2026년 5월</option>
-                </select>
-                <select class="form-select">
-                  <option>전체 현장</option>
-                </select>
-              </div>
-              <button type="button" class="btn btn--primary">
-                + 일정 등록
-              </button>
-            </div>
-            <section class="card">
-              <div class="schedule-calendar" id="calendar"></div>
-            </section>
-          </main>
-        </div>
-      </div>
-    </section>
-
-    <!-- 공지·알림 -->
-    <section
-      id="screen-notices"
-      class="screen"
-      data-title="공지·알림"
-      data-header-title="공지·알림"
-      data-header-breadcrumb="홈 / 공지·알림"
-    >
-      <div class="app">
-        <aside class="sidebar">
-          <div class="sidebar__logo">
-            <a href="#" data-nav="dashboard"
-              ><img src="https://i.ibb.co/wZ4mNscs/3.png" alt="EFFEX"
-            /></a>
-          </div>
-          <nav class="sidebar__nav js-sidebar-nav"></nav>
-          <div class="sidebar__footer">EFFEX 시공관리 v1.0</div>
-        </aside>
-        <div class="main">
-          <header class="header">
-            <div>
-              <h1 class="header__title" data-page-title>공지·알림</h1>
-              <p class="header__breadcrumb" data-page-breadcrumb>
-                홈 / 공지·알림
-              </p>
-            </div>
-            <div class="header__actions">
-              <a href="#" class="btn btn--outline btn--sm" data-logout
-                >로그아웃</a
-              >
-            </div>
-          </header>
-          <main class="content">
-            <div class="content__toolbar">
-              <select class="form-select" style="width: 160px">
-                <option>전체</option>
-                <option>사진 승인</option>
-                <option>이슈</option>
-                <option>일정</option>
-              </select>
-              <button type="button" class="btn btn--primary">
-                + 공지 작성
-              </button>
-            </div>
-            <section class="card">
-              <table class="data-table">
-                <thead>
-                  <tr>
-                    <th>유형</th>
-                    <th>내용</th>
-                    <th>현장</th>
-                    <th>일시</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody id="notices-table"></tbody>
-              </table>
-            </section>
-          </main>
-        </div>
-      </div>
-    </section>
+    </div>
 
     <!-- 4번: 오더 상세 팝업 -->
     <div class="modal-overlay" id="modal-assign-detail">
@@ -2431,17 +1987,138 @@
               </div>
             </div>
             <div class="order-field order-field--modal-inline">
-              <div class="order-field__label"><span>시공구분</span></div>
-              <span class="order-field__divider" aria-hidden="true"></span>
-              <div class="order-field__control order-field__control--md">
-                <span class="modal-field-value" id="assignDetailScope"></span>
-              </div>
-            </div>
-            <div class="order-field order-field--modal-inline">
               <div class="order-field__label"><span>현장명</span></div>
               <span class="order-field__divider" aria-hidden="true"></span>
               <div class="order-field__control order-field__control--md">
                 <span class="modal-field-value" id="assignDetailSite"></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="order-field order-field--scope">
+            <div class="order-field__label"><span>시공구분</span></div>
+            <span class="order-field__divider" aria-hidden="true"></span>
+            <div class="order-field__control">
+              <div
+                class="order-scope-options"
+                id="assignDetailScopeGroup"
+                role="group"
+                aria-label="시공구분"
+              >
+                <button
+                  type="button"
+                  class="order-scope-option"
+                  data-value="kitchen-wood"
+                  disabled
+                >
+                  <span>주방 목대</span
+                  ><span class="order-scope-option__dot"></span>
+                </button>
+                <button
+                  type="button"
+                  class="order-scope-option"
+                  data-value="kitchen-top"
+                  disabled
+                >
+                  <span>주방 상판</span
+                  ><span class="order-scope-option__dot"></span>
+                </button>
+                <button
+                  type="button"
+                  class="order-scope-option"
+                  data-value="kitchen-product"
+                  disabled
+                >
+                  <span>주방 상품</span
+                  ><span class="order-scope-option__dot"></span>
+                </button>
+                <button
+                  type="button"
+                  class="order-scope-option"
+                  data-value="etc"
+                  disabled
+                >
+                  <span>기타</span><span class="order-scope-option__dot"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="order-field order-field--scope-sales">
+            <div class="order-field__label"><span>시공매출</span></div>
+            <span class="order-field__divider" aria-hidden="true"></span>
+            <div class="order-field__control">
+              <div
+                class="order-scope-sales-options"
+                id="assignDetailScopeSalesList"
+                role="group"
+                aria-label="시공매출"
+              >
+                <div
+                  class="order-scope-sales-cell"
+                  data-scope-key="kitchen-wood"
+                >
+                  <input
+                    type="text"
+                    id="assignDetailSales-kitchen-wood"
+                    class="order-scope-sales-input"
+                    data-scope-key="kitchen-wood"
+                    inputmode="numeric"
+                    placeholder="숫자만 입력"
+                    title="주방 목대 시공매출"
+                    autocomplete="off"
+                    readonly
+                    disabled
+                  />
+                </div>
+                <div
+                  class="order-scope-sales-cell"
+                  data-scope-key="kitchen-top"
+                >
+                  <input
+                    type="text"
+                    id="assignDetailSales-kitchen-top"
+                    class="order-scope-sales-input"
+                    data-scope-key="kitchen-top"
+                    inputmode="numeric"
+                    placeholder="숫자만 입력"
+                    title="주방 상판 시공매출"
+                    autocomplete="off"
+                    readonly
+                    disabled
+                  />
+                </div>
+                <div
+                  class="order-scope-sales-cell"
+                  data-scope-key="kitchen-product"
+                >
+                  <input
+                    type="text"
+                    id="assignDetailSales-kitchen-product"
+                    class="order-scope-sales-input"
+                    data-scope-key="kitchen-product"
+                    inputmode="numeric"
+                    placeholder="숫자만 입력"
+                    title="주방 상품 시공매출"
+                    autocomplete="off"
+                    readonly
+                    disabled
+                  />
+                </div>
+                <div class="order-scope-sales-cell" data-scope-key="etc">
+                  <input
+                    type="text"
+                    id="assignDetailSales-etc"
+                    class="order-scope-sales-input"
+                    data-scope-key="etc"
+                    inputmode="numeric"
+                    placeholder="숫자만 입력"
+                    title="기타 시공매출"
+                    autocomplete="off"
+                    readonly
+                    disabled
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -2690,6 +2367,31 @@
         </section>
 
         <section
+          class="status-detail-modal__section status-detail-modal__section--action"
+          id="statusDetailActionSection"
+          aria-labelledby="statusSectionActionTitle"
+          hidden
+        >
+          <div class="status-detail-modal__section-head">
+            <h3
+              class="status-detail-modal__section-title"
+              id="statusSectionActionTitle"
+            >
+              조치정보
+            </h3>
+            <div
+              id="statusDetailActionRoundTags"
+              class="status-detail-modal__scope-tags"
+              aria-label="조치 차수"
+            ></div>
+          </div>
+          <div
+            id="statusDetailActionBlocks"
+            class="status-detail-modal__work-blocks"
+          ></div>
+        </section>
+
+        <section
           class="status-detail-modal__section"
           aria-labelledby="statusSectionAttachTitle"
         >
@@ -2922,40 +2624,6 @@
         >
           닫기
         </button>
-      </div>
-    </div>
-
-    <!-- 모달 -->
-    <div class="modal-overlay" id="modal-project">
-      <div class="modal">
-        <h2 class="modal__title">현장 등록</h2>
-        <form id="formProject">
-          <div class="form-group">
-            <label class="form-label">현장명</label>
-            <input class="form-input" type="text" required />
-          </div>
-          <div class="form-group">
-            <label class="form-label">주소</label>
-            <input class="form-input" type="text" required />
-          </div>
-          <div class="form-group">
-            <label class="form-label">담당 협력사</label>
-            <select class="form-select">
-              <option>(주)한빛인테리어</option>
-              <option>미래시공</option>
-            </select>
-          </div>
-          <div class="modal__actions">
-            <button
-              type="button"
-              class="btn btn--outline"
-              data-modal-close="modal-project"
-            >
-              취소
-            </button>
-            <button type="submit" class="btn btn--primary">저장</button>
-          </div>
-        </form>
       </div>
     </div>
 

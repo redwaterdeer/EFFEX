@@ -2066,11 +2066,6 @@ function renderOrderSummaryTable() {
 function syncOrderSummaryMetricFromControls() {
   var group = document.getElementById("orderSummaryMetricToggle");
   if (!group) return;
-  var selectEl = document.getElementById("orderSummaryMetricSelect");
-  if (selectEl && (selectEl.value === "count" || selectEl.value === "ratio")) {
-    summaryMetricState = selectEl.value;
-    return;
-  }
   var active = group.querySelector(".order-summary-toggle__btn--active");
   summaryMetricState = active
     ? active.getAttribute("data-summary-metric") || "count"
@@ -2145,21 +2140,6 @@ function initOrderSummaryMetricToggle() {
 
   var group = document.getElementById("orderSummaryMetricToggle");
   if (!group) return;
-  var selectEl = document.getElementById("orderSummaryMetricSelect");
-
-  if (selectEl) {
-    selectEl.addEventListener("change", function () {
-      var next = selectEl.value === "ratio" ? "ratio" : "count";
-      group.querySelectorAll(".order-summary-toggle__btn").forEach(function (el) {
-        var metric = el.getAttribute("data-summary-metric") || "count";
-        var active = metric === next;
-        el.classList.toggle("order-summary-toggle__btn--active", active);
-        el.setAttribute("aria-pressed", active ? "true" : "false");
-      });
-      summaryMetricState = next;
-      renderOrderSummaryTable();
-    });
-  }
 
   group.addEventListener("click", function (e) {
     var btn = e.target.closest("[data-summary-metric]");
@@ -2169,9 +2149,6 @@ function initOrderSummaryMetricToggle() {
       var active = el === btn;
       el.classList.toggle("order-summary-toggle__btn--active", active);
       el.setAttribute("aria-pressed", active ? "true" : "false");
-      if (active && selectEl) {
-        selectEl.value = el.getAttribute("data-summary-metric") || "count";
-      }
     });
     syncOrderSummaryMetricFromControls();
     renderOrderSummaryTable();
@@ -2240,8 +2217,6 @@ function updateOrderLoginMessage() {
   var active = document.querySelector(".screen.is-active");
   var el = active ? active.querySelector(".order-topbar__login-msg") : null;
   if (!el) return;
-  el.removeAttribute("hidden");
-  el.removeAttribute("aria-hidden");
   var auth = getAuth();
   if (auth) {
     var id = auth.userId || auth.name || "사용자";

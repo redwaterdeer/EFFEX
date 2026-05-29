@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>일정·공정 - EFFEX 시공관리</title>
+    <link rel="stylesheet" href="css/variables.css" />
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/components.css" />
+    <link rel="stylesheet" href="css/layout.css" />
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar">
+        <div class="sidebar__logo">
+          <a href="dashboard.html"><img src="https://i.ibb.co/wZ4mNscs/3.png" alt="EFFEX" /></a>
+        </div>
+        <nav class="sidebar__nav" id="sidebar-nav"></nav>
+        <div class="sidebar__footer">EFFEX 시공관리 v1.0</div>
+      </aside>
+
+      <div class="main">
+        <header class="header">
+          <div>
+            <h1 class="header__title" data-page-title>일정·공정</h1>
+            <p class="header__breadcrumb" data-page-breadcrumb>홈 / 일정·공정</p>
+          </div>
+          <div class="header__actions">
+            <a href="#" class="btn btn--outline btn--sm" data-logout>로그아웃</a>
+          </div>
+        </header>
+
+        <main class="content">
+          <div class="content__toolbar">
+            <div class="filter-bar">
+              <select class="form-select"><option>2026년 5월</option></select>
+              <select class="form-select"><option>전체 현장</option></select>
+            </div>
+            <button type="button" class="btn btn--primary">+ 일정 등록</button>
+          </div>
+
+          <section class="card">
+            <div class="schedule-calendar" id="calendar"></div>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+      function renderCalendar() {
+        var el = document.getElementById("calendar");
+        if (!el) return;
+        var days = ["일", "월", "화", "수", "목", "금", "토"];
+        var html = "";
+        days.forEach(function (d) {
+          html += '<div class="schedule-calendar__head">' + d + "</div>";
+        });
+        for (var i = 0; i < 4; i++) html += '<div class="schedule-calendar__cell"></div>';
+        for (var d = 1; d <= 31; d++) {
+          var cls = d === 21 ? " schedule-calendar__cell--today" : "";
+          var events = d === 21 ? '<div class="schedule-calendar__event">강남 도배</div><div class="schedule-calendar__event">판교 전기</div>' : "";
+          html += '<div class="schedule-calendar__cell' + cls + '"><div class="schedule-calendar__date">' + d + "</div>" + events + "</div>";
+        }
+        el.innerHTML = html;
+      }
+      initAppPage({ page: "schedule", title: "일정·공정", breadcrumb: "홈 / 일정·공정", onReady: renderCalendar });
+    </script>
+  </body>
+</html>

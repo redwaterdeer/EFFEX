@@ -827,7 +827,10 @@
           <a href="#" class="order-topbar__link" data-order-nav="stats">통계</a>
         </nav>
         <div class="order-topbar__aside">
-          <span class="order-topbar__login-msg" id="summaryLoginMsg"></span>
+          <span
+            class="order-topbar__login-msg order-topbar__login-msg--summary"
+            id="summaryLoginMsg"
+          ></span>
           <a
             href="#"
             class="order-topbar__link order-topbar__edit-profile"
@@ -883,10 +886,23 @@
                     <option value="all" selected>전체</option>
                   </select>
                 </div>
+                <div
+                  class="order-summary-ym__field order-summary-metric-mobile"
+                  aria-label="집계 표시"
+                >
+                  <select
+                    id="orderSummaryMetricSelect"
+                    class="order-summary-ym__select"
+                    aria-label="집계 표시"
+                  >
+                    <option value="count" selected>건수 / 금액</option>
+                    <option value="ratio">비율</option>
+                  </select>
+                </div>
               </div>
             </div>
             <div
-              class="order-summary-toggle"
+              class="order-summary-toggle order-summary-toggle--desktop"
               id="orderSummaryMetricToggle"
               role="group"
               aria-label="집계 표시"
@@ -954,8 +970,21 @@
             </table>
           </div>
         </div>
-        </div>
       </main>
+      <footer class="order-summary-mobile-footer" aria-label="계정">
+        <a
+          href="#"
+          class="order-summary-mobile-footer__link"
+          data-action="signup-edit"
+          >가입수정</a
+        >
+        <span class="order-summary-mobile-footer__sep" aria-hidden="true"
+          >Ι</span
+        >
+        <a href="#" class="order-summary-mobile-footer__link" data-logout
+          >로그아웃</a
+        >
+      </footer>
     </section>
 
     <!-- 4번: 오더배정 -->

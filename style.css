@@ -4026,7 +4026,7 @@ table {
 @media (max-width: 768px) {
   :root {
     --order-mobile-ym-box-h: 48px;
-    --order-summary-logo-band-h: 48px;
+    --order-summary-logo-band-h: 36px;
   }
 
   html,
@@ -4085,20 +4085,20 @@ table {
   }
 
   #screen-order-summary > .order-topbar {
-    display: grid !important;
-    grid-template-columns: minmax(0, 1fr) !important;
-    grid-template-areas:
-      "logo"
-      "menu" !important;
+    display: flex !important;
+    flex-direction: column !important;
     align-items: stretch !important;
-    gap: 8px !important;
-    padding: 12px 10px 8px !important;
+    gap: 0 !important;
+    padding: 0 !important;
     height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
     overflow: visible !important;
+    background: transparent !important;
     isolation: isolate;
   }
 
-  .order-topbar__logo {
+  .order-topbar:not(#screen-order-summary > .order-topbar) .order-topbar__logo {
     position: relative;
     grid-area: logo;
     transform: none;
@@ -4317,59 +4317,59 @@ table {
     font-size: 12px;
   }
 
-  /* 8번 집계표: 모바일·태블릿(≤768px) — 회색 로고 밴드 높이 유지 (PC 769px+ 미적용) */
+  /* 8번 집계표: 모바일(≤768px) — 회색바=로고만, 메뉴는 바 아래 (PC 769px+ 미적용) */
   #screen-order-summary > .order-topbar {
-    grid-template-columns: minmax(0, 1fr) !important;
-    grid-template-rows: auto auto !important;
-    grid-template-areas:
-      "logo"
-      "menu" !important;
-    gap: 8px !important;
-    padding: 12px 10px 8px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0 !important;
+    padding: 0 !important;
     height: auto !important;
     min-height: 0 !important;
     overflow: visible !important;
     align-items: stretch !important;
+    background: transparent !important;
   }
 
   #screen-order-summary .order-topbar__logo {
     position: relative !important;
-    grid-area: logo !important;
     transform: none !important;
     margin: 0 !important;
-    display: block !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex: 0 0 var(--order-summary-logo-band-h) !important;
     flex-shrink: 0 !important;
-    justify-self: start !important;
-    align-self: start !important;
+    width: 100% !important;
+    max-width: none !important;
     height: var(--order-summary-logo-band-h) !important;
     min-height: var(--order-summary-logo-band-h) !important;
     max-height: var(--order-summary-logo-band-h) !important;
-    width: 40vw !important;
-    max-width: 40vw !important;
-    overflow: visible !important;
+    overflow: hidden !important;
     box-sizing: border-box !important;
-    padding: 0 !important;
+    padding: 2px 10px !important;
     line-height: 0 !important;
     z-index: 5 !important;
+    order: 1 !important;
+    background: linear-gradient(to right, #d9d9d9, #adacac) !important;
   }
 
   #screen-order-summary
     .order-topbar__logo.order-topbar__logo--active
     .order-topbar__logo-img--active {
-    position: relative !important;
+    position: static !important;
     top: auto !important;
     left: auto !important;
     right: auto !important;
     bottom: auto !important;
     display: block !important;
-    width: 100% !important;
-    height: var(--order-summary-logo-band-h) !important;
-    max-width: 100% !important;
-    max-height: var(--order-summary-logo-band-h) !important;
+    width: auto !important;
+    max-width: min(82vw, 340px) !important;
+    height: calc(var(--order-summary-logo-band-h) - 2px) !important;
+    max-height: calc(var(--order-summary-logo-band-h) - 2px) !important;
     object-fit: contain !important;
-    object-position: left center !important;
+    object-position: center center !important;
     transform: none !important;
-    transform-origin: left center !important;
+    transform-origin: center center !important;
     pointer-events: none !important;
   }
 
@@ -4378,9 +4378,17 @@ table {
     pointer-events: none !important;
   }
 
+  /* 8번: 가입수정/로그아웃은 회색바 밖(하단 고정) */
+  #screen-order-summary .order-topbar__aside {
+    order: 99 !important;
+  }
+
+  /* 8번: 오더등록~통계 — 회색바(로고) 아래 별도 행 */
   #screen-order-summary .order-topbar__menu {
-    grid-area: menu !important;
     position: relative !important;
+    top: auto !important;
+    right: auto !important;
+    bottom: auto !important;
     left: auto !important;
     transform: none !important;
     display: grid !important;
@@ -4388,7 +4396,13 @@ table {
     gap: 4px !important;
     width: 100% !important;
     margin: 0 !important;
+    padding: 8px 8px 6px !important;
+    box-sizing: border-box !important;
+    background: #d9d9d9 !important;
     overflow: visible !important;
+    flex: 0 0 auto !important;
+    order: 2 !important;
+    z-index: 4 !important;
   }
 
   #screen-order-summary .order-topbar__menu .order-topbar__link {
@@ -4476,19 +4490,20 @@ table {
 @media (max-width: 480px) {
   :root {
     --order-mobile-ym-box-h: 42px;
-    --order-summary-logo-band-h: 48px;
+    --order-summary-logo-band-h: 32px;
   }
 
   #screen-order-summary {
-    --order-mobile-ym-box-h: 48px;
+    --order-mobile-ym-box-h: 42px;
+    --order-summary-logo-band-h: 32px;
   }
 
   /* 8번 집계표: 공통 480px 상단(3행 aside) 규칙 제외 */
   #screen-order-summary > .order-topbar {
-    grid-template-columns: minmax(0, 1fr) !important;
-    grid-template-areas:
-      "logo"
-      "menu" !important;
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 0 !important;
+    gap: 0 !important;
   }
 
   #screen-order-summary .order-topbar__login-msg,
@@ -4521,7 +4536,7 @@ table {
     gap: 7px;
   }
 
-  .order-topbar__logo {
+  .order-topbar:not(#screen-order-summary > .order-topbar) .order-topbar__logo {
     justify-self: start;
     align-self: start;
     width: 40vw;
@@ -4534,11 +4549,43 @@ table {
   }
 
   #screen-order-summary .order-topbar__logo {
-    width: 40vw !important;
-    max-width: 40vw !important;
+    width: 100% !important;
+    max-width: none !important;
     height: var(--order-summary-logo-band-h) !important;
     min-height: var(--order-summary-logo-band-h) !important;
     max-height: var(--order-summary-logo-band-h) !important;
+    padding: 2px 10px !important;
+  }
+
+  #screen-order-summary
+    .order-topbar__logo.order-topbar__logo--active
+    .order-topbar__logo-img--active {
+    width: auto !important;
+    max-width: min(84vw, 320px) !important;
+    height: calc(var(--order-summary-logo-band-h) - 4px) !important;
+    max-height: calc(var(--order-summary-logo-band-h) - 4px) !important;
+    object-fit: contain !important;
+    object-position: center center !important;
+  }
+
+  #screen-order-summary .order-topbar__menu {
+    background: #d9d9d9 !important;
+    padding: 8px 8px 6px !important;
+    top: auto !important;
+    left: auto !important;
+    transform: none !important;
+  }
+
+  #screen-order-summary .order-summary-toolbar {
+    column-gap: 5px !important;
+    row-gap: 6px !important;
+  }
+
+  #screen-order-summary .order-summary-metric-select,
+  #screen-order-summary .order-summary-ym__select {
+    font-size: clamp(11px, 2.85vw, 13px) !important;
+    padding-left: 7px !important;
+    padding-right: 26px !important;
   }
 
   .order-topbar:not(#screen-order-summary > .order-topbar) .order-topbar__menu {
@@ -4665,7 +4712,7 @@ table {
     padding: 10px 8px 10px;
   }
 
-  .order-topbar__logo {
+  .order-topbar:not(#screen-order-summary > .order-topbar) .order-topbar__logo {
     grid-area: logo;
     justify-self: start;
     align-self: start;
@@ -4695,10 +4742,10 @@ table {
 
   /* 8번 집계표: 공통 모바일 상단(login 영역) 레이아웃 미적용 */
   #screen-order-summary > .order-topbar {
-    grid-template-columns: minmax(0, 1fr) !important;
-    grid-template-areas:
-      "logo"
-      "menu" !important;
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 0 !important;
+    gap: 0 !important;
   }
 
   #screen-order-summary .order-topbar__login-msg,
@@ -4774,9 +4821,9 @@ table {
   }
 
   #screen-order-summary .order-page__num {
-    font-size: 84px !important;
-    top: 6px !important;
-    right: 10px !important;
+    font-size: clamp(52px, 14vw, 72px) !important;
+    top: 4px !important;
+    right: 8px !important;
     line-height: 1 !important;
     max-height: var(--order-summary-logo-band-h) !important;
     overflow: hidden !important;
@@ -4787,66 +4834,64 @@ table {
     /* 목대(행 헤더) 열 폭 — 경계선은 목대|시공오더 열 사이 간격 정중앙 */
     --order-summary-frozen-width: 52px;
     --order-summary-col-gap: 2px;
-    /* 로고: 메뉴 버튼 높이와 동일 (모바일 8번만, PC 미적용) */
-    --order-summary-logo-band-h: var(--order-mobile-ym-box-h, 48px);
-    --order-mobile-ym-box-h: 48px;
+    /* 8번 모바일: 회색바(로고만) — 메뉴는 바 아래 별도 행 */
+    --order-summary-logo-band-h: 36px;
+    --order-mobile-ym-box-h: 44px;
   }
 
   #screen-order-summary .order-topbar {
-    display: grid !important;
-    grid-template-columns: minmax(0, 1fr) !important;
-    grid-template-rows: auto auto !important;
-    grid-template-areas:
-      "logo"
-      "menu" !important;
+    display: flex !important;
+    flex-direction: column !important;
     align-items: stretch !important;
-    row-gap: 8px !important;
-    column-gap: 0 !important;
-    padding: 12px 10px 8px !important;
+    gap: 0 !important;
+    padding: 0 !important;
     height: auto !important;
     min-height: 0 !important;
+    max-height: none !important;
     overflow: visible !important;
+    background: transparent !important;
   }
 
   #screen-order-summary .order-topbar__logo {
-    grid-area: logo !important;
     position: relative !important;
-    display: block !important;
-    align-self: start !important;
-    justify-self: start !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex: 0 0 var(--order-summary-logo-band-h) !important;
     flex-shrink: 0 !important;
-    width: 40vw !important;
-    max-width: 40vw !important;
+    width: 100% !important;
+    max-width: none !important;
     height: var(--order-summary-logo-band-h) !important;
     min-height: var(--order-summary-logo-band-h) !important;
     max-height: var(--order-summary-logo-band-h) !important;
-    margin-top: 0 !important;
-    margin-bottom: 0 !important;
-    overflow: visible !important;
+    margin: 0 !important;
+    overflow: hidden !important;
     line-height: 0 !important;
-    padding: 0 !important;
+    padding: 2px 10px !important;
     box-sizing: border-box !important;
     z-index: 5 !important;
+    order: 1 !important;
+    background: linear-gradient(to right, #d9d9d9, #adacac) !important;
   }
 
-  /* 로고: 좌상단 정렬, 높이 = 메뉴 버튼(시안) */
+  /* 로고: 회색바(로고만) 안에서 가로·세로 중앙, 크기 확대 */
   #screen-order-summary
     .order-topbar__logo.order-topbar__logo--active
     .order-topbar__logo-img--active {
-    position: relative !important;
+    position: static !important;
     top: auto !important;
     left: auto !important;
     right: auto !important;
     bottom: auto !important;
     display: block !important;
-    width: 100% !important;
-    height: var(--order-summary-logo-band-h) !important;
-    max-width: 100% !important;
-    max-height: var(--order-summary-logo-band-h) !important;
+    width: auto !important;
+    max-width: min(82vw, 340px) !important;
+    height: calc(var(--order-summary-logo-band-h) - 2px) !important;
+    max-height: calc(var(--order-summary-logo-band-h) - 2px) !important;
     transform: none !important;
-    transform-origin: left center !important;
+    transform-origin: center center !important;
     object-fit: contain !important;
-    object-position: left center !important;
+    object-position: center center !important;
     pointer-events: none !important;
   }
 
@@ -4900,8 +4945,14 @@ table {
     box-sizing: border-box !important;
   }
 
+  /* 오더등록~통계: 회색 그라데이션 바 아래 (바와 분리된 별도 행) */
   #screen-order-summary .order-topbar__menu {
-    grid-area: menu !important;
+    position: relative !important;
+    top: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    transform: none !important;
     display: grid !important;
     grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
     grid-auto-rows: var(--order-mobile-ym-box-h) !important;
@@ -4909,8 +4960,17 @@ table {
     margin: 0 !important;
     gap: 4px !important;
     overflow: visible !important;
-    padding-bottom: 0 !important;
+    padding: 8px 8px 6px !important;
+    box-sizing: border-box !important;
+    background: #d9d9d9 !important;
     align-items: stretch !important;
+    flex: 0 0 auto !important;
+    order: 2 !important;
+    z-index: 4 !important;
+  }
+
+  #screen-order-summary .order-topbar__aside {
+    order: 99 !important;
   }
 
   #screen-order-summary .order-topbar__menu .order-topbar__link[data-order-nav="order"] {
@@ -5037,45 +5097,109 @@ table {
   #screen-order-summary .order-summary-toolbar {
     display: grid !important;
     grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    grid-template-rows: auto !important;
     width: 100% !important;
-    gap: 6px !important;
+    column-gap: 6px !important;
+    row-gap: 8px !important;
     align-items: stretch !important;
+    margin-bottom: 10px !important;
+    box-sizing: border-box !important;
   }
 
-  #screen-order-summary .order-summary-ym {
-    grid-column: 1 / span 2 !important;
+  #screen-order-summary .order-summary-ym,
+  #screen-order-summary .order-summary-ym__row {
+    display: contents !important;
+  }
+
+  #screen-order-summary .order-summary-ym__field {
+    position: relative !important;
+    display: block !important;
     min-width: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+    isolation: isolate !important;
+  }
+
+  #screen-order-summary .order-summary-ym__row .order-summary-ym__field:nth-child(1) {
+    grid-column: 1 / 2 !important;
+    grid-row: 1 !important;
+  }
+
+  #screen-order-summary .order-summary-ym__row .order-summary-ym__field:nth-child(2) {
+    grid-column: 2 / 3 !important;
+    grid-row: 1 !important;
   }
 
   #screen-order-summary .order-summary-toggle {
-    grid-column: 3 !important;
+    grid-column: 3 / 4 !important;
+    grid-row: 1 !important;
     width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
     display: block !important;
     border: none !important;
     background: transparent !important;
     border-radius: 0 !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+    position: relative !important;
+    isolation: isolate !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
 
   #screen-order-summary .order-summary-toggle__btn {
     display: none !important;
+    visibility: hidden !important;
+    position: absolute !important;
+    width: 0 !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
   }
 
   #screen-order-summary .order-summary-metric-select-wrap {
-    display: inline-flex !important;
-    width: 100% !important;
-  }
-
-  #screen-order-summary .order-summary-metric-select {
+    display: block !important;
     width: 100% !important;
     min-width: 0 !important;
-    height: var(--order-mobile-ym-box-h) !important;
-    padding-right: 32px !important;
-    font-size: 14px !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
 
+  #screen-order-summary .order-summary-metric-select-wrap.order-summary-ym__field {
+    display: block !important;
+  }
+
+  #screen-order-summary .order-summary-metric-select,
   #screen-order-summary .order-summary-ym__select {
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
     height: var(--order-mobile-ym-box-h) !important;
+    min-height: var(--order-mobile-ym-box-h) !important;
+    max-height: var(--order-mobile-ym-box-h) !important;
     box-sizing: border-box !important;
+    font-size: clamp(11px, 2.85vw, 14px) !important;
+    padding-left: 8px !important;
+    padding-right: 28px !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+  }
+
+  #screen-order-summary .order-summary-ym__field::after {
+    right: 9px !important;
+  }
+
+  #screen-order-summary .order-summary-metric-select-wrap.order-summary-ym__field::after {
+    right: 9px !important;
   }
 
   #screen-order-summary .order-summary-table-wrap {
@@ -5320,6 +5444,10 @@ table {
 
 /* 8번 집계표: 초소형 모바일 — 메뉴 글자 잘림 방지 (PC·769px+ 미적용) */
 @media (max-width: 360px) {
+  #screen-order-summary {
+    --order-summary-logo-band-h: 30px;
+  }
+
   #screen-order-summary .order-topbar__menu {
     gap: 4px !important;
   }
@@ -5330,6 +5458,17 @@ table {
     padding: 0 3px !important;
     font-size: 13px !important;
     letter-spacing: -0.04em !important;
+  }
+
+  #screen-order-summary .order-summary-toolbar {
+    column-gap: 4px !important;
+  }
+
+  #screen-order-summary .order-summary-metric-select,
+  #screen-order-summary .order-summary-ym__select {
+    font-size: 11px !important;
+    padding-left: 6px !important;
+    padding-right: 24px !important;
   }
 }
 

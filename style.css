@@ -4111,13 +4111,14 @@ table {
     border-width: 1px;
   }
 
-  .order-page__num {
+  /* 3~7번은 .order-mobile-layout(8번과 동일 셸) — 구형 상단바 규칙 제외 */
+  .order-page:not(.order-mobile-layout) .order-page__num {
     top: 8px;
     right: 10px;
     font-size: 46px;
   }
 
-  .order-topbar {
+  .order-page:not(.order-mobile-layout) .order-topbar {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     grid-template-areas:
@@ -4131,7 +4132,7 @@ table {
     isolation: isolate;
   }
 
-  .order-topbar__logo {
+  .order-page:not(.order-mobile-layout) .order-topbar__logo {
     position: relative;
     grid-area: logo;
     transform: none;
@@ -4141,11 +4142,11 @@ table {
     z-index: 1;
   }
 
-  .order-topbar__logo-img {
+  .order-page:not(.order-mobile-layout) .order-topbar__logo-img {
     object-position: left center;
   }
 
-  .order-topbar__menu {
+  .order-page:not(.order-mobile-layout) .order-topbar__menu {
     grid-area: menu;
     position: relative;
     left: auto;
@@ -4162,11 +4163,11 @@ table {
     z-index: 3;
   }
 
-  .order-topbar__menu::-webkit-scrollbar {
+  .order-page:not(.order-mobile-layout) .order-topbar__menu::-webkit-scrollbar {
     display: none;
   }
 
-  .order-topbar__menu .order-topbar__link {
+  .order-page:not(.order-mobile-layout) .order-topbar__menu .order-topbar__link {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -4186,13 +4187,15 @@ table {
     -webkit-tap-highlight-color: transparent;
   }
 
-  .order-topbar__menu .order-topbar__link--active {
+  .order-page:not(.order-mobile-layout)
+    .order-topbar__menu
+    .order-topbar__link--active {
     border-color: #9a9a9a;
     background: #9a9a9a;
     color: #fff;
   }
 
-  .order-topbar__aside {
+  .order-page:not(.order-mobile-layout) .order-topbar__aside {
     grid-area: aside;
     position: relative;
     margin: 0;
@@ -4202,92 +4205,90 @@ table {
     z-index: 3;
   }
 
-  .order-topbar__login-msg,
-  .order-topbar__edit-profile,
-  .order-topbar__logout {
+  .order-page:not(.order-mobile-layout) .order-topbar__login-msg,
+  .order-page:not(.order-mobile-layout) .order-topbar__edit-profile,
+  .order-page:not(.order-mobile-layout) .order-topbar__logout {
     font-size: 12px;
     line-height: 1.25;
   }
 
-  .order-topbar__edit-profile,
-  .order-topbar__logout {
+  .order-page:not(.order-mobile-layout) .order-topbar__edit-profile,
+  .order-page:not(.order-mobile-layout) .order-topbar__logout {
     min-height: 28px;
     padding: 3px 5px;
   }
 
-  .order-body,
-  .assign-body {
+  .order-page:not(.order-mobile-layout) .order-body,
+  .order-page:not(.order-mobile-layout) .assign-body {
     padding: 12px 8px 18px;
   }
 
-  .assign-panel {
+  .order-page:not(.order-mobile-layout) .assign-panel {
     width: 100%;
     padding: 10px 8px;
   }
 
-  .assign-layout,
-  .stats-content {
+  .order-page:not(.order-mobile-layout) .assign-layout,
+  .order-page:not(.order-mobile-layout) .stats-content {
     flex-direction: column;
   }
 
-  .assign-sidebar,
-  .stats-filters {
+  .order-page:not(.order-mobile-layout) .assign-sidebar,
+  .order-page:not(.order-mobile-layout) .stats-filters {
     width: 100%;
     flex: 0 0 auto;
   }
 
-  .assign-open-filter {
+  .order-page:not(.order-mobile-layout) .assign-open-filter {
     min-height: 36px;
   }
 
-  .assign-calendar {
+  .order-page:not(.order-mobile-layout) .assign-calendar {
     min-height: 220px;
   }
 
-  .order-field__control--md,
-  .order-field__control--sm,
-  .order-field__control--upload {
+  .order-page:not(.order-mobile-layout) .order-field__control--md,
+  .order-page:not(.order-mobile-layout) .order-field__control--sm,
+  .order-page:not(.order-mobile-layout) .order-field__control--upload {
     flex: 1;
     max-width: 100%;
   }
 
-  .order-field__region-group {
+  .order-page:not(.order-mobile-layout) .order-field__region-group {
     flex-direction: column;
   }
 
-  /* 8번 집계표 모바일: 파일 하단 #screen-order-summary 전용 블록에서만 제어 (PC·중복 방지) */
-
-  .order-topbar__menu {
+  .order-page:not(.order-mobile-layout) .order-topbar__menu {
     gap: 5px;
   }
 
-  .order-topbar__menu .order-topbar__link {
+  .order-page:not(.order-mobile-layout) .order-topbar__menu .order-topbar__link {
     min-height: 38px;
     min-width: 58px;
     padding: 7px 9px;
     font-size: 13px;
   }
 
-  .order-topbar__aside {
+  .order-page:not(.order-mobile-layout) .order-topbar__aside {
     width: 100%;
     justify-content: flex-start;
   }
 
-  .order-topbar__login-msg,
-  .order-topbar__edit-profile,
-  .order-topbar__logout {
+  .order-page:not(.order-mobile-layout) .order-topbar__login-msg,
+  .order-page:not(.order-mobile-layout) .order-topbar__edit-profile,
+  .order-page:not(.order-mobile-layout) .order-topbar__logout {
     font-size: 13px;
   }
 }
 
 @media (max-width: 480px) {
-  .order-page__num {
+  .order-page:not(.order-mobile-layout) .order-page__num {
     top: 7px;
     right: 8px;
     font-size: 42px;
   }
 
-  .order-topbar {
+  .order-page:not(.order-mobile-layout) .order-topbar {
     grid-template-columns: minmax(0, 1fr);
     grid-template-areas:
       "logo"
@@ -4297,13 +4298,13 @@ table {
     gap: 7px;
   }
 
-  .order-topbar__logo {
+  .order-page:not(.order-mobile-layout) .order-topbar__logo {
     justify-self: start;
     height: 34px;
     width: min(150px, 52vw);
   }
 
-  .order-topbar__menu {
+  .order-page:not(.order-mobile-layout) .order-topbar__menu {
     width: 100%;
     gap: 6px;
     padding-bottom: 2px;
@@ -4312,7 +4313,7 @@ table {
     touch-action: pan-x;
   }
 
-  .order-topbar__menu .order-topbar__link {
+  .order-page:not(.order-mobile-layout) .order-topbar__menu .order-topbar__link {
     min-height: 40px;
     min-width: 62px;
     padding: 8px 10px;
@@ -4322,7 +4323,7 @@ table {
     pointer-events: auto;
   }
 
-  .order-topbar__aside {
+  .order-page:not(.order-mobile-layout) .order-topbar__aside {
     width: 100%;
     justify-content: flex-start;
     align-items: center;
@@ -4331,14 +4332,12 @@ table {
     pointer-events: auto;
   }
 
-  .order-topbar__login-msg,
-  .order-topbar__edit-profile,
-  .order-topbar__logout {
+  .order-page:not(.order-mobile-layout) .order-topbar__login-msg,
+  .order-page:not(.order-mobile-layout) .order-topbar__edit-profile,
+  .order-page:not(.order-mobile-layout) .order-topbar__logout {
     font-size: 12px;
     line-height: 1.3;
   }
-
-  /* 8번 집계표: 768px #screen-order-summary 블록에서만 제어 */
 }
 
 /* 모바일(요청 반영): 상단/하단 배치 및 집계표 첫 열 고정 */
@@ -4350,8 +4349,8 @@ table {
     font-size: 62px;
   }
 
-  /* 2) 메뉴를 3+2 버튼 2행으로 정렬 (가로 폭 축소) */
-  .order-topbar__menu {
+  /* 3~8번: 8번과 동일 5열 메뉴 (.order-mobile-layout) — 구 레이아웃(3+2) 미적용 */
+  .order-page:not(.order-mobile-layout) .order-topbar__menu {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 8px;
@@ -4361,15 +4360,15 @@ table {
     padding-bottom: 0;
   }
 
-  .order-topbar__menu .order-topbar__link:nth-child(4) {
+  .order-page:not(.order-mobile-layout) .order-topbar__menu .order-topbar__link:nth-child(4) {
     grid-column: 1 / 2;
   }
 
-  .order-topbar__menu .order-topbar__link:nth-child(5) {
+  .order-page:not(.order-mobile-layout) .order-topbar__menu .order-topbar__link:nth-child(5) {
     grid-column: 2 / 3;
   }
 
-  .order-topbar__menu .order-topbar__link {
+  .order-page:not(.order-mobile-layout) .order-topbar__menu .order-topbar__link {
     min-width: 0;
     width: 100%;
     min-height: 36px;
@@ -4378,87 +4377,32 @@ table {
     border-radius: 8px;
   }
 
-  /* 3~5) 8번 집계표 제외: 로그인 문구·하단 링크·테이블 고정은 768px #screen-order-summary 블록에서 처리 */
-  .order-page:not(.order-summary-page) .order-topbar {
-    grid-template-columns: minmax(0, 1fr) auto;
-    grid-template-areas:
-      "logo login"
-      "menu menu";
-    align-items: center;
-    row-gap: 7px;
-    column-gap: 8px;
-    padding: 8px 8px 10px;
-  }
-
-  .order-page:not(.order-summary-page) .order-topbar__logo {
-    grid-area: logo;
-    height: 48px;
-    width: min(220px, 64vw);
-  }
-
-  .order-page:not(.order-summary-page) .order-topbar__aside {
-    grid-area: login;
-    width: auto;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 0;
-  }
-
-  .order-page:not(.order-summary-page) .order-topbar__login-msg {
-    font-size: 12px;
-    line-height: 1.25;
-    white-space: nowrap;
-    text-align: right;
-  }
-
-  .order-page:not(.order-summary-page) .order-topbar__edit-profile,
-  .order-page:not(.order-summary-page) .order-topbar__logout {
-    position: fixed;
-    bottom: 10px;
-    z-index: 60;
-    background: transparent;
-    font-size: 13px;
-    line-height: 1.2;
-    min-height: auto;
-    padding: 0;
-  }
-
-  .order-page:not(.order-summary-page) .order-topbar__edit-profile {
-    left: 50%;
-    transform: translateX(-120%);
-  }
-
-  .order-page:not(.order-summary-page) .order-topbar__logout {
-    left: 50%;
-    transform: translateX(20%);
-  }
-
-  .order-page:not(.order-summary-page) .order-body,
-  .order-page:not(.order-summary-page) .assign-body {
-    padding-bottom: 38px;
+  .order-mobile-layout .order-page__num {
+    font-size: 62px !important;
+    top: 4px !important;
+    right: 8px !important;
   }
 }
 
-/* 모바일 전용: 8번 집계표 (PC 769px 이상은 변경 없음) */
+/* 모바일 전용: 3~8번 공통 셸 (8번 집계표와 동일 상단·하단) + 8번 집계표 본문 */
 @media (max-width: 768px) {
   html,
   body {
     overflow-x: hidden !important;
   }
 
-  #screen-order-summary {
+  .order-mobile-layout {
     overflow-x: hidden !important;
   }
 
-  #screen-order-summary .order-page__num {
+  .order-mobile-layout .order-page__num {
     font-size: 84px !important;
     top: -2px !important;
     right: 8px !important;
   }
 
-  #screen-order-summary {
+  .order-mobile-layout {
     --order-summary-mobile-col-w: 88px;
-    /* 상단 집계·집계표 셀 박스 간격: 기준 3.5px 대비 50% (좌우·상하 동일) */
     --order-summary-mobile-box-gap: 1.75px;
     --order-summary-mobile-topbar-gap: 3.5px;
     --order-summary-mobile-ym-font-size: 15px;
@@ -4466,7 +4410,7 @@ table {
     background-color: #ffffff !important;
   }
 
-  #screen-order-summary .order-topbar {
+  .order-mobile-layout .order-topbar {
     display: grid !important;
     grid-template-columns: minmax(0, 1fr) !important;
     grid-template-areas:
@@ -4479,13 +4423,15 @@ table {
     height: auto !important;
     min-height: 0 !important;
     overflow: clip !important;
+    background: #ffffff !important;
+    background-image: none !important;
   }
 
-  #screen-order-summary .order-topbar__logo:not(.order-topbar__logo-mobile) {
+  .order-mobile-layout .order-topbar__logo:not(.order-topbar__logo-mobile) {
     display: none !important;
   }
 
-  #screen-order-summary .order-topbar__logo-mobile {
+  .order-mobile-layout .order-topbar__logo-mobile {
     display: block !important;
     grid-area: logo !important;
     justify-self: start !important;
@@ -4502,7 +4448,7 @@ table {
     z-index: 2 !important;
   }
 
-  #screen-order-summary .order-topbar__logo-mobile img {
+  .order-mobile-layout .order-topbar__logo-mobile img {
     display: block !important;
     width: min(240px, 64vw) !important;
     height: auto !important;
@@ -4512,12 +4458,12 @@ table {
     border: 0 !important;
   }
 
-  #screen-order-summary .order-topbar__aside {
+  .order-mobile-layout .order-topbar__aside {
     display: none !important;
   }
 
-  #screen-order-summary .order-topbar__login-msg,
-  #screen-order-summary .order-topbar__login-msg--summary {
+  .order-mobile-layout .order-topbar__login-msg,
+  .order-mobile-layout .order-topbar__login-msg--summary {
     display: none !important;
     visibility: hidden !important;
     width: 0 !important;
@@ -4528,7 +4474,7 @@ table {
     pointer-events: none !important;
   }
 
-  #screen-order-summary .order-topbar__menu {
+  .order-mobile-layout .order-topbar__menu {
     grid-area: menu !important;
     display: grid !important;
     grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
@@ -4540,46 +4486,73 @@ table {
     align-items: stretch !important;
   }
 
-  #screen-order-summary .order-topbar__menu .order-topbar__link[data-order-nav="order"] {
+  .order-mobile-layout .order-topbar__menu .order-topbar__link[data-order-nav="order"] {
     order: 1 !important;
   }
-  #screen-order-summary .order-topbar__menu .order-topbar__link[data-order-nav="assign"] {
+  .order-mobile-layout .order-topbar__menu .order-topbar__link[data-order-nav="assign"] {
     order: 2 !important;
   }
-  #screen-order-summary .order-topbar__menu .order-topbar__link[data-order-nav="status"] {
+  .order-mobile-layout .order-topbar__menu .order-topbar__link[data-order-nav="status"] {
     order: 3 !important;
   }
-  #screen-order-summary .order-topbar__menu .order-topbar__link[data-order-nav="open"] {
+  .order-mobile-layout .order-topbar__menu .order-topbar__link[data-order-nav="open"] {
     order: 4 !important;
   }
-  #screen-order-summary .order-topbar__menu .order-topbar__link[data-order-nav="stats"] {
+  .order-mobile-layout .order-topbar__menu .order-topbar__link[data-order-nav="stats"] {
     order: 5 !important;
   }
 
-  #screen-order-summary .order-topbar__menu .order-topbar__link {
+  .order-mobile-layout .order-topbar__menu .order-topbar__link {
     min-width: 0 !important;
     width: 100% !important;
     min-height: 54px !important;
     padding: 11px 6px !important;
     font-size: clamp(10px, 2.85vw, 12px) !important;
+    font-weight: 600 !important;
     line-height: 1.35 !important;
+    border: 1px solid #c9c9c9 !important;
     border-radius: 6px !important;
+    background: #f7f7f7 !important;
+    color: #333 !important;
     justify-content: center !important;
     align-items: center !important;
     white-space: nowrap !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
     letter-spacing: -0.02em !important;
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
   }
 
-  #screen-order-summary .order-topbar__menu .order-topbar__link:nth-child(4),
-  #screen-order-summary .order-topbar__menu .order-topbar__link:nth-child(5) {
+  .order-mobile-layout .order-topbar__menu .order-topbar__link--active {
+    border-color: #9a9a9a !important;
+    background: #9a9a9a !important;
+    color: #ffffff !important;
+  }
+
+  .order-mobile-layout .order-topbar__menu .order-topbar__link:hover {
+    color: #333 !important;
+  }
+
+  .order-mobile-layout .order-topbar__menu .order-topbar__link--active:hover {
+    color: #ffffff !important;
+  }
+
+  .order-mobile-layout .order-topbar__menu .order-topbar__link:nth-child(4),
+  .order-mobile-layout .order-topbar__menu .order-topbar__link:nth-child(5) {
     grid-column: auto !important;
   }
 
-  #screen-order-summary .order-summary-body {
+  .order-mobile-layout .assign-body,
+  .order-mobile-layout .order-summary-body {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
     padding-bottom: 52px !important;
     overflow-x: hidden !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    background: #ffffff !important;
+    background-color: #ffffff !important;
   }
 
   #screen-order-summary .order-summary-toolbar {
@@ -4904,18 +4877,12 @@ table {
     background-color: #ffffff !important;
   }
 
-  #screen-order-summary .assign-panel,
-  #screen-order-summary .assign-panel.order-summary-panel {
+  .order-mobile-layout .assign-panel,
+  .order-mobile-layout .assign-panel.order-summary-panel {
     overflow: hidden !important;
     background: #ffffff !important;
     background-color: #ffffff !important;
     border-color: #d8d8d8 !important;
-  }
-
-  #screen-order-summary .order-summary-body,
-  #screen-order-summary .assign-body.order-summary-body {
-    background: #ffffff !important;
-    background-color: #ffffff !important;
   }
 
   /* 4) 집계표 영역·셀 사이(박스 사이) 바탕 — 회색 패널색이 비치지 않도록 흰색 */
@@ -4935,7 +4902,7 @@ table {
     background-color: #ffffff !important;
   }
 
-  #screen-order-summary .order-summary-mobile-footer {
+  .order-mobile-layout .order-summary-mobile-footer {
     display: flex !important;
     position: fixed !important;
     left: 0 !important;
@@ -4954,20 +4921,422 @@ table {
     color: #333 !important;
   }
 
-  #screen-order-summary .order-summary-mobile-footer__sep {
+  .order-mobile-layout .order-summary-mobile-footer__sep {
     color: #888 !important;
     font-weight: 500 !important;
     user-select: none !important;
   }
 
-  #screen-order-summary .order-summary-mobile-footer__link {
+  .order-mobile-layout .order-summary-mobile-footer__link {
     color: inherit !important;
     text-decoration: none !important;
     padding: 4px 6px !important;
     line-height: 1.2 !important;
   }
 
-  #screen-order-summary .order-summary-mobile-footer__link:active {
+  .order-mobile-layout .order-summary-mobile-footer__link:active {
     opacity: 0.75 !important;
+  }
+
+  /* 3~7번 본문: 흰 배경·하단 푸터 여백·캘린더/필터 */
+  .order-mobile-layout:not(.order-summary-page) .assign-body,
+  .order-mobile-layout:not(.order-summary-page) .order-summary-body {
+    padding: 8px 8px 52px !important;
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+  }
+
+  .order-mobile-layout:not(.order-summary-page) .assign-panel,
+  .order-mobile-layout.stats-page .stats-panel {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 10px 8px !important;
+    border: 1px solid #d8d8d8 !important;
+    border-radius: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  .order-mobile-layout:not(.order-summary-page) .assign-layout {
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+
+  .order-mobile-layout:not(.order-summary-page) .assign-sidebar {
+    width: 100% !important;
+    flex: 0 0 auto !important;
+  }
+
+  /* 4~6번 연·월: 8번 집계표와 동일 2열 그리드(화살표 숨김) */
+  .order-mobile-layout:not(.order-summary-page) .assign-ym {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    align-items: stretch !important;
+    width: 100% !important;
+    gap: var(--order-summary-mobile-box-gap, 1.75px) !important;
+  }
+
+  .order-mobile-layout:not(.order-summary-page) .assign-ym__row {
+    display: contents !important;
+  }
+
+  .order-mobile-layout:not(.order-summary-page) .assign-ym__arrows {
+    display: none !important;
+  }
+
+  .order-mobile-layout:not(.order-summary-page) .assign-ym__select {
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 44px !important;
+    height: 44px !important;
+    box-sizing: border-box !important;
+    font-size: var(--order-summary-mobile-ym-font-size, 15px) !important;
+    font-weight: 600 !important;
+    line-height: 1.2 !important;
+    padding: 0 22px 0 6px !important;
+    border-radius: 8px !important;
+    border: 1px solid #b8b8b8 !important;
+    background: #ffffff !important;
+    text-align: center !important;
+    text-align-last: center !important;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  .order-mobile-layout:not(.order-summary-page) .assign-calendar {
+    min-height: 200px !important;
+  }
+
+  .order-mobile-layout:not(.order-summary-page) .assign-date-title {
+    font-size: clamp(18px, 5vw, 24px) !important;
+    margin-bottom: 8px !important;
+  }
+
+  .order-mobile-layout:not(.order-summary-page) .assign-table-wrap {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  .order-mobile-layout:not(.order-summary-page) .assign-save {
+    margin-top: 12px !important;
+    padding-bottom: 4px !important;
+  }
+
+  .order-mobile-layout:not(.order-summary-page) .order-register__btn {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .order-mobile-layout.stats-page .stats-main {
+    flex-direction: column !important;
+  }
+
+  .order-mobile-layout.stats-page .stats-filters {
+    width: 100% !important;
+    flex: 0 0 auto !important;
+  }
+
+  .order-mobile-layout.stats-page .stats-filters-form {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+  }
+
+  .order-mobile-layout.stats-page .stats-mode-nav--top {
+    margin-bottom: 10px !important;
+  }
+
+  .order-mobile-layout:not(.order-summary-page) .order-form {
+    gap: 8px !important;
+  }
+
+  .order-mobile-layout:not(.order-summary-page) .order-field {
+    flex-wrap: wrap !important;
+  }
+
+  .order-mobile-layout:not(.order-summary-page) .order-field__control--md,
+  .order-mobile-layout:not(.order-summary-page) .order-field__control--sm,
+  .order-mobile-layout:not(.order-summary-page) .order-field__control--date,
+  .order-mobile-layout:not(.order-summary-page) .order-field__control--upload {
+    flex: 1 1 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* 3번 오더등록: 8번과 동일 흰 배경·세로 폼 */
+  .order-mobile-layout:not(.order-summary-page) .order-form,
+  .order-mobile-layout:not(.order-summary-page) .order-register {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .order-mobile-layout:not(.order-summary-page) .order-field {
+    transform: none !important;
+    flex-wrap: wrap !important;
+    align-items: stretch !important;
+    gap: 4px !important;
+    margin-bottom: 10px !important;
+  }
+
+  .order-mobile-layout:not(.order-summary-page) .order-field__label {
+    flex: 0 0 100% !important;
+    transform: none !important;
+    min-height: 36px !important;
+    border-radius: 6px 6px 0 0 !important;
+  }
+
+  .order-mobile-layout:not(.order-summary-page) .order-field__label span,
+  .order-mobile-layout:not(.order-summary-page) .order-field__control,
+  .order-mobile-layout:not(.order-summary-page) .order-field__control input,
+  .order-mobile-layout:not(.order-summary-page) .order-field__control select,
+  .order-mobile-layout:not(.order-summary-page) .order-upload-btn span,
+  .order-mobile-layout:not(.order-summary-page) .order-delete-btn span {
+    transform: none !important;
+  }
+
+  .order-mobile-layout:not(.order-summary-page) .order-field__divider {
+    display: none !important;
+  }
+
+  .order-mobile-layout:not(.order-summary-page) .order-field__control {
+    flex: 1 1 100% !important;
+    min-height: 44px !important;
+    border-radius: 0 0 8px 8px !important;
+    border: 1px solid #b8b8b8 !important;
+    padding: 0 12px !important;
+  }
+
+  .order-mobile-layout:not(.order-summary-page) .order-field--scope .order-field__control,
+  .order-mobile-layout:not(.order-summary-page) .order-field--scope-sales .order-field__control {
+    border-radius: 8px !important;
+    padding: 8px !important;
+  }
+
+  .order-mobile-layout:not(.order-summary-page) .order-scope-options {
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+  }
+
+  .order-mobile-layout:not(.order-summary-page) .order-register {
+    margin-top: 8px !important;
+    padding: 0 4px !important;
+  }
+
+  .order-mobile-layout:not(.order-summary-page) .order-register__btn {
+    min-height: 48px !important;
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    border-radius: 8px !important;
+  }
+
+  /* 4~6번: 필터·달력·테이블 */
+  .order-mobile-layout:not(.order-summary-page) .assign-sidebar {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+
+  /* 5·6번 필터: 8번 토글과 동일 2열·회색 활성 */
+  .order-mobile-layout:not(.order-summary-page) .assign-open-filter {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: var(--order-summary-mobile-box-gap, 1.75px) !important;
+    min-height: 0 !important;
+    border: none !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    overflow: visible !important;
+  }
+
+  .order-mobile-layout:not(.order-summary-page) .assign-open-filter__btn {
+    min-height: 44px !important;
+    font-size: var(--order-summary-mobile-ym-font-size, 15px) !important;
+    font-weight: 600 !important;
+    border: 1px solid #c9c9c9 !important;
+    border-radius: 6px !important;
+    background: #f7f7f7 !important;
+    color: #333 !important;
+  }
+
+  .order-mobile-layout:not(.order-summary-page) .assign-open-filter__btn:last-child {
+    border-right: 1px solid #c9c9c9 !important;
+  }
+
+  .order-mobile-layout:not(.order-summary-page) .assign-open-filter__btn--active {
+    border-color: #9a9a9a !important;
+    background: #9a9a9a !important;
+    color: #fff !important;
+  }
+
+  .order-mobile-layout:not(.order-summary-page) .assign-main {
+    min-width: 0 !important;
+    width: 100% !important;
+  }
+
+  .order-mobile-layout:not(.order-summary-page) .assign-table {
+    font-size: 12px !important;
+  }
+
+  .order-mobile-layout:not(.order-summary-page) .assign-table__th,
+  .order-mobile-layout:not(.order-summary-page) .assign-table__td {
+    padding: 6px 4px !important;
+    white-space: nowrap !important;
+  }
+
+  .order-mobile-layout:not(.order-summary-page) .assign-save .order-register__btn {
+    min-height: 48px !important;
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    border-radius: 8px !important;
+  }
+
+  /* 7번 통계: 8번 툴바 스타일에 맞춤 */
+  .order-mobile-layout.stats-page .stats-panel {
+    background: #ffffff !important;
+  }
+
+  .order-mobile-layout.stats-page .stats-main {
+    gap: 16px !important;
+  }
+
+  .order-mobile-layout.stats-page .stats-content {
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+
+  .order-mobile-layout.stats-page .stats-mode-nav.stats-mode-nav--top {
+    display: flex !important;
+    width: 100% !important;
+    border: 1px solid #b8b8b8 !important;
+    border-radius: 8px !important;
+    overflow: hidden !important;
+    margin-bottom: 8px !important;
+  }
+
+  .order-mobile-layout.stats-page .stats-mode-nav--top .stats-mode-nav__btn {
+    flex: 1 !important;
+    min-height: 44px !important;
+    margin: 0 !important;
+    border: none !important;
+    border-right: 1px solid #b8b8b8 !important;
+    border-radius: 0 !important;
+    font-size: clamp(11px, 2.8vw, 13px) !important;
+    font-weight: 600 !important;
+    transform: none !important;
+  }
+
+  .order-mobile-layout.stats-page .stats-mode-nav--top .stats-mode-nav__btn > span {
+    transform: none !important;
+  }
+
+  .order-mobile-layout.stats-page .stats-mode-nav--top .stats-mode-nav__btn:last-child {
+    border-right: none !important;
+  }
+
+  .order-mobile-layout.stats-page .stats-mode-nav__btn--active {
+    background: #9a9a9a !important;
+    color: #fff !important;
+  }
+
+  .order-mobile-layout.stats-page .stats-filters {
+    padding-top: 0 !important;
+  }
+
+  .order-mobile-layout.stats-page .stats-filters-form .order-field {
+    transform: none !important;
+    flex-wrap: wrap !important;
+    margin-bottom: 8px !important;
+  }
+
+  .order-mobile-layout.stats-page .stats-filters-form .order-field__label {
+    flex: 0 0 100% !important;
+    transform: none !important;
+    min-height: 34px !important;
+  }
+
+  .order-mobile-layout.stats-page .stats-filters-form .order-field__label span {
+    transform: none !important;
+  }
+
+  .order-mobile-layout.stats-page .stats-filters-form .order-field__divider {
+    display: none !important;
+  }
+
+  .order-mobile-layout.stats-page .stats-filters-form .order-field__control {
+    flex: 1 1 100% !important;
+    transform: none !important;
+    min-height: 44px !important;
+    border-radius: 8px !important;
+  }
+
+  .order-mobile-layout.stats-page .stats-filters-form .order-select {
+    min-height: 44px !important;
+    font-size: var(--order-summary-mobile-ym-font-size, 15px) !important;
+    font-weight: 600 !important;
+    text-align: center !important;
+    text-align-last: center !important;
+  }
+
+  .order-mobile-layout.stats-page .stats-body {
+    min-width: 0 !important;
+    width: 100% !important;
+  }
+
+  .order-mobile-layout.stats-page .stats-body .assign-table-wrap {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  .order-mobile-layout.stats-page .stats-unit-label {
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    margin-bottom: 6px !important;
+    padding: 0 2px !important;
+  }
+
+  .order-mobile-layout.stats-page .stats-chart-wrap,
+  .order-mobile-layout.stats-page .stats-rank {
+    min-width: 0 !important;
+    width: 100% !important;
+  }
+
+  .order-mobile-layout:not(.order-summary-page) .assign-date-title {
+    text-align: center !important;
+    color: #222 !important;
+  }
+
+  .order-mobile-layout:not(.order-summary-page) .assign-mini-cal {
+    border: 1px solid #b8b8b8 !important;
+    border-radius: 8px !important;
+    background: #ffffff !important;
+  }
+
+  .order-mobile-layout:not(.order-summary-page) .assign-mini-cal__day-btn {
+    min-height: 40px !important;
+    touch-action: manipulation !important;
+  }
+
+  .order-mobile-layout:not(.order-summary-page) .assign-body > .assign-save {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 10px 8px 4px !important;
+    box-sizing: border-box !important;
+  }
+
+  .order-mobile-layout:not(.order-summary-page) .assign-layout {
+    min-height: 0 !important;
+  }
+
+  .order-mobile-layout:not(.order-summary-page) .assign-panel .assign-save {
+    width: 100% !important;
+    margin-top: 12px !important;
+    padding: 0 4px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .order-mobile-layout .order-topbar__menu .order-topbar__link {
+    min-height: 50px !important;
+    padding: 10px 5px !important;
+    font-size: clamp(10px, 2.7vw, 12px) !important;
   }
 }

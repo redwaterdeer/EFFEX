@@ -328,11 +328,20 @@
     </section>
 
     <!-- 3. 오더등록 -->
-    <section id="screen-order" class="screen order-page assign-page" data-title="오더등록">
+    <section
+      id="screen-order"
+      class="screen order-page assign-page order-mobile-layout"
+      data-title="오더등록"
+    >
       <span class="order-page__num" aria-hidden="true">3</span>
 
       <header class="order-topbar">
-        <a href="#" class="order-topbar__logo" data-order-nav="home" aria-label="EFFEX">
+        <a
+          href="#"
+          class="order-topbar__logo order-topbar__logo--active"
+          data-order-nav="home"
+          aria-label="EFFEX"
+        >
           <img
             class="order-topbar__logo-img order-topbar__logo-img--active"
             src="https://i.ibb.co/8DW6cys2/3.png"
@@ -343,6 +352,14 @@
             src="https://i.ibb.co/5WH4s329/3.png"
             alt="EFFEX"
           />
+        </a>
+        <a
+          href="#"
+          class="order-topbar__logo-mobile"
+          data-order-nav="home"
+          aria-label="EFFEX"
+        >
+          <img src="https://i.ibb.co/XxvhZ981/3.png" alt="EFFEX" />
         </a>
         <nav class="order-topbar__menu" aria-label="주요 메뉴">
           <a href="#" class="order-topbar__link" data-order-nav="order"
@@ -393,7 +410,7 @@
         </div>
       </header>
 
-      <main class="assign-body">
+      <main class="assign-body order-summary-body">
         <div class="assign-panel">
         <form class="order-form" id="orderForm" novalidate>
           <div class="order-field order-field--date">
@@ -783,12 +800,26 @@
         </div>
         </div>
       </main>
+      <footer class="order-summary-mobile-footer" aria-label="계정">
+        <a
+          href="#"
+          class="order-summary-mobile-footer__link"
+          data-action="signup-edit"
+          >가입수정</a
+        >
+        <span class="order-summary-mobile-footer__sep" aria-hidden="true"
+          >Ι</span
+        >
+        <a href="#" class="order-summary-mobile-footer__link" data-logout
+          >로그아웃</a
+        >
+      </footer>
     </section>
 
     <!-- 8. 집계표 (EFFEX 홈) -->
     <section
       id="screen-order-summary"
-      class="screen order-page assign-page order-summary-page"
+      class="screen order-page assign-page order-summary-page order-mobile-layout"
       data-title="집계"
     >
       <span class="order-page__num" aria-hidden="true">8</span>
@@ -812,15 +843,12 @@
           />
         </a>
         <a
-          href="https://imgbb.com/"
+          href="#"
           class="order-topbar__logo-mobile"
+          data-order-nav="home"
           aria-label="EFFEX"
         >
-          <img
-            src="https://i.ibb.co/XxvhZ981/3.png"
-            alt="로고3"
-            border="0"
-          />
+          <img src="https://i.ibb.co/XxvhZ981/3.png" alt="EFFEX" />
         </a>
         <nav class="order-topbar__menu" aria-label="주요 메뉴">
           <a href="#" class="order-topbar__link" data-order-nav="order"
@@ -1001,13 +1029,18 @@
     <!-- 4번: 오더배정 -->
     <section
       id="screen-order-assign"
-      class="screen order-page assign-page"
+      class="screen order-page assign-page order-mobile-layout"
       data-title="오더배정"
     >
       <span class="order-page__num" aria-hidden="true">4</span>
 
       <header class="order-topbar">
-        <a href="#" class="order-topbar__logo" data-order-nav="home" aria-label="EFFEX">
+        <a
+          href="#"
+          class="order-topbar__logo order-topbar__logo--active"
+          data-order-nav="home"
+          aria-label="EFFEX"
+        >
           <img
             class="order-topbar__logo-img order-topbar__logo-img--active"
             src="https://i.ibb.co/8DW6cys2/3.png"
@@ -1018,6 +1051,14 @@
             src="https://i.ibb.co/5WH4s329/3.png"
             alt="EFFEX"
           />
+        </a>
+        <a
+          href="#"
+          class="order-topbar__logo-mobile"
+          data-order-nav="home"
+          aria-label="EFFEX"
+        >
+          <img src="https://i.ibb.co/XxvhZ981/3.png" alt="EFFEX" />
         </a>
         <nav class="order-topbar__menu" aria-label="주요 메뉴">
           <a href="#" class="order-topbar__link" data-order-nav="order"
@@ -1071,7 +1112,7 @@
         </div>
       </header>
 
-      <main class="assign-body">
+      <main class="assign-body order-summary-body">
         <div class="assign-panel">
           <h2 class="assign-date-title" id="assignDateTitle">5월 17일</h2>
 
@@ -1188,18 +1229,37 @@
           </button>
         </div>
       </main>
+      <footer class="order-summary-mobile-footer" aria-label="계정">
+        <a
+          href="#"
+          class="order-summary-mobile-footer__link"
+          data-action="signup-edit"
+          >가입수정</a
+        >
+        <span class="order-summary-mobile-footer__sep" aria-hidden="true"
+          >Ι</span
+        >
+        <a href="#" class="order-summary-mobile-footer__link" data-logout
+          >로그아웃</a
+        >
+      </footer>
     </section>
 
     <!-- 5번: 배정현황 -->
     <section
       id="screen-order-status"
-      class="screen order-page assign-page"
+      class="screen order-page assign-page order-mobile-layout"
       data-title="배정현황"
     >
       <span class="order-page__num" aria-hidden="true">5</span>
 
       <header class="order-topbar">
-        <a href="#" class="order-topbar__logo" data-order-nav="home" aria-label="EFFEX">
+        <a
+          href="#"
+          class="order-topbar__logo order-topbar__logo--active"
+          data-order-nav="home"
+          aria-label="EFFEX"
+        >
           <img
             class="order-topbar__logo-img order-topbar__logo-img--active"
             src="https://i.ibb.co/8DW6cys2/3.png"
@@ -1210,6 +1270,14 @@
             src="https://i.ibb.co/5WH4s329/3.png"
             alt="EFFEX"
           />
+        </a>
+        <a
+          href="#"
+          class="order-topbar__logo-mobile"
+          data-order-nav="home"
+          aria-label="EFFEX"
+        >
+          <img src="https://i.ibb.co/XxvhZ981/3.png" alt="EFFEX" />
         </a>
         <nav class="order-topbar__menu" aria-label="주요 메뉴">
           <a href="#" class="order-topbar__link" data-order-nav="order"
@@ -1263,7 +1331,7 @@
         </div>
       </header>
 
-      <main class="assign-body">
+      <main class="assign-body order-summary-body">
         <div class="assign-panel">
           <h2 class="assign-date-title" id="statusDateTitle">5월 17일</h2>
 
@@ -1407,18 +1475,37 @@
           </button>
         </div>
       </main>
+      <footer class="order-summary-mobile-footer" aria-label="계정">
+        <a
+          href="#"
+          class="order-summary-mobile-footer__link"
+          data-action="signup-edit"
+          >가입수정</a
+        >
+        <span class="order-summary-mobile-footer__sep" aria-hidden="true"
+          >Ι</span
+        >
+        <a href="#" class="order-summary-mobile-footer__link" data-logout
+          >로그아웃</a
+        >
+      </footer>
     </section>
 
     <!-- 6번: 미마감 -->
     <section
       id="screen-order-open"
-      class="screen order-page assign-page"
+      class="screen order-page assign-page order-mobile-layout"
       data-title="미마감"
     >
       <span class="order-page__num" aria-hidden="true">6</span>
 
       <header class="order-topbar">
-        <a href="#" class="order-topbar__logo" data-order-nav="home" aria-label="EFFEX">
+        <a
+          href="#"
+          class="order-topbar__logo order-topbar__logo--active"
+          data-order-nav="home"
+          aria-label="EFFEX"
+        >
           <img
             class="order-topbar__logo-img order-topbar__logo-img--active"
             src="https://i.ibb.co/8DW6cys2/3.png"
@@ -1429,6 +1516,14 @@
             src="https://i.ibb.co/5WH4s329/3.png"
             alt="EFFEX"
           />
+        </a>
+        <a
+          href="#"
+          class="order-topbar__logo-mobile"
+          data-order-nav="home"
+          aria-label="EFFEX"
+        >
+          <img src="https://i.ibb.co/XxvhZ981/3.png" alt="EFFEX" />
         </a>
         <nav class="order-topbar__menu" aria-label="주요 메뉴">
           <a href="#" class="order-topbar__link" data-order-nav="order"
@@ -1482,7 +1577,7 @@
         </div>
       </header>
 
-      <main class="assign-body">
+      <main class="assign-body order-summary-body">
         <div class="assign-panel">
           <h2 class="assign-date-title" id="openDateTitle">5월 17일</h2>
 
@@ -1626,18 +1721,37 @@
           </button>
         </div>
       </main>
+      <footer class="order-summary-mobile-footer" aria-label="계정">
+        <a
+          href="#"
+          class="order-summary-mobile-footer__link"
+          data-action="signup-edit"
+          >가입수정</a
+        >
+        <span class="order-summary-mobile-footer__sep" aria-hidden="true"
+          >Ι</span
+        >
+        <a href="#" class="order-summary-mobile-footer__link" data-logout
+          >로그아웃</a
+        >
+      </footer>
     </section>
 
     <!-- 7번: 통계 -->
     <section
       id="screen-order-stats"
-      class="screen order-page assign-page stats-page"
+      class="screen order-page assign-page stats-page order-mobile-layout"
       data-title="통계"
     >
       <span class="order-page__num" aria-hidden="true">7</span>
 
       <header class="order-topbar">
-        <a href="#" class="order-topbar__logo" data-order-nav="home" aria-label="EFFEX">
+        <a
+          href="#"
+          class="order-topbar__logo order-topbar__logo--active"
+          data-order-nav="home"
+          aria-label="EFFEX"
+        >
           <img
             class="order-topbar__logo-img order-topbar__logo-img--active"
             src="https://i.ibb.co/8DW6cys2/3.png"
@@ -1648,6 +1762,14 @@
             src="https://i.ibb.co/5WH4s329/3.png"
             alt="EFFEX"
           />
+        </a>
+        <a
+          href="#"
+          class="order-topbar__logo-mobile"
+          data-order-nav="home"
+          aria-label="EFFEX"
+        >
+          <img src="https://i.ibb.co/XxvhZ981/3.png" alt="EFFEX" />
         </a>
         <nav class="order-topbar__menu" aria-label="주요 메뉴">
           <a href="#" class="order-topbar__link" data-order-nav="order"
@@ -1698,7 +1820,7 @@
         </div>
       </header>
 
-      <main class="assign-body">
+      <main class="assign-body order-summary-body">
         <div class="assign-panel stats-panel">
           <div class="stats-main">
             <nav
@@ -1967,6 +2089,20 @@
           </div>
         </div>
       </main>
+      <footer class="order-summary-mobile-footer" aria-label="계정">
+        <a
+          href="#"
+          class="order-summary-mobile-footer__link"
+          data-action="signup-edit"
+          >가입수정</a
+        >
+        <span class="order-summary-mobile-footer__sep" aria-hidden="true"
+          >Ι</span
+        >
+        <a href="#" class="order-summary-mobile-footer__link" data-logout
+          >로그아웃</a
+        >
+      </footer>
     </section>
 
 

@@ -3,6 +3,7 @@
 var AUTH_KEY = "efex_auth";
 var USERS_STORAGE_KEY = "efex_users";
 var ORDERS_STORAGE_KEY = "efex_orders";
+var UI_STATE_KEY = "efex_ui_state";
 var LOGO_URL = "https://i.ibb.co/8DW6cys2/3.png";
 var LOGO_URL_INACTIVE = "https://i.ibb.co/5WH4s329/3.png";
 var currentProjectId = null;
@@ -2064,12 +2065,20 @@ function renderOrderSummaryTable() {
 }
 
 function syncOrderSummaryMetricFromControls() {
+  var metricSelect = document.getElementById("orderSummaryMetricSelect");
+  if (metricSelect && isMobileLayout()) {
+    summaryMetricState =
+      metricSelect.value === "ratio" ? "ratio" : "count";
+    applyOrderSummaryMetricToControls();
+    return;
+  }
   var group = document.getElementById("orderSummaryMetricToggle");
   if (!group) return;
   var active = group.querySelector(".order-summary-toggle__btn--active");
   summaryMetricState = active
     ? active.getAttribute("data-summary-metric") || "count"
     : "count";
+  applyOrderSummaryMetricToControls();
 }
 
 function initOrderSummaryYearMonthFilters() {
@@ -2085,11 +2094,13 @@ function initOrderSummaryYearMonthFilters() {
 
   yearEl.addEventListener("change", function () {
     syncOrderSummaryFilterFromControls();
+    saveUiState();
     renderOrderSummaryTable();
   });
 
   monthEl.addEventListener("change", function () {
     syncOrderSummaryFilterFromControls();
+    saveUiState();
     renderOrderSummaryTable();
   });
 }
@@ -2139,6 +2150,16 @@ function initOrderSummaryMetricToggle() {
   initializedScreens.orderSummaryToggle = true;
 
   var group = document.getElementById("orderSummaryMetricToggle");
+  var metricSelect = document.getElementById("orderSummaryMetricSelect");
+
+  if (metricSelect) {
+    metricSelect.addEventListener("change", function () {
+      syncOrderSummaryMetricFromControls();
+      saveUiState();
+      renderOrderSummaryTable();
+    });
+  }
+
   if (!group) return;
 
   group.addEventListener("click", function (e) {
@@ -2151,6 +2172,7 @@ function initOrderSummaryMetricToggle() {
       el.setAttribute("aria-pressed", active ? "true" : "false");
     });
     syncOrderSummaryMetricFromControls();
+    saveUiState();
     renderOrderSummaryTable();
   });
 }
@@ -2169,6 +2191,7 @@ function initOrderSummaryPage(screen) {
     initializedScreens.orderSummary = true;
   }
 
+  applyUiStateToControls();
   syncOrderSummaryMetricFromControls();
   syncOrderSummaryFilterFromControls();
   renderOrderSummaryTable();
@@ -2237,6 +2260,170 @@ function getStoredOrders() {
 
 function saveStoredOrders(orders) {
   localStorage.setItem(ORDERS_STORAGE_KEY, JSON.stringify(orders));
+  saveUiState();
+}
+
+function loadUiState() {
+  try {
+    var raw = localStorage.getItem(UI_STATE_KEY);
+    if (!raw) return;
+    var state = JSON.parse(raw);
+    if (state.orderSummary) {
+      if (state.orderSummary.year != null) {
+        orderSummaryFilterState.year = clampOrderYear(state.orderSummary.year);
+      }
+      if (state.orderSummary.month != null) {
+        orderSummaryFilterState.month = state.orderSummary.month;
+      }
+      if (state.orderSummary.metric) {
+        summaryMetricState =
+          state.orderSummary.metric === "ratio" ? "ratio" : "count";
+      }
+    }
+    if (state.assign) {
+      ["assign", "status", "open"].forEach(function (key) {
+        if (!state.assign[key] || !assignPickerStates[key]) return;
+        var saved = state.assign[key];
+        var picker = assignPickerStates[key];
+        if (saved.year != null) picker.year = clampOrderYear(saved.year);
+        if (saved.month != null) picker.month = parseInt(saved.month, 10) || picker.month;
+        if (saved.day != null) picker.day = parseInt(saved.day, 10) || picker.day;
+        if (saved.workerFilter != null) picker.workerFilter = saved.workerFilter;
+        if (saved.actionFilter != null) picker.actionFilter = saved.actionFilter;
+      });
+    }
+    if (state.stats && state.stats.picker) {
+      var sp = state.stats.picker;
+      if (sp.year != null) statsPickerState.year = clampOrderYear(sp.year);
+      if (sp.mode) statsPickerState.mode = sp.mode;
+      if (sp.view) statsPickerState.view = sp.view;
+    }
+    if (state.stats && state.stats.filters) {
+      statsUiFilterState = state.stats.filters;
+    }
+  } catch (e) {
+    /* ignore */
+  }
+}
+
+var statsUiFilterState = null;
+
+function saveUiState() {
+  try {
+    var statsFilters = null;
+    if (document.getElementById("statsYear")) {
+      statsFilters = {
+        year: document.getElementById("statsYear").value,
+        partner: document.getElementById("statsPartner")
+          ? document.getElementById("statsPartner").value
+          : STATS_FILTER_ALL,
+        worker: document.getElementById("statsWorker")
+          ? document.getElementById("statsWorker").value
+          : STATS_FILTER_ALL,
+        item: document.getElementById("statsItem")
+          ? document.getElementById("statsItem").value
+          : "",
+        aggregate: document.getElementById("statsAggregate")
+          ? document.getElementById("statsAggregate").value
+          : "count",
+        rank: document.getElementById("statsRank")
+          ? document.getElementById("statsRank").value
+          : "best",
+      };
+    }
+    localStorage.setItem(
+      UI_STATE_KEY,
+      JSON.stringify({
+        orderSummary: {
+          year: orderSummaryFilterState.year,
+          month: orderSummaryFilterState.month,
+          metric: summaryMetricState,
+        },
+        assign: assignPickerStates,
+        stats: {
+          picker: statsPickerState,
+          filters: statsFilters,
+        },
+      })
+    );
+  } catch (e) {
+    /* ignore */
+  }
+}
+
+function applyUiStateToControls() {
+  var yearEl = document.getElementById("orderSummaryYear");
+  var monthEl = document.getElementById("orderSummaryMonth");
+  if (yearEl) yearEl.value = String(orderSummaryFilterState.year);
+  if (monthEl) monthEl.value = orderSummaryFilterState.month;
+  applyOrderSummaryMetricToControls();
+
+  ["assign", "status", "open"].forEach(function (pageKey) {
+    var cfg = getAssignConfig(pageKey);
+    var picker = getAssignPicker(pageKey);
+    var y = document.getElementById(cfg.ids.year);
+    var m = document.getElementById(cfg.ids.month);
+    if (y) y.value = String(picker.year);
+    if (m) m.value = String(picker.month);
+  });
+
+  var statsYear = document.getElementById("statsYear");
+  if (statsYear) statsYear.value = String(statsPickerState.year);
+
+  if (statsUiFilterState) {
+    var sf = statsUiFilterState;
+    var partnerEl = document.getElementById("statsPartner");
+    var workerEl = document.getElementById("statsWorker");
+    var itemEl = document.getElementById("statsItem");
+    var aggregateEl = document.getElementById("statsAggregate");
+    var rankEl = document.getElementById("statsRank");
+    if (statsYear && sf.year != null) statsYear.value = String(sf.year);
+    if (partnerEl && sf.partner != null) partnerEl.value = sf.partner;
+    if (workerEl && sf.worker != null) workerEl.value = sf.worker;
+    if (itemEl && sf.item != null) itemEl.value = sf.item;
+    if (aggregateEl && sf.aggregate != null) aggregateEl.value = sf.aggregate;
+    if (rankEl && sf.rank != null) rankEl.value = sf.rank;
+  }
+}
+
+function applyOrderSummaryMetricToControls() {
+  var metric = summaryMetricState === "ratio" ? "ratio" : "count";
+  var group = document.getElementById("orderSummaryMetricToggle");
+  if (group) {
+    group.querySelectorAll("[data-summary-metric]").forEach(function (btn) {
+      var active = btn.getAttribute("data-summary-metric") === metric;
+      btn.classList.toggle("order-summary-toggle__btn--active", active);
+      btn.setAttribute("aria-pressed", active ? "true" : "false");
+    });
+  }
+  var metricSelect = document.getElementById("orderSummaryMetricSelect");
+  if (metricSelect) metricSelect.value = metric;
+}
+
+function isMobileLayout() {
+  return window.matchMedia("(max-width: 768px)").matches;
+}
+
+function refreshDataFromStorage() {
+  loadUiState();
+  applyUiStateToControls();
+  var active = document.querySelector(".screen.is-active");
+  if (!active) return;
+  var page = active.id.replace(/^screen-/, "");
+  if (page === "order-summary") {
+    renderOrderSummaryTable();
+  } else if (page === "order-stats") {
+    renderStatsView();
+  } else if (page === "order-assign") {
+    renderAssignCalendars("assign");
+    renderAssignTable("assign");
+  } else if (page === "order-status") {
+    renderAssignCalendars("status");
+    renderAssignTable("status");
+  } else if (page === "order-open") {
+    renderAssignCalendars("open");
+    renderAssignTable("open");
+  }
 }
 
 function getOrderScopePrefix() {
@@ -5092,11 +5279,13 @@ function initAssignDateControls(pageKey) {
 
   yearEl.addEventListener("change", function () {
     syncAssignPickerFromControls(pageKey);
+    saveUiState();
     updateAssignDateTitle(pageKey);
     renderAssignTable(pageKey);
   });
   monthEl.addEventListener("change", function () {
     syncAssignPickerFromControls(pageKey);
+    saveUiState();
     updateAssignDateTitle(pageKey);
     renderAssignTable(pageKey);
   });
@@ -6523,30 +6712,46 @@ function initStatsFilterControls() {
   var rankEl = document.getElementById("statsRank");
 
   if (yearEl) {
-    yearEl.addEventListener("change", renderStatsView);
+    yearEl.addEventListener("change", function () {
+      saveUiState();
+      renderStatsView();
+    });
   }
 
   if (partnerEl) {
     partnerEl.addEventListener("change", function () {
       updateStatsWorkerControlState();
+      saveUiState();
       renderStatsView();
     });
   }
 
   if (workerEl) {
-    workerEl.addEventListener("change", renderStatsView);
+    workerEl.addEventListener("change", function () {
+      saveUiState();
+      renderStatsView();
+    });
   }
 
   if (itemEl) {
-    itemEl.addEventListener("change", renderStatsView);
+    itemEl.addEventListener("change", function () {
+      saveUiState();
+      renderStatsView();
+    });
   }
 
   if (aggregateEl) {
-    aggregateEl.addEventListener("change", renderStatsView);
+    aggregateEl.addEventListener("change", function () {
+      saveUiState();
+      renderStatsView();
+    });
   }
 
   if (rankEl) {
-    rankEl.addEventListener("change", renderStatsView);
+    rankEl.addEventListener("change", function () {
+      saveUiState();
+      renderStatsView();
+    });
   }
 }
 
@@ -7024,9 +7229,25 @@ window.addEventListener("popstate", function () {
   showScreen(parsed.page, parsed.params);
 });
 
+window.addEventListener("storage", function (e) {
+  if (
+    e.key !== ORDERS_STORAGE_KEY &&
+    e.key !== UI_STATE_KEY &&
+    e.key !== USERS_STORAGE_KEY
+  ) {
+    return;
+  }
+  if (e.key === UI_STATE_KEY) {
+    loadUiState();
+  }
+  refreshDataFromStorage();
+});
+
 document.addEventListener("DOMContentLoaded", function () {
   initModals();
+  loadUiState();
   populateAllOrderYearSelects();
+  applyUiStateToControls();
 
   var parsed = parseHash();
   var page = parsed.page;

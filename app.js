@@ -2063,51 +2063,13 @@ function renderOrderSummaryTable() {
   tbody.innerHTML = html;
 }
 
-function isOrderSummaryMobileLayout() {
-  return (
-    typeof window !== "undefined" &&
-    window.matchMedia &&
-    window.matchMedia("(max-width: 768px)").matches
-  );
-}
-
-function setOrderSummaryMetricControls(metric) {
-  var value = metric === "ratio" ? "ratio" : "count";
-  summaryMetricState = value;
-
-  var group = document.getElementById("orderSummaryMetricToggle");
-  if (group) {
-    group.querySelectorAll(".order-summary-toggle__btn").forEach(function (el) {
-      var active = el.getAttribute("data-summary-metric") === value;
-      el.classList.toggle("order-summary-toggle__btn--active", active);
-      el.setAttribute("aria-pressed", active ? "true" : "false");
-    });
-  }
-
-  var selectEl = document.getElementById("orderSummaryMetricSelect");
-  if (selectEl && selectEl.value !== value) {
-    selectEl.value = value;
-  }
-}
-
 function syncOrderSummaryMetricFromControls() {
-  var selectEl = document.getElementById("orderSummaryMetricSelect");
-  if (selectEl && isOrderSummaryMobileLayout()) {
-    summaryMetricState =
-      selectEl.value === "ratio" ? "ratio" : "count";
-    return;
-  }
-
   var group = document.getElementById("orderSummaryMetricToggle");
   if (!group) return;
   var active = group.querySelector(".order-summary-toggle__btn--active");
   summaryMetricState = active
     ? active.getAttribute("data-summary-metric") || "count"
     : "count";
-
-  if (selectEl && selectEl.value !== summaryMetricState) {
-    selectEl.value = summaryMetricState;
-  }
 }
 
 function initOrderSummaryYearMonthFilters() {
@@ -2183,20 +2145,12 @@ function initOrderSummaryMetricToggle() {
     var btn = e.target.closest("[data-summary-metric]");
     if (!btn) return;
     e.preventDefault();
-    setOrderSummaryMetricControls(btn.getAttribute("data-summary-metric") || "count");
-    renderOrderSummaryTable();
-  });
-}
-
-function initOrderSummaryMetricSelect() {
-  if (initializedScreens.orderSummaryMetricSelect) return;
-  initializedScreens.orderSummaryMetricSelect = true;
-
-  var selectEl = document.getElementById("orderSummaryMetricSelect");
-  if (!selectEl) return;
-
-  selectEl.addEventListener("change", function () {
-    setOrderSummaryMetricControls(selectEl.value);
+    group.querySelectorAll(".order-summary-toggle__btn").forEach(function (el) {
+      var active = el === btn;
+      el.classList.toggle("order-summary-toggle__btn--active", active);
+      el.setAttribute("aria-pressed", active ? "true" : "false");
+    });
+    syncOrderSummaryMetricFromControls();
     renderOrderSummaryTable();
   });
 }
@@ -2207,7 +2161,6 @@ function initOrderSummaryPage(screen) {
   initLogout(screen);
   initOrderNavDelegation();
   initOrderSummaryMetricToggle();
-  initOrderSummaryMetricSelect();
   initOrderSummaryYearMonthFilters();
   initOrderSummaryTableClicks();
   initOrderSummaryListRowClicks();
@@ -2216,17 +2169,6 @@ function initOrderSummaryPage(screen) {
     initializedScreens.orderSummary = true;
   }
 
-  if (!initializedScreens.orderSummaryResize) {
-    initializedScreens.orderSummaryResize = true;
-    window.addEventListener("resize", function () {
-      var summaryScreen = document.getElementById("screen-order-summary");
-      if (summaryScreen && summaryScreen.classList.contains("is-active")) {
-        updateOrderLoginMessage();
-      }
-    });
-  }
-
-  updateOrderLoginMessage();
   syncOrderSummaryMetricFromControls();
   syncOrderSummaryFilterFromControls();
   renderOrderSummaryTable();
@@ -2275,16 +2217,6 @@ function updateOrderLoginMessage() {
   var active = document.querySelector(".screen.is-active");
   var el = active ? active.querySelector(".order-topbar__login-msg") : null;
   if (!el) return;
-  if (
-    active &&
-    active.id === "screen-order-summary" &&
-    isOrderSummaryMobileLayout()
-  ) {
-    el.textContent = "";
-    el.setAttribute("hidden", "");
-    return;
-  }
-  el.removeAttribute("hidden");
   var auth = getAuth();
   if (auth) {
     var id = auth.userId || auth.name || "사용자";

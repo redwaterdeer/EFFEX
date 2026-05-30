@@ -605,12 +605,13 @@ table {
 }
 
 @media (max-width: 480px) {
-  .order-topbar__menu {
-    grid-template-columns: repeat(5, minmax(52px, 1fr));
-    column-gap: 4px;
+  /* 8번(#screen-order-summary)은 하단 전용 블록에서 별도 제어 */
+  .order-page.assign-page:not(.order-summary-page) .order-topbar__menu {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: 6px;
   }
 
-  .order-topbar__menu .order-topbar__link {
+  .order-page.assign-page:not(.order-summary-page) .order-topbar__menu .order-topbar__link {
     font-size: 12px;
   }
 
@@ -630,7 +631,80 @@ table {
     font-size: 12px;
   }
 
-  /* 8번 집계표: 768px #screen-order-summary 블록에서만 제어 */
+  .order-summary-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .order-summary-ym {
+    width: 100%;
+  }
+
+  .order-summary-ym__row {
+    width: 100%;
+    gap: 8px;
+  }
+
+  .order-summary-ym__field {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  .order-summary-ym__select {
+    width: 100%;
+    min-width: 0;
+    height: 44px;
+    font-size: 16px;
+    padding: 0 34px 0 12px;
+  }
+
+  .order-summary-toggle {
+    width: 100%;
+  }
+
+  .order-summary-toggle__btn {
+    flex: 1 1 0;
+    min-width: 0;
+    min-height: 42px;
+    font-size: 15px;
+  }
+
+  .order-summary-table-wrap {
+    overflow-x: auto;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
+  }
+
+  .order-summary-table {
+    min-width: 700px;
+    border-spacing: 10px;
+  }
+
+  .order-summary-table__corner,
+  .order-summary-table__row-head {
+    width: 96px;
+  }
+
+  .order-summary-table__col-head,
+  .order-summary-table__row-head {
+    font-size: 14px;
+    padding: 10px 6px;
+  }
+
+  .order-summary-table tbody .order-summary-table__cell-box {
+    min-height: 56px;
+  }
+
+  .order-summary-table__cell-box span {
+    font-size: 14px;
+  }
+
+  .order-summary-table__sales-unit {
+    font-size: 13px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -1904,19 +1978,6 @@ table {
   color: #666;
 }
 
-.order-summary-metric-mobile {
-  display: none;
-}
-
-.order-summary-mobile-footer {
-  display: none;
-}
-
-/* 8번 모바일 전용 로고 (PC에서는 숨김) */
-.order-topbar__logo-mobile {
-  display: none;
-}
-
 .order-summary-table-wrap {
   flex: 1;
   min-height: 0;
@@ -3028,54 +3089,7 @@ table {
 .assign-table tbody tr.assign-table__row-main:has(.assign-delete-check:hover) .assign-partner-select,
 .assign-table tbody tr.assign-table__row-main:has(.assign-detail-link:hover) .assign-worker-select,
 .assign-table tbody tr.assign-table__row-main:has(.assign-delete-check:hover) .assign-worker-select {
-  background-color: #eef4fc;
-}
-
-/* 4번 PC: 시공협력사 드롭다운 호버 — 상세(보기)와 동일한 행·셀 강조 (#eef4fc) */
-@media (min-width: 769px) {
-  #screen-order-assign
-    .assign-table
-    tbody
-    tr.assign-table__row-main:has(.assign-partner-select:hover:not(:disabled))
-    .assign-cell-box,
-  #screen-order-assign
-    .assign-table
-    tbody
-    tr.assign-table__row-main:has(.assign-table__cell-partner:hover)
-    .assign-cell-box {
-    background: #eef4fc;
-  }
-
-  #screen-order-assign
-    .assign-table
-    tbody
-    tr.assign-table__row-main:has(.assign-partner-select:hover:not(:disabled))
-    .assign-stack-item,
-  #screen-order-assign
-    .assign-table
-    tbody
-    tr.assign-table__row-main:has(.assign-table__cell-partner:hover)
-    .assign-stack-item,
-  #screen-order-assign
-    .assign-table
-    tbody
-    tr.assign-table__row-main:has(.assign-partner-select:hover:not(:disabled))
-    .assign-partner-select,
-  #screen-order-assign
-    .assign-table
-    tbody
-    tr.assign-table__row-main:has(.assign-table__cell-partner:hover)
-    .assign-partner-select {
-    background-color: #eef4fc;
-  }
-
-  #screen-order-assign .assign-table__cell-partner:hover .assign-partner-select:not(:disabled),
-  #screen-order-assign .assign-partner-select:hover:not(:disabled) {
-    background-color: #eef4fc;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23333' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 12px center;
-  }
+  background: #eef4fc;
 }
 
 .assign-table tbody tr.assign-table__row-main:not(:last-child) td {
@@ -4111,14 +4125,13 @@ table {
     border-width: 1px;
   }
 
-  /* 3~7번은 .order-mobile-layout(8번과 동일 셸) — 구형 상단바 규칙 제외 */
-  .order-page:not(.order-mobile-layout) .order-page__num {
+  .order-page__num {
     top: 8px;
     right: 10px;
     font-size: 46px;
   }
 
-  .order-page:not(.order-mobile-layout) .order-topbar {
+  .order-topbar {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     grid-template-areas:
@@ -4132,7 +4145,7 @@ table {
     isolation: isolate;
   }
 
-  .order-page:not(.order-mobile-layout) .order-topbar__logo {
+  .order-topbar__logo {
     position: relative;
     grid-area: logo;
     transform: none;
@@ -4142,11 +4155,11 @@ table {
     z-index: 1;
   }
 
-  .order-page:not(.order-mobile-layout) .order-topbar__logo-img {
+  .order-topbar__logo-img {
     object-position: left center;
   }
 
-  .order-page:not(.order-mobile-layout) .order-topbar__menu {
+  .order-topbar__menu {
     grid-area: menu;
     position: relative;
     left: auto;
@@ -4163,11 +4176,11 @@ table {
     z-index: 3;
   }
 
-  .order-page:not(.order-mobile-layout) .order-topbar__menu::-webkit-scrollbar {
+  .order-topbar__menu::-webkit-scrollbar {
     display: none;
   }
 
-  .order-page:not(.order-mobile-layout) .order-topbar__menu .order-topbar__link {
+  .order-topbar__menu .order-topbar__link {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -4187,15 +4200,13 @@ table {
     -webkit-tap-highlight-color: transparent;
   }
 
-  .order-page:not(.order-mobile-layout)
-    .order-topbar__menu
-    .order-topbar__link--active {
+  .order-topbar__menu .order-topbar__link--active {
     border-color: #9a9a9a;
     background: #9a9a9a;
     color: #fff;
   }
 
-  .order-page:not(.order-mobile-layout) .order-topbar__aside {
+  .order-topbar__aside {
     grid-area: aside;
     position: relative;
     margin: 0;
@@ -4205,90 +4216,192 @@ table {
     z-index: 3;
   }
 
-  .order-page:not(.order-mobile-layout) .order-topbar__login-msg,
-  .order-page:not(.order-mobile-layout) .order-topbar__edit-profile,
-  .order-page:not(.order-mobile-layout) .order-topbar__logout {
+  .order-topbar__login-msg,
+  .order-topbar__edit-profile,
+  .order-topbar__logout {
     font-size: 12px;
     line-height: 1.25;
   }
 
-  .order-page:not(.order-mobile-layout) .order-topbar__edit-profile,
-  .order-page:not(.order-mobile-layout) .order-topbar__logout {
+  .order-topbar__edit-profile,
+  .order-topbar__logout {
     min-height: 28px;
     padding: 3px 5px;
   }
 
-  .order-page:not(.order-mobile-layout) .order-body,
-  .order-page:not(.order-mobile-layout) .assign-body {
+  .order-body,
+  .assign-body {
     padding: 12px 8px 18px;
   }
 
-  .order-page:not(.order-mobile-layout) .assign-panel {
+  .assign-panel {
     width: 100%;
     padding: 10px 8px;
   }
 
-  .order-page:not(.order-mobile-layout) .assign-layout,
-  .order-page:not(.order-mobile-layout) .stats-content {
+  .assign-layout,
+  .stats-content {
     flex-direction: column;
   }
 
-  .order-page:not(.order-mobile-layout) .assign-sidebar,
-  .order-page:not(.order-mobile-layout) .stats-filters {
+  .assign-sidebar,
+  .stats-filters {
     width: 100%;
     flex: 0 0 auto;
   }
 
-  .order-page:not(.order-mobile-layout) .assign-open-filter {
+  .assign-open-filter {
     min-height: 36px;
   }
 
-  .order-page:not(.order-mobile-layout) .assign-calendar {
+  .assign-calendar {
     min-height: 220px;
   }
 
-  .order-page:not(.order-mobile-layout) .order-field__control--md,
-  .order-page:not(.order-mobile-layout) .order-field__control--sm,
-  .order-page:not(.order-mobile-layout) .order-field__control--upload {
+  .order-field__control--md,
+  .order-field__control--sm,
+  .order-field__control--upload {
     flex: 1;
     max-width: 100%;
   }
 
-  .order-page:not(.order-mobile-layout) .order-field__region-group {
+  .order-field__region-group {
     flex-direction: column;
   }
 
-  .order-page:not(.order-mobile-layout) .order-topbar__menu {
+  .order-summary-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .order-summary-ym__row {
+    width: 100%;
+    gap: 8px;
+  }
+
+  .order-summary-ym__field {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .order-summary-ym__select {
+    width: 100%;
+    min-width: 0;
+    height: 48px;
+    font-size: 16px;
+    padding-right: 34px;
+  }
+
+  .order-summary-toggle {
+    width: 100%;
+  }
+
+  .order-summary-toggle__btn {
+    flex: 1;
+    min-height: 48px;
+    font-size: 16px;
+  }
+
+  .order-summary-table-wrap {
+    overflow-x: auto;
+    overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
+  }
+
+  .order-summary-table {
+    min-width: 600px;
+    border-spacing: 10px 12px;
+  }
+
+  .order-summary-table__corner,
+  .order-summary-table__row-head {
+    width: 78px;
+  }
+
+  .order-summary-table__row-head,
+  .order-summary-table__col-head {
+    font-size: 14px;
+    padding: 8px 6px;
+  }
+
+  .order-summary-table tbody .order-summary-table__cell-box {
+    min-height: 46px;
+  }
+
+  .order-summary-table__cell-box span {
+    font-size: 15px;
+  }
+
+  .order-summary-table__sales-unit {
+    font-size: 12px;
+  }
+
+  .order-topbar__menu {
     gap: 5px;
   }
 
-  .order-page:not(.order-mobile-layout) .order-topbar__menu .order-topbar__link {
+  .order-topbar__menu .order-topbar__link {
     min-height: 38px;
     min-width: 58px;
     padding: 7px 9px;
     font-size: 13px;
   }
 
-  .order-page:not(.order-mobile-layout) .order-topbar__aside {
+  .order-topbar__aside {
     width: 100%;
     justify-content: flex-start;
   }
 
-  .order-page:not(.order-mobile-layout) .order-topbar__login-msg,
-  .order-page:not(.order-mobile-layout) .order-topbar__edit-profile,
-  .order-page:not(.order-mobile-layout) .order-topbar__logout {
+  .order-topbar__login-msg,
+  .order-topbar__edit-profile,
+  .order-topbar__logout {
     font-size: 13px;
+  }
+
+  .order-summary-ym__select {
+    height: 42px;
+    font-size: 15px;
+  }
+
+  .order-summary-toggle__btn {
+    min-height: 40px;
+    font-size: 14px;
+  }
+
+  .order-summary-table {
+    min-width: 640px;
+    border-spacing: 8px;
+  }
+
+  .order-summary-table__col-head,
+  .order-summary-table__row-head {
+    font-size: 13px;
+    padding: 9px 6px;
+  }
+
+  .order-summary-table tbody .order-summary-table__cell-box {
+    min-height: 52px;
+  }
+
+  .order-summary-table__cell-box span {
+    font-size: 13px;
+  }
+
+  .order-summary-table__sales-unit {
+    font-size: 12px;
   }
 }
 
 @media (max-width: 480px) {
-  .order-page:not(.order-mobile-layout) .order-page__num {
+  .order-page__num {
     top: 7px;
     right: 8px;
     font-size: 42px;
   }
 
-  .order-page:not(.order-mobile-layout) .order-topbar {
+  .order-topbar {
     grid-template-columns: minmax(0, 1fr);
     grid-template-areas:
       "logo"
@@ -4298,13 +4411,13 @@ table {
     gap: 7px;
   }
 
-  .order-page:not(.order-mobile-layout) .order-topbar__logo {
+  .order-topbar__logo {
     justify-self: start;
     height: 34px;
     width: min(150px, 52vw);
   }
 
-  .order-page:not(.order-mobile-layout) .order-topbar__menu {
+  .order-topbar__menu {
     width: 100%;
     gap: 6px;
     padding-bottom: 2px;
@@ -4313,7 +4426,7 @@ table {
     touch-action: pan-x;
   }
 
-  .order-page:not(.order-mobile-layout) .order-topbar__menu .order-topbar__link {
+  .order-topbar__menu .order-topbar__link {
     min-height: 40px;
     min-width: 62px;
     padding: 8px 10px;
@@ -4323,7 +4436,7 @@ table {
     pointer-events: auto;
   }
 
-  .order-page:not(.order-mobile-layout) .order-topbar__aside {
+  .order-topbar__aside {
     width: 100%;
     justify-content: flex-start;
     align-items: center;
@@ -4332,11 +4445,49 @@ table {
     pointer-events: auto;
   }
 
-  .order-page:not(.order-mobile-layout) .order-topbar__login-msg,
-  .order-page:not(.order-mobile-layout) .order-topbar__edit-profile,
-  .order-page:not(.order-mobile-layout) .order-topbar__logout {
+  .order-topbar__login-msg,
+  .order-topbar__edit-profile,
+  .order-topbar__logout {
     font-size: 12px;
     line-height: 1.3;
+  }
+
+  .order-summary-ym__select {
+    height: 42px;
+    font-size: 14px;
+  }
+
+  .order-summary-toggle__btn {
+    min-height: 40px;
+    font-size: 13px;
+  }
+
+  .order-summary-table {
+    min-width: 500px;
+    border-spacing: 6px 8px;
+  }
+
+  .order-summary-table__corner,
+  .order-summary-table__row-head {
+    width: 64px;
+  }
+
+  .order-summary-table__row-head,
+  .order-summary-table__col-head {
+    font-size: 12px;
+    padding: 6px 4px;
+  }
+
+  .order-summary-table tbody .order-summary-table__cell-box {
+    min-height: 38px;
+  }
+
+  .order-summary-table__cell-box span {
+    font-size: 12px;
+  }
+
+  .order-summary-table__sales-unit {
+    font-size: 10px;
   }
 }
 
@@ -4349,8 +4500,8 @@ table {
     font-size: 62px;
   }
 
-  /* 3~8번: 8번과 동일 5열 메뉴 (.order-mobile-layout) — 구 레이아웃(3+2) 미적용 */
-  .order-page:not(.order-mobile-layout) .order-topbar__menu {
+  /* 2) 메뉴를 3+2 버튼 2행으로 정렬 (가로 폭 축소) */
+  .order-topbar__menu {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 8px;
@@ -4360,15 +4511,15 @@ table {
     padding-bottom: 0;
   }
 
-  .order-page:not(.order-mobile-layout) .order-topbar__menu .order-topbar__link:nth-child(4) {
+  .order-topbar__menu .order-topbar__link:nth-child(4) {
     grid-column: 1 / 2;
   }
 
-  .order-page:not(.order-mobile-layout) .order-topbar__menu .order-topbar__link:nth-child(5) {
+  .order-topbar__menu .order-topbar__link:nth-child(5) {
     grid-column: 2 / 3;
   }
 
-  .order-page:not(.order-mobile-layout) .order-topbar__menu .order-topbar__link {
+  .order-topbar__menu .order-topbar__link {
     min-width: 0;
     width: 100%;
     min-height: 36px;
@@ -4377,355 +4528,273 @@ table {
     border-radius: 8px;
   }
 
-  .order-mobile-layout .order-page__num {
-    font-size: 62px !important;
-    top: 4px !important;
-    right: 8px !important;
+  /* 3) 로그인 문구를 로고 행 우측 정렬 */
+  .order-topbar {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "logo login"
+      "menu menu";
+    align-items: center;
+    row-gap: 7px;
+    column-gap: 8px;
+    padding: 8px 8px 10px;
+  }
+
+  .order-topbar__logo {
+    grid-area: logo;
+    height: 48px;
+    width: min(220px, 64vw);
+  }
+
+  .order-topbar__aside {
+    grid-area: login;
+    width: auto;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0;
+  }
+
+  .order-topbar__login-msg {
+    font-size: 12px;
+    line-height: 1.25;
+    white-space: nowrap;
+    text-align: right;
+  }
+
+  /* 4) 가입수정/로그아웃 하단 중앙 고정 */
+  .order-topbar__edit-profile,
+  .order-topbar__logout {
+    position: fixed;
+    bottom: 10px;
+    z-index: 60;
+    background: transparent;
+    font-size: 13px;
+    line-height: 1.2;
+    min-height: auto;
+    padding: 0;
+  }
+
+  .order-topbar__edit-profile {
+    left: 50%;
+    transform: translateX(-120%);
+  }
+
+  .order-topbar__logout {
+    left: 50%;
+    transform: translateX(20%);
+  }
+
+  .order-body,
+  .assign-body {
+    padding-bottom: 38px;
+  }
+
+  /* 5) 집계표: 좌측(목대~기타) 고정 + 우측 열 가로 스크롤 */
+  .order-summary-table-wrap {
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .order-summary-table {
+    width: max-content;
+    min-width: 700px;
+  }
+
+  .order-summary-table__corner,
+  .order-summary-table__row-head {
+    position: sticky;
+    left: 0;
+    z-index: 3;
+    min-width: 74px;
+  }
+
+  .order-summary-table__corner {
+    background: #ececec;
+  }
+
+  .order-summary-table__row-head {
+    z-index: 4;
   }
 }
 
-/* 모바일 전용: 3~8번 공통 셸 (8번 집계표와 동일 상단·하단) + 8번 집계표 본문 */
-@media (max-width: 768px) {
+@media (max-width: 480px) {
   html,
   body {
     overflow-x: hidden !important;
   }
 
-  .order-mobile-layout {
+  #screen-order-summary {
     overflow-x: hidden !important;
   }
 
-  .order-mobile-layout .order-page__num {
+  #screen-order-summary .order-page__num {
     font-size: 84px !important;
     top: -2px !important;
     right: 8px !important;
   }
 
-  .order-mobile-layout {
-    --order-summary-mobile-col-w: 88px;
-    --order-summary-mobile-box-gap: 1.75px;
-    --order-summary-mobile-topbar-gap: 3.5px;
-    --order-summary-mobile-ym-font-size: 15px;
-    background: #ffffff !important;
-    background-color: #ffffff !important;
-  }
-
-  .order-mobile-layout .order-topbar {
+  #screen-order-summary .order-topbar {
     display: grid !important;
-    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-columns: minmax(0, 1fr) auto !important;
     grid-template-areas:
-      "logo"
-      "menu" !important;
-    align-items: start !important;
-    row-gap: calc(var(--order-summary-mobile-topbar-gap) + 6px) !important;
-    column-gap: var(--order-summary-mobile-topbar-gap) !important;
-    padding: 2px 8px 6px !important;
+      "logo login"
+      "menu menu" !important;
+    align-items: center !important;
+    row-gap: 8px !important;
+    column-gap: 8px !important;
+    padding: 6px 8px 10px !important;
     height: auto !important;
-    min-height: 0 !important;
     overflow: clip !important;
-    background: #ffffff !important;
-    background-image: none !important;
   }
 
-  .order-mobile-layout .order-topbar__logo:not(.order-topbar__logo-mobile) {
-    display: none !important;
-  }
-
-  .order-mobile-layout .order-topbar__logo-mobile {
-    display: block !important;
+  #screen-order-summary .order-topbar__logo {
     grid-area: logo !important;
-    justify-self: start !important;
-    width: min(260px, 68vw) !important;
-    height: auto !important;
-    min-height: 0 !important;
-    align-self: start !important;
-    margin-top: 10px !important;
-    margin-bottom: 0 !important;
+    width: min(21px, 6vw) !important;
+    height: 6px !important;
+    align-self: center !important;
+  }
+
+  #screen-order-summary .order-topbar__logo .order-topbar__logo-img {
+    object-fit: cover !important;
+    object-position: left center !important;
+  }
+
+  #screen-order-summary .order-topbar__aside {
+    grid-area: login !important;
+    width: auto !important;
+    justify-content: flex-end !important;
+    align-items: center !important;
+    align-self: center !important;
+    min-height: 42px !important;
+    gap: 0 !important;
+  }
+
+  #screen-order-summary .order-topbar__login-msg {
+    font-size: 12px !important;
+    line-height: 1.2 !important;
+    white-space: nowrap !important;
+    text-align: right !important;
+    margin-left: auto !important;
+    align-self: center !important;
     padding-top: 0 !important;
-    background: transparent !important;
-    line-height: 0 !important;
-    position: relative !important;
-    z-index: 2 !important;
   }
 
-  .order-mobile-layout .order-topbar__logo-mobile img {
-    display: block !important;
-    width: min(240px, 64vw) !important;
-    height: auto !important;
-    max-height: 58px !important;
-    object-fit: contain !important;
-    object-position: left top !important;
-    border: 0 !important;
-  }
-
-  .order-mobile-layout .order-topbar__aside {
-    display: none !important;
-  }
-
-  .order-mobile-layout .order-topbar__login-msg,
-  .order-mobile-layout .order-topbar__login-msg--summary {
-    display: none !important;
-    visibility: hidden !important;
-    width: 0 !important;
-    height: 0 !important;
-    overflow: hidden !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    pointer-events: none !important;
-  }
-
-  .order-mobile-layout .order-topbar__menu {
+  #screen-order-summary .order-topbar__menu {
     grid-area: menu !important;
     display: grid !important;
     grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
     width: 100% !important;
     margin: 0 !important;
-    gap: var(--order-summary-mobile-topbar-gap) !important;
+    gap: 4px !important;
     overflow: clip !important;
     padding-bottom: 0 !important;
     align-items: stretch !important;
   }
 
-  .order-mobile-layout .order-topbar__menu .order-topbar__link[data-order-nav="order"] {
+  #screen-order-summary .order-topbar__menu .order-topbar__link[data-order-nav="order"] {
     order: 1 !important;
   }
-  .order-mobile-layout .order-topbar__menu .order-topbar__link[data-order-nav="assign"] {
+  #screen-order-summary .order-topbar__menu .order-topbar__link[data-order-nav="assign"] {
     order: 2 !important;
   }
-  .order-mobile-layout .order-topbar__menu .order-topbar__link[data-order-nav="status"] {
+  #screen-order-summary .order-topbar__menu .order-topbar__link[data-order-nav="status"] {
     order: 3 !important;
   }
-  .order-mobile-layout .order-topbar__menu .order-topbar__link[data-order-nav="open"] {
+  #screen-order-summary .order-topbar__menu .order-topbar__link[data-order-nav="open"] {
     order: 4 !important;
   }
-  .order-mobile-layout .order-topbar__menu .order-topbar__link[data-order-nav="stats"] {
+  #screen-order-summary .order-topbar__menu .order-topbar__link[data-order-nav="stats"] {
     order: 5 !important;
   }
 
-  .order-mobile-layout .order-topbar__menu .order-topbar__link {
+  #screen-order-summary .order-topbar__menu .order-topbar__link {
     min-width: 0 !important;
     width: 100% !important;
-    min-height: 54px !important;
-    padding: 11px 6px !important;
-    font-size: clamp(10px, 2.85vw, 12px) !important;
-    font-weight: 600 !important;
-    line-height: 1.35 !important;
-    border: 1px solid #c9c9c9 !important;
-    border-radius: 6px !important;
-    background: #f7f7f7 !important;
-    color: #333 !important;
+    min-height: 29px !important;
+    padding: 2px 1px !important;
+    font-size: 10px !important;
+    border-radius: 7px !important;
     justify-content: center !important;
-    align-items: center !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    letter-spacing: -0.02em !important;
-    touch-action: manipulation !important;
-    -webkit-tap-highlight-color: transparent !important;
   }
 
-  .order-mobile-layout .order-topbar__menu .order-topbar__link--active {
-    border-color: #9a9a9a !important;
-    background: #9a9a9a !important;
-    color: #ffffff !important;
-  }
-
-  .order-mobile-layout .order-topbar__menu .order-topbar__link:hover {
-    color: #333 !important;
-  }
-
-  .order-mobile-layout .order-topbar__menu .order-topbar__link--active:hover {
-    color: #ffffff !important;
-  }
-
-  .order-mobile-layout .order-topbar__menu .order-topbar__link:nth-child(4),
-  .order-mobile-layout .order-topbar__menu .order-topbar__link:nth-child(5) {
+  #screen-order-summary .order-topbar__menu .order-topbar__link:nth-child(4),
+  #screen-order-summary .order-topbar__menu .order-topbar__link:nth-child(5) {
     grid-column: auto !important;
   }
 
-  .order-mobile-layout .assign-body,
-  .order-mobile-layout .order-summary-body {
-    flex: 1 1 auto !important;
-    min-height: 0 !important;
-    padding-bottom: 52px !important;
+  #screen-order-summary .order-topbar__edit-profile,
+  #screen-order-summary .order-topbar__logout {
+    position: fixed !important;
+    bottom: 10px !important;
+    z-index: 80 !important;
+    padding: 0 !important;
+    min-height: auto !important;
+    background: transparent !important;
+    font-size: 13px !important;
+    line-height: 1.2 !important;
+    max-width: calc(50vw - 12px) !important;
+  }
+
+  #screen-order-summary .order-topbar__edit-profile {
+    left: 8px !important;
+    transform: none !important;
+  }
+
+  #screen-order-summary .order-topbar__logout {
+    right: 8px !important;
+    left: auto !important;
+    transform: none !important;
+  }
+
+  #screen-order-summary .order-summary-body {
+    padding-bottom: 44px !important;
     overflow-x: hidden !important;
-    overflow-y: auto !important;
-    -webkit-overflow-scrolling: touch !important;
-    background: #ffffff !important;
-    background-color: #ffffff !important;
   }
 
   #screen-order-summary .order-summary-toolbar {
-    display: block !important;
+    display: flex !important;
     width: 100% !important;
-    gap: var(--order-summary-mobile-box-gap) !important;
-    margin-bottom: 12px !important;
+    gap: 6px !important;
+    align-items: flex-start !important;
   }
 
   #screen-order-summary .order-summary-ym {
-    width: 100% !important;
-  }
-
-  #screen-order-summary .order-summary-ym__row {
-    display: grid !important;
-    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-    align-items: stretch !important;
-    width: 100% !important;
-    gap: var(--order-summary-mobile-box-gap) !important;
-  }
-
-  #screen-order-summary .order-summary-ym__row > .order-summary-ym__field,
-  #screen-order-summary
-    .order-summary-ym__row
-    > .order-summary-ym__field.order-summary-metric-mobile {
-    display: flex !important;
-    flex: none !important;
+    flex: 1 1 auto !important;
     min-width: 0 !important;
-    max-width: none !important;
-    width: 100% !important;
-    box-sizing: border-box !important;
   }
 
-  #screen-order-summary .order-summary-metric-mobile {
-    display: flex !important;
-  }
-
-  #screen-order-summary .order-summary-toggle--desktop,
   #screen-order-summary .order-summary-toggle {
-    display: none !important;
+    flex: 0 0 auto !important;
+    margin-left: auto !important;
+    transform: none !important;
+    transform-origin: right top;
+    width: auto !important;
+    justify-content: flex-end !important;
   }
 
-  #screen-order-summary .order-summary-ym__field {
-    background: transparent !important;
-  }
-
-  #screen-order-summary .order-summary-ym__select {
-    width: 100% !important;
-    min-width: 0 !important;
-    max-width: 100% !important;
-    height: 44px !important;
-    box-sizing: border-box !important;
-    font-size: var(--order-summary-mobile-ym-font-size) !important;
-    border-radius: 8px !important;
-    border: 1px solid #b8b8b8 !important;
-    background: #ffffff !important;
-    background-color: #ffffff !important;
-  }
-
-  /* 3) 연·월·건수/금액 — 박스 가로 1:1:1, 글자·패딩 통일 */
-  #screen-order-summary .order-summary-ym__row .order-summary-ym__select {
-    flex: none !important;
-    width: 100% !important;
-    font-size: var(--order-summary-mobile-ym-font-size) !important;
-    font-weight: 600 !important;
-    line-height: 1.2 !important;
-    padding: 0 22px 0 6px !important;
-    letter-spacing: 0 !important;
-    white-space: nowrap !important;
-    text-overflow: ellipsis !important;
-    overflow: hidden !important;
-    text-align: center !important;
-    text-align-last: center !important;
-    -webkit-text-size-adjust: 100%;
-    text-size-adjust: 100%;
-  }
-
-  #screen-order-summary .order-summary-ym__field::after {
-    right: 8px !important;
-  }
-
-  #screen-order-summary .order-summary-metric-mobile .order-summary-ym__select {
-    height: 44px !important;
+  #screen-order-summary .order-summary-toggle__btn {
+    min-width: 92px !important;
+    min-height: 44px !important;
+    padding: 0 14px !important;
+    font-size: 13px !important;
   }
 
   #screen-order-summary .order-summary-table-wrap {
-    overflow: auto hidden !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
     width: 100% !important;
-    margin: 0 !important;
-    padding: 0 !important;
+    margin-left: 22px !important;
+    padding-left: 12px !important;
+    padding-right: 4px !important;
     -webkit-overflow-scrolling: touch !important;
-    isolation: isolate !important;
-    background: #ffffff !important;
-    background-color: #ffffff !important;
-    position: relative !important;
   }
 
   #screen-order-summary .order-summary-table {
     width: max-content !important;
     min-width: max-content !important;
     table-layout: auto !important;
-    background: #ffffff !important;
-    background-color: #ffffff !important;
-    /* 1·2) 목대~기타(행)·시공오더~시공매출(열) = 상단 집계(연·월·건수) 박스 gap */
-    border-spacing: var(--order-summary-mobile-box-gap)
-      var(--order-summary-mobile-box-gap) !important;
-    border-collapse: separate !important;
-  }
-
-  #screen-order-summary .order-summary-table tbody {
-    background: #ffffff !important;
-    background-color: #ffffff !important;
-  }
-
-  #screen-order-summary .order-summary-table tbody tr + tr th,
-  #screen-order-summary .order-summary-table tbody tr + tr td {
-    /* 행(목대~기타) 간격은 border-spacing 세로값과 동일 */
-    background-color: #ffffff !important;
-  }
-
-  #screen-order-summary .order-summary-table thead,
-  #screen-order-summary .order-summary-table tbody,
-  #screen-order-summary .order-summary-table tr {
-    background: #ffffff !important;
-    background-color: #ffffff !important;
-  }
-
-  #screen-order-summary .order-summary-table th,
-  #screen-order-summary .order-summary-table td {
-    padding: 0 !important;
-    background: #ffffff !important;
-    background-color: #ffffff !important;
-    vertical-align: middle !important;
-  }
-
-  #screen-order-summary .order-summary-table tbody th.order-summary-table__row-head {
-    background: var(--color-navy) !important;
-    background-clip: padding-box !important;
-  }
-
-  #screen-order-summary .order-summary-table thead th.order-summary-table__col-head {
-    background: #636363 !important;
-    background-clip: padding-box !important;
-  }
-
-  #screen-order-summary .order-summary-table__col-head,
-  #screen-order-summary .order-summary-table__row-head,
-  #screen-order-summary .order-summary-table__cell-box {
-    transform: none !important;
-    border-radius: 0 !important;
-  }
-
-  #screen-order-summary .order-summary-table__col-head span,
-  #screen-order-summary .order-summary-table__row-head span,
-  #screen-order-summary .order-summary-table__cell-box span,
-  #screen-order-summary .order-summary-table__cell-box--sales .order-summary-table__sales-unit,
-  #screen-order-summary
-    .order-summary-table__cell-box--sales
-    > span:not(.order-summary-table__sales-unit) {
-    transform: none !important;
-  }
-
-  #screen-order-summary .order-summary-table__col-head {
-    border: 1px solid #707070 !important;
-    border-radius: 0 !important;
-    background: #636363 !important;
-    padding: 2px 3px !important;
-    box-sizing: border-box !important;
-    width: var(--order-summary-mobile-col-w) !important;
-    min-width: var(--order-summary-mobile-col-w) !important;
-    max-width: var(--order-summary-mobile-col-w) !important;
-    min-height: 50px !important;
-    height: 50px !important;
+    border-spacing: 5px !important;
   }
 
   #screen-order-summary .order-summary-table__corner,
@@ -4734,609 +4803,111 @@ table {
     width: 80px !important;
     position: sticky !important;
     left: 0 !important;
-    z-index: 12 !important;
-    background-clip: padding-box !important;
-    isolation: isolate !important;
-    overflow: hidden !important;
-    box-shadow: none !important;
+    z-index: 4 !important;
   }
 
   #screen-order-summary .order-summary-table__corner {
-    background: #ffffff !important;
-    z-index: 13 !important;
-    padding: 6px 4px !important;
-  }
-
-  #screen-order-summary .order-summary-table tbody th.order-summary-table__row-head {
-    background: var(--color-navy) !important;
-    border: 1px solid var(--color-navy-dark) !important;
-    border-radius: 0 !important;
-    padding: 8px 4px !important;
-    color: var(--color-white) !important;
-    box-shadow: none !important;
-    box-sizing: border-box !important;
-    min-height: 50px !important;
-    height: 50px !important;
-  }
-
-  #screen-order-summary .order-summary-table tbody th.order-summary-table__row-head span {
-    color: var(--color-white) !important;
-  }
-
-  #screen-order-summary .order-summary-table__row-head {
-    background: var(--color-navy) !important;
-    border: 1px solid var(--color-navy-dark) !important;
-    border-radius: 0 !important;
-    padding: 8px 4px !important;
-    color: var(--color-white) !important;
-  }
-
-  #screen-order-summary .order-summary-table__row-head::after,
-  #screen-order-summary .order-summary-table__corner::after {
-    content: "" !important;
-    position: absolute !important;
-    top: 0 !important;
-    left: 100% !important;
-    width: var(--order-summary-mobile-box-gap) !important;
-    height: 100% !important;
-    background: inherit !important;
-    pointer-events: none !important;
-    z-index: 2 !important;
-  }
-
-  #screen-order-summary .order-summary-table__corner::after {
-    box-shadow: var(--order-summary-mobile-box-gap) 0 0 0 #ffffff !important;
-  }
-
-  #screen-order-summary .order-summary-table__row-head::after {
-    box-shadow: var(--order-summary-mobile-box-gap) 0 0 0 var(--color-navy) !important;
-  }
-
-  #screen-order-summary .order-summary-table__row-head,
-  #screen-order-summary .order-summary-table__corner {
-    position: sticky !important;
-  }
-
-  #screen-order-summary .order-summary-table__col-head,
-  #screen-order-summary .order-summary-table__cell,
-  #screen-order-summary .order-summary-table__cell-box {
-    position: relative !important;
-    z-index: 1 !important;
+    background: #ececec !important;
   }
 
   #screen-order-summary .order-summary-table__col-head,
   #screen-order-summary .order-summary-table__cell {
-    min-width: var(--order-summary-mobile-col-w) !important;
-    width: var(--order-summary-mobile-col-w) !important;
-    max-width: var(--order-summary-mobile-col-w) !important;
-    box-sizing: border-box !important;
+    min-width: 96px !important;
+    width: max-content !important;
     white-space: nowrap !important;
   }
 
   #screen-order-summary .order-summary-table__cell-box {
-    width: 100% !important;
-    min-width: 0 !important;
-    max-width: 100% !important;
-    min-height: 50px !important;
-    height: 50px !important;
-    padding: 0 6px !important;
-    border: 1px solid #909090 !important;
-    border-radius: 0 !important;
-    background: #ffffff !important;
-    background-color: #ffffff !important;
-    opacity: 1 !important;
-    box-sizing: border-box !important;
-  }
-
-  #screen-order-summary .order-summary-table__cell-btn .order-summary-table__cell-box,
-  #screen-order-summary .order-summary-table__cell-btn:disabled .order-summary-table__cell-box {
-    background: #ffffff !important;
-    background-color: #ffffff !important;
-  }
-
-  #screen-order-summary
-    .order-summary-table__cell-btn:not(:disabled):hover
-    .order-summary-table__cell-box,
-  #screen-order-summary
-    .order-summary-table__cell-btn:not(:disabled):focus-visible
-    .order-summary-table__cell-box {
-    background: #ffffff !important;
-    background-color: #ffffff !important;
-  }
-
-  #screen-order-summary .order-summary-table__cell {
-    background: transparent !important;
-    padding: 0 !important;
-  }
-
-  #screen-order-summary .order-summary-table__cell-btn {
-    background: transparent !important;
+    width: max-content !important;
+    min-width: 78px !important;
+    padding: 0 8px !important;
   }
 
   #screen-order-summary .order-summary-table__cell-box span {
     white-space: nowrap !important;
     word-break: keep-all !important;
-    font-size: 14px !important;
-    line-height: 1.25 !important;
   }
 
   #screen-order-summary .order-summary-table__col-head span {
     white-space: nowrap !important;
     word-break: keep-all !important;
-    font-size: 13px !important;
-    line-height: 1.2 !important;
   }
 
-  #screen-order-summary .order-summary-table tbody th.order-summary-table__row-head span {
-    font-size: 13px !important;
-    line-height: 1.2 !important;
+  #screen-order-summary .assign-panel,
+  #screen-order-summary .assign-panel.order-summary-panel {
+    overflow-x: visible !important;
   }
+}
 
-  #screen-order-summary .order-summary-metric-mobile .order-summary-ym__select {
-    background: #ffffff !important;
-    background-color: #ffffff !important;
-  }
-
-  .order-mobile-layout .assign-panel,
-  .order-mobile-layout .assign-panel.order-summary-panel {
-    overflow: hidden !important;
-    background: #ffffff !important;
-    background-color: #ffffff !important;
-    border-color: #d8d8d8 !important;
-  }
-
-  /* 4) 집계표 영역·셀 사이(박스 사이) 바탕 — 회색 패널색이 비치지 않도록 흰색 */
-  #screen-order-summary .order-summary-panel,
-  #screen-order-summary .order-summary-toolbar,
-  #screen-order-summary .order-summary-ym,
-  #screen-order-summary .order-summary-table td.order-summary-table__cell,
-  #screen-order-summary .order-summary-table__unit-row th,
-  #screen-order-summary .order-summary-table thead tr,
-  #screen-order-summary .order-summary-table tbody tr {
-    background: #ffffff !important;
-    background-color: #ffffff !important;
-  }
-
-  #screen-order-summary .order-summary-table td.order-summary-table__cell,
-  #screen-order-summary .order-summary-table th[scope="col"]:empty {
-    background-color: #ffffff !important;
-  }
-
-  .order-mobile-layout .order-summary-mobile-footer {
-    display: flex !important;
-    position: fixed !important;
-    left: 0 !important;
-    right: 0 !important;
-    bottom: 0 !important;
-    z-index: 90 !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 10px !important;
-    min-height: 44px !important;
-    padding: 8px 12px calc(8px + env(safe-area-inset-bottom, 0px)) !important;
-    background: var(--color-white) !important;
-    border-top: 1px solid #e0e0e0 !important;
-    font-size: 14px !important;
-    font-weight: 600 !important;
-    color: #333 !important;
-  }
-
-  .order-mobile-layout .order-summary-mobile-footer__sep {
-    color: #888 !important;
-    font-weight: 500 !important;
-    user-select: none !important;
-  }
-
-  .order-mobile-layout .order-summary-mobile-footer__link {
-    color: inherit !important;
-    text-decoration: none !important;
-    padding: 4px 6px !important;
-    line-height: 1.2 !important;
-  }
-
-  .order-mobile-layout .order-summary-mobile-footer__link:active {
-    opacity: 0.75 !important;
-  }
-
-  /* 3~7번 본문: 흰 배경·하단 푸터 여백·캘린더/필터 */
-  .order-mobile-layout:not(.order-summary-page) .assign-body,
-  .order-mobile-layout:not(.order-summary-page) .order-summary-body {
-    padding: 8px 8px 52px !important;
-    background: #ffffff !important;
-    background-color: #ffffff !important;
-  }
-
-  .order-mobile-layout:not(.order-summary-page) .assign-panel,
-  .order-mobile-layout.stats-page .stats-panel {
-    width: 100% !important;
-    max-width: 100% !important;
-    padding: 10px 8px !important;
-    border: 1px solid #d8d8d8 !important;
-    border-radius: 0 !important;
-    box-sizing: border-box !important;
-  }
-
-  .order-mobile-layout:not(.order-summary-page) .assign-layout {
-    flex-direction: column !important;
-    gap: 12px !important;
-  }
-
-  .order-mobile-layout:not(.order-summary-page) .assign-sidebar {
-    width: 100% !important;
-    flex: 0 0 auto !important;
-  }
-
-  /* 4~6번 연·월: 8번 집계표와 동일 2열 그리드(화살표 숨김) */
-  .order-mobile-layout:not(.order-summary-page) .assign-ym {
-    display: grid !important;
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    align-items: stretch !important;
-    width: 100% !important;
-    gap: var(--order-summary-mobile-box-gap, 1.75px) !important;
-  }
-
-  .order-mobile-layout:not(.order-summary-page) .assign-ym__row {
-    display: contents !important;
-  }
-
-  .order-mobile-layout:not(.order-summary-page) .assign-ym__arrows {
-    display: none !important;
-  }
-
-  .order-mobile-layout:not(.order-summary-page) .assign-ym__select {
-    width: 100% !important;
-    min-width: 0 !important;
-    min-height: 44px !important;
-    height: 44px !important;
-    box-sizing: border-box !important;
-    font-size: var(--order-summary-mobile-ym-font-size, 15px) !important;
-    font-weight: 600 !important;
-    line-height: 1.2 !important;
-    padding: 0 22px 0 6px !important;
-    border-radius: 8px !important;
-    border: 1px solid #b8b8b8 !important;
-    background: #ffffff !important;
-    text-align: center !important;
-    text-align-last: center !important;
-    -webkit-text-size-adjust: 100%;
-    text-size-adjust: 100%;
-  }
-
-  .order-mobile-layout:not(.order-summary-page) .assign-calendar {
-    min-height: 200px !important;
-  }
-
-  .order-mobile-layout:not(.order-summary-page) .assign-date-title {
-    font-size: clamp(18px, 5vw, 24px) !important;
-    margin-bottom: 8px !important;
-  }
-
-  .order-mobile-layout:not(.order-summary-page) .assign-table-wrap {
-    overflow-x: auto !important;
-    -webkit-overflow-scrolling: touch !important;
-  }
-
-  .order-mobile-layout:not(.order-summary-page) .assign-save {
-    margin-top: 12px !important;
-    padding-bottom: 4px !important;
-  }
-
-  .order-mobile-layout:not(.order-summary-page) .order-register__btn {
-    width: 100% !important;
-    max-width: 100% !important;
-  }
-
-  .order-mobile-layout.stats-page .stats-main {
-    flex-direction: column !important;
-  }
-
-  .order-mobile-layout.stats-page .stats-filters {
-    width: 100% !important;
-    flex: 0 0 auto !important;
-  }
-
-  .order-mobile-layout.stats-page .stats-filters-form {
-    display: grid !important;
-    grid-template-columns: 1fr !important;
-    gap: 8px !important;
-  }
-
-  .order-mobile-layout.stats-page .stats-mode-nav--top {
-    margin-bottom: 10px !important;
-  }
-
-  .order-mobile-layout:not(.order-summary-page) .order-form {
-    gap: 8px !important;
-  }
-
-  .order-mobile-layout:not(.order-summary-page) .order-field {
-    flex-wrap: wrap !important;
-  }
-
-  .order-mobile-layout:not(.order-summary-page) .order-field__control--md,
-  .order-mobile-layout:not(.order-summary-page) .order-field__control--sm,
-  .order-mobile-layout:not(.order-summary-page) .order-field__control--date,
-  .order-mobile-layout:not(.order-summary-page) .order-field__control--upload {
-    flex: 1 1 100% !important;
-    max-width: 100% !important;
-  }
-
-  /* 3번 오더등록: 8번과 동일 흰 배경·세로 폼 */
-  .order-mobile-layout:not(.order-summary-page) .order-form,
-  .order-mobile-layout:not(.order-summary-page) .order-register {
-    width: 100% !important;
-    max-width: 100% !important;
-  }
-
-  .order-mobile-layout:not(.order-summary-page) .order-field {
-    transform: none !important;
-    flex-wrap: wrap !important;
-    align-items: stretch !important;
-    gap: 4px !important;
-    margin-bottom: 10px !important;
-  }
-
-  .order-mobile-layout:not(.order-summary-page) .order-field__label {
-    flex: 0 0 100% !important;
-    transform: none !important;
-    min-height: 36px !important;
-    border-radius: 6px 6px 0 0 !important;
-  }
-
-  .order-mobile-layout:not(.order-summary-page) .order-field__label span,
-  .order-mobile-layout:not(.order-summary-page) .order-field__control,
-  .order-mobile-layout:not(.order-summary-page) .order-field__control input,
-  .order-mobile-layout:not(.order-summary-page) .order-field__control select,
-  .order-mobile-layout:not(.order-summary-page) .order-upload-btn span,
-  .order-mobile-layout:not(.order-summary-page) .order-delete-btn span {
-    transform: none !important;
-  }
-
-  .order-mobile-layout:not(.order-summary-page) .order-field__divider {
-    display: none !important;
-  }
-
-  .order-mobile-layout:not(.order-summary-page) .order-field__control {
-    flex: 1 1 100% !important;
-    min-height: 44px !important;
-    border-radius: 0 0 8px 8px !important;
-    border: 1px solid #b8b8b8 !important;
-    padding: 0 12px !important;
-  }
-
-  .order-mobile-layout:not(.order-summary-page) .order-field--scope .order-field__control,
-  .order-mobile-layout:not(.order-summary-page) .order-field--scope-sales .order-field__control {
-    border-radius: 8px !important;
-    padding: 8px !important;
-  }
-
-  .order-mobile-layout:not(.order-summary-page) .order-scope-options {
-    flex-wrap: wrap !important;
-    gap: 6px !important;
-  }
-
-  .order-mobile-layout:not(.order-summary-page) .order-register {
-    margin-top: 8px !important;
-    padding: 0 4px !important;
-  }
-
-  .order-mobile-layout:not(.order-summary-page) .order-register__btn {
-    min-height: 48px !important;
-    font-size: 16px !important;
-    font-weight: 700 !important;
-    border-radius: 8px !important;
-  }
-
-  /* 4~6번: 필터·달력·테이블 */
-  .order-mobile-layout:not(.order-summary-page) .assign-sidebar {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 8px !important;
-  }
-
-  /* 5·6번 필터: 8번 토글과 동일 2열·회색 활성 */
-  .order-mobile-layout:not(.order-summary-page) .assign-open-filter {
-    display: grid !important;
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: var(--order-summary-mobile-box-gap, 1.75px) !important;
-    min-height: 0 !important;
-    border: none !important;
-    border-radius: 0 !important;
-    background: transparent !important;
+/* 모바일 3~7번: 상단 메뉴(오더등록~통계) 잘림 방지 — 8번 집계표 모바일 블록은 변경 없음 */
+@media (max-width: 768px) {
+  .order-page.assign-page:not(.order-summary-page) .order-topbar {
     overflow: visible !important;
-  }
-
-  .order-mobile-layout:not(.order-summary-page) .assign-open-filter__btn {
-    min-height: 44px !important;
-    font-size: var(--order-summary-mobile-ym-font-size, 15px) !important;
-    font-weight: 600 !important;
-    border: 1px solid #c9c9c9 !important;
-    border-radius: 6px !important;
-    background: #f7f7f7 !important;
-    color: #333 !important;
-  }
-
-  .order-mobile-layout:not(.order-summary-page) .assign-open-filter__btn:last-child {
-    border-right: 1px solid #c9c9c9 !important;
-  }
-
-  .order-mobile-layout:not(.order-summary-page) .assign-open-filter__btn--active {
-    border-color: #9a9a9a !important;
-    background: #9a9a9a !important;
-    color: #fff !important;
-  }
-
-  .order-mobile-layout:not(.order-summary-page) .assign-main {
-    min-width: 0 !important;
-    width: 100% !important;
-  }
-
-  .order-mobile-layout:not(.order-summary-page) .assign-table {
-    font-size: 12px !important;
-  }
-
-  .order-mobile-layout:not(.order-summary-page) .assign-table__th,
-  .order-mobile-layout:not(.order-summary-page) .assign-table__td {
-    padding: 6px 4px !important;
-    white-space: nowrap !important;
-  }
-
-  .order-mobile-layout:not(.order-summary-page) .assign-save .order-register__btn {
-    min-height: 48px !important;
-    font-size: 16px !important;
-    font-weight: 700 !important;
-    border-radius: 8px !important;
-  }
-
-  /* 7번 통계: 8번 툴바 스타일에 맞춤 */
-  .order-mobile-layout.stats-page .stats-panel {
-    background: #ffffff !important;
-  }
-
-  .order-mobile-layout.stats-page .stats-main {
-    gap: 16px !important;
-  }
-
-  .order-mobile-layout.stats-page .stats-content {
-    flex-direction: column !important;
-    gap: 12px !important;
-  }
-
-  .order-mobile-layout.stats-page .stats-mode-nav.stats-mode-nav--top {
-    display: flex !important;
-    width: 100% !important;
-    border: 1px solid #b8b8b8 !important;
-    border-radius: 8px !important;
-    overflow: hidden !important;
-    margin-bottom: 8px !important;
-  }
-
-  .order-mobile-layout.stats-page .stats-mode-nav--top .stats-mode-nav__btn {
-    flex: 1 !important;
-    min-height: 44px !important;
-    margin: 0 !important;
-    border: none !important;
-    border-right: 1px solid #b8b8b8 !important;
-    border-radius: 0 !important;
-    font-size: clamp(11px, 2.8vw, 13px) !important;
-    font-weight: 600 !important;
-    transform: none !important;
-  }
-
-  .order-mobile-layout.stats-page .stats-mode-nav--top .stats-mode-nav__btn > span {
-    transform: none !important;
-  }
-
-  .order-mobile-layout.stats-page .stats-mode-nav--top .stats-mode-nav__btn:last-child {
-    border-right: none !important;
-  }
-
-  .order-mobile-layout.stats-page .stats-mode-nav__btn--active {
-    background: #9a9a9a !important;
-    color: #fff !important;
-  }
-
-  .order-mobile-layout.stats-page .stats-filters {
-    padding-top: 0 !important;
-  }
-
-  .order-mobile-layout.stats-page .stats-filters-form .order-field {
-    transform: none !important;
-    flex-wrap: wrap !important;
-    margin-bottom: 8px !important;
-  }
-
-  .order-mobile-layout.stats-page .stats-filters-form .order-field__label {
-    flex: 0 0 100% !important;
-    transform: none !important;
-    min-height: 34px !important;
-  }
-
-  .order-mobile-layout.stats-page .stats-filters-form .order-field__label span {
-    transform: none !important;
-  }
-
-  .order-mobile-layout.stats-page .stats-filters-form .order-field__divider {
-    display: none !important;
-  }
-
-  .order-mobile-layout.stats-page .stats-filters-form .order-field__control {
-    flex: 1 1 100% !important;
-    transform: none !important;
-    min-height: 44px !important;
-    border-radius: 8px !important;
-  }
-
-  .order-mobile-layout.stats-page .stats-filters-form .order-select {
-    min-height: 44px !important;
-    font-size: var(--order-summary-mobile-ym-font-size, 15px) !important;
-    font-weight: 600 !important;
-    text-align: center !important;
-    text-align-last: center !important;
-  }
-
-  .order-mobile-layout.stats-page .stats-body {
-    min-width: 0 !important;
-    width: 100% !important;
-  }
-
-  .order-mobile-layout.stats-page .stats-body .assign-table-wrap {
-    overflow-x: auto !important;
-    -webkit-overflow-scrolling: touch !important;
-  }
-
-  .order-mobile-layout.stats-page .stats-unit-label {
-    font-size: 13px !important;
-    font-weight: 600 !important;
-    margin-bottom: 6px !important;
-    padding: 0 2px !important;
-  }
-
-  .order-mobile-layout.stats-page .stats-chart-wrap,
-  .order-mobile-layout.stats-page .stats-rank {
-    min-width: 0 !important;
-    width: 100% !important;
-  }
-
-  .order-mobile-layout:not(.order-summary-page) .assign-date-title {
-    text-align: center !important;
-    color: #222 !important;
-  }
-
-  .order-mobile-layout:not(.order-summary-page) .assign-mini-cal {
-    border: 1px solid #b8b8b8 !important;
-    border-radius: 8px !important;
-    background: #ffffff !important;
-  }
-
-  .order-mobile-layout:not(.order-summary-page) .assign-mini-cal__day-btn {
-    min-height: 40px !important;
-    touch-action: manipulation !important;
-  }
-
-  .order-mobile-layout:not(.order-summary-page) .assign-body > .assign-save {
-    width: 100% !important;
-    max-width: 100% !important;
-    margin: 0 !important;
-    padding: 10px 8px 4px !important;
-    box-sizing: border-box !important;
-  }
-
-  .order-mobile-layout:not(.order-summary-page) .assign-layout {
+    height: auto !important;
     min-height: 0 !important;
   }
 
-  .order-mobile-layout:not(.order-summary-page) .assign-panel .assign-save {
+  .order-page.assign-page:not(.order-summary-page) .order-topbar__logo {
+    position: relative !important;
+    left: auto !important;
+    top: auto !important;
+    transform: none !important;
+    margin: 0 !important;
+  }
+
+  .order-page.assign-page:not(.order-summary-page) .order-topbar__menu {
+    position: relative !important;
+    left: auto !important;
+    top: auto !important;
+    bottom: auto !important;
+    transform: none !important;
+    margin: 0 !important;
     width: 100% !important;
-    margin-top: 12px !important;
-    padding: 0 4px !important;
+    max-width: 100% !important;
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    grid-auto-flow: row !important;
+    grid-auto-columns: unset !important;
+    gap: 6px !important;
+    overflow: visible !important;
+    -webkit-overflow-scrolling: auto !important;
+  }
+
+  .order-page.assign-page:not(.order-summary-page)
+    .order-topbar__menu
+    .order-topbar__link:nth-child(4) {
+    grid-column: 1 / 2 !important;
+  }
+
+  .order-page.assign-page:not(.order-summary-page)
+    .order-topbar__menu
+    .order-topbar__link:nth-child(5) {
+    grid-column: 2 / 3 !important;
+  }
+
+  .order-page.assign-page:not(.order-summary-page) .order-topbar__menu .order-topbar__link {
+    display: flex !important;
+    box-sizing: border-box !important;
+    min-width: 0 !important;
+    width: 100% !important;
+    min-height: 44px !important;
+    padding: 6px 4px !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    line-height: 1.25 !important;
+    white-space: normal !important;
+    word-break: keep-all !important;
+    text-align: center !important;
+    overflow: visible !important;
+    flex: none !important;
   }
 }
 
 @media (max-width: 480px) {
-  .order-mobile-layout .order-topbar__menu .order-topbar__link {
-    min-height: 50px !important;
-    padding: 10px 5px !important;
-    font-size: clamp(10px, 2.7vw, 12px) !important;
+  .order-page.assign-page:not(.order-summary-page) .order-topbar__menu .order-topbar__link {
+    min-height: 40px !important;
+    padding: 5px 4px !important;
+    font-size: 11px !important;
+    line-height: 1.2 !important;
   }
 }

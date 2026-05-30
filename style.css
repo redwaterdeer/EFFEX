@@ -1869,6 +1869,11 @@ table {
   color: #666;
 }
 
+/* PC: 모바일 하단 푸터 숨김 */
+.order-mobile-footer {
+  display: none;
+}
+
 /* 집계표 (EFFEX 홈) */
 .assign-panel.order-summary-panel {
   flex: 1;
@@ -4221,7 +4226,7 @@ table {
 
   .order-summary-table {
     min-width: 600px;
-    border-spacing: 10px 12px;
+    border-spacing: 10px 0;
   }
 
   .order-summary-table__corner,
@@ -4288,9 +4293,9 @@ table {
       "logo"
       "menu" !important;
     align-items: center !important;
-    row-gap: 8px !important;
+    row-gap: 54px !important;
     column-gap: 8px !important;
-    padding: 6px 8px 10px !important;
+    padding: 28px 8px 16px !important;
     height: auto !important;
     overflow: clip !important;
     background: linear-gradient(to right, #d9d9d9, #adacac) !important;
@@ -4308,10 +4313,12 @@ table {
     top: auto !important;
     transform: none !important;
     width: min(168px, 46vw) !important;
-    height: 40px !important;
-    min-height: 40px !important;
+    height: 44px !important;
+    min-height: 44px !important;
+    max-height: 44px !important;
     align-self: center !important;
-    margin: 0 !important;
+    margin: 48px auto 30px !important;
+    overflow: hidden !important;
   }
 
   #screen-order .order-topbar__logo .order-topbar__logo-img,
@@ -4456,46 +4463,330 @@ table {
   #screen-order-stats .order-topbar__logout,
   #screen-order-summary .order-topbar__edit-profile,
   #screen-order-summary .order-topbar__logout {
-    position: fixed !important;
-    bottom: 10px !important;
-    z-index: 80 !important;
-    padding: 0 !important;
-    min-height: auto !important;
-    background: transparent !important;
-    font-size: 13px !important;
-    line-height: 1.2 !important;
-    max-width: calc(50vw - 12px) !important;
+    display: none !important;
   }
 
-  #screen-order .order-topbar__edit-profile,
-  #screen-order-assign .order-topbar__edit-profile,
-  #screen-order-status .order-topbar__edit-profile,
-  #screen-order-open .order-topbar__edit-profile,
-  #screen-order-stats .order-topbar__edit-profile,
-  #screen-order-summary .order-topbar__edit-profile {
-    left: 8px !important;
-    transform: none !important;
+  .order-page .order-mobile-footer,
+  #screen-login .order-mobile-footer--auth,
+  #screen-signup .order-mobile-footer--auth {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 100;
+    margin: 0;
+    padding: 12px 12px calc(12px + env(safe-area-inset-bottom, 0px));
+    background: rgba(244, 245, 247, 0.98);
+    border-top: 1px solid #e0e0e0;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.06);
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    pointer-events: none;
   }
 
-  #screen-order .order-topbar__logout,
-  #screen-order-assign .order-topbar__logout,
-  #screen-order-status .order-topbar__logout,
-  #screen-order-open .order-topbar__logout,
-  #screen-order-stats .order-topbar__logout,
-  #screen-order-summary .order-topbar__logout {
-    right: 8px !important;
-    left: auto !important;
-    transform: none !important;
+  .order-page .order-mobile-footer .order-footer__link,
+  #screen-login .order-mobile-footer--auth .order-footer__link,
+  #screen-signup .order-mobile-footer--auth .order-footer__link {
+    pointer-events: auto;
   }
 
-  #screen-order .order-body,
+  #screen-login .login-screen,
+  #screen-signup .signup-body {
+    padding-bottom: calc(52px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
   #screen-order-assign .assign-body,
   #screen-order-status .assign-body,
   #screen-order-open .assign-body,
   #screen-order-stats .assign-body,
   #screen-order-summary .order-summary-body {
-    padding-bottom: 44px !important;
+    padding-bottom: calc(52px + env(safe-area-inset-bottom, 0px)) !important;
     overflow-x: hidden !important;
+  }
+
+  /* 3번: 가로 스크롤바 (assign-body) */
+  #screen-order .assign-body {
+    padding-bottom: calc(52px + env(safe-area-inset-bottom, 0px)) !important;
+    overflow-x: scroll !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-gutter: stable both-edges;
+    scrollbar-width: thin;
+    scrollbar-color: #9a9a9a #e8e8e8;
+  }
+
+  #screen-order .assign-body::-webkit-scrollbar {
+    height: 10px;
+  }
+
+  #screen-order .assign-body::-webkit-scrollbar-track {
+    background: #e8e8e8;
+    border-radius: 4px;
+  }
+
+  #screen-order .assign-body::-webkit-scrollbar-thumb {
+    background: #9a9a9a;
+    border-radius: 4px;
+  }
+
+  #screen-order .assign-panel {
+    overflow-x: visible !important;
+    overflow-y: visible;
+  }
+
+  #screen-order .order-form {
+    min-width: 560px;
+    width: max-content;
+    max-width: none;
+  }
+
+  /* 3번: 시공일자~도면3 입력 박스 높이·테두리 통일 */
+  #screen-order {
+    --order-field-h: 48px;
+    --order-label-w: 88px;
+  }
+
+  /* 시공일자 ~ 도면3 (폼 1~10번째 필드) */
+  #screen-order .order-form > .order-field:nth-child(-n + 10) {
+    height: var(--order-field-h);
+    min-height: var(--order-field-h);
+    max-height: var(--order-field-h);
+    margin-bottom: 12px;
+    align-items: stretch;
+    box-sizing: border-box;
+  }
+
+  #screen-order .order-form > .order-field:nth-child(-n + 10) .order-field__label,
+  #screen-order .order-form > .order-field:nth-child(-n + 10) .order-field__divider,
+  #screen-order .order-form > .order-field:nth-child(-n + 10) .order-field__control,
+  #screen-order .order-form > .order-field:nth-child(-n + 10) .order-scope-options,
+  #screen-order .order-form > .order-field:nth-child(-n + 10) .order-scope-sales-options {
+    border-width: 1px;
+    border-style: solid;
+    box-sizing: border-box;
+  }
+
+  #screen-order .order-form > .order-field:nth-child(-n + 10) .order-field__label,
+  #screen-order .order-form > .order-field:nth-child(-n + 10) .order-field__divider {
+    border-color: transparent;
+  }
+
+  #screen-order .order-form > .order-field:nth-child(-n + 10) .order-field__control,
+  #screen-order .order-form > .order-field:nth-child(-n + 10) .order-scope-options,
+  #screen-order .order-form > .order-field:nth-child(-n + 10) .order-scope-sales-options {
+    border-color: #b8b8b8;
+  }
+
+  #screen-order .order-field--region .order-field__region-group {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    min-height: var(--order-field-h);
+    max-height: var(--order-field-h);
+    gap: 0;
+    align-items: stretch;
+  }
+
+  #screen-order .order-field__label {
+    height: 100%;
+    min-height: var(--order-field-h);
+    flex: 0 0 var(--order-label-w);
+  }
+
+  #screen-order .order-field__divider {
+    flex: 0 0 5px;
+    width: 5px;
+    min-width: 5px;
+    height: 100%;
+  }
+
+  #screen-order .order-field__control,
+  #screen-order .order-field--date .order-field__control,
+  #screen-order .order-field--upload .order-field__control,
+  #screen-order .order-field--region .order-field__control--region-item {
+    height: 100%;
+    min-height: var(--order-field-h);
+    max-height: var(--order-field-h);
+    border: 1px solid #b8b8b8;
+    box-sizing: border-box;
+  }
+
+  #screen-order .order-field--scope .order-field__control,
+  #screen-order .order-field--scope-sales .order-field__control {
+    height: 100%;
+    min-height: var(--order-field-h);
+    max-height: var(--order-field-h);
+    border: 1px solid #b8b8b8;
+    box-sizing: border-box;
+  }
+
+  #screen-order .order-scope-options,
+  #screen-order .order-scope-sales-options {
+    height: 100%;
+    min-height: var(--order-field-h);
+    border: none;
+  }
+
+  #screen-order .order-scope-option,
+  #screen-order .order-scope-sales-cell {
+    min-height: var(--order-field-h);
+    height: 100%;
+    border-width: 0 1px 0 0;
+    border-style: solid;
+    border-color: #b8b8b8;
+    box-sizing: border-box;
+  }
+
+  #screen-order .order-scope-option:last-child,
+  #screen-order .order-scope-sales-cell:last-child {
+    border-right-width: 0;
+  }
+
+  #screen-order .order-field__label,
+  #screen-order .order-field__divider {
+    box-sizing: border-box;
+  }
+
+  #screen-order .order-date-btn,
+  #screen-order .order-upload-btn,
+  #screen-order .order-delete-btn {
+    min-height: var(--order-field-h);
+    height: var(--order-field-h);
+    max-height: var(--order-field-h);
+    align-self: stretch;
+    box-sizing: border-box;
+    border-width: 0 0 0 1px;
+    border-style: solid;
+    border-color: #b8b8b8;
+  }
+
+  #screen-order .order-field__control input,
+  #screen-order .order-select {
+    min-height: 0;
+  }
+
+  /* 8번: 목대 위 희미한 회색(단위행·빈 헤더칸·thead 간격) 제거 */
+  #screen-order-summary .order-summary-table__unit-row,
+  #screen-order-summary .order-summary-table thead tr.order-summary-table__unit-row,
+  #screen-order-summary .order-summary-table thead tr:first-child {
+    display: none !important;
+    height: 0 !important;
+    max-height: 0 !important;
+    line-height: 0 !important;
+    font-size: 0 !important;
+    visibility: collapse !important;
+    border: none !important;
+    pointer-events: none !important;
+  }
+
+  #screen-order-summary .order-summary-table__unit-row th,
+  #screen-order-summary .order-summary-table__unit-head,
+  #screen-order-summary .order-summary-table__col-unit {
+    display: none !important;
+    height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    background: transparent !important;
+    opacity: 0 !important;
+  }
+
+  #screen-order-summary .order-summary-table thead th[aria-hidden="true"] {
+    display: none !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    max-width: 0 !important;
+    height: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    background: transparent !important;
+    opacity: 0 !important;
+  }
+
+  #screen-order-summary thead .order-summary-table__corner,
+  #screen-order-summary .order-summary-table thead tr:last-child th.order-summary-table__corner {
+    display: none !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    max-width: 0 !important;
+    height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    line-height: 0 !important;
+    overflow: hidden !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+  }
+
+  #screen-order-summary .order-summary-table {
+    border-spacing: 4px 0 !important;
+  }
+
+  #screen-order-summary .order-summary-table thead tr:last-child th.order-summary-table__col-head {
+    padding-bottom: 0 !important;
+  }
+
+  #screen-order-summary .order-summary-table tbody tr:first-child .order-summary-table__row-head,
+  #screen-order-summary .order-summary-table tbody tr:first-child .order-summary-table__cell {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+    border-top: none !important;
+    box-shadow: none !important;
+  }
+
+  #screen-order-summary .order-summary-table tbody tr:first-child .order-summary-table__row-head {
+    vertical-align: middle !important;
+  }
+
+  #screen-order-summary .order-summary-table thead + tbody tr:first-child .order-summary-table__row-head::before {
+    content: none !important;
+    display: none !important;
+  }
+
+  #screen-order-summary .order-summary-table__row-head {
+    box-shadow: none !important;
+  }
+
+  /* 8번: 목대 행 위 헤더 코너·단위행 잔상(회색 박스) 제거 */
+  #screen-order-summary .order-summary-table thead tr:first-child,
+  #screen-order-summary .order-summary-table thead tr.order-summary-table__unit-row {
+    display: none !important;
+    height: 0 !important;
+    max-height: 0 !important;
+    visibility: collapse !important;
+    border: none !important;
+  }
+
+  #screen-order-summary .order-summary-table thead tr:last-child th.order-summary-table__corner {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    max-width: 0 !important;
+    max-height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    opacity: 0 !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    pointer-events: none !important;
+  }
+
+  #screen-order-summary .order-summary-table tbody tr:first-child .order-summary-table__row-head {
+    border-top: none !important;
+    background: var(--color-navy) !important;
   }
 
   /* 모바일(1번 로그인 제외): 선택·집계 박스 직사각형 */
@@ -4685,7 +4976,7 @@ table {
 
   .order-summary-table {
     min-width: 500px;
-    border-spacing: 6px 8px;
+    border-spacing: 6px 0;
   }
 
   .order-summary-table__corner,
@@ -4726,20 +5017,17 @@ table {
     min-width: 700px;
   }
 
-  .order-summary-table__corner,
   .order-summary-table__row-head {
     position: sticky;
     left: 0;
-    z-index: 3;
-    min-width: 74px;
-  }
-
-  .order-summary-table__corner {
-    background: #ececec;
-  }
-
-  .order-summary-table__row-head {
     z-index: 4;
+    min-width: 74px;
+    box-shadow: none;
+  }
+
+  #screen-order-summary thead .order-summary-table__corner,
+  #screen-order-summary .order-summary-table thead th[aria-hidden="true"] {
+    display: none !important;
   }
 }
 
@@ -4749,13 +5037,36 @@ table {
     overflow-x: hidden !important;
   }
 
-  #screen-order,
   #screen-order-assign,
   #screen-order-status,
   #screen-order-open,
   #screen-order-stats,
   #screen-order-summary {
     overflow-x: hidden !important;
+  }
+
+  #screen-order {
+    overflow-x: hidden !important;
+  }
+
+  #screen-order .assign-body {
+    overflow-x: scroll !important;
+    scrollbar-width: thin;
+    scrollbar-color: #9a9a9a #e8e8e8;
+  }
+
+  #screen-order .assign-body::-webkit-scrollbar {
+    height: 10px;
+  }
+
+  #screen-order .assign-body::-webkit-scrollbar-track {
+    background: #e8e8e8;
+    border-radius: 4px;
+  }
+
+  #screen-order .assign-body::-webkit-scrollbar-thumb {
+    background: #9a9a9a;
+    border-radius: 4px;
   }
 
   #screen-order-summary .order-page__num {
@@ -4809,7 +5120,7 @@ table {
     min-width: calc(72px + 5 * 92px) !important;
     max-width: calc(72px + 5 * 92px) !important;
     table-layout: fixed !important;
-    border-spacing: 4px !important;
+    border-spacing: 4px 0 !important;
     border-collapse: separate !important;
   }
 
@@ -4821,15 +5132,62 @@ table {
     position: sticky !important;
     left: 0 !important;
     z-index: 5 !important;
-    box-shadow: 4px 0 6px rgba(0, 0, 0, 0.08);
+    box-shadow: none !important;
   }
 
-  #screen-order-summary .order-summary-table__corner {
-    background: #ececec !important;
+  #screen-order-summary thead .order-summary-table__corner {
+    display: none !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    max-width: 0 !important;
+    height: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    background: transparent !important;
+    visibility: hidden !important;
+  }
+
+  #screen-order-summary .order-summary-table {
+    border-spacing: 4px 0 !important;
+  }
+
+  #screen-order-summary .order-summary-table thead {
+    border-spacing: 0 !important;
+  }
+
+  #screen-order-summary .order-summary-table__unit-row,
+  #screen-order-summary .order-summary-table thead tr:first-child {
+    display: none !important;
+    height: 0 !important;
+    max-height: 0 !important;
+    line-height: 0 !important;
+    visibility: collapse !important;
+    border: none !important;
+  }
+
+  #screen-order-summary .order-summary-table thead tr:last-child th.order-summary-table__corner {
+    display: none !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    max-width: 0 !important;
+    height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    background: transparent !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    overflow: hidden !important;
+    font-size: 0 !important;
+  }
+
+  #screen-order-summary .order-summary-table thead tr:last-child th.order-summary-table__col-head {
+    border-bottom: none !important;
   }
 
   #screen-order-summary .order-summary-table__row-head {
     background: var(--color-navy) !important;
+    box-shadow: none !important;
   }
 
   #screen-order-summary .order-summary-table__col-head,
@@ -4869,8 +5227,34 @@ table {
     font-size: 11px !important;
   }
 
-  #screen-order-summary .order-summary-table__unit-row {
+  #screen-order-summary .order-summary-table__unit-row,
+  #screen-order-summary .order-summary-table thead tr:first-child {
     display: none !important;
+    height: 0 !important;
+    max-height: 0 !important;
+    visibility: collapse !important;
+    border: none !important;
+  }
+
+  #screen-order-summary .order-summary-table thead tr:last-child th.order-summary-table__corner {
+    display: none !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    max-width: 0 !important;
+    height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    background: transparent !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    overflow: hidden !important;
+  }
+
+  #screen-order-summary .order-summary-table tbody tr:first-child .order-summary-table__row-head {
+    margin-top: 0 !important;
+    padding-top: 8px !important;
+    border-top: none !important;
   }
 
   #screen-order-summary .assign-panel,

@@ -2862,7 +2862,11 @@ function initOrderNavDelegation() {
     if (!target) return;
 
     var editProfile = target.closest("[data-action='signup-edit']");
-    if (editProfile && editProfile.closest(".order-topbar__aside")) {
+    if (
+      editProfile &&
+      (editProfile.closest(".order-topbar__aside") ||
+        editProfile.closest(".order-mobile-footer"))
+    ) {
       e.preventDefault();
       if (getAuth()) goToSignupEdit();
       return;
@@ -2960,7 +2964,7 @@ function initOrderNavDelegation() {
   // 모바일 브라우저에서 문서 위임이 누락되는 케이스를 막기 위해
   // 상단 메뉴/가입수정에도 직접 이벤트를 보조로 바인딩한다.
   var topbarTargets = document.querySelectorAll(
-    ".order-page [data-order-nav], .order-page [data-action='signup-edit']"
+    ".order-page [data-order-nav], .order-page [data-action='signup-edit'], .order-mobile-footer [data-action='signup-edit']"
   );
   topbarTargets.forEach(function (el) {
     if (!el || el.dataset.orderNavBound === "1") return;

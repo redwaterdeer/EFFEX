@@ -605,7 +605,6 @@ table {
 }
 
 @media (max-width: 480px) {
-  /* 8번(#screen-order-summary)은 하단 전용 블록에서 별도 제어 */
   .order-page.assign-page:not(.order-summary-page) .order-topbar__menu {
     grid-template-columns: repeat(3, minmax(0, 1fr));
     column-gap: 6px;
@@ -629,81 +628,6 @@ table {
 
   .stats-unit-label {
     font-size: 12px;
-  }
-
-  .order-summary-toolbar {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 10px;
-    margin-bottom: 14px;
-  }
-
-  .order-summary-ym {
-    width: 100%;
-  }
-
-  .order-summary-ym__row {
-    width: 100%;
-    gap: 8px;
-  }
-
-  .order-summary-ym__field {
-    flex: 1 1 0;
-    min-width: 0;
-  }
-
-  .order-summary-ym__select {
-    width: 100%;
-    min-width: 0;
-    height: 44px;
-    font-size: 16px;
-    padding: 0 34px 0 12px;
-  }
-
-  .order-summary-toggle {
-    width: 100%;
-  }
-
-  .order-summary-toggle__btn {
-    flex: 1 1 0;
-    min-width: 0;
-    min-height: 42px;
-    font-size: 15px;
-  }
-
-  .order-summary-table-wrap {
-    overflow-x: auto;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    padding-bottom: 4px;
-  }
-
-  .order-summary-table {
-    min-width: 700px;
-    border-spacing: 10px;
-  }
-
-  .order-summary-table__corner,
-  .order-summary-table__row-head {
-    width: 96px;
-  }
-
-  .order-summary-table__col-head,
-  .order-summary-table__row-head {
-    font-size: 14px;
-    padding: 10px 6px;
-  }
-
-  .order-summary-table tbody .order-summary-table__cell-box {
-    min-height: 56px;
-  }
-
-  .order-summary-table__cell-box span {
-    font-size: 14px;
-  }
-
-  .order-summary-table__sales-unit {
-    font-size: 13px;
   }
 }
 
@@ -4269,75 +4193,6 @@ table {
     flex-direction: column;
   }
 
-  .order-summary-toolbar {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 12px;
-  }
-
-  .order-summary-ym__row {
-    width: 100%;
-    gap: 8px;
-  }
-
-  .order-summary-ym__field {
-    flex: 1;
-    min-width: 0;
-  }
-
-  .order-summary-ym__select {
-    width: 100%;
-    min-width: 0;
-    height: 48px;
-    font-size: 16px;
-    padding-right: 34px;
-  }
-
-  .order-summary-toggle {
-    width: 100%;
-  }
-
-  .order-summary-toggle__btn {
-    flex: 1;
-    min-height: 48px;
-    font-size: 16px;
-  }
-
-  .order-summary-table-wrap {
-    overflow-x: auto;
-    overflow-y: visible;
-    -webkit-overflow-scrolling: touch;
-    padding-bottom: 4px;
-  }
-
-  .order-summary-table {
-    min-width: 600px;
-    border-spacing: 10px 12px;
-  }
-
-  .order-summary-table__corner,
-  .order-summary-table__row-head {
-    width: 78px;
-  }
-
-  .order-summary-table__row-head,
-  .order-summary-table__col-head {
-    font-size: 14px;
-    padding: 8px 6px;
-  }
-
-  .order-summary-table tbody .order-summary-table__cell-box {
-    min-height: 46px;
-  }
-
-  .order-summary-table__cell-box span {
-    font-size: 15px;
-  }
-
-  .order-summary-table__sales-unit {
-    font-size: 12px;
-  }
-
   .order-topbar__menu {
     gap: 5px;
   }
@@ -4358,39 +4213,6 @@ table {
   .order-topbar__edit-profile,
   .order-topbar__logout {
     font-size: 13px;
-  }
-
-  .order-summary-ym__select {
-    height: 42px;
-    font-size: 15px;
-  }
-
-  .order-summary-toggle__btn {
-    min-height: 40px;
-    font-size: 14px;
-  }
-
-  .order-summary-table {
-    min-width: 640px;
-    border-spacing: 8px;
-  }
-
-  .order-summary-table__col-head,
-  .order-summary-table__row-head {
-    font-size: 13px;
-    padding: 9px 6px;
-  }
-
-  .order-summary-table tbody .order-summary-table__cell-box {
-    min-height: 52px;
-  }
-
-  .order-summary-table__cell-box span {
-    font-size: 13px;
-  }
-
-  .order-summary-table__sales-unit {
-    font-size: 12px;
   }
 }
 
@@ -4451,57 +4273,17 @@ table {
     font-size: 12px;
     line-height: 1.3;
   }
-
-  .order-summary-ym__select {
-    height: 42px;
-    font-size: 14px;
-  }
-
-  .order-summary-toggle__btn {
-    min-height: 40px;
-    font-size: 13px;
-  }
-
-  .order-summary-table {
-    min-width: 500px;
-    border-spacing: 6px 8px;
-  }
-
-  .order-summary-table__corner,
-  .order-summary-table__row-head {
-    width: 64px;
-  }
-
-  .order-summary-table__row-head,
-  .order-summary-table__col-head {
-    font-size: 12px;
-    padding: 6px 4px;
-  }
-
-  .order-summary-table tbody .order-summary-table__cell-box {
-    min-height: 38px;
-  }
-
-  .order-summary-table__cell-box span {
-    font-size: 12px;
-  }
-
-  .order-summary-table__sales-unit {
-    font-size: 10px;
-  }
 }
 
-/* 모바일(요청 반영): 상단/하단 배치 및 집계표 첫 열 고정 */
+/* 모바일(요청 반영): 3~7번 상단/하단 배치 — 8번 집계표는 제외 */
 @media (max-width: 480px) {
-  /* 1) 우측 상단 숫자(8) 크기 확대 */
-  .order-page__num {
+  .order-page:not(.order-summary-page) .order-page__num {
     top: 4px;
     right: 8px;
     font-size: 62px;
   }
 
-  /* 2) 메뉴를 3+2 버튼 2행으로 정렬 (가로 폭 축소) */
-  .order-topbar__menu {
+  .order-page:not(.order-summary-page) .order-topbar__menu {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 8px;
@@ -4511,15 +4293,15 @@ table {
     padding-bottom: 0;
   }
 
-  .order-topbar__menu .order-topbar__link:nth-child(4) {
+  .order-page:not(.order-summary-page) .order-topbar__menu .order-topbar__link:nth-child(4) {
     grid-column: 1 / 2;
   }
 
-  .order-topbar__menu .order-topbar__link:nth-child(5) {
+  .order-page:not(.order-summary-page) .order-topbar__menu .order-topbar__link:nth-child(5) {
     grid-column: 2 / 3;
   }
 
-  .order-topbar__menu .order-topbar__link {
+  .order-page:not(.order-summary-page) .order-topbar__menu .order-topbar__link {
     min-width: 0;
     width: 100%;
     min-height: 36px;
@@ -4528,8 +4310,7 @@ table {
     border-radius: 8px;
   }
 
-  /* 3) 로그인 문구를 로고 행 우측 정렬 */
-  .order-topbar {
+  .order-page:not(.order-summary-page) .order-topbar {
     grid-template-columns: minmax(0, 1fr) auto;
     grid-template-areas:
       "logo login"
@@ -4540,13 +4321,13 @@ table {
     padding: 8px 8px 10px;
   }
 
-  .order-topbar__logo {
+  .order-page:not(.order-summary-page) .order-topbar__logo {
     grid-area: logo;
     height: 48px;
     width: min(220px, 64vw);
   }
 
-  .order-topbar__aside {
+  .order-page:not(.order-summary-page) .order-topbar__aside {
     grid-area: login;
     width: auto;
     justify-content: flex-end;
@@ -4554,16 +4335,15 @@ table {
     gap: 0;
   }
 
-  .order-topbar__login-msg {
+  .order-page:not(.order-summary-page) .order-topbar__login-msg {
     font-size: 12px;
     line-height: 1.25;
     white-space: nowrap;
     text-align: right;
   }
 
-  /* 4) 가입수정/로그아웃 하단 중앙 고정 */
-  .order-topbar__edit-profile,
-  .order-topbar__logout {
+  .order-page:not(.order-summary-page) .order-topbar__edit-profile,
+  .order-page:not(.order-summary-page) .order-topbar__logout {
     position: fixed;
     bottom: 10px;
     z-index: 60;
@@ -4574,272 +4354,23 @@ table {
     padding: 0;
   }
 
-  .order-topbar__edit-profile {
+  .order-page:not(.order-summary-page) .order-topbar__edit-profile {
     left: 50%;
     transform: translateX(-120%);
   }
 
-  .order-topbar__logout {
+  .order-page:not(.order-summary-page) .order-topbar__logout {
     left: 50%;
     transform: translateX(20%);
   }
 
-  .order-body,
-  .assign-body {
+  .order-page:not(.order-summary-page) .order-body,
+  .order-page:not(.order-summary-page) .assign-body {
     padding-bottom: 38px;
   }
-
-  /* 5) 집계표: 좌측(목대~기타) 고정 + 우측 열 가로 스크롤 */
-  .order-summary-table-wrap {
-    overflow-x: auto;
-    overflow-y: hidden;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .order-summary-table {
-    width: max-content;
-    min-width: 700px;
-  }
-
-  .order-summary-table__corner,
-  .order-summary-table__row-head {
-    position: sticky;
-    left: 0;
-    z-index: 3;
-    min-width: 74px;
-  }
-
-  .order-summary-table__corner {
-    background: #ececec;
-  }
-
-  .order-summary-table__row-head {
-    z-index: 4;
-  }
 }
 
-@media (max-width: 480px) {
-  html,
-  body {
-    overflow-x: hidden !important;
-  }
-
-  #screen-order-summary {
-    overflow-x: hidden !important;
-  }
-
-  #screen-order-summary .order-page__num {
-    font-size: 84px !important;
-    top: -2px !important;
-    right: 8px !important;
-  }
-
-  #screen-order-summary .order-topbar {
-    display: grid !important;
-    grid-template-columns: minmax(0, 1fr) auto !important;
-    grid-template-areas:
-      "logo login"
-      "menu menu" !important;
-    align-items: center !important;
-    row-gap: 8px !important;
-    column-gap: 8px !important;
-    padding: 6px 8px 10px !important;
-    height: auto !important;
-    overflow: clip !important;
-  }
-
-  #screen-order-summary .order-topbar__logo {
-    grid-area: logo !important;
-    width: min(21px, 6vw) !important;
-    height: 6px !important;
-    align-self: center !important;
-  }
-
-  #screen-order-summary .order-topbar__logo .order-topbar__logo-img {
-    object-fit: cover !important;
-    object-position: left center !important;
-  }
-
-  #screen-order-summary .order-topbar__aside {
-    grid-area: login !important;
-    width: auto !important;
-    justify-content: flex-end !important;
-    align-items: center !important;
-    align-self: center !important;
-    min-height: 42px !important;
-    gap: 0 !important;
-  }
-
-  #screen-order-summary .order-topbar__login-msg {
-    font-size: 12px !important;
-    line-height: 1.2 !important;
-    white-space: nowrap !important;
-    text-align: right !important;
-    margin-left: auto !important;
-    align-self: center !important;
-    padding-top: 0 !important;
-  }
-
-  #screen-order-summary .order-topbar__menu {
-    grid-area: menu !important;
-    display: grid !important;
-    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
-    width: 100% !important;
-    margin: 0 !important;
-    gap: 4px !important;
-    overflow: clip !important;
-    padding-bottom: 0 !important;
-    align-items: stretch !important;
-  }
-
-  #screen-order-summary .order-topbar__menu .order-topbar__link[data-order-nav="order"] {
-    order: 1 !important;
-  }
-  #screen-order-summary .order-topbar__menu .order-topbar__link[data-order-nav="assign"] {
-    order: 2 !important;
-  }
-  #screen-order-summary .order-topbar__menu .order-topbar__link[data-order-nav="status"] {
-    order: 3 !important;
-  }
-  #screen-order-summary .order-topbar__menu .order-topbar__link[data-order-nav="open"] {
-    order: 4 !important;
-  }
-  #screen-order-summary .order-topbar__menu .order-topbar__link[data-order-nav="stats"] {
-    order: 5 !important;
-  }
-
-  #screen-order-summary .order-topbar__menu .order-topbar__link {
-    min-width: 0 !important;
-    width: 100% !important;
-    min-height: 29px !important;
-    padding: 2px 1px !important;
-    font-size: 10px !important;
-    border-radius: 7px !important;
-    justify-content: center !important;
-  }
-
-  #screen-order-summary .order-topbar__menu .order-topbar__link:nth-child(4),
-  #screen-order-summary .order-topbar__menu .order-topbar__link:nth-child(5) {
-    grid-column: auto !important;
-  }
-
-  #screen-order-summary .order-topbar__edit-profile,
-  #screen-order-summary .order-topbar__logout {
-    position: fixed !important;
-    bottom: 10px !important;
-    z-index: 80 !important;
-    padding: 0 !important;
-    min-height: auto !important;
-    background: transparent !important;
-    font-size: 13px !important;
-    line-height: 1.2 !important;
-    max-width: calc(50vw - 12px) !important;
-  }
-
-  #screen-order-summary .order-topbar__edit-profile {
-    left: 8px !important;
-    transform: none !important;
-  }
-
-  #screen-order-summary .order-topbar__logout {
-    right: 8px !important;
-    left: auto !important;
-    transform: none !important;
-  }
-
-  #screen-order-summary .order-summary-body {
-    padding-bottom: 44px !important;
-    overflow-x: hidden !important;
-  }
-
-  #screen-order-summary .order-summary-toolbar {
-    display: flex !important;
-    width: 100% !important;
-    gap: 6px !important;
-    align-items: flex-start !important;
-  }
-
-  #screen-order-summary .order-summary-ym {
-    flex: 1 1 auto !important;
-    min-width: 0 !important;
-  }
-
-  #screen-order-summary .order-summary-toggle {
-    flex: 0 0 auto !important;
-    margin-left: auto !important;
-    transform: none !important;
-    transform-origin: right top;
-    width: auto !important;
-    justify-content: flex-end !important;
-  }
-
-  #screen-order-summary .order-summary-toggle__btn {
-    min-width: 92px !important;
-    min-height: 44px !important;
-    padding: 0 14px !important;
-    font-size: 13px !important;
-  }
-
-  #screen-order-summary .order-summary-table-wrap {
-    overflow-x: auto !important;
-    overflow-y: hidden !important;
-    width: 100% !important;
-    margin-left: 22px !important;
-    padding-left: 12px !important;
-    padding-right: 4px !important;
-    -webkit-overflow-scrolling: touch !important;
-  }
-
-  #screen-order-summary .order-summary-table {
-    width: max-content !important;
-    min-width: max-content !important;
-    table-layout: auto !important;
-    border-spacing: 5px !important;
-  }
-
-  #screen-order-summary .order-summary-table__corner,
-  #screen-order-summary .order-summary-table__row-head {
-    min-width: 80px !important;
-    width: 80px !important;
-    position: sticky !important;
-    left: 0 !important;
-    z-index: 4 !important;
-  }
-
-  #screen-order-summary .order-summary-table__corner {
-    background: #ececec !important;
-  }
-
-  #screen-order-summary .order-summary-table__col-head,
-  #screen-order-summary .order-summary-table__cell {
-    min-width: 96px !important;
-    width: max-content !important;
-    white-space: nowrap !important;
-  }
-
-  #screen-order-summary .order-summary-table__cell-box {
-    width: max-content !important;
-    min-width: 78px !important;
-    padding: 0 8px !important;
-  }
-
-  #screen-order-summary .order-summary-table__cell-box span {
-    white-space: nowrap !important;
-    word-break: keep-all !important;
-  }
-
-  #screen-order-summary .order-summary-table__col-head span {
-    white-space: nowrap !important;
-    word-break: keep-all !important;
-  }
-
-  #screen-order-summary .assign-panel,
-  #screen-order-summary .assign-panel.order-summary-panel {
-    overflow-x: visible !important;
-  }
-}
-
-/* 모바일 3~7번: 상단 메뉴(오더등록~통계) 잘림 방지 — 8번 집계표 모바일 블록은 변경 없음 */
+/* 모바일 3~7번: 상단 메뉴(오더등록~통계) 잘림 방지 */
 @media (max-width: 768px) {
   .order-page.assign-page:not(.order-summary-page) .order-topbar {
     overflow: visible !important;
@@ -4909,5 +4440,121 @@ table {
     padding: 5px 4px !important;
     font-size: 11px !important;
     line-height: 1.2 !important;
+  }
+}
+
+/* 8번 집계표 — 모바일 (3~7번 전용 상단/하단 레이아웃 미적용, 공통 오더 모바일 + 집계표 표만 조정) */
+@media (max-width: 768px) {
+  .order-summary-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .order-summary-ym {
+    width: 100%;
+  }
+
+  .order-summary-ym__row {
+    width: 100%;
+    gap: 8px;
+  }
+
+  .order-summary-ym__field {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .order-summary-ym__select {
+    width: 100%;
+    min-width: 0;
+    height: 48px;
+    font-size: 16px;
+    padding-right: 34px;
+  }
+
+  .order-summary-toggle {
+    width: 100%;
+  }
+
+  .order-summary-toggle__btn {
+    flex: 1;
+    min-height: 48px;
+    font-size: 16px;
+  }
+
+  .order-summary-table-wrap {
+    overflow-x: auto;
+    overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
+  }
+
+  .order-summary-table {
+    min-width: 600px;
+    border-spacing: 10px 12px;
+  }
+
+  .order-summary-table__corner,
+  .order-summary-table__row-head {
+    width: 78px;
+  }
+
+  .order-summary-table__row-head,
+  .order-summary-table__col-head {
+    font-size: 14px;
+    padding: 8px 6px;
+  }
+
+  .order-summary-table tbody .order-summary-table__cell-box {
+    min-height: 46px;
+  }
+
+  .order-summary-table__cell-box span {
+    font-size: 15px;
+  }
+
+  .order-summary-table__sales-unit {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .order-summary-ym__select {
+    height: 42px;
+    font-size: 14px;
+  }
+
+  .order-summary-toggle__btn {
+    min-height: 40px;
+    font-size: 13px;
+  }
+
+  .order-summary-table {
+    min-width: 500px;
+    border-spacing: 6px 8px;
+  }
+
+  .order-summary-table__corner,
+  .order-summary-table__row-head {
+    width: 64px;
+  }
+
+  .order-summary-table__row-head,
+  .order-summary-table__col-head {
+    font-size: 12px;
+    padding: 6px 4px;
+  }
+
+  .order-summary-table tbody .order-summary-table__cell-box {
+    min-height: 38px;
+  }
+
+  .order-summary-table__cell-box span {
+    font-size: 12px;
+  }
+
+  .order-summary-table__sales-unit {
+    font-size: 10px;
   }
 }

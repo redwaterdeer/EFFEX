@@ -589,18 +589,21 @@ table {
 
 @media (max-width: 768px) {
   .signup-page {
-    --signup-label-w: 88px;
-    --skew-angle: -14deg;
+    --signup-label-w: 100%;
+    --signup-field-h: 48px;
+    --skew-angle: 0deg;
   }
 
   .signup-form-box {
     width: 100%;
     padding: 20px 16px;
+    border-width: 1px;
   }
 
   .signup-role-options,
   .signup-scope-options {
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;
   }
 }
 
@@ -4293,9 +4296,9 @@ table {
       "logo"
       "menu" !important;
     align-items: center !important;
-    row-gap: 54px !important;
+    row-gap: 10px !important;
     column-gap: 8px !important;
-    padding: 28px 8px 16px !important;
+    padding: 14px 8px 12px !important;
     height: auto !important;
     overflow: clip !important;
     background: linear-gradient(to right, #d9d9d9, #adacac) !important;
@@ -4317,7 +4320,7 @@ table {
     min-height: 44px !important;
     max-height: 44px !important;
     align-self: center !important;
-    margin: 48px auto 30px !important;
+    margin: 0 auto 8px !important;
     overflow: hidden !important;
   }
 
@@ -4467,7 +4470,6 @@ table {
   }
 
   .order-page .order-mobile-footer,
-  #screen-login .order-mobile-footer--auth,
   #screen-signup .order-mobile-footer--auth {
     display: flex !important;
     align-items: center;
@@ -4490,12 +4492,10 @@ table {
   }
 
   .order-page .order-mobile-footer .order-footer__link,
-  #screen-login .order-mobile-footer--auth .order-footer__link,
   #screen-signup .order-mobile-footer--auth .order-footer__link {
     pointer-events: auto;
   }
 
-  #screen-login .login-screen,
   #screen-signup .signup-body {
     padding-bottom: calc(52px + env(safe-area-inset-bottom, 0px)) !important;
   }
@@ -5260,5 +5260,467 @@ table {
   #screen-order-summary .assign-panel,
   #screen-order-summary .assign-panel.order-summary-panel {
     overflow-x: hidden !important;
+  }
+}
+
+/* =============================================================================
+   모바일 UI/UX (2~8번, 1번 로그인 제외) — PC(769px+) 규칙 변경 없음
+   ============================================================================= */
+@media (max-width: 768px) {
+  /* 2번: 신규가입 — 세로형 폼·터치 영역 */
+  #screen-signup .signup-header {
+    min-height: 56px;
+    padding: 10px 12px;
+    background: linear-gradient(to right, #d9d9d9, #adacac);
+  }
+
+  #screen-signup .signup-header__logo img {
+    height: 34px;
+  }
+
+  #screen-signup .signup-header__title {
+    font-size: 17px;
+  }
+
+  #screen-signup .signup-body {
+    align-items: stretch;
+    padding: 16px 10px 20px;
+  }
+
+  #screen-signup .signup-field {
+    flex-direction: column;
+    gap: 0;
+    min-height: 0;
+    margin-bottom: 14px;
+    transform: none !important;
+  }
+
+  #screen-signup .signup-field__label {
+    flex: 0 0 auto;
+    width: 100%;
+    min-height: 42px;
+    border-radius: 0;
+  }
+
+  #screen-signup .signup-field__divider {
+    display: none;
+  }
+
+  #screen-signup .signup-field__control {
+    flex: 1 1 auto;
+    width: 100%;
+    min-height: var(--signup-field-h);
+    border: 1px solid #b8b8b8;
+    border-top: none;
+  }
+
+  #screen-signup .signup-role-options,
+  #screen-signup .signup-scope-options {
+    width: 100%;
+    min-height: var(--signup-field-h);
+  }
+
+  #screen-signup .signup-role-option,
+  #screen-signup .signup-scope-option {
+    min-height: var(--signup-field-h);
+    flex: 1 1 0;
+  }
+
+  #screen-signup .signup-actions {
+    margin-top: 20px;
+    gap: 10px;
+  }
+
+  #screen-signup .signup-actions__btn {
+    flex: 1;
+    min-height: 48px;
+    min-width: 0;
+  }
+
+  /* 3~8번: 화면 레이아웃(상단바·본문·하단 푸터) */
+  #screen-order.is-active,
+  #screen-order-assign.is-active,
+  #screen-order-status.is-active,
+  #screen-order-open.is-active,
+  #screen-order-stats.is-active,
+  #screen-order-summary.is-active {
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: 100%;
+    min-height: 100dvh;
+    overflow: hidden;
+  }
+
+  #screen-order .order-topbar,
+  #screen-order-assign .order-topbar,
+  #screen-order-status .order-topbar,
+  #screen-order-open .order-topbar,
+  #screen-order-stats .order-topbar,
+  #screen-order-summary .order-topbar {
+    flex-shrink: 0;
+    row-gap: 10px !important;
+    padding: 14px 8px 12px !important;
+  }
+
+  #screen-order .order-topbar__logo,
+  #screen-order-assign .order-topbar__logo,
+  #screen-order-status .order-topbar__logo,
+  #screen-order-open .order-topbar__logo,
+  #screen-order-stats .order-topbar__logo,
+  #screen-order-summary .order-topbar__logo {
+    margin: 0 auto 10px !important;
+    width: min(176px, 50vw) !important;
+    height: 42px !important;
+    min-height: 42px !important;
+    max-height: 42px !important;
+  }
+
+  #screen-order .order-topbar__menu,
+  #screen-order-assign .order-topbar__menu,
+  #screen-order-status .order-topbar__menu,
+  #screen-order-open .order-topbar__menu,
+  #screen-order-stats .order-topbar__menu,
+  #screen-order-summary .order-topbar__menu {
+    margin-top: 0 !important;
+    padding-top: 2px !important;
+  }
+
+  #screen-order .assign-body,
+  #screen-order-assign .assign-body,
+  #screen-order-status .assign-body,
+  #screen-order-open .assign-body,
+  #screen-order-stats .assign-body,
+  #screen-order-summary .order-summary-body {
+    flex: 1 1 auto;
+    min-height: 0;
+    width: 100%;
+    align-items: stretch;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  #screen-order .assign-panel,
+  #screen-order-assign .assign-panel,
+  #screen-order-status .assign-panel,
+  #screen-order-open .assign-panel,
+  #screen-order-stats .assign-panel,
+  #screen-order-summary .assign-panel {
+    width: 100%;
+    max-width: 100%;
+    padding: 12px 8px;
+    min-height: 0;
+  }
+
+  /* 3번: 등록 버튼 */
+  #screen-order .order-register {
+    width: 100%;
+    margin-top: 8px;
+  }
+
+  #screen-order .order-register__btn {
+    width: 100%;
+    min-height: 48px;
+    font-size: 16px;
+  }
+
+  /* 4~6번: 달력 + 테이블 */
+  #screen-order-assign .assign-date-title,
+  #screen-order-status .assign-date-title,
+  #screen-order-open .assign-date-title {
+    font-size: clamp(22px, 6vw, 28px);
+    margin-bottom: 12px;
+  }
+
+  #screen-order-assign .assign-sidebar,
+  #screen-order-status .assign-sidebar,
+  #screen-order-open .assign-sidebar {
+    width: 100%;
+    flex: 0 0 auto;
+  }
+
+  #screen-order-assign .assign-ym__row,
+  #screen-order-status .assign-ym__row,
+  #screen-order-open .assign-ym__row {
+    width: 100%;
+  }
+
+  #screen-order-assign .assign-ym__select,
+  #screen-order-status .assign-ym__select,
+  #screen-order-open .assign-ym__select {
+    flex: 1;
+    min-height: 44px;
+    font-size: 16px;
+  }
+
+  #screen-order-assign .assign-calendar,
+  #screen-order-status .assign-calendar,
+  #screen-order-open .assign-calendar {
+    min-height: 200px;
+    max-height: 240px;
+  }
+
+  #screen-order-assign .assign-main,
+  #screen-order-status .assign-main,
+  #screen-order-open .assign-main {
+    width: 100%;
+    min-height: 180px;
+    flex: 1 1 auto;
+  }
+
+  #screen-order-assign .assign-table-wrap,
+  #screen-order-status .assign-table-wrap,
+  #screen-order-open .assign-table-wrap {
+    max-height: min(48vh, 400px);
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
+
+  #screen-order-assign .assign-table,
+  #screen-order-status .assign-table,
+  #screen-order-open .assign-table {
+    min-width: 720px;
+  }
+
+  #screen-order-assign .assign-save,
+  #screen-order-status .assign-save,
+  #screen-order-open .assign-save {
+    width: 100%;
+    margin-top: 10px;
+    flex-shrink: 0;
+  }
+
+  #screen-order-assign .assign-save .order-register__btn,
+  #screen-order-status .assign-save .order-register__btn,
+  #screen-order-open .assign-save .order-register__btn {
+    width: 100%;
+    min-height: 48px;
+    font-size: 16px;
+  }
+
+  /* 5번: 필터·미니달력 */
+  #screen-order-status .assign-open-filter__btn,
+  #screen-order-open .assign-open-filter__btn {
+    min-height: 44px;
+    font-size: 14px;
+  }
+
+  #screen-order-status .assign-partner-select,
+  #screen-order-status .assign-worker-select,
+  #screen-order-open .assign-partner-select,
+  #screen-order-open .assign-worker-select {
+    min-height: 44px;
+    font-size: 15px;
+  }
+
+  #screen-order-status .assign-stack-item,
+  #screen-order-open .assign-stack-item {
+    min-height: 44px;
+  }
+
+  /* 7번: 통계 */
+  #screen-order-stats .stats-content {
+    width: 100%;
+    gap: 14px;
+  }
+
+  #screen-order-stats .stats-filters {
+    width: 100%;
+    padding: 10px 8px;
+  }
+
+  #screen-order-stats .stats-filters-form .order-field {
+    margin-bottom: 12px;
+  }
+
+  #screen-order-stats .stats-filters-form .order-select,
+  #screen-order-stats .stats-mode-nav__btn {
+    min-height: 44px;
+    font-size: 15px;
+  }
+
+  #screen-order-stats .stats-body .assign-table-wrap {
+    max-height: min(52vh, 440px);
+    overflow-x: auto;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  #screen-order-stats .stats-table {
+    min-width: 640px;
+  }
+
+  #screen-order-stats .stats-chart__plot {
+    min-height: 120px;
+  }
+
+  /* 8번: 집계표 — 목대 위 회색 잔상 추가 차단 */
+  #screen-order-summary .order-summary-table thead::before,
+  #screen-order-summary .order-summary-table tbody tr:first-child .order-summary-table__row-head::after {
+    content: none !important;
+    display: none !important;
+  }
+
+  #screen-order-summary .order-summary-table tbody tr:first-child .order-summary-table__cell {
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  /* 모바일 공통: 모달·리스트 */
+  .modal-overlay {
+    padding: 10px;
+    align-items: flex-end;
+  }
+
+  .modal,
+  .assign-detail-modal,
+  .status-detail-modal,
+  .order-summary-list-modal {
+    width: 100%;
+    max-width: 100%;
+    max-height: min(92vh, 92dvh);
+    padding: 18px 14px;
+    border-radius: 12px 12px 0 0;
+  }
+
+  .order-summary-list-modal__body {
+    max-height: min(60vh, 60dvh);
+  }
+
+  .assign-detail-modal__form,
+  .status-detail-modal .status-detail-modal__section {
+    max-height: calc(92vh - 140px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .status-detail-modal__photos {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* 터치 타깃 최소 높이 */
+  #screen-signup button,
+  #screen-order button,
+  #screen-order-assign button,
+  #screen-order-status button,
+  #screen-order-open button,
+  #screen-order-stats button,
+  #screen-order-summary button,
+  #screen-order .order-topbar__link,
+  #screen-order-assign .order-topbar__link,
+  #screen-order-status .order-topbar__link,
+  #screen-order-open .order-topbar__link,
+  #screen-order-stats .order-topbar__link,
+  #screen-order-summary .order-topbar__link {
+    touch-action: manipulation;
+  }
+
+  /* 1번 로그인: 기존 화면 유지(추가 모바일 UX·하단 푸터 미적용) */
+  #screen-login .order-mobile-footer--auth {
+    display: none !important;
+  }
+
+  #screen-login .login-screen {
+    padding-bottom: 32px !important;
+  }
+
+  /* 2번: 전체 화면 스크롤 + 하단 푸터 */
+  #screen-signup.is-active {
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: 100%;
+    min-height: 100dvh;
+    overflow: hidden;
+  }
+
+  #screen-signup .signup-header {
+    flex-shrink: 0;
+  }
+
+  #screen-signup .signup-body {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  #screen-signup .order-mobile-footer--auth {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 100;
+    flex-shrink: 0;
+  }
+
+  /* 4~6번: 달력·테이블 세로 배치 */
+  #screen-order-assign .assign-layout,
+  #screen-order-status .assign-layout,
+  #screen-order-open .assign-layout {
+    flex-direction: column !important;
+    align-items: stretch;
+    gap: 14px !important;
+  }
+
+  #screen-order-assign .assign-main,
+  #screen-order-status .assign-main,
+  #screen-order-open .assign-main {
+    width: 100%;
+    min-width: 0;
+  }
+
+  #screen-order-assign .assign-table-wrap,
+  #screen-order-status .assign-table-wrap,
+  #screen-order-open .assign-table-wrap,
+  #screen-order-stats .stats-body .assign-table-wrap {
+    overflow-x: auto;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: #9a9a9a #e8e8e8;
+  }
+
+  /* 8번: 목대 위 회색 간격(테이블 세로 border-spacing) 제거 */
+  #screen-order-summary .order-summary-table {
+    border-spacing: 4px 0 !important;
+  }
+
+  #screen-order-summary .order-summary-table thead tr:last-child th.order-summary-table__col-head {
+    padding-bottom: 6px !important;
+    margin-bottom: 0 !important;
+    border-bottom: none !important;
+  }
+
+  #screen-order-summary .order-summary-table tbody tr:first-child .order-summary-table__row-head,
+  #screen-order-summary .order-summary-table tbody tr:first-child .order-summary-table__cell {
+    margin-top: 0 !important;
+    padding-top: 6px !important;
+    border-top: none !important;
+    box-shadow: none !important;
+    background-image: none !important;
+  }
+
+  #screen-order-summary .order-summary-table tbody tr:first-child .order-summary-table__row-head::before,
+  #screen-order-summary .order-summary-table tbody tr:first-child .order-summary-table__row-head::after,
+  #screen-order-summary .order-summary-table tbody tr:first-child .order-summary-table__cell::before,
+  #screen-order-summary .order-summary-table tbody tr:first-child .order-summary-table__cell::after {
+    content: none !important;
+    display: none !important;
+  }
+
+  #screen-order-summary .order-summary-table thead tr.order-summary-table__unit-row,
+  #screen-order-summary .order-summary-table thead tr:first-child {
+    display: none !important;
+    height: 0 !important;
+    max-height: 0 !important;
+    overflow: hidden !important;
+    visibility: collapse !important;
+  }
+
+  /* 3번: 시공일자~도면3 필드 높이 통일(후속 블록과 동일값 유지) */
+  #screen-order .order-form > .order-field:nth-child(-n + 10) .order-field__control,
+  #screen-order .order-form > .order-field:nth-child(-n + 10) .order-scope-options,
+  #screen-order .order-form > .order-field:nth-child(-n + 10) .order-scope-sales-options {
+    min-height: var(--order-field-h) !important;
+    max-height: var(--order-field-h) !important;
   }
 }

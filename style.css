@@ -4296,20 +4296,32 @@ table {
   #screen-order-open .order-topbar,
   #screen-order-stats .order-topbar,
   #screen-order-summary .order-topbar {
-    --mob-topbar-nav-h: 30px;
-    --mob-topbar-logo-w: 42px;
-    --mob-topbar-nav-col: 30px;
+    /* 모바일 상단(로고·오더등록~통계): 구조 유지, 1x(120·168·14) × --mob-topbar-scale(2) */
+    --mob-topbar-scale: 2;
+    --mob-topbar-nav-h: calc(60px * var(--mob-topbar-scale) * var(--mob-topbar-scale));
+    --mob-topbar-logo-w: min(
+      calc(84px * var(--mob-topbar-scale) * var(--mob-topbar-scale)),
+      46vw
+    );
+    --mob-topbar-nav-col: var(--mob-topbar-nav-h);
+    --mob-topbar-pad-v: calc(12px * var(--mob-topbar-scale));
+    --mob-topbar-pad-h: calc(16px * var(--mob-topbar-scale));
+    --mob-topbar-gap: calc(8px * var(--mob-topbar-scale));
+    --mob-topbar-font: calc(14px * var(--mob-topbar-scale) * var(--mob-topbar-scale));
+    --mob-topbar-border: calc(4px * var(--mob-topbar-scale));
+    --mob-topbar-radius: calc(20px * var(--mob-topbar-scale));
+    --mob-topbar-menu-gap: calc(4px * var(--mob-topbar-scale));
     display: flex !important;
     flex-direction: row !important;
     flex-wrap: nowrap !important;
     align-items: center !important;
     justify-content: flex-start !important;
-    gap: 4px !important;
-    padding: 6px 8px !important;
-    height: calc(var(--mob-topbar-nav-h) + 12px) !important;
-    min-height: calc(var(--mob-topbar-nav-h) + 12px) !important;
-    max-height: calc(var(--mob-topbar-nav-h) + 12px) !important;
-    margin-bottom: 8px !important;
+    gap: var(--mob-topbar-gap) !important;
+    padding: var(--mob-topbar-pad-v) var(--mob-topbar-pad-h) !important;
+    height: calc(var(--mob-topbar-nav-h) + var(--mob-topbar-pad-v) * 2) !important;
+    min-height: calc(var(--mob-topbar-nav-h) + var(--mob-topbar-pad-v) * 2) !important;
+    max-height: calc(var(--mob-topbar-nav-h) + var(--mob-topbar-pad-v) * 2) !important;
+    margin-bottom: calc(16px * var(--mob-topbar-scale)) !important;
     overflow: hidden !important;
     background: linear-gradient(to right, #d9d9d9, #adacac) !important;
   }
@@ -4397,9 +4409,9 @@ table {
     flex: 0 1 auto !important;
     min-width: 0 !important;
     width: max-content !important;
-    max-width: calc(100% - var(--mob-topbar-logo-w) - 10px) !important;
+    max-width: calc(100% - var(--mob-topbar-logo-w) - var(--mob-topbar-gap) - 16px) !important;
     display: grid !important;
-    grid-template-columns: repeat(5, var(--mob-topbar-nav-col)) !important;
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
     grid-auto-flow: column !important;
     align-content: center !important;
     min-height: var(--mob-topbar-nav-h) !important;
@@ -4407,7 +4419,7 @@ table {
     max-height: var(--mob-topbar-nav-h) !important;
     margin-left: 0 !important;
     margin-right: 0 !important;
-    gap: 1px !important;
+    gap: var(--mob-topbar-menu-gap) !important;
     overflow: hidden !important;
     padding: 0 !important;
     z-index: 2 !important;
@@ -4469,17 +4481,17 @@ table {
   #screen-order-summary .order-topbar__menu .order-topbar__link {
     box-sizing: border-box !important;
     min-width: 0 !important;
-    width: var(--mob-topbar-nav-col) !important;
-    max-width: var(--mob-topbar-nav-col) !important;
+    width: 100% !important;
+    max-width: none !important;
     height: var(--mob-topbar-nav-h) !important;
     min-height: var(--mob-topbar-nav-h) !important;
     max-height: var(--mob-topbar-nav-h) !important;
-    padding: 1px 0 !important;
-    font-size: 7px !important;
-    letter-spacing: -0.1em !important;
-    border: 1px solid #c9c9c9 !important;
+    padding: calc(4px * var(--mob-topbar-scale)) 0 !important;
+    font-size: var(--mob-topbar-font) !important;
+    letter-spacing: -0.06em !important;
+    border: var(--mob-topbar-border) solid #c9c9c9 !important;
     background: #f7f7f7 !important;
-    border-radius: 5px !important;
+    border-radius: var(--mob-topbar-radius) !important;
     justify-content: center !important;
     align-items: center !important;
     align-self: center !important;

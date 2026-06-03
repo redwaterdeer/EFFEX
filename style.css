@@ -4296,31 +4296,27 @@ table {
     gap: 10px !important;
   }
 
-  /* 3~8번: 로고 최상단(사이즈 유지), 메뉴는 그 아래 회색바(두께 PC와 동일) */
+  /* 3~8번: 로고 — 오더등록 왼쪽, 메뉴 버튼과 동일 행·높이 (PC 상단바 레이아웃 유지) */
   #screen-order .order-topbar,
   #screen-order-assign .order-topbar,
   #screen-order-status .order-topbar,
   #screen-order-open .order-topbar,
   #screen-order-stats .order-topbar,
   #screen-order-summary .order-topbar {
-    display: grid !important;
-    grid-template-columns: minmax(0, 1fr) !important;
-    grid-template-areas:
-      "logo"
-      "menu" !important;
-    grid-template-rows: auto auto !important;
-    align-content: start !important;
-    align-items: stretch !important;
-    row-gap: 0 !important;
-    column-gap: 0 !important;
-    padding: 0 8px !important;
-    padding-top: 0 !important;
-    height: auto !important;
-    min-height: 0 !important;
-    max-height: none !important;
+    --mob-topbar-nav-h: 32px;
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 6px !important;
+    padding: 6px 8px !important;
+    height: calc(var(--mob-topbar-nav-h) + 12px) !important;
+    min-height: calc(var(--mob-topbar-nav-h) + 12px) !important;
+    max-height: calc(var(--mob-topbar-nav-h) + 12px) !important;
     margin-bottom: 8px !important;
-    overflow: visible !important;
-    background: var(--color-bg) !important;
+    overflow: hidden !important;
+    background: linear-gradient(to right, #d9d9d9, #adacac) !important;
   }
 
   #screen-order .order-topbar__logo,
@@ -4329,25 +4325,31 @@ table {
   #screen-order-open .order-topbar__logo,
   #screen-order-stats .order-topbar__logo,
   #screen-order-summary .order-topbar__logo {
-    grid-area: logo !important;
     position: relative !important;
     left: auto !important;
     right: auto !important;
-    top: 0 !important;
+    top: auto !important;
     bottom: auto !important;
-    width: min(168px, 46vw) !important;
-    height: 30px !important;
-    min-height: 30px !important;
-    max-height: 30px !important;
-    margin: 0 auto -10px !important;
-    margin-top: 0 !important;
-    padding-top: 0 !important;
-    transform: translateY(22px) !important;
-    justify-self: center !important;
-    align-self: start !important;
+    order: 0 !important;
+    flex: 0 0 52px !important;
+    width: 52px !important;
+    height: var(--mob-topbar-nav-h) !important;
+    min-width: 52px !important;
+    min-height: var(--mob-topbar-nav-h) !important;
+    max-height: var(--mob-topbar-nav-h) !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    transform: none !important;
+    align-self: center !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
     z-index: 3 !important;
-    overflow: visible !important;
+    overflow: hidden !important;
     background: transparent !important;
+    flex-shrink: 0 !important;
+    box-sizing: border-box !important;
+    line-height: 0 !important;
   }
 
   #screen-order .order-topbar__logo .order-topbar__logo-img,
@@ -4356,7 +4358,11 @@ table {
   #screen-order-open .order-topbar__logo .order-topbar__logo-img,
   #screen-order-stats .order-topbar__logo .order-topbar__logo-img,
   #screen-order-summary .order-topbar__logo .order-topbar__logo-img {
-    object-fit: cover !important;
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
     object-position: left center !important;
   }
 
@@ -4375,15 +4381,7 @@ table {
   #screen-order-open .order-topbar__aside,
   #screen-order-stats .order-topbar__aside,
   #screen-order-summary .order-topbar__aside {
-    grid-area: menu !important;
-    position: static !important;
-    width: 0 !important;
-    height: 0 !important;
-    min-height: 0 !important;
-    overflow: visible !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    border: 0 !important;
+    display: none !important;
   }
 
   #screen-order .order-topbar__menu,
@@ -4392,23 +4390,35 @@ table {
   #screen-order-open .order-topbar__menu,
   #screen-order-stats .order-topbar__menu,
   #screen-order-summary .order-topbar__menu {
-    grid-area: menu !important;
+    order: 1 !important;
     position: relative !important;
     left: auto !important;
+    right: auto !important;
+    top: auto !important;
+    bottom: auto !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
     transform: none !important;
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+    width: auto !important;
+    max-width: none !important;
     display: grid !important;
     grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
-    grid-auto-flow: row !important;
-    width: 100% !important;
-    min-height: clamp(48px, 6vh, 60px) !important;
-    margin: 0 !important;
+    grid-auto-flow: column !important;
+    align-content: center !important;
+    min-height: var(--mob-topbar-nav-h) !important;
+    height: var(--mob-topbar-nav-h) !important;
+    max-height: var(--mob-topbar-nav-h) !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
     gap: 4px !important;
-    overflow: clip !important;
+    overflow: hidden !important;
     padding: 0 !important;
     z-index: 2 !important;
-    align-items: stretch !important;
-    align-self: stretch !important;
-    background: linear-gradient(to right, #d9d9d9, #adacac) !important;
+    align-items: center !important;
+    align-self: center !important;
+    background: transparent !important;
   }
 
   #screen-order .order-topbar__menu .order-topbar__link[data-order-nav="order"],
@@ -4462,15 +4472,20 @@ table {
   #screen-order-open .order-topbar__menu .order-topbar__link,
   #screen-order-stats .order-topbar__menu .order-topbar__link,
   #screen-order-summary .order-topbar__menu .order-topbar__link {
+    box-sizing: border-box !important;
     min-width: 0 !important;
     width: 100% !important;
-    min-height: 29px !important;
+    height: var(--mob-topbar-nav-h) !important;
+    min-height: var(--mob-topbar-nav-h) !important;
+    max-height: var(--mob-topbar-nav-h) !important;
     padding: 2px 1px !important;
     font-size: 10px !important;
     border: 1px solid #c9c9c9 !important;
     background: #f7f7f7 !important;
     border-radius: 7px !important;
     justify-content: center !important;
+    align-items: center !important;
+    align-self: center !important;
     flex: unset !important;
   }
 

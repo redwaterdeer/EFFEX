@@ -4296,21 +4296,23 @@ table {
   #screen-order-open .order-topbar,
   #screen-order-stats .order-topbar,
   #screen-order-summary .order-topbar {
-    /* 모바일 상단(로고·오더등록~통계): 구조 유지, 1x(120·168·14) × --mob-topbar-scale(2) */
+    /* 모바일 상단: 세로는 --mob-topbar-scale, 가로(메뉴·간격)는 --mob-topbar-scale-x 로만 확대 */
     --mob-topbar-scale: 2;
+    --mob-topbar-scale-x: 5.75;
     --mob-topbar-nav-h: calc(60px * var(--mob-topbar-scale) * var(--mob-topbar-scale));
-    --mob-topbar-logo-w: min(
-      calc(84px * var(--mob-topbar-scale) * var(--mob-topbar-scale)),
-      46vw
+    --mob-topbar-logo-w: calc(
+      84px * var(--mob-topbar-scale) * var(--mob-topbar-scale)
     );
-    --mob-topbar-nav-col: var(--mob-topbar-nav-h);
+    --mob-topbar-menu-col-min: calc(
+      3.5em * var(--mob-topbar-scale-x) * var(--mob-topbar-scale-x)
+    );
     --mob-topbar-pad-v: calc(12px * var(--mob-topbar-scale));
     --mob-topbar-pad-h: calc(16px * var(--mob-topbar-scale));
-    --mob-topbar-gap: calc(8px * var(--mob-topbar-scale));
+    --mob-topbar-gap: calc(16px * var(--mob-topbar-scale-x));
     --mob-topbar-font: calc(14px * var(--mob-topbar-scale) * var(--mob-topbar-scale));
     --mob-topbar-border: calc(4px * var(--mob-topbar-scale));
     --mob-topbar-radius: calc(20px * var(--mob-topbar-scale));
-    --mob-topbar-menu-gap: calc(4px * var(--mob-topbar-scale));
+    --mob-topbar-menu-gap: calc(10px * var(--mob-topbar-scale-x));
     display: flex !important;
     flex-direction: row !important;
     flex-wrap: nowrap !important;
@@ -4322,7 +4324,15 @@ table {
     min-height: calc(var(--mob-topbar-nav-h) + var(--mob-topbar-pad-v) * 2) !important;
     max-height: calc(var(--mob-topbar-nav-h) + var(--mob-topbar-pad-v) * 2) !important;
     margin-bottom: calc(16px * var(--mob-topbar-scale)) !important;
-    overflow: hidden !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: #9a9a9a transparent;
     background: linear-gradient(to right, #d9d9d9, #adacac) !important;
   }
 
@@ -4355,8 +4365,10 @@ table {
     overflow: hidden !important;
     background: transparent !important;
     flex-shrink: 0 !important;
+    flex-grow: 0 !important;
     box-sizing: border-box !important;
     line-height: 0 !important;
+    isolation: isolate !important;
   }
 
   #screen-order .order-topbar__logo .order-topbar__logo-img,
@@ -4406,12 +4418,14 @@ table {
     margin-top: 0 !important;
     margin-bottom: 0 !important;
     transform: none !important;
-    flex: 0 1 auto !important;
-    min-width: 0 !important;
+    flex: 0 0 auto !important;
+    flex-shrink: 0 !important;
+    flex-grow: 0 !important;
+    min-width: max-content !important;
     width: max-content !important;
-    max-width: calc(100% - var(--mob-topbar-logo-w) - var(--mob-topbar-gap) - 16px) !important;
+    max-width: none !important;
     display: grid !important;
-    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    grid-template-columns: repeat(5, minmax(var(--mob-topbar-menu-col-min), max-content)) !important;
     grid-auto-flow: column !important;
     align-content: center !important;
     min-height: var(--mob-topbar-nav-h) !important;
@@ -4420,7 +4434,7 @@ table {
     margin-left: 0 !important;
     margin-right: 0 !important;
     gap: var(--mob-topbar-menu-gap) !important;
-    overflow: hidden !important;
+    overflow: visible !important;
     padding: 0 !important;
     z-index: 2 !important;
     align-items: center !important;
@@ -4480,15 +4494,18 @@ table {
   #screen-order-stats .order-topbar__menu .order-topbar__link,
   #screen-order-summary .order-topbar__menu .order-topbar__link {
     box-sizing: border-box !important;
-    min-width: 0 !important;
-    width: 100% !important;
+    min-width: var(--mob-topbar-menu-col-min) !important;
+    width: auto !important;
     max-width: none !important;
     height: var(--mob-topbar-nav-h) !important;
     min-height: var(--mob-topbar-nav-h) !important;
     max-height: var(--mob-topbar-nav-h) !important;
-    padding: calc(4px * var(--mob-topbar-scale)) 0 !important;
+    padding: calc(4px * var(--mob-topbar-scale))
+      calc(12px * var(--mob-topbar-scale-x)) !important;
     font-size: var(--mob-topbar-font) !important;
-    letter-spacing: -0.06em !important;
+    letter-spacing: -0.04em !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
     border: var(--mob-topbar-border) solid #c9c9c9 !important;
     background: #f7f7f7 !important;
     border-radius: var(--mob-topbar-radius) !important;

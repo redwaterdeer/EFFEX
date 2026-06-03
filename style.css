@@ -4108,13 +4108,23 @@ table {
     overflow: auto;
   }
 
+  #screen-login.is-active {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
   .login-screen {
-    padding: 24px 14px 32px;
+    padding: 52px 14px 36px;
+    min-height: min(100%, 100dvh);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: #9a9a9a #e8e8e8;
   }
 
   .login-screen__logo {
-    margin-top: 0;
-    margin-bottom: 20px;
+    margin-top: 32px;
+    margin-bottom: 24px;
   }
 
   .login-screen__slogan {
@@ -4222,9 +4232,12 @@ table {
 
   .order-summary-table-wrap {
     overflow-x: auto;
-    overflow-y: visible;
+    overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     padding-bottom: 4px;
+    scrollbar-width: thin;
+    scrollbar-color: #9a9a9a #e8e8e8;
+    max-height: min(58vh, 520px);
   }
 
   .order-summary-table {
@@ -4296,11 +4309,11 @@ table {
       "logo"
       "menu" !important;
     align-items: center !important;
-    row-gap: 26px !important;
+    row-gap: 34px !important;
     column-gap: 8px !important;
-    padding: 36px 8px 12px !important;
+    padding: 52px 8px 14px !important;
     height: auto !important;
-    overflow: clip !important;
+    overflow: visible !important;
     background: linear-gradient(to right, #d9d9d9, #adacac) !important;
   }
 
@@ -4320,9 +4333,9 @@ table {
     min-height: 44px !important;
     max-height: 44px !important;
     align-self: center !important;
-    margin: 24px auto 8px !important;
-    z-index: 1 !important;
-    overflow: hidden !important;
+    margin: 36px auto 12px !important;
+    z-index: 3 !important;
+    overflow: visible !important;
   }
 
   #screen-order .order-topbar__logo .order-topbar__logo-img,
@@ -4510,6 +4523,11 @@ table {
   #screen-order-summary .order-summary-body {
     padding-bottom: calc(52px + env(safe-area-inset-bottom, 0px)) !important;
     overflow-x: hidden !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-gutter: stable;
+    scrollbar-width: thin;
+    scrollbar-color: #9a9a9a #e8e8e8;
   }
 
   /* 3번: 가로 스크롤바 (assign-body) */
@@ -5011,8 +5029,11 @@ table {
   /* 집계표: 좌측(목대~기타) 고정 + 우측 열 가로 스크롤 */
   .order-summary-table-wrap {
     overflow-x: auto;
-    overflow-y: hidden;
+    overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: #9a9a9a #e8e8e8;
+    max-height: min(58vh, 520px);
   }
 
   .order-summary-table {
@@ -5073,8 +5094,8 @@ table {
   }
 
   #screen-order-summary .order-page__num {
-    font-size: 84px !important;
-    top: -2px !important;
+    font-size: 42px !important;
+    top: 7px !important;
     right: 8px !important;
   }
 
@@ -5108,7 +5129,7 @@ table {
 
   #screen-order-summary .order-summary-table-wrap {
     overflow-x: auto !important;
-    overflow-y: hidden !important;
+    overflow-y: auto !important;
     width: 100% !important;
     max-width: 100% !important;
     margin-left: 0 !important;
@@ -5361,8 +5382,9 @@ table {
   #screen-order-stats .order-topbar,
   #screen-order-summary .order-topbar {
     flex-shrink: 0;
-    row-gap: 26px !important;
-    padding: 36px 8px 12px !important;
+    row-gap: 34px !important;
+    padding: 52px 8px 14px !important;
+    overflow: visible !important;
   }
 
   #screen-order .order-topbar__logo,
@@ -5371,11 +5393,12 @@ table {
   #screen-order-open .order-topbar__logo,
   #screen-order-stats .order-topbar__logo,
   #screen-order-summary .order-topbar__logo {
-    margin: 24px auto 8px !important;
+    margin: 36px auto 12px !important;
     width: min(176px, 50vw) !important;
     height: 42px !important;
     min-height: 42px !important;
     max-height: 42px !important;
+    z-index: 3 !important;
   }
 
   #screen-order .order-topbar__menu,
@@ -5384,8 +5407,9 @@ table {
   #screen-order-open .order-topbar__menu,
   #screen-order-stats .order-topbar__menu,
   #screen-order-summary .order-topbar__menu {
-    margin-top: 6px !important;
-    padding-top: 4px !important;
+    margin-top: 8px !important;
+    padding-top: 6px !important;
+    z-index: 2 !important;
   }
 
   #screen-order .assign-body,
@@ -5397,9 +5421,15 @@ table {
     flex: 1 1 auto;
     min-height: 0;
     width: 100%;
+    max-width: 100%;
     align-items: stretch;
     padding-left: 8px;
     padding-right: 8px;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-gutter: stable;
+    scrollbar-width: thin;
+    scrollbar-color: #9a9a9a #e8e8e8;
   }
 
   #screen-order .assign-panel,
@@ -5725,5 +5755,48 @@ table {
   #screen-order .order-form > .order-field:nth-child(-n + 10) .order-scope-sales-options {
     min-height: var(--order-field-h) !important;
     max-height: var(--order-field-h) !important;
+  }
+
+  /* 모바일: 표·넓은 콘텐츠 — 가로 스크롤 + 스크롤바 표시 */
+  #screen-order-assign .assign-table-wrap,
+  #screen-order-status .assign-table-wrap,
+  #screen-order-open .assign-table-wrap,
+  #screen-order-stats .stats-body .assign-table-wrap,
+  #screen-order-summary .order-summary-table-wrap {
+    overflow-x: auto !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: #9a9a9a #e8e8e8;
+  }
+
+  #screen-order-assign .assign-table-wrap::-webkit-scrollbar,
+  #screen-order-status .assign-table-wrap::-webkit-scrollbar,
+  #screen-order-open .assign-table-wrap::-webkit-scrollbar,
+  #screen-order-stats .stats-body .assign-table-wrap::-webkit-scrollbar,
+  #screen-order-summary .order-summary-table-wrap::-webkit-scrollbar,
+  #screen-order .assign-body::-webkit-scrollbar,
+  #screen-order-assign .assign-body::-webkit-scrollbar,
+  #screen-order-status .assign-body::-webkit-scrollbar,
+  #screen-order-open .assign-body::-webkit-scrollbar,
+  #screen-order-stats .assign-body::-webkit-scrollbar,
+  #screen-order-summary .order-summary-body::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  #screen-order-assign .assign-table-wrap::-webkit-scrollbar-thumb,
+  #screen-order-status .assign-table-wrap::-webkit-scrollbar-thumb,
+  #screen-order-open .assign-table-wrap::-webkit-scrollbar-thumb,
+  #screen-order-stats .stats-body .assign-table-wrap::-webkit-scrollbar-thumb,
+  #screen-order-summary .order-summary-table-wrap::-webkit-scrollbar-thumb,
+  #screen-order .assign-body::-webkit-scrollbar-thumb,
+  #screen-order-assign .assign-body::-webkit-scrollbar-thumb,
+  #screen-order-status .assign-body::-webkit-scrollbar-thumb,
+  #screen-order-open .assign-body::-webkit-scrollbar-thumb,
+  #screen-order-stats .assign-body::-webkit-scrollbar-thumb,
+  #screen-order-summary .order-summary-body::-webkit-scrollbar-thumb {
+    background: #9a9a9a;
+    border-radius: 4px;
   }
 }

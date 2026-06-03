@@ -4296,7 +4296,7 @@ table {
     gap: 10px !important;
   }
 
-  /* 3~8번: 8번과 동일 상단 회색바·메뉴(오더등록~통계) */
+  /* 3~8번: 상단 회색바 두께 = PC와 동일, 로고는 메뉴와 겹치지 않게 아래 배치 */
   #screen-order .order-topbar,
   #screen-order-assign .order-topbar,
   #screen-order-status .order-topbar,
@@ -4305,14 +4305,16 @@ table {
   #screen-order-summary .order-topbar {
     display: grid !important;
     grid-template-columns: minmax(0, 1fr) !important;
-    grid-template-areas:
-      "logo"
-      "menu" !important;
+    grid-template-areas: "menu" !important;
+    grid-template-rows: 1fr !important;
     align-items: center !important;
-    row-gap: 34px !important;
-    column-gap: 8px !important;
-    padding: 52px 8px 14px !important;
-    height: auto !important;
+    row-gap: 0 !important;
+    column-gap: 0 !important;
+    padding: 0 8px !important;
+    height: clamp(48px, 6vh, 60px) !important;
+    min-height: clamp(48px, 6vh, 60px) !important;
+    max-height: clamp(48px, 6vh, 60px) !important;
+    margin-bottom: 32px !important;
     overflow: visible !important;
     background: linear-gradient(to right, #d9d9d9, #adacac) !important;
   }
@@ -4323,17 +4325,15 @@ table {
   #screen-order-open .order-topbar__logo,
   #screen-order-stats .order-topbar__logo,
   #screen-order-summary .order-topbar__logo {
-    grid-area: logo !important;
-    position: relative !important;
-    left: auto !important;
-    top: auto !important;
-    transform: none !important;
+    position: absolute !important;
+    left: 50% !important;
+    top: 0 !important;
     width: min(168px, 46vw) !important;
     height: 44px !important;
     min-height: 44px !important;
     max-height: 44px !important;
-    align-self: center !important;
-    margin: 36px auto 12px !important;
+    margin: 0 !important;
+    transform: translateX(-50%) translateY(40px) !important;
     z-index: 3 !important;
     overflow: visible !important;
   }
@@ -4387,13 +4387,13 @@ table {
     grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
     grid-auto-flow: row !important;
     width: 100% !important;
-    margin: 6px 0 0 !important;
+    margin: 0 !important;
     gap: 4px !important;
     overflow: clip !important;
-    padding-top: 4px !important;
-    padding-bottom: 0 !important;
+    padding: 0 !important;
     z-index: 2 !important;
     align-items: stretch !important;
+    align-self: center !important;
   }
 
   #screen-order .order-topbar__menu .order-topbar__link[data-order-nav="order"],
@@ -5382,34 +5382,6 @@ table {
   #screen-order-stats .order-topbar,
   #screen-order-summary .order-topbar {
     flex-shrink: 0;
-    row-gap: 34px !important;
-    padding: 52px 8px 14px !important;
-    overflow: visible !important;
-  }
-
-  #screen-order .order-topbar__logo,
-  #screen-order-assign .order-topbar__logo,
-  #screen-order-status .order-topbar__logo,
-  #screen-order-open .order-topbar__logo,
-  #screen-order-stats .order-topbar__logo,
-  #screen-order-summary .order-topbar__logo {
-    margin: 36px auto 12px !important;
-    width: min(176px, 50vw) !important;
-    height: 42px !important;
-    min-height: 42px !important;
-    max-height: 42px !important;
-    z-index: 3 !important;
-  }
-
-  #screen-order .order-topbar__menu,
-  #screen-order-assign .order-topbar__menu,
-  #screen-order-status .order-topbar__menu,
-  #screen-order-open .order-topbar__menu,
-  #screen-order-stats .order-topbar__menu,
-  #screen-order-summary .order-topbar__menu {
-    margin-top: 8px !important;
-    padding-top: 6px !important;
-    z-index: 2 !important;
   }
 
   #screen-order .assign-body,

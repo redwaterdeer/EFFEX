@@ -5502,6 +5502,8 @@ table {
     min-height: 100%;
     min-height: 100dvh;
     overflow: hidden;
+    /* 8번: 3~7번 assign-body 와 동일 바탕 (상단 회색바·PC 미변경) */
+    background: #f0f0f0 !important;
   }
 
   #screen-order .order-topbar,
@@ -5709,7 +5711,7 @@ table {
   }
 
   #screen-order-summary .order-summary-table tbody tr:first-child .order-summary-table__cell {
-    background: var(--os-summary-surface, var(--color-white)) !important;
+    background: var(--os-summary-surface) !important;
     box-shadow: none !important;
   }
 
@@ -5925,7 +5927,9 @@ table {
     --os-summary-cell-h: 46px;
     --os-summary-shift: calc(var(--os-summary-fixed-w) + var(--os-summary-gap));
     --os-summary-clip-w: calc(var(--os-summary-shift) + 2px);
-    --os-summary-surface: var(--color-white);
+    /* 3~7번 assign-body / assign-panel 과 동일 (선택·드롭다운·데이터 박스 제외) */
+    --os-summary-body-bg: #f0f0f0;
+    --os-summary-surface: #ececec;
   }
 
   #screen-order-summary .order-summary-table-wrap {
@@ -6161,7 +6165,7 @@ table {
     background: var(--color-white) !important;
   }
 
-  /* 목대~기타 열: 행 사이·위아래 여백을 화면 바탕(흰색)과 동일 */
+  /* 목대~기타 열: 행 사이·위아래 여백을 패널 바탕(#ececec)과 동일 */
   #screen-order-summary .order-summary-table tbody .order-summary-table__row-head {
     vertical-align: middle !important;
     background: var(--color-navy) !important;
@@ -6196,16 +6200,50 @@ table {
     box-shadow: none !important;
   }
 
-  /* 목대~기타 열 위·아래 여백: 화면 바탕(흰색)과 동일 */
-  #screen-order-summary .order-summary-body,
-  #screen-order-summary .assign-panel.order-summary-panel {
-    background: var(--os-summary-surface) !important;
+  /* 8번 본문·패널: 3~7번과 동일 (#f0f0f0 / #ececec). 선택·드롭다운·데이터 박스 색 유지 */
+  #screen-order-summary .order-summary-body {
+    background: #f0f0f0 !important;
   }
 
+  #screen-order-summary .assign-panel.order-summary-panel {
+    background: #ececec !important;
+    border: 1px solid #b0b0b0;
+  }
+
+  #screen-order-summary .order-summary-toolbar,
+  #screen-order-summary .order-summary-ym,
+  #screen-order-summary .order-summary-ym__row,
+  #screen-order-summary .order-summary-ym__field {
+    background: transparent !important;
+  }
+
+  #screen-order-summary .order-summary-ym__select,
+  #screen-order-summary .order-summary-metric-field .order-summary-ym__select {
+    background: var(--color-white) !important;
+  }
+
+  #screen-order-summary .order-summary-toggle {
+    background: #e8e8e8 !important;
+  }
+
+  #screen-order-summary .order-summary-toggle__btn {
+    background: #e8e8e8 !important;
+  }
+
+  #screen-order-summary .order-summary-toggle__btn--active {
+    background: #9a9a9a !important;
+  }
+
+  #screen-order-summary .order-summary-table-wrap,
   #screen-order-summary .order-summary-table,
   #screen-order-summary .order-summary-table tbody tr,
-  #screen-order-summary .order-summary-table tbody .order-summary-table__cell {
-    background: var(--os-summary-surface) !important;
+  #screen-order-summary .order-summary-table tbody .order-summary-table__cell,
+  #screen-order-summary .order-summary-table tbody .order-summary-table__cell-btn {
+    background: #ececec !important;
+  }
+
+  #screen-order-summary .order-summary-table-wrap::before {
+    background: #ececec !important;
   }
 
   #screen-order-summary .order-summary-table thead tr:last-child th.order-summary-table__col-head {
@@ -6229,8 +6267,21 @@ table {
     box-shadow: none !important;
   }
 
+  /* 데이터 셀 흰 박스·헤더·행 라벨 색 유지 */
+  #screen-order-summary .order-summary-table tbody .order-summary-table__cell-box,
   #screen-order-summary .order-summary-table tbody tr:first-child .order-summary-table__cell-box {
     background: var(--color-white) !important;
+  }
+
+  #screen-order-summary .order-summary-table thead tr:last-child th.order-summary-table__col-head,
+  #screen-order-summary .order-summary-table__col-head {
+    background: #9a9a9a !important;
+  }
+
+  #screen-order-summary .order-summary-table tbody .order-summary-table__row-head,
+  #screen-order-summary .order-summary-table tbody tr .order-summary-table__row-head {
+    background: var(--color-navy) !important;
+    background-color: var(--color-navy) !important;
   }
 
   /* 가로 스크롤: 시공오더~시공매출이 목대 열 뒤로 지나갈 때 완전히 숨김 (상단바 미변경) */
@@ -6258,7 +6309,7 @@ table {
     z-index: 0 !important;
   }
 
-  /* 목대~기타: 행 위·아래 흰 여백을 화면 바탕과 동일 */
+  /* 목대~기타: 행 위·아래 여백을 패널 바탕(#ececec)과 동일 */
   #screen-order-summary .order-summary-table thead tr:last-child th.order-summary-table__col-head,
   #screen-order-summary .order-summary-table tbody tr .order-summary-table__row-head,
   #screen-order-summary .order-summary-table tbody tr .order-summary-table__cell {
@@ -6303,5 +6354,73 @@ table {
   #screen-order-summary .order-summary-table tbody tr:first-child .order-summary-table__cell {
     padding-top: 0 !important;
     padding-bottom: 0 !important;
+  }
+}
+
+/* 모바일 8번: 바탕색 3~7번과 동일 (상단 회색바·PC·선택/드롭다운/색상 박스 제외) */
+@media (max-width: 768px) {
+  #screen-order-summary.is-active,
+  #screen-order-summary .order-summary-body {
+    background: #f0f0f0 !important;
+  }
+
+  #screen-order-summary .assign-panel.order-summary-panel {
+    background: #ececec !important;
+  }
+
+  #screen-order-summary .order-summary-toolbar,
+  #screen-order-summary .order-summary-ym,
+  #screen-order-summary .order-summary-ym__row,
+  #screen-order-summary .order-summary-ym__field {
+    background: transparent !important;
+  }
+
+  #screen-order-summary .order-summary-table-wrap,
+  #screen-order-summary .order-summary-table,
+  #screen-order-summary .order-summary-table tbody tr,
+  #screen-order-summary .order-summary-table tbody .order-summary-table__cell,
+  #screen-order-summary .order-summary-table tbody .order-summary-table__cell-btn,
+  #screen-order-summary .order-summary-table-wrap::before,
+  #screen-order-summary .order-summary-table__row-head::after,
+  #screen-order-summary
+    .order-summary-table
+    tbody
+    tr:first-child
+    .order-summary-table__row-head::after {
+    background-color: #ececec !important;
+  }
+
+  #screen-order-summary .order-summary-ym__select,
+  #screen-order-summary .order-summary-metric-field .order-summary-ym__select {
+    background-color: var(--color-white) !important;
+  }
+
+  #screen-order-summary .order-summary-toggle,
+  #screen-order-summary .order-summary-toggle__btn {
+    background-color: #e8e8e8 !important;
+  }
+
+  #screen-order-summary .order-summary-toggle__btn--active {
+    background-color: #9a9a9a !important;
+    color: #fff !important;
+  }
+
+  #screen-order-summary .order-summary-table thead tr:last-child th.order-summary-table__col-head,
+  #screen-order-summary .order-summary-table__col-head {
+    background-color: #9a9a9a !important;
+  }
+
+  #screen-order-summary .order-summary-table tbody .order-summary-table__row-head,
+  #screen-order-summary .order-summary-table tbody tr .order-summary-table__row-head {
+    background-color: var(--color-navy) !important;
+  }
+
+  #screen-order-summary .order-summary-table tbody .order-summary-table__cell-box,
+  #screen-order-summary .order-summary-table__cell-box {
+    background-color: var(--color-white) !important;
+  }
+
+  #screen-order-summary .order-summary-table thead tr:last-child th.order-summary-table__corner {
+    background-color: #ececec !important;
   }
 }

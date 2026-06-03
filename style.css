@@ -5709,7 +5709,7 @@ table {
   }
 
   #screen-order-summary .order-summary-table tbody tr:first-child .order-summary-table__cell {
-    background: transparent !important;
+    background: var(--os-summary-surface, var(--color-white)) !important;
     box-shadow: none !important;
   }
 
@@ -5924,7 +5924,8 @@ table {
     --os-summary-fixed-w: var(--os-summary-data-w);
     --os-summary-cell-h: 46px;
     --os-summary-shift: calc(var(--os-summary-fixed-w) + var(--os-summary-gap));
-    --os-summary-clip-w: var(--os-summary-shift);
+    --os-summary-clip-w: calc(var(--os-summary-shift) + 2px);
+    --os-summary-surface: var(--color-white);
   }
 
   #screen-order-summary .order-summary-table-wrap {
@@ -5933,24 +5934,34 @@ table {
     overflow-y: auto !important;
     -webkit-overflow-scrolling: touch;
     isolation: isolate;
+    background: var(--os-summary-surface);
   }
 
+  /* 가로 스크롤 시 시공오더~시공매출(헤더·흰박스)이 목대 열 뒤로 지나갈 때 보이지 않도록 좌측 마스크 */
   #screen-order-summary .order-summary-table-wrap::before {
     content: "";
     position: absolute;
-    left: 0;
     top: 0;
+    left: 0;
     bottom: 0;
     width: var(--os-summary-clip-w);
-    z-index: 21;
-    background: var(--color-bg);
+    background: var(--os-summary-surface);
+    z-index: 29;
     pointer-events: none;
   }
 
-  /* thead 코너를 1열 분량의 투명 스페이서로 — transform 없이 열 정렬(스크롤 클립 안정) */
+  #screen-order-summary .order-summary-table {
+    background: var(--os-summary-surface);
+  }
+
+  #screen-order-summary .order-summary-table tbody tr {
+    background: var(--os-summary-surface);
+  }
+
+  /* thead 코너: 좌측 고정·바탕색 — 헤더(시공오더~)가 목대 열 뒤로 갈 때 가려짐 */
   #screen-order-summary .order-summary-table thead tr:last-child th.order-summary-table__corner {
     display: table-cell !important;
-    visibility: hidden !important;
+    visibility: visible !important;
     width: var(--os-summary-shift) !important;
     min-width: var(--os-summary-shift) !important;
     max-width: var(--os-summary-shift) !important;
@@ -5958,15 +5969,18 @@ table {
     padding: 0 !important;
     margin: 0 !important;
     border: none !important;
-    background: transparent !important;
-    opacity: 0 !important;
+    background: var(--os-summary-surface) !important;
+    opacity: 1 !important;
     overflow: hidden !important;
     line-height: 0 !important;
     font-size: 0 !important;
     pointer-events: none !important;
-    position: static !important;
+    position: sticky !important;
+    left: 0 !important;
+    z-index: 28 !important;
     clip: auto !important;
     transform: none !important;
+    box-shadow: 6px 0 0 var(--os-summary-surface) !important;
   }
 
   #screen-order-summary
@@ -6007,7 +6021,7 @@ table {
     overflow: hidden !important;
     position: relative;
     z-index: 1 !important;
-    background: transparent !important;
+    background: var(--os-summary-surface) !important;
   }
 
   #screen-order-summary
@@ -6048,14 +6062,14 @@ table {
   #screen-order-summary .order-summary-table__row-head {
     position: sticky !important;
     left: 0 !important;
-    z-index: 22 !important;
+    z-index: 30 !important;
     min-height: var(--os-summary-cell-h) !important;
     height: var(--os-summary-cell-h) !important;
     max-height: var(--os-summary-cell-h) !important;
     padding: 0 6px !important;
     background: var(--color-navy) !important;
     border: none !important;
-    box-shadow: none !important;
+    box-shadow: 6px 0 0 var(--os-summary-surface) !important;
     isolation: isolate;
     overflow: hidden !important;
     transform: none !important;
@@ -6098,10 +6112,28 @@ table {
     z-index: 2;
   }
 
-  #screen-order-summary .order-summary-table__row-head::before,
-  #screen-order-summary .order-summary-table__row-head::after {
+  #screen-order-summary .order-summary-table__row-head::before {
     content: none !important;
     display: none !important;
+  }
+
+  /* 목대~기타 행 라벨 우측: 스크롤되는 데이터 흰박스가 비치지 않도록 덮개 */
+  #screen-order-summary .order-summary-table__row-head::after,
+  #screen-order-summary
+    .order-summary-table
+    tbody
+    tr:first-child
+    .order-summary-table__row-head::after {
+    content: "" !important;
+    display: block !important;
+    position: absolute !important;
+    top: 0 !important;
+    right: calc(-1 * var(--os-summary-gap)) !important;
+    width: calc(var(--os-summary-gap) + 14px) !important;
+    height: 100% !important;
+    background: var(--os-summary-surface) !important;
+    pointer-events: none !important;
+    z-index: 31 !important;
   }
 
   #screen-order-summary .order-summary-table {
@@ -6114,13 +6146,29 @@ table {
     max-width: none !important;
   }
 
-  /* 가로 스크롤: 시공오더~시공매출(헤더·흰박스)이 좌측 고정 경계 뒤로 가면 마스크에 가려짐 */
+  /* 가로 스크롤: 시공오더~시공매출(헤더·흰박스)이 목대 열 뒤로 가면 마스크 아래로 숨김 */
   #screen-order-summary .order-summary-table thead tr:last-child th.order-summary-table__col-head,
   #screen-order-summary .order-summary-table tbody .order-summary-table__cell,
-  #screen-order-summary .order-summary-table tbody .order-summary-table__cell-btn,
+  #screen-order-summary .order-summary-table tbody .order-summary-table__cell-btn {
+    position: relative;
+    z-index: 0 !important;
+    background: var(--os-summary-surface) !important;
+  }
+
   #screen-order-summary .order-summary-table tbody .order-summary-table__cell-box {
     position: relative;
-    z-index: 1 !important;
+    z-index: 0 !important;
+    background: var(--color-white) !important;
+  }
+
+  /* 목대~기타 열: 행 사이·위아래 여백을 화면 바탕(흰색)과 동일 */
+  #screen-order-summary .order-summary-table tbody .order-summary-table__row-head {
+    vertical-align: middle !important;
+    background: var(--color-navy) !important;
+  }
+
+  #screen-order-summary .order-summary-table tbody tr .order-summary-table__row-head {
+    background-color: var(--color-navy) !important;
   }
 
   #screen-order-summary .order-summary-table-wrap {
@@ -6144,6 +6192,99 @@ table {
   #screen-order-summary .order-summary-table tbody tr:first-child .order-summary-table__cell-box {
     padding-top: 0 !important;
     margin-top: 0 !important;
+    background-image: none !important;
+    box-shadow: none !important;
+  }
+
+  /* 목대~기타 열 위·아래 여백: 화면 바탕(흰색)과 동일 */
+  #screen-order-summary .order-summary-body,
+  #screen-order-summary .assign-panel.order-summary-panel {
+    background: var(--os-summary-surface) !important;
+  }
+
+  #screen-order-summary .order-summary-table,
+  #screen-order-summary .order-summary-table tbody tr,
+  #screen-order-summary .order-summary-table tbody .order-summary-table__cell {
+    background: var(--os-summary-surface) !important;
+  }
+
+  #screen-order-summary .order-summary-table thead tr:last-child th.order-summary-table__col-head {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    margin-bottom: 0 !important;
+    background: #9a9a9a !important;
+  }
+
+  #screen-order-summary .order-summary-table tbody tr .order-summary-table__row-head,
+  #screen-order-summary .order-summary-table tbody tr .order-summary-table__cell {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    vertical-align: middle !important;
+  }
+
+  #screen-order-summary .order-summary-table tbody tr:first-child .order-summary-table__cell {
+    background: var(--os-summary-surface) !important;
+    box-shadow: none !important;
+  }
+
+  #screen-order-summary .order-summary-table tbody tr:first-child .order-summary-table__cell-box {
+    background: var(--color-white) !important;
+  }
+
+  /* 가로 스크롤: 시공오더~시공매출이 목대 열 뒤로 지나갈 때 완전히 숨김 (상단바 미변경) */
+  #screen-order-summary .order-summary-table-wrap::before {
+    z-index: 35;
+    width: calc(var(--os-summary-shift) + 4px);
+  }
+
+  #screen-order-summary .order-summary-table thead tr:last-child th.order-summary-table__corner {
+    z-index: 34 !important;
+  }
+
+  #screen-order-summary .order-summary-table__row-head {
+    z-index: 36 !important;
+  }
+
+  #screen-order-summary
+    .order-summary-table
+    thead
+    tr:last-child
+    th.order-summary-table__col-head,
+  #screen-order-summary .order-summary-table tbody .order-summary-table__cell,
+  #screen-order-summary .order-summary-table tbody .order-summary-table__cell-btn,
+  #screen-order-summary .order-summary-table tbody .order-summary-table__cell-box {
+    z-index: 0 !important;
+  }
+
+  /* 목대~기타: 행 위·아래 흰 여백을 화면 바탕과 동일 */
+  #screen-order-summary .order-summary-table thead tr:last-child th.order-summary-table__col-head,
+  #screen-order-summary .order-summary-table tbody tr .order-summary-table__row-head,
+  #screen-order-summary .order-summary-table tbody tr .order-summary-table__cell {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+
+  #screen-order-summary .order-summary-table tbody tr {
+    background: var(--os-summary-surface) !important;
+  }
+
+  #screen-order-summary .order-summary-table tbody .order-summary-table__row-head {
+    background: var(--color-navy) !important;
+    background-color: var(--color-navy) !important;
+    vertical-align: middle !important;
+  }
+
+  #screen-order-summary .order-summary-table tbody tr:first-child .order-summary-table__row-head,
+  #screen-order-summary .order-summary-table tbody tr:first-child .order-summary-table__cell {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+    border-top: none !important;
+    box-shadow: none !important;
+    background-image: none !important;
   }
 }
 
@@ -6154,6 +6295,13 @@ table {
     --os-summary-gap: 4px;
     --os-summary-cell-h: 40px;
     --os-summary-shift: calc(var(--os-summary-fixed-w) + var(--os-summary-gap));
-    --os-summary-clip-w: var(--os-summary-shift);
+    --os-summary-clip-w: calc(var(--os-summary-shift) + 2px);
+  }
+
+  #screen-order-summary .order-summary-table thead tr:last-child th.order-summary-table__col-head,
+  #screen-order-summary .order-summary-table tbody tr:first-child .order-summary-table__row-head,
+  #screen-order-summary .order-summary-table tbody tr:first-child .order-summary-table__cell {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
   }
 }

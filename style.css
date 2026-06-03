@@ -4372,7 +4372,7 @@ table {
     align-items: center !important;
     justify-content: flex-start !important;
     z-index: 3 !important;
-    overflow: hidden !important;
+    overflow: visible !important;
     background: transparent !important;
     flex-shrink: 0 !important;
     flex-grow: 0 !important;
@@ -4393,7 +4393,8 @@ table {
     height: 100% !important;
     object-fit: contain !important;
     object-position: left center !important;
-    transform: scale(0.96);
+    /* 로고만 소폭 확대 — 상단바·메뉴 버튼 높이/폭 변수는 변경하지 않음 */
+    transform: scale(1.26);
     transform-origin: left center;
   }
 
@@ -5078,7 +5079,8 @@ table {
   #screen-order-open .order-topbar__logo .order-topbar__logo-img,
   #screen-order-stats .order-topbar__logo .order-topbar__logo-img,
   #screen-order-summary .order-topbar__logo .order-topbar__logo-img {
-    transform: scale(0.88);
+    /* 좁은 화면에서도 상단바·버튼 크기는 유지, 로고만 시각적으로 소폭 확대 */
+    transform: scale(1.24);
     transform-origin: left center;
   }
 

@@ -4296,7 +4296,7 @@ table {
     gap: 10px !important;
   }
 
-  /* 3~8번: 상단 회색바 두께 = PC와 동일, 로고는 메뉴와 겹치지 않게 아래 배치 */
+  /* 3~8번: 로고 최상단(사이즈 유지), 메뉴는 그 아래 회색바(두께 PC와 동일) */
   #screen-order .order-topbar,
   #screen-order-assign .order-topbar,
   #screen-order-status .order-topbar,
@@ -4305,18 +4305,22 @@ table {
   #screen-order-summary .order-topbar {
     display: grid !important;
     grid-template-columns: minmax(0, 1fr) !important;
-    grid-template-areas: "menu" !important;
-    grid-template-rows: 1fr !important;
-    align-items: center !important;
+    grid-template-areas:
+      "logo"
+      "menu" !important;
+    grid-template-rows: auto auto !important;
+    align-content: start !important;
+    align-items: stretch !important;
     row-gap: 0 !important;
     column-gap: 0 !important;
     padding: 0 8px !important;
-    height: clamp(48px, 6vh, 60px) !important;
-    min-height: clamp(48px, 6vh, 60px) !important;
-    max-height: clamp(48px, 6vh, 60px) !important;
+    padding-top: 0 !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
     margin-bottom: 32px !important;
     overflow: visible !important;
-    background: linear-gradient(to right, #d9d9d9, #adacac) !important;
+    background: var(--color-bg) !important;
   }
 
   #screen-order .order-topbar__logo,
@@ -4325,17 +4329,25 @@ table {
   #screen-order-open .order-topbar__logo,
   #screen-order-stats .order-topbar__logo,
   #screen-order-summary .order-topbar__logo {
-    position: absolute !important;
-    left: 50% !important;
+    grid-area: logo !important;
+    position: relative !important;
+    left: auto !important;
+    right: auto !important;
     top: 0 !important;
+    bottom: auto !important;
     width: min(168px, 46vw) !important;
     height: 44px !important;
     min-height: 44px !important;
     max-height: 44px !important;
-    margin: 0 !important;
-    transform: translateX(-50%) translateY(40px) !important;
+    margin: 0 auto !important;
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+    transform: none !important;
+    justify-self: center !important;
+    align-self: start !important;
     z-index: 3 !important;
     overflow: visible !important;
+    background: transparent !important;
   }
 
   #screen-order .order-topbar__logo .order-topbar__logo-img,
@@ -4363,6 +4375,7 @@ table {
   #screen-order-open .order-topbar__aside,
   #screen-order-stats .order-topbar__aside,
   #screen-order-summary .order-topbar__aside {
+    grid-area: menu !important;
     position: static !important;
     width: 0 !important;
     height: 0 !important;
@@ -4387,13 +4400,15 @@ table {
     grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
     grid-auto-flow: row !important;
     width: 100% !important;
+    min-height: clamp(48px, 6vh, 60px) !important;
     margin: 0 !important;
     gap: 4px !important;
     overflow: clip !important;
     padding: 0 !important;
     z-index: 2 !important;
     align-items: stretch !important;
-    align-self: center !important;
+    align-self: stretch !important;
+    background: linear-gradient(to right, #d9d9d9, #adacac) !important;
   }
 
   #screen-order .order-topbar__menu .order-topbar__link[data-order-nav="order"],

@@ -4821,22 +4821,6 @@ table {
     opacity: 0 !important;
   }
 
-  #screen-order-summary .order-summary-table {
-    border-spacing: 4px 0 !important;
-  }
-
-  #screen-order-summary .order-summary-table thead tr:last-child th.order-summary-table__col-head {
-    padding-bottom: 0 !important;
-  }
-
-  #screen-order-summary .order-summary-table tbody tr:first-child .order-summary-table__row-head,
-  #screen-order-summary .order-summary-table tbody tr:first-child .order-summary-table__cell {
-    padding-top: 0 !important;
-    margin-top: 0 !important;
-    border-top: none !important;
-    box-shadow: none !important;
-  }
-
   #screen-order-summary .order-summary-table tbody tr:first-child .order-summary-table__row-head {
     vertical-align: middle !important;
   }
@@ -5259,7 +5243,6 @@ table {
     ) !important;
     max-width: none !important;
     table-layout: fixed !important;
-    border-spacing: 4px 0 !important;
     border-collapse: separate !important;
   }
 
@@ -5284,10 +5267,6 @@ table {
     border: none !important;
     background: transparent !important;
     visibility: hidden !important;
-  }
-
-  #screen-order-summary .order-summary-table {
-    border-spacing: 4px 0 !important;
   }
 
   #screen-order-summary .order-summary-table thead {
@@ -5829,34 +5808,6 @@ table {
     scrollbar-color: #9a9a9a #e8e8e8;
   }
 
-  /* 8번: 목대 위 회색 간격(테이블 세로 border-spacing) 제거 */
-  #screen-order-summary .order-summary-table {
-    border-spacing: 4px 0 !important;
-  }
-
-  #screen-order-summary .order-summary-table thead tr:last-child th.order-summary-table__col-head {
-    padding-bottom: 6px !important;
-    margin-bottom: 0 !important;
-    border-bottom: none !important;
-  }
-
-  #screen-order-summary .order-summary-table tbody tr:first-child .order-summary-table__row-head,
-  #screen-order-summary .order-summary-table tbody tr:first-child .order-summary-table__cell {
-    margin-top: 0 !important;
-    padding-top: 6px !important;
-    border-top: none !important;
-    box-shadow: none !important;
-    background-image: none !important;
-  }
-
-  #screen-order-summary .order-summary-table tbody tr:first-child .order-summary-table__row-head::before,
-  #screen-order-summary .order-summary-table tbody tr:first-child .order-summary-table__row-head::after,
-  #screen-order-summary .order-summary-table tbody tr:first-child .order-summary-table__cell::before,
-  #screen-order-summary .order-summary-table tbody tr:first-child .order-summary-table__cell::after {
-    content: none !important;
-    display: none !important;
-  }
-
   #screen-order-summary .order-summary-table thead tr.order-summary-table__unit-row,
   #screen-order-summary .order-summary-table thead tr:first-child {
     display: none !important;
@@ -5984,7 +5935,7 @@ table {
     z-index: 28 !important;
     clip: auto !important;
     transform: none !important;
-    box-shadow: 6px 0 0 var(--os-summary-surface) !important;
+    box-shadow: none !important;
   }
 
   #screen-order-summary
@@ -5999,7 +5950,7 @@ table {
   }
 
   #screen-order-summary .order-summary-table {
-    border-spacing: var(--os-summary-gap) !important;
+    border-spacing: var(--os-summary-gap) var(--os-summary-gap) !important;
     border-collapse: separate !important;
     table-layout: fixed !important;
   }
@@ -6073,7 +6024,7 @@ table {
     padding: 0 6px !important;
     background: var(--color-navy) !important;
     border: none !important;
-    box-shadow: 6px 0 0 var(--os-summary-surface) !important;
+    box-shadow: none !important;
     isolation: isolate;
     overflow: hidden !important;
     transform: none !important;
@@ -6152,7 +6103,7 @@ table {
     position: absolute !important;
     top: 0 !important;
     right: calc(-1 * var(--os-summary-gap)) !important;
-    width: calc(var(--os-summary-gap) + 14px) !important;
+    width: var(--os-summary-gap) !important;
     height: 100% !important;
     background: var(--os-summary-surface) !important;
     pointer-events: none !important;
@@ -6216,7 +6167,6 @@ table {
     padding-top: 0 !important;
     margin-top: 0 !important;
     background-image: none !important;
-    box-shadow: none !important;
   }
 
   /* 8번 본문·패널: 3~7번과 동일 (#f0f0f0 / #ececec). 선택·드롭다운·데이터 박스 색 유지 */
@@ -6352,8 +6302,6 @@ table {
   #screen-order-summary .order-summary-table tbody tr:first-child .order-summary-table__cell {
     padding-top: 0 !important;
     margin-top: 0 !important;
-    border-top: none !important;
-    box-shadow: none !important;
     background-image: none !important;
   }
 }
@@ -6642,27 +6590,39 @@ table {
     transform: none !important;
   }
 
-  /* 목대(1행)만 달랐던 시공오더 열 흰박스 → 2~4행과 동일 */
-  #screen-order-summary
-    .order-summary-table
-    tbody
-    tr:first-child
-    > td.order-summary-table__cell:nth-child(2),
-  #screen-order-summary
-    .order-summary-table
-    tbody
-    tr:first-child
-    > td.order-summary-table__cell:nth-child(2)
-    .order-summary-table__cell-btn,
-  #screen-order-summary
-    .order-summary-table
-    tbody
-    tr:first-child
-    > td.order-summary-table__cell:nth-child(2)
-    .order-summary-table__cell-box {
+}
+
+/* 8번 모바일: 파란(목대~기타)↔흰박스·헤더↔데이터행 간격 = --os-summary-gap만 (상단 회색바·PC 미변경) */
+@media (max-width: 768px) {
+  #screen-order-summary .order-summary-table {
+    border-spacing: var(--os-summary-gap) var(--os-summary-gap) !important;
+    border-collapse: separate !important;
+  }
+
+  /* box-shadow 제거: border-spacing과 겹치면 파란열↔시공오더열 간격만 넓어짐 */
+  #screen-order-summary .order-summary-table thead tr:last-child th.order-summary-table__corner,
+  #screen-order-summary .order-summary-table tbody .order-summary-table__row-head {
     box-shadow: none !important;
-    border-top: none !important;
-    margin-top: 0 !important;
+  }
+
+  #screen-order-summary .order-summary-table thead tr:last-child th.order-summary-table__col-head,
+  #screen-order-summary .order-summary-table thead tr:last-child th.order-summary-table__corner,
+  #screen-order-summary .order-summary-table tbody tr .order-summary-table__row-head,
+  #screen-order-summary .order-summary-table tbody tr .order-summary-table__cell,
+  #screen-order-summary .order-summary-table tbody tr .order-summary-table__cell-btn,
+  #screen-order-summary .order-summary-table tbody tr .order-summary-table__cell-box {
     padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+
+  #screen-order-summary .order-summary-table__row-head::after {
+    right: calc(-1 * var(--os-summary-gap)) !important;
+    width: var(--os-summary-gap) !important;
+  }
+
+  #screen-order-summary .order-summary-table-wrap::before {
+    width: calc(var(--os-summary-fixed-w) + var(--os-summary-gap)) !important;
   }
 }

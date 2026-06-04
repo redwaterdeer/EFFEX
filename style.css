@@ -4603,29 +4603,15 @@ table {
     scrollbar-color: #9a9a9a #e8e8e8;
   }
 
-  /* 3번: 가로 스크롤바 (assign-body) */
+  /* 3번: 세로 스크롤(assign-body) · 가로 스크롤은 order-form(파란 라벨 고정) */
   #screen-order .assign-body {
     padding-bottom: calc(52px + env(safe-area-inset-bottom, 0px)) !important;
-    overflow-x: scroll !important;
+    overflow-x: hidden !important;
     overflow-y: auto !important;
     -webkit-overflow-scrolling: touch;
-    scrollbar-gutter: stable both-edges;
+    scrollbar-gutter: stable;
     scrollbar-width: thin;
     scrollbar-color: #9a9a9a #e8e8e8;
-  }
-
-  #screen-order .assign-body::-webkit-scrollbar {
-    height: 10px;
-  }
-
-  #screen-order .assign-body::-webkit-scrollbar-track {
-    background: #e8e8e8;
-    border-radius: 4px;
-  }
-
-  #screen-order .assign-body::-webkit-scrollbar-thumb {
-    background: #9a9a9a;
-    border-radius: 4px;
   }
 
   #screen-order .assign-panel {
@@ -4633,11 +4619,7 @@ table {
     overflow-y: visible;
   }
 
-  #screen-order .order-form {
-    min-width: 560px;
-    width: max-content;
-    max-width: none;
-  }
+  /* 3번 가로 스크롤·고정 라벨: 하단 전용 블록(6635~)에서 처리 */
 
   /* 3번: 시공일자~도면3 입력 박스 높이·테두리 통일 */
   #screen-order {
@@ -4660,11 +4642,6 @@ table {
     gap: 0;
   }
 
-  /* 3번: 파란 라벨 ↔ 빨간 막대 사이 간격 */
-  #screen-order .order-form > .order-field:nth-child(-n + 10) > .order-field__label {
-    margin-right: 17px;
-  }
-
   #screen-order .order-form > .order-field:nth-child(-n + 10) > .order-field__divider {
     margin: 0 !important;
     padding: 0 !important;
@@ -4673,13 +4650,6 @@ table {
     width: 5px;
     min-width: 5px;
     max-width: 5px;
-  }
-
-  /* 3번: 빨간 막대 ↔ 흰 입력박스 — 투명 간격 보정, 흰 박스 좌측 */
-  #screen-order .order-form > .order-field:nth-child(-n + 10) > .order-field__control,
-  #screen-order .order-form > .order-field:nth-child(-n + 10) > .order-field__region-group {
-    margin-left: -17px !important;
-    border-left: 1px solid #b8b8b8 !important;
   }
 
   #screen-order .order-field--region .order-field__region-group > .order-field__control--region-item:first-child {
@@ -5204,23 +5174,7 @@ table {
   }
 
   #screen-order .assign-body {
-    overflow-x: scroll !important;
-    scrollbar-width: thin;
-    scrollbar-color: #9a9a9a #e8e8e8;
-  }
-
-  #screen-order .assign-body::-webkit-scrollbar {
-    height: 10px;
-  }
-
-  #screen-order .assign-body::-webkit-scrollbar-track {
-    background: #e8e8e8;
-    border-radius: 4px;
-  }
-
-  #screen-order .assign-body::-webkit-scrollbar-thumb {
-    background: #9a9a9a;
-    border-radius: 4px;
+    overflow-x: hidden !important;
   }
 
   #screen-order-summary .order-page__num {
@@ -6659,5 +6613,196 @@ table {
 
   #screen-order-summary .order-summary-table-wrap::before {
     width: calc(var(--os-summary-fixed-w) + var(--os-summary-gap)) !important;
+  }
+}
+
+/* 3번 모바일: 8번 집계표와 동일 — 파란 라벨·빨간 막대 고정, 흰 입력만 가로 스크롤 (1·8번·상단바·PC 미변경) */
+@media (max-width: 768px) {
+  #screen-order {
+    --order-mob-gap: 4px;
+    --order-mob-divider-w: 5px;
+    --order-mob-fixed-w: var(--order-label-w);
+    --order-mob-shift: calc(
+      var(--order-mob-fixed-w) + var(--order-mob-gap) + var(--order-mob-divider-w)
+    );
+    --order-mob-clip-w: calc(var(--order-mob-shift) + var(--order-mob-gap) + 2px);
+    --order-mob-surface: #ececec;
+    --order-mob-control-min: 480px;
+  }
+
+  #screen-order .assign-body {
+    overflow-x: hidden !important;
+  }
+
+  #screen-order .assign-panel {
+    position: relative;
+    isolation: isolate;
+    overflow-x: visible !important;
+    overflow-y: visible;
+    background: var(--order-mob-surface) !important;
+  }
+
+  /* 8번 .order-summary-table-wrap 과 동일: 이 영역만 가로 스크롤 */
+  #screen-order .order-form {
+    display: block;
+    position: relative;
+    isolation: isolate;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    margin: 0;
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    touch-action: pan-x pan-y;
+    scrollbar-gutter: stable both-edges;
+    scrollbar-width: thin;
+    scrollbar-color: #9a9a9a #e8e8e8;
+    padding-bottom: 4px;
+    background: var(--order-mob-surface) !important;
+  }
+
+  #screen-order .order-form::-webkit-scrollbar {
+    height: 10px;
+  }
+
+  #screen-order .order-form::-webkit-scrollbar-track {
+    background: #e8e8e8;
+    border-radius: 4px;
+  }
+
+  #screen-order .order-form::-webkit-scrollbar-thumb {
+    background: #9a9a9a;
+    border-radius: 4px;
+  }
+
+  /* 가로 스크롤 시 흰 박스가 파란 열 뒤로 지나갈 때 숨김 (8번 table-wrap::before) */
+  #screen-order .order-form::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: var(--order-mob-clip-w);
+    background: var(--order-mob-surface);
+    z-index: 35;
+    pointer-events: none;
+  }
+
+  #screen-order .order-form > .order-field {
+    display: flex;
+    position: relative;
+    width: max-content;
+    min-width: calc(var(--order-mob-shift) + var(--order-mob-control-min));
+    max-width: none;
+    flex-wrap: nowrap;
+    gap: 0;
+    transform: none !important;
+    margin-bottom: 12px;
+    align-items: stretch;
+    box-sizing: border-box;
+  }
+
+  #screen-order .order-form > .order-field > .order-field__label {
+    position: -webkit-sticky !important;
+    position: sticky !important;
+    left: 0 !important;
+    z-index: 36 !important;
+    flex: 0 0 var(--order-mob-fixed-w) !important;
+    width: var(--order-mob-fixed-w) !important;
+    min-width: var(--order-mob-fixed-w) !important;
+    max-width: var(--order-mob-fixed-w) !important;
+    margin-right: var(--order-mob-gap) !important;
+    flex-shrink: 0 !important;
+    background: var(--color-navy) !important;
+    background-color: var(--color-navy) !important;
+    isolation: isolate;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+    transform: none !important;
+  }
+
+  #screen-order .order-form > .order-field > .order-field__label span {
+    transform: none !important;
+  }
+
+  /* 8번 row-head::after — 라벨·빨간 막대 사이 간격 덮개 */
+  #screen-order .order-form > .order-field > .order-field__label::after {
+    content: "" !important;
+    display: block !important;
+    position: absolute !important;
+    top: 0 !important;
+    right: calc(-1 * var(--order-mob-gap)) !important;
+    width: var(--order-mob-gap) !important;
+    height: 100% !important;
+    background: var(--order-mob-surface) !important;
+    pointer-events: none !important;
+    z-index: 37 !important;
+  }
+
+  #screen-order .order-form > .order-field > .order-field__divider {
+    position: -webkit-sticky !important;
+    position: sticky !important;
+    left: calc(var(--order-mob-fixed-w) + var(--order-mob-gap)) !important;
+    z-index: 36 !important;
+    flex: 0 0 var(--order-mob-divider-w) !important;
+    width: var(--order-mob-divider-w) !important;
+    min-width: var(--order-mob-divider-w) !important;
+    max-width: var(--order-mob-divider-w) !important;
+    margin: 0 !important;
+    flex-shrink: 0 !important;
+    background: var(--color-red) !important;
+    background-color: var(--color-red) !important;
+    box-sizing: border-box !important;
+    align-self: stretch !important;
+  }
+
+  /* 8번 데이터 셀(z-index 0) — 흰 입력만 스크롤 */
+  #screen-order .order-form > .order-field > .order-field__control,
+  #screen-order .order-form > .order-field > .order-field__region-group {
+    position: relative;
+    z-index: 0 !important;
+    margin-left: 0 !important;
+    flex: 0 0 var(--order-mob-control-min) !important;
+    width: var(--order-mob-control-min) !important;
+    min-width: var(--order-mob-control-min) !important;
+    max-width: none !important;
+    border-left: 1px solid #b8b8b8 !important;
+    background: var(--color-white) !important;
+    background-color: var(--color-white) !important;
+    transform: none !important;
+  }
+
+  #screen-order .order-field--scope .order-field__control,
+  #screen-order .order-field--scope-sales .order-field__control {
+    flex: 0 0 var(--order-mob-control-min) !important;
+    width: var(--order-mob-control-min) !important;
+    min-width: var(--order-mob-control-min) !important;
+    z-index: 0 !important;
+  }
+
+  #screen-order .order-scope-options,
+  #screen-order .order-scope-sales-options,
+  #screen-order .order-field__control input,
+  #screen-order .order-select,
+  #screen-order .order-scope-option,
+  #screen-order .order-scope-sales-cell {
+    transform: none !important;
+    z-index: 0;
+  }
+
+  #screen-order .order-field--region .order-field__region-group {
+    display: flex;
+    flex: 0 0 var(--order-mob-control-min) !important;
+    width: var(--order-mob-control-min) !important;
+    min-width: var(--order-mob-control-min) !important;
+    z-index: 0 !important;
+  }
+
+  #screen-order .order-field--upload .order-field__control--upload {
+    width: var(--order-mob-control-min) !important;
+    min-width: var(--order-mob-control-min) !important;
   }
 }

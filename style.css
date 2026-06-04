@@ -4655,8 +4655,34 @@ table {
     box-sizing: border-box;
   }
 
+  /* 3번: 빨간 구분선 ↔ 흰 입력박스 사이 투명 간격 제거 (시공일자~도면3) */
+  #screen-order .order-form > .order-field:nth-child(-n + 10) {
+    gap: 0;
+  }
+
+  #screen-order .order-form > .order-field:nth-child(-n + 10) > .order-field__divider {
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    flex-shrink: 0;
+    width: 5px;
+    min-width: 5px;
+    max-width: 5px;
+  }
+
+  #screen-order .order-form > .order-field:nth-child(-n + 10) > .order-field__control,
+  #screen-order .order-form > .order-field:nth-child(-n + 10) > .order-field__region-group {
+    margin-left: 0 !important;
+    border-left: 1px solid #b8b8b8 !important;
+  }
+
+  #screen-order .order-field--region .order-field__region-group > .order-field__control--region-item:first-child {
+    border-left-width: 1px;
+    border-left-style: solid;
+    border-left-color: #b8b8b8;
+  }
+
   #screen-order .order-form > .order-field:nth-child(-n + 10) .order-field__label,
-  #screen-order .order-form > .order-field:nth-child(-n + 10) .order-field__divider,
   #screen-order .order-form > .order-field:nth-child(-n + 10) .order-field__control,
   #screen-order .order-form > .order-field:nth-child(-n + 10) .order-scope-options,
   #screen-order .order-form > .order-field:nth-child(-n + 10) .order-scope-sales-options {
@@ -4665,9 +4691,12 @@ table {
     box-sizing: border-box;
   }
 
-  #screen-order .order-form > .order-field:nth-child(-n + 10) .order-field__label,
-  #screen-order .order-form > .order-field:nth-child(-n + 10) .order-field__divider {
+  #screen-order .order-form > .order-field:nth-child(-n + 10) .order-field__label {
     border-color: transparent;
+  }
+
+  #screen-order .order-form > .order-field:nth-child(-n + 10) .order-field__divider {
+    border: none !important;
   }
 
   #screen-order .order-form > .order-field:nth-child(-n + 10) .order-field__control,

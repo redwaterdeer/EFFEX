@@ -4655,9 +4655,14 @@ table {
     box-sizing: border-box;
   }
 
-  /* 3번: 빨간 구분선 ↔ 흰 입력박스 사이 투명 간격 제거 (시공일자~도면3) */
+  /* 3번: 필드 행 간격 (시공일자~도면3) */
   #screen-order .order-form > .order-field:nth-child(-n + 10) {
     gap: 0;
+  }
+
+  /* 3번: 파란 라벨 ↔ 빨간 막대 사이 간격 */
+  #screen-order .order-form > .order-field:nth-child(-n + 10) > .order-field__label {
+    margin-right: 17px;
   }
 
   #screen-order .order-form > .order-field:nth-child(-n + 10) > .order-field__divider {
@@ -4670,9 +4675,10 @@ table {
     max-width: 5px;
   }
 
+  /* 3번: 빨간 막대 ↔ 흰 입력박스 — 투명 간격 보정, 흰 박스 좌측 */
   #screen-order .order-form > .order-field:nth-child(-n + 10) > .order-field__control,
   #screen-order .order-form > .order-field:nth-child(-n + 10) > .order-field__region-group {
-    margin-left: 0 !important;
+    margin-left: -17px !important;
     border-left: 1px solid #b8b8b8 !important;
   }
 

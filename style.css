@@ -4621,10 +4621,12 @@ table {
 
   /* 3번 가로 스크롤·고정 라벨: 하단 전용 블록(6635~)에서 처리 */
 
-  /* 3번: 시공일자~도면3 입력 박스 높이·테두리 통일 */
+  /* 3번: 시공일자~도면3 입력 박스 높이·테두리 통일 (상단 회색바·1·8번·PC 미변경) */
   #screen-order {
-    --order-field-h: 48px;
-    --order-label-w: 88px;
+    --order-field-h: 24px;
+    --order-label-w: 48px;
+    --order-font: 8px;
+    --order-input-font: 8px;
   }
 
   /* 시공일자 ~ 도면3 (폼 1~10번째 필드) */
@@ -4632,7 +4634,7 @@ table {
     height: var(--order-field-h);
     min-height: var(--order-field-h);
     max-height: var(--order-field-h);
-    margin-bottom: 12px;
+    margin-bottom: 4px;
     align-items: stretch;
     box-sizing: border-box;
   }
@@ -5532,13 +5534,13 @@ table {
   /* 3번: 등록 버튼 */
   #screen-order .order-register {
     width: 100%;
-    margin-top: 8px;
+    margin-top: 4px;
   }
 
   #screen-order .order-register__btn {
     width: 100%;
-    min-height: 48px;
-    font-size: 16px;
+    min-height: 28px;
+    font-size: 9px;
   }
 
   /* 4~6번: 달력 + 테이블 */
@@ -6700,7 +6702,7 @@ table {
     flex-wrap: nowrap;
     gap: 0;
     transform: none !important;
-    margin-bottom: 12px;
+    margin-bottom: 4px;
     align-items: stretch;
     box-sizing: border-box;
   }
@@ -6804,5 +6806,97 @@ table {
   #screen-order .order-field--upload .order-field__control--upload {
     width: var(--order-mob-control-min) !important;
     min-width: var(--order-mob-control-min) !important;
+  }
+}
+
+/* 3번 모바일: 회색 상단바 아래 폼만 글자·입력·파란 라벨 축소 (1·8번·상단바·PC 미변경) */
+@media (max-width: 768px) {
+  #screen-order .assign-panel {
+    padding: 8px 6px;
+  }
+
+  #screen-order .order-form > .order-field {
+    margin-bottom: 4px;
+  }
+
+  #screen-order .order-form > .order-field:nth-child(-n + 10) {
+    margin-bottom: 4px;
+  }
+
+  #screen-order .order-field__label,
+  #screen-order .order-field__label span {
+    font-size: var(--order-font);
+    line-height: 1.05;
+    padding: 0 1px;
+  }
+
+  #screen-order .order-field__control,
+  #screen-order .order-field__control--region-item {
+    padding: 0 4px;
+  }
+
+  #screen-order .order-field__control input,
+  #screen-order .order-select,
+  #screen-order .order-field__control--upload input[readonly] {
+    font-size: var(--order-input-font);
+    line-height: 1.1;
+  }
+
+  #screen-order .order-scope-option,
+  #screen-order .order-scope-option > span:first-child {
+    font-size: var(--order-input-font);
+    gap: 2px;
+    padding: 0 2px;
+  }
+
+  #screen-order .order-scope-option__dot {
+    width: 8px;
+    height: 8px;
+    border-width: 1px;
+  }
+
+  #screen-order .order-scope-option--active .order-scope-option__dot::after {
+    inset: 1.5px;
+  }
+
+  #screen-order .order-scope-sales-cell,
+  #screen-order .order-scope-sales-cell .order-scope-sales-input {
+    font-size: var(--order-input-font);
+    padding: 0 2px;
+  }
+
+  #screen-order .order-date-btn,
+  #screen-order .order-upload-btn,
+  #screen-order .order-delete-btn {
+    padding: 0 4px;
+    font-size: var(--order-input-font);
+  }
+
+  #screen-order .order-date-btn__icon {
+    width: 10px;
+    height: 10px;
+  }
+
+  #screen-order .order-upload-btn span,
+  #screen-order .order-delete-btn span {
+    font-size: var(--order-input-font);
+  }
+
+  #screen-order .order-register {
+    margin-top: 4px;
+  }
+}
+
+@media (max-width: 480px) {
+  #screen-order {
+    --order-field-h: 22px;
+    --order-label-w: 44px;
+    --order-font: 7px;
+    --order-input-font: 7px;
+  }
+
+  #screen-order .order-register__btn {
+    min-height: 26px;
+    font-size: 8px;
   }
 }

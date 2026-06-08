@@ -6629,7 +6629,6 @@ table {
     );
     --order-mob-clip-w: calc(var(--order-mob-shift) + var(--order-mob-gap) + 2px);
     --order-mob-surface: #ececec;
-    --order-mob-control-min: 480px;
   }
 
   #screen-order .assign-body {
@@ -6644,7 +6643,7 @@ table {
     background: var(--order-mob-surface) !important;
   }
 
-  /* 8번 .order-summary-table-wrap 과 동일: 이 영역만 가로 스크롤 */
+  /* 3번: 폼은 화면 폭 안에 맞춤 (입력칸만 축소, 가로 스크롤 없음) */
   #screen-order .order-form {
     display: block;
     position: relative;
@@ -6654,30 +6653,10 @@ table {
     max-width: 100%;
     min-width: 0;
     margin: 0;
-    overflow-x: auto !important;
+    overflow-x: hidden !important;
     overflow-y: visible !important;
-    -webkit-overflow-scrolling: touch;
-    overscroll-behavior-x: contain;
-    touch-action: pan-x pan-y;
-    scrollbar-gutter: stable both-edges;
-    scrollbar-width: thin;
-    scrollbar-color: #9a9a9a #e8e8e8;
     padding-bottom: 4px;
     background: var(--order-mob-surface) !important;
-  }
-
-  #screen-order .order-form::-webkit-scrollbar {
-    height: 10px;
-  }
-
-  #screen-order .order-form::-webkit-scrollbar-track {
-    background: #e8e8e8;
-    border-radius: 4px;
-  }
-
-  #screen-order .order-form::-webkit-scrollbar-thumb {
-    background: #9a9a9a;
-    border-radius: 4px;
   }
 
   /* 가로 스크롤 시 흰 박스가 파란 열 뒤로 지나갈 때 숨김 (8번 table-wrap::before) */
@@ -6696,9 +6675,9 @@ table {
   #screen-order .order-form > .order-field {
     display: flex;
     position: relative;
-    width: max-content;
-    min-width: calc(var(--order-mob-shift) + var(--order-mob-control-min));
-    max-width: none;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
     flex-wrap: nowrap;
     gap: 0;
     transform: none !important;
@@ -6761,15 +6740,15 @@ table {
     align-self: stretch !important;
   }
 
-  /* 8번 데이터 셀(z-index 0) — 흰 입력만 스크롤 */
+  /* 파란 라벨·빨간 막대 옆 입력칸 — 행 안 남은 폭만 사용 (폰 화면 맞춤) */
   #screen-order .order-form > .order-field > .order-field__control,
   #screen-order .order-form > .order-field > .order-field__region-group {
     position: relative;
     z-index: 0 !important;
     margin-left: 0 !important;
-    flex: 0 0 var(--order-mob-control-min) !important;
-    width: var(--order-mob-control-min) !important;
-    min-width: var(--order-mob-control-min) !important;
+    flex: 1 1 0% !important;
+    width: 0 !important;
+    min-width: 0 !important;
     max-width: none !important;
     border-left: 1px solid #b8b8b8 !important;
     background: var(--color-white) !important;
@@ -6779,9 +6758,10 @@ table {
 
   #screen-order .order-field--scope .order-field__control,
   #screen-order .order-field--scope-sales .order-field__control {
-    flex: 0 0 var(--order-mob-control-min) !important;
-    width: var(--order-mob-control-min) !important;
-    min-width: var(--order-mob-control-min) !important;
+    flex: 1 1 0% !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    max-width: none !important;
     z-index: 0 !important;
   }
 
@@ -6797,15 +6777,18 @@ table {
 
   #screen-order .order-field--region .order-field__region-group {
     display: flex;
-    flex: 0 0 var(--order-mob-control-min) !important;
-    width: var(--order-mob-control-min) !important;
-    min-width: var(--order-mob-control-min) !important;
+    flex: 1 1 0% !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    max-width: none !important;
     z-index: 0 !important;
   }
 
   #screen-order .order-field--upload .order-field__control--upload {
-    width: var(--order-mob-control-min) !important;
-    min-width: var(--order-mob-control-min) !important;
+    flex: 1 1 0% !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    max-width: none !important;
   }
 }
 
@@ -6898,5 +6881,129 @@ table {
   #screen-order .order-register__btn {
     min-height: 26px;
     font-size: 8px;
+  }
+}
+
+/* 3번 모바일: 파란 라벨 옆 입력칸 가로폭만 폰 화면에 맞춤 (1·8번·상단바·PC 미변경) */
+@media (max-width: 768px) {
+  #screen-order .assign-panel {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+  }
+
+  #screen-order .order-form {
+    overflow-x: hidden !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  #screen-order .order-form > .order-field {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+  }
+
+  /* 파란 라벨·빨간 막대 제외 — 흰 입력칸만 행 남은 폭에 맞춤 (PC md/sm 고정폭 해제) */
+  #screen-order .order-form > .order-field > .order-field__control,
+  #screen-order .order-form > .order-field > .order-field__region-group,
+  #screen-order .order-field--scope .order-field__control,
+  #screen-order .order-field--scope-sales .order-field__control,
+  #screen-order .order-field__control--md,
+  #screen-order .order-field__control--sm,
+  #screen-order .order-field__control--full,
+  #screen-order .order-field__control--upload,
+  #screen-order .order-field--date .order-field__control,
+  #screen-order .order-field--upload .order-field__control {
+    flex: 1 1 0% !important;
+    flex-basis: 0 !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    box-sizing: border-box !important;
+  }
+
+  #screen-order .order-field--date .order-field__control,
+  #screen-order .order-field--upload .order-field__control {
+    display: flex !important;
+    align-items: stretch !important;
+    overflow: hidden !important;
+  }
+
+  #screen-order .order-field__control--date input[readonly],
+  #screen-order .order-field__control--upload input[readonly] {
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+    width: auto !important;
+    max-width: 100% !important;
+    padding: 0 2px !important;
+  }
+
+  #screen-order .order-date-btn,
+  #screen-order .order-upload-btn,
+  #screen-order .order-delete-btn {
+    flex: 0 0 auto !important;
+    flex-shrink: 0 !important;
+  }
+
+  #screen-order .order-field--scope .order-field__control,
+  #screen-order .order-field--scope-sales .order-field__control {
+    overflow: hidden !important;
+  }
+
+  #screen-order .order-scope-options,
+  #screen-order .order-scope-sales-options {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    overflow: hidden !important;
+  }
+
+  #screen-order .order-scope-option,
+  #screen-order .order-scope-sales-cell {
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+    padding-left: 1px !important;
+    padding-right: 1px !important;
+    overflow: hidden !important;
+  }
+
+  #screen-order .order-scope-option > span:first-child {
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    max-width: 100% !important;
+  }
+
+  #screen-order .order-field--region .order-field__region-group {
+    flex: 1 1 0% !important;
+    flex-basis: 0 !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    gap: 0 !important;
+  }
+
+  #screen-order .order-field--region .order-field__control--region-item {
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    padding: 0 2px !important;
+  }
+
+  #screen-order .order-field__control input:not([type="file"]),
+  #screen-order .order-field__control--upload input[readonly],
+  #screen-order .order-select,
+  #screen-order .order-scope-sales-input {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
   }
 }

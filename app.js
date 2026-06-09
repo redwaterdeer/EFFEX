@@ -104,6 +104,88 @@ var orderDatePickerState = {
   selectedIso: "",
 };
 
+var orderDatePickerMount = {
+  parent: null,
+  next: null,
+  onBody: false,
+};
+
+function isMobileOrderViewport() {
+  return window.matchMedia("(max-width: 768px)").matches;
+}
+
+function restoreOrderDatePickerFromBody() {
+  var popup = document.getElementById("orderDatePickerPopup");
+  if (!popup || !orderDatePickerMount.onBody || !orderDatePickerMount.parent) return;
+  if (
+    orderDatePickerMount.next &&
+    orderDatePickerMount.next.parentNode === orderDatePickerMount.parent
+  ) {
+    orderDatePickerMount.parent.insertBefore(popup, orderDatePickerMount.next);
+  } else {
+    orderDatePickerMount.parent.appendChild(popup);
+  }
+  orderDatePickerMount.onBody = false;
+}
+
+function mountOrderDatePickerToBodyIfMobile() {
+  var popup = document.getElementById("orderDatePickerPopup");
+  if (!popup) return;
+
+  if (!isMobileOrderViewport()) {
+    restoreOrderDatePickerFromBody();
+    return;
+  }
+
+  if (popup.parentNode === document.body) {
+    orderDatePickerMount.onBody = true;
+    return;
+  }
+
+  orderDatePickerMount.parent = popup.parentNode;
+  orderDatePickerMount.next = popup.nextSibling;
+  document.body.appendChild(popup);
+  orderDatePickerMount.onBody = true;
+}
+
+var orderDatePickerMobileViewportBound = false;
+
+function applyMobileOrderDatePickerCenter(popup) {
+  if (!popup) return;
+  popup.style.setProperty("position", "fixed", "important");
+  popup.style.setProperty("top", "50%", "important");
+  popup.style.setProperty("left", "50%", "important");
+  popup.style.setProperty("right", "auto", "important");
+  popup.style.setProperty("bottom", "auto", "important");
+  popup.style.setProperty("inset", "auto", "important");
+  popup.style.setProperty("margin", "0", "important");
+  popup.style.setProperty("transform", "translate(-50%, -50%)", "important");
+  popup.style.setProperty("z-index", "10050", "important");
+}
+
+function clearMobileOrderDatePickerPosition(popup) {
+  if (!popup) return;
+  ["position", "top", "left", "right", "bottom", "inset", "margin", "transform", "z-index"].forEach(function (prop) {
+    popup.style.removeProperty(prop);
+  });
+}
+
+function onOrderDatePickerMobileViewportChange() {
+  var popup = document.getElementById("orderDatePickerPopup");
+  if (!popup || popup.hidden || !isMobileOrderViewport()) return;
+  applyMobileOrderDatePickerCenter(popup);
+}
+
+function bindOrderDatePickerMobileViewport() {
+  if (orderDatePickerMobileViewportBound) return;
+  orderDatePickerMobileViewportBound = true;
+  window.addEventListener("resize", onOrderDatePickerMobileViewportChange);
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener("resize", onOrderDatePickerMobileViewportChange);
+    window.visualViewport.addEventListener("scroll", onOrderDatePickerMobileViewportChange);
+  }
+}
+
 var statusActionDatePickerState = {
   year: 0,
   month: 0,
@@ -2567,16 +2649,35 @@ function openOrderDatePicker() {
   orderDatePickerState.selectedIso = existing;
 
   renderOrderDatePickerGrid();
+  mountOrderDatePickerToBodyIfMobile();
   popup.hidden = false;
 
-  var rect = btn.getBoundingClientRect();
-  popup.style.top = rect.bottom + 8 + "px";
-  popup.style.left = rect.left + "px";
+  if (isMobileOrderViewport()) {
+    bindOrderDatePickerMobileViewport();
+    clearMobileOrderDatePickerPosition(popup);
+    applyMobileOrderDatePickerCenter(popup);
+    requestAnimationFrame(function () {
+      applyMobileOrderDatePickerCenter(popup);
+    });
+  } else {
+    var rect = btn.getBoundingClientRect();
+    popup.style.position = "fixed";
+    popup.style.top = rect.bottom + 8 + "px";
+    popup.style.left = rect.left + "px";
+    popup.style.right = "auto";
+    popup.style.bottom = "auto";
+    popup.style.transform = "";
+    popup.style.zIndex = "1000";
+  }
 }
 
 function closeOrderDatePicker() {
   var popup = document.getElementById("orderDatePickerPopup");
-  if (popup) popup.hidden = true;
+  if (!popup) return;
+  popup.hidden = true;
+  if (isMobileOrderViewport()) {
+    clearMobileOrderDatePickerPosition(popup);
+  }
 }
 
 function clampOrderYear(year) {

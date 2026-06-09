@@ -7095,37 +7095,46 @@ table {
     display: none !important;
   }
 
+  /* 3번: section 안에 남은 달력은 표시하지 않음(body 백드롭만 사용) */
+  #screen-order #orderDatePickerPopup:not([hidden]) {
+    display: none !important;
+  }
+
   .order-date-picker-backdrop:not([hidden]) {
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
     position: fixed !important;
     inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 100vh;
+    min-height: 100dvh;
     z-index: 10040 !important;
+    padding: 16px !important;
+    box-sizing: border-box !important;
     background: rgba(0, 0, 0, 0.45);
-    padding: 16px;
-    box-sizing: border-box;
+    touch-action: none;
   }
 
-  #screen-order #orderDatePickerPopup:not([hidden]),
-  #orderDatePickerBackdrop #orderDatePickerPopup:not([hidden]),
-  #orderDatePickerPopup.order-date-picker--mobile-modal:not([hidden]) {
+  #orderDatePickerBackdrop #orderDatePickerPopup:not([hidden]) {
     display: block !important;
-    position: fixed !important;
-    top: 50% !important;
-    left: 50% !important;
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
     right: auto !important;
     bottom: auto !important;
     inset: auto !important;
     width: min(340px, calc(100vw - 32px)) !important;
     max-height: min(90vh, 90dvh) !important;
     margin: 0 !important;
-    transform: translate(-50%, -50%) !important;
-    z-index: 10050 !important;
+    transform: none !important;
+    flex-shrink: 0 !important;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     border-radius: 8px;
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.28);
+    z-index: 10050 !important;
   }
 
   body.order-date-picker-modal-open {

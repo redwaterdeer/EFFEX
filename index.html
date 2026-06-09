@@ -10,27 +10,6 @@
       href="mobile.css"
       media="only screen and (max-width: 768px)"
     />
-    <!-- 3번 시공일자 달력: 모바일 화면 정중앙 (1·8번·상단바·PC 미변경) -->
-    <style media="only screen and (max-width: 768px)">
-      .order-date-picker-backdrop:not([hidden]) {
-        position: fixed !important;
-        inset: 0 !important;
-        z-index: 10040 !important;
-        background: rgba(0, 0, 0, 0.45) !important;
-      }
-
-      #screen-order #orderDatePickerPopup:not([hidden]),
-      #orderDatePickerPopup.order-date-picker--mobile-modal:not([hidden]) {
-        position: fixed !important;
-        top: 50% !important;
-        left: 50% !important;
-        transform: translate(-50%, -50%) !important;
-        z-index: 10050 !important;
-        width: min(340px, calc(100vw - 32px)) !important;
-        max-height: min(90vh, 90dvh) !important;
-        margin: 0 !important;
-      }
-    </style>
   </head>
   <body>
     <!-- 1. 로그인 -->

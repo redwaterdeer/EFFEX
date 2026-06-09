@@ -149,9 +149,31 @@ function mountOrderDatePickerToBodyIfMobile() {
 }
 
 var orderDatePickerMobileViewportBound = false;
+var orderDatePickerOpening = false;
+
+function ensureOrderDatePickerBackdrop() {
+  var backdrop = document.getElementById("orderDatePickerBackdrop");
+  if (backdrop) return backdrop;
+
+  backdrop = document.createElement("div");
+  backdrop.id = "orderDatePickerBackdrop";
+  backdrop.className = "order-date-picker-backdrop";
+  backdrop.hidden = true;
+  backdrop.setAttribute("aria-hidden", "true");
+  backdrop.addEventListener("click", function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    closeOrderDatePicker();
+  });
+  document.body.appendChild(backdrop);
+  return backdrop;
+}
 
 function applyMobileOrderDatePickerCenter(popup) {
   if (!popup) return;
+  popup.classList.add("order-date-picker--mobile-modal");
+  popup.setAttribute("aria-modal", "true");
+  popup.style.setProperty("display", "block", "important");
   popup.style.setProperty("position", "fixed", "important");
   popup.style.setProperty("top", "50%", "important");
   popup.style.setProperty("left", "50%", "important");
@@ -165,7 +187,9 @@ function applyMobileOrderDatePickerCenter(popup) {
 
 function clearMobileOrderDatePickerPosition(popup) {
   if (!popup) return;
-  ["position", "top", "left", "right", "bottom", "inset", "margin", "transform", "z-index"].forEach(function (prop) {
+  popup.classList.remove("order-date-picker--mobile-modal");
+  popup.removeAttribute("aria-modal");
+  ["display", "position", "top", "left", "right", "bottom", "inset", "margin", "transform", "z-index"].forEach(function (prop) {
     popup.style.removeProperty(prop);
   });
 }
@@ -2650,16 +2674,29 @@ function openOrderDatePicker() {
 
   renderOrderDatePickerGrid();
   mountOrderDatePickerToBodyIfMobile();
-  popup.hidden = false;
 
   if (isMobileOrderViewport()) {
     bindOrderDatePickerMobileViewport();
-    clearMobileOrderDatePickerPosition(popup);
+    mountOrderDatePickerToBodyIfMobile();
+    var backdrop = ensureOrderDatePickerBackdrop();
+    document.body.classList.add("order-date-picker-modal-open");
     applyMobileOrderDatePickerCenter(popup);
+    backdrop.hidden = false;
+    popup.hidden = false;
     requestAnimationFrame(function () {
+      mountOrderDatePickerToBodyIfMobile();
       applyMobileOrderDatePickerCenter(popup);
     });
+    window.setTimeout(function () {
+      if (!popup.hidden && isMobileOrderViewport()) {
+        mountOrderDatePickerToBodyIfMobile();
+        applyMobileOrderDatePickerCenter(popup);
+      }
+    }, 0);
+    return;
   } else {
+    clearMobileOrderDatePickerPosition(popup);
+    popup.hidden = false;
     var rect = btn.getBoundingClientRect();
     popup.style.position = "fixed";
     popup.style.top = rect.bottom + 8 + "px";
@@ -2675,6 +2712,9 @@ function closeOrderDatePicker() {
   var popup = document.getElementById("orderDatePickerPopup");
   if (!popup) return;
   popup.hidden = true;
+  var backdrop = document.getElementById("orderDatePickerBackdrop");
+  if (backdrop) backdrop.hidden = true;
+  document.body.classList.remove("order-date-picker-modal-open");
   if (isMobileOrderViewport()) {
     clearMobileOrderDatePickerPosition(popup);
   }
@@ -2737,6 +2777,8 @@ function initOrderDatePicker() {
   var prevBtn = document.getElementById("orderDatePickerPrev");
   var nextBtn = document.getElementById("orderDatePickerNext");
 
+  ensureOrderDatePickerBackdrop();
+
   if (openBtn) {
     openBtn.addEventListener("click", function (e) {
       e.preventDefault();
@@ -2745,7 +2787,11 @@ function initOrderDatePicker() {
         closeOrderDatePicker();
         return;
       }
+      orderDatePickerOpening = true;
       openOrderDatePicker();
+      window.setTimeout(function () {
+        orderDatePickerOpening = false;
+      }, 0);
     });
   }
 
@@ -2762,8 +2808,15 @@ function initOrderDatePicker() {
   }
 
   document.addEventListener("click", function (e) {
+    if (orderDatePickerOpening) return;
     if (!popup || popup.hidden) return;
-    if (e.target.closest("#orderDatePickerPopup") || e.target.closest("#btnOrderDatePicker")) return;
+    if (
+      e.target.closest("#orderDatePickerPopup") ||
+      e.target.closest("#btnOrderDatePicker") ||
+      e.target.closest("#orderDatePickerBackdrop")
+    ) {
+      return;
+    }
     closeOrderDatePicker();
   });
 }

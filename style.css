@@ -4185,8 +4185,12 @@ table {
     max-width: 100%;
   }
 
-  .order-field__region-group {
-    flex-direction: column;
+  /* 3번 모바일: 권역 도/시·군/구 나란히 (1·8번·상단바·PC 미변경) */
+  #screen-order .order-field--region .order-field__region-group {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+    flex-direction: unset !important;
+    flex-wrap: nowrap !important;
   }
 
   .order-summary-toolbar {
@@ -4685,6 +4689,7 @@ table {
 
   #screen-order .order-field--region .order-field__region-group {
     display: flex;
+    flex-direction: row;
     flex: 1;
     min-width: 0;
     height: 100%;
@@ -4692,6 +4697,23 @@ table {
     max-height: var(--order-field-h);
     gap: 0;
     align-items: stretch;
+  }
+
+  #screen-order
+    .order-field--region
+    .order-field__region-group
+    > .order-field__control--region-item {
+    flex: 1 1 0;
+    min-width: 0;
+    width: auto;
+  }
+
+  #screen-order
+    .order-field--region
+    .order-field__region-group
+    > .order-field__control--region-item
+    + .order-field__control--region-item {
+    border-left: 1px solid #b8b8b8;
   }
 
   #screen-order .order-field__label {
@@ -6911,6 +6933,10 @@ table {
     box-sizing: border-box !important;
   }
 
+  #screen-order .order-form > .order-field.order-field--region {
+    overflow: visible !important;
+  }
+
   /* 파란 라벨·빨간 막대 제외 — 흰 입력칸만 행 남은 폭에 맞춤 (PC md/sm 고정폭 해제) */
   #screen-order .order-form > .order-field > .order-field__control,
   #screen-order .order-form > .order-field > .order-field__region-group,
@@ -6983,6 +7009,7 @@ table {
   }
 
   #screen-order .order-field--region .order-field__region-group {
+    flex-direction: row !important;
     flex: 1 1 0% !important;
     flex-basis: 0 !important;
     width: 0 !important;
@@ -6995,7 +7022,16 @@ table {
     flex: 1 1 0 !important;
     min-width: 0 !important;
     max-width: none !important;
+    width: auto !important;
     padding: 0 2px !important;
+  }
+
+  #screen-order
+    .order-field--region
+    .order-field__region-group
+    > .order-field__control--region-item
+    + .order-field__control--region-item {
+    border-left: 1px solid #b8b8b8 !important;
   }
 
   #screen-order .order-field__control input:not([type="file"]),
@@ -7139,5 +7175,62 @@ table {
 
   body.order-date-picker-modal-open {
     overflow: hidden !important;
+  }
+
+  /* 3번: 권역 도/시·군/구 나란히 (1·8번·상단바·PC 미변경) */
+  #screen-order .order-field--region.order-field {
+    overflow: visible !important;
+  }
+
+  #screen-order .order-field--region .order-field__region-group {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: stretch !important;
+    flex: 1 1 0% !important;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    overflow: visible !important;
+    gap: 0 !important;
+  }
+
+  #screen-order
+    .order-field--region
+    .order-field__region-group
+    > .order-field__control--region-item {
+    display: flex !important;
+    flex: 1 1 50% !important;
+    width: 50% !important;
+    max-width: 50% !important;
+    min-width: 0 !important;
+    padding: 0 2px !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+  }
+
+  #screen-order
+    .order-field--region
+    .order-field__region-group
+    > .order-field__control--region-item
+    + .order-field__control--region-item {
+    border-left: 1px solid #b8b8b8 !important;
+  }
+
+  #screen-order .order-field--region #orderCity.order-select,
+  #screen-order .order-field--region #orderDistrict.order-select {
+    display: block !important;
+    visibility: visible !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    opacity: 1 !important;
+    -webkit-text-fill-color: currentColor;
+  }
+
+  #screen-order .order-field--region #orderDistrict.order-select:disabled {
+    color: #999 !important;
+    opacity: 1 !important;
+    -webkit-text-fill-color: #999 !important;
   }
 }

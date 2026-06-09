@@ -7089,4 +7089,46 @@ table {
     padding-right: 16px !important;
     background-position: right 2px center !important;
   }
+
+  /* 3번: 시공일자 달력 — 모바일 화면 정중앙 (1·8번·상단바·PC 미변경, mobile.css 미배포 시 대비) */
+  #orderDatePickerPopup[hidden] {
+    display: none !important;
+  }
+
+  .order-date-picker-backdrop:not([hidden]) {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 10040 !important;
+    background: rgba(0, 0, 0, 0.45);
+    padding: 16px;
+    box-sizing: border-box;
+  }
+
+  #screen-order #orderDatePickerPopup:not([hidden]),
+  #orderDatePickerBackdrop #orderDatePickerPopup:not([hidden]),
+  #orderDatePickerPopup.order-date-picker--mobile-modal:not([hidden]) {
+    display: block !important;
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    right: auto !important;
+    bottom: auto !important;
+    inset: auto !important;
+    width: min(340px, calc(100vw - 32px)) !important;
+    max-height: min(90vh, 90dvh) !important;
+    margin: 0 !important;
+    transform: translate(-50%, -50%) !important;
+    z-index: 10050 !important;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 8px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.28);
+  }
+
+  body.order-date-picker-modal-open {
+    overflow: hidden !important;
+  }
 }

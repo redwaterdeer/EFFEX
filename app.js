@@ -2823,13 +2823,13 @@ function ensureAssignSavePlacement() {
   var screen = document.getElementById("screen-order-assign");
   if (!screen) return;
   var body = screen.querySelector(".assign-body");
-  var tableWrap = screen.querySelector(".assign-table-wrap");
+  var main = screen.querySelector(".assign-main");
   var saveWrap = screen.querySelector(".assign-save--in-scroll");
-  if (!body || !tableWrap || !saveWrap) return;
+  if (!body || !main || !saveWrap) return;
 
   if (isMobileLayout()) {
-    if (saveWrap.parentElement !== tableWrap) {
-      tableWrap.appendChild(saveWrap);
+    if (saveWrap.parentElement !== main) {
+      main.appendChild(saveWrap);
     }
     return;
   }

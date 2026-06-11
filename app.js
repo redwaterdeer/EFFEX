@@ -2819,6 +2819,26 @@ function isMobileLayout() {
   return window.matchMedia("(max-width: 768px)").matches;
 }
 
+function ensureAssignSavePlacement() {
+  var screen = document.getElementById("screen-order-assign");
+  if (!screen) return;
+  var body = screen.querySelector(".assign-body");
+  var tableWrap = screen.querySelector(".assign-table-wrap");
+  var saveWrap = screen.querySelector(".assign-save--in-scroll");
+  if (!body || !tableWrap || !saveWrap) return;
+
+  if (isMobileLayout()) {
+    if (saveWrap.parentElement !== tableWrap) {
+      tableWrap.appendChild(saveWrap);
+    }
+    return;
+  }
+
+  if (saveWrap.parentElement !== body) {
+    body.appendChild(saveWrap);
+  }
+}
+
 function refreshDataFromStorage() {
   loadUiState();
   applyUiStateToControls();
@@ -2872,6 +2892,7 @@ function bindCrossTabDataSync() {
       pullCloudData(true);
       refreshDataFromStorage();
     }
+    ensureAssignSavePlacement();
   });
 }
 
@@ -5865,6 +5886,7 @@ function initAssignDateControls(pageKey) {
 
 /* 4번: 오더배정 */
 function initOrderAssignPage(screen) {
+  ensureAssignSavePlacement();
   if (!getAuth()) return;
 
   initLogout(screen);
@@ -7827,5 +7849,6 @@ document.addEventListener("DOMContentLoaded", function () {
     location.replace("#login");
   }
 
+  ensureAssignSavePlacement();
   showScreen(page, parsed.params);
 });

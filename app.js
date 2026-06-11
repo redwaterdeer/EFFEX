@@ -4,10 +4,13 @@ var AUTH_KEY = "efex_auth";
 var USERS_STORAGE_KEY = "efex_users";
 var ORDERS_STORAGE_KEY = "efex_orders";
 var UI_STATE_KEY = "efex_ui_state";
-var EFFEX_CLOUD_DATA_ID_KEY = "efex_cloud_data_blob";
 var EFFEX_CLOUD_REV_KEY = "efex_cloud_rev";
-var EFFEX_CLOUD_POINTER = "redwaterdeer-effex-pointer-v1";
-var EFFEX_CLOUD_PULL_MS = 15000;
+var EFFEX_CLOUD_BLOB_ID = "019eb50c-03b8-7a44-a43e-3be0a42e285a";
+var EFFEX_CORS_PROXIES = [
+  "https://corsproxy.io/?",
+  "https://api.codetabs.com/v1/proxy?quest=",
+];
+var EFFEX_CLOUD_PULL_MS = 5000;
 var LOGO_URL = "https://i.ibb.co/8DW6cys2/3.png";
 var LOGO_URL_INACTIVE = "https://i.ibb.co/5WH4s329/3.png";
 var currentProjectId = null;
@@ -2474,16 +2477,33 @@ function notifyEffexDataChanged() {
   }
 }
 
-function jsonBlobUrl(id) {
-  return "https://jsonblob.com/api/jsonBlob/" + id;
+function cloudBlobUrl() {
+  return "https://jsonblob.com/api/jsonBlob/" + EFFEX_CLOUD_BLOB_ID;
 }
 
-function getCloudDataBlobId() {
-  return localStorage.getItem(EFFEX_CLOUD_DATA_ID_KEY) || "";
-}
+function cloudFetch(url, options) {
+  options = options || {};
 
-function setCloudDataBlobId(id) {
-  if (id) localStorage.setItem(EFFEX_CLOUD_DATA_ID_KEY, id);
+  function attempt(index) {
+    if (index >= EFFEX_CORS_PROXIES.length) {
+      return Promise.reject(new Error("cloud fetch failed"));
+    }
+    return fetch(EFFEX_CORS_PROXIES[index] + encodeURIComponent(url), options)
+      .then(function (res) {
+        if (!res.ok && index + 1 < EFFEX_CORS_PROXIES.length) {
+          return attempt(index + 1);
+        }
+        return res;
+      })
+      .catch(function () {
+        if (index + 1 < EFFEX_CORS_PROXIES.length) {
+          return attempt(index + 1);
+        }
+        throw new Error("cloud fetch failed");
+      });
+  }
+
+  return attempt(0);
 }
 
 function buildCloudPayload() {
@@ -2494,96 +2514,104 @@ function buildCloudPayload() {
   };
 }
 
-function applyCloudPayload(payload) {
-  if (!payload || !payload.updatedAt) return false;
-  var localRev = parseInt(localStorage.getItem(EFFEX_CLOUD_REV_KEY) || "0", 10);
-  if (payload.updatedAt <= localRev) return false;
-  if (Array.isArray(payload.orders)) {
-    localStorage.setItem(ORDERS_STORAGE_KEY, JSON.stringify(payload.orders));
-  }
-  if (Array.isArray(payload.users)) {
-    localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(payload.users));
-  }
-  localStorage.setItem(EFFEX_CLOUD_REV_KEY, String(payload.updatedAt));
-  loadUiState();
-  applyUiStateToControls();
-  refreshDataFromStorage();
-  return true;
+function orderRecordTime(order) {
+  var raw = (order && (order.updatedAt || order.createdAt)) || "";
+  var t = Date.parse(raw);
+  return isNaN(t) ? 0 : t;
 }
 
-function fetchJsonBlob(id) {
-  return fetch(jsonBlobUrl(id), { cache: "no-store" }).then(function (res) {
+function mergeOrderLists(localOrders, remoteOrders) {
+  var map = {};
+  (localOrders || []).forEach(function (order) {
+    if (order && order.orderNo) map[order.orderNo] = order;
+  });
+  (remoteOrders || []).forEach(function (order) {
+    if (!order || !order.orderNo) return;
+    var existing = map[order.orderNo];
+    if (!existing) {
+      map[order.orderNo] = order;
+      return;
+    }
+    map[order.orderNo] =
+      orderRecordTime(order) > orderRecordTime(existing) ? order : existing;
+  });
+  return Object.keys(map).map(function (key) {
+    return map[key];
+  });
+}
+
+function mergeUserLists(localUsers, remoteUsers) {
+  var map = {};
+  (localUsers || []).forEach(function (user) {
+    if (user && user.userId) map[user.userId.toLowerCase()] = user;
+  });
+  (remoteUsers || []).forEach(function (user) {
+    if (!user || !user.userId) return;
+    var key = user.userId.toLowerCase();
+    if (!map[key]) {
+      map[key] = user;
+    }
+  });
+  return Object.keys(map).map(function (key) {
+    return map[key];
+  });
+}
+
+function saveMergedCloudData(mergedOrders, mergedUsers, updatedAt) {
+  var localOrders = getStoredOrders();
+  var localUsers = getRegisteredUsers();
+  var ordersChanged = JSON.stringify(mergedOrders) !== JSON.stringify(localOrders);
+  var usersChanged = JSON.stringify(mergedUsers) !== JSON.stringify(localUsers);
+
+  if (ordersChanged) {
+    localStorage.setItem(ORDERS_STORAGE_KEY, JSON.stringify(mergedOrders));
+  }
+  if (usersChanged) {
+    localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(mergedUsers));
+  }
+  if (updatedAt) {
+    localStorage.setItem(EFFEX_CLOUD_REV_KEY, String(updatedAt));
+  }
+  if (ordersChanged || usersChanged) {
+    loadUiState();
+    applyUiStateToControls();
+    refreshDataFromStorage();
+  }
+  return ordersChanged || usersChanged;
+}
+
+function mergeCloudIntoLocal(remote) {
+  if (!remote) return false;
+  var mergedOrders = mergeOrderLists(getStoredOrders(), remote.orders || []);
+  var mergedUsers = mergeUserLists(getRegisteredUsers(), remote.users || []);
+  return saveMergedCloudData(mergedOrders, mergedUsers, remote.updatedAt || Date.now());
+}
+
+function fetchCloudData() {
+  return cloudFetch(cloudBlobUrl(), { cache: "no-store" }).then(function (res) {
     if (!res.ok) return null;
     return res.json();
   });
 }
 
-function createJsonBlob(data) {
-  return fetch("https://jsonblob.com/api/jsonBlob", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data || {}),
-  }).then(function (res) {
-    if (!res.ok) return "";
-    var loc = res.headers.get("Location") || "";
-    var parts = loc.split("/");
-    return parts[parts.length - 1] || "";
-  });
-}
-
-function putJsonBlob(id, data) {
-  return fetch(jsonBlobUrl(id), {
+function putCloudData(payload) {
+  return cloudFetch(cloudBlobUrl(), {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-  });
-}
-
-function resolveCloudDataBlobId() {
-  var cached = getCloudDataBlobId();
-  if (cached) {
-    return Promise.resolve(cached);
-  }
-  return fetchJsonBlob(EFFEX_CLOUD_POINTER).then(function (pointer) {
-    if (pointer && pointer.dataBlobId) {
-      setCloudDataBlobId(pointer.dataBlobId);
-      return pointer.dataBlobId;
-    }
-    return "";
-  });
-}
-
-function ensureCloudDataBlobId() {
-  return resolveCloudDataBlobId().then(function (id) {
-    if (id) return id;
-    var payload = buildCloudPayload();
-    return createJsonBlob(payload).then(function (newId) {
-      if (!newId) return "";
-      setCloudDataBlobId(newId);
-      return putJsonBlob(EFFEX_CLOUD_POINTER, {
-        dataBlobId: newId,
-        updatedAt: payload.updatedAt,
-      })
-        .catch(function () {
-          /* pointer PUT may fail on first use */
-        })
-        .then(function () {
-          return newId;
-        });
-    });
+    body: JSON.stringify(payload),
   });
 }
 
 function scheduleCloudSync() {
   if (!getAuth()) return;
   clearTimeout(cloudSyncTimer);
-  cloudSyncTimer = setTimeout(runCloudSync, 400);
+  cloudSyncTimer = setTimeout(pushCloudData, 400);
 }
 
 function runCloudSync() {
-  if (!getAuth() || cloudSyncRunning) return;
+  if (!getAuth() || cloudSyncRunning) return Promise.resolve();
   cloudSyncRunning = true;
-  pullCloudData(true)
+  return pullCloudData(true)
     .then(function () {
       return pushCloudData();
     })
@@ -2594,13 +2622,9 @@ function runCloudSync() {
 
 function pullCloudData(silent) {
   if (!getAuth()) return Promise.resolve();
-  return resolveCloudDataBlobId()
-    .then(function (id) {
-      if (!id) return null;
-      return fetchJsonBlob(id);
-    })
+  return fetchCloudData()
     .then(function (remote) {
-      if (remote) applyCloudPayload(remote);
+      if (remote) mergeCloudIntoLocal(remote);
     })
     .catch(function () {
       if (!silent) {
@@ -2611,23 +2635,30 @@ function pullCloudData(silent) {
 
 function pushCloudData() {
   if (!getAuth()) return Promise.resolve();
-  return ensureCloudDataBlobId()
-    .then(function (id) {
-      if (!id) return;
-      var payload = buildCloudPayload();
-      return putJsonBlob(id, payload).then(function (res) {
+  return fetchCloudData()
+    .then(function (remote) {
+      var mergedOrders = mergeOrderLists(getStoredOrders(), remote && remote.orders ? remote.orders : []);
+      var mergedUsers = mergeUserLists(
+        getRegisteredUsers(),
+        remote && remote.users ? remote.users : []
+      );
+      var payload = {
+        orders: mergedOrders,
+        users: mergedUsers,
+        updatedAt: Date.now(),
+      };
+      saveMergedCloudData(mergedOrders, mergedUsers, payload.updatedAt);
+      return putCloudData(payload).then(function (res) {
         if (!res.ok) return;
         localStorage.setItem(EFFEX_CLOUD_REV_KEY, String(payload.updatedAt));
-        return putJsonBlob(EFFEX_CLOUD_POINTER, {
-          dataBlobId: id,
-          updatedAt: payload.updatedAt,
-        }).catch(function () {
-          /* ignore */
-        });
       });
     })
     .catch(function () {
-      /* offline */
+      var payload = buildCloudPayload();
+      return putCloudData(payload).then(function (res) {
+        if (!res.ok) return;
+        localStorage.setItem(EFFEX_CLOUD_REV_KEY, String(payload.updatedAt));
+      });
     });
 }
 

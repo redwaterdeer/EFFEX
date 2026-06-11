@@ -4,6 +4,10 @@ var AUTH_KEY = "efex_auth";
 var USERS_STORAGE_KEY = "efex_users";
 var ORDERS_STORAGE_KEY = "efex_orders";
 var UI_STATE_KEY = "efex_ui_state";
+var EFFEX_CLOUD_DATA_ID_KEY = "efex_cloud_data_blob";
+var EFFEX_CLOUD_REV_KEY = "efex_cloud_rev";
+var EFFEX_CLOUD_POINTER = "redwaterdeer-effex-pointer-v1";
+var EFFEX_CLOUD_PULL_MS = 15000;
 var LOGO_URL = "https://i.ibb.co/8DW6cys2/3.png";
 var LOGO_URL_INACTIVE = "https://i.ibb.co/5WH4s329/3.png";
 var currentProjectId = null;
@@ -521,6 +525,9 @@ function getRegisteredUsers() {
 
 function saveRegisteredUsers(users) {
   localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(users));
+  localStorage.setItem(EFFEX_CLOUD_REV_KEY, String(Date.now()));
+  notifyEffexDataChanged();
+  scheduleCloudSync();
 }
 
 function isUserIdTaken(userId) {
@@ -815,6 +822,21 @@ function showScreen(page, params) {
 
   screen.classList.add("is-active");
   document.title = (screen.getAttribute("data-title") || "EFFEX") + " - EFFEX 시공관리";
+
+  if (
+    getAuth() &&
+    [
+      "order",
+      "order-summary",
+      "order-assign",
+      "order-status",
+      "order-open",
+      "order-stats",
+    ].indexOf(page) >= 0
+  ) {
+    pullCloudData(true);
+    refreshDataFromStorage();
+  }
 
   window.scrollTo(0, 0);
   document.documentElement.scrollTop = 0;
@@ -2429,7 +2451,200 @@ function getStoredOrders() {
 
 function saveStoredOrders(orders) {
   localStorage.setItem(ORDERS_STORAGE_KEY, JSON.stringify(orders));
+  localStorage.setItem(EFFEX_CLOUD_REV_KEY, String(Date.now()));
   saveUiState();
+  notifyEffexDataChanged();
+  scheduleCloudSync();
+}
+
+var effexDataChannel =
+  typeof BroadcastChannel !== "undefined" ? new BroadcastChannel("effex-data") : null;
+var cloudSyncTimer = null;
+var cloudSyncRunning = false;
+var cloudPullTimer = null;
+
+function notifyEffexDataChanged() {
+  window.dispatchEvent(new CustomEvent("effex-data-changed"));
+  if (effexDataChannel) {
+    try {
+      effexDataChannel.postMessage({ t: Date.now() });
+    } catch (e) {
+      /* ignore */
+    }
+  }
+}
+
+function jsonBlobUrl(id) {
+  return "https://jsonblob.com/api/jsonBlob/" + id;
+}
+
+function getCloudDataBlobId() {
+  return localStorage.getItem(EFFEX_CLOUD_DATA_ID_KEY) || "";
+}
+
+function setCloudDataBlobId(id) {
+  if (id) localStorage.setItem(EFFEX_CLOUD_DATA_ID_KEY, id);
+}
+
+function buildCloudPayload() {
+  return {
+    orders: getStoredOrders(),
+    users: getRegisteredUsers(),
+    updatedAt: Date.now(),
+  };
+}
+
+function applyCloudPayload(payload) {
+  if (!payload || !payload.updatedAt) return false;
+  var localRev = parseInt(localStorage.getItem(EFFEX_CLOUD_REV_KEY) || "0", 10);
+  if (payload.updatedAt <= localRev) return false;
+  if (Array.isArray(payload.orders)) {
+    localStorage.setItem(ORDERS_STORAGE_KEY, JSON.stringify(payload.orders));
+  }
+  if (Array.isArray(payload.users)) {
+    localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(payload.users));
+  }
+  localStorage.setItem(EFFEX_CLOUD_REV_KEY, String(payload.updatedAt));
+  loadUiState();
+  applyUiStateToControls();
+  refreshDataFromStorage();
+  return true;
+}
+
+function fetchJsonBlob(id) {
+  return fetch(jsonBlobUrl(id), { cache: "no-store" }).then(function (res) {
+    if (!res.ok) return null;
+    return res.json();
+  });
+}
+
+function createJsonBlob(data) {
+  return fetch("https://jsonblob.com/api/jsonBlob", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data || {}),
+  }).then(function (res) {
+    if (!res.ok) return "";
+    var loc = res.headers.get("Location") || "";
+    var parts = loc.split("/");
+    return parts[parts.length - 1] || "";
+  });
+}
+
+function putJsonBlob(id, data) {
+  return fetch(jsonBlobUrl(id), {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+}
+
+function resolveCloudDataBlobId() {
+  var cached = getCloudDataBlobId();
+  if (cached) {
+    return Promise.resolve(cached);
+  }
+  return fetchJsonBlob(EFFEX_CLOUD_POINTER).then(function (pointer) {
+    if (pointer && pointer.dataBlobId) {
+      setCloudDataBlobId(pointer.dataBlobId);
+      return pointer.dataBlobId;
+    }
+    return "";
+  });
+}
+
+function ensureCloudDataBlobId() {
+  return resolveCloudDataBlobId().then(function (id) {
+    if (id) return id;
+    var payload = buildCloudPayload();
+    return createJsonBlob(payload).then(function (newId) {
+      if (!newId) return "";
+      setCloudDataBlobId(newId);
+      return putJsonBlob(EFFEX_CLOUD_POINTER, {
+        dataBlobId: newId,
+        updatedAt: payload.updatedAt,
+      })
+        .catch(function () {
+          /* pointer PUT may fail on first use */
+        })
+        .then(function () {
+          return newId;
+        });
+    });
+  });
+}
+
+function scheduleCloudSync() {
+  if (!getAuth()) return;
+  clearTimeout(cloudSyncTimer);
+  cloudSyncTimer = setTimeout(runCloudSync, 400);
+}
+
+function runCloudSync() {
+  if (!getAuth() || cloudSyncRunning) return;
+  cloudSyncRunning = true;
+  pullCloudData(true)
+    .then(function () {
+      return pushCloudData();
+    })
+    .finally(function () {
+      cloudSyncRunning = false;
+    });
+}
+
+function pullCloudData(silent) {
+  if (!getAuth()) return Promise.resolve();
+  return resolveCloudDataBlobId()
+    .then(function (id) {
+      if (!id) return null;
+      return fetchJsonBlob(id);
+    })
+    .then(function (remote) {
+      if (remote) applyCloudPayload(remote);
+    })
+    .catch(function () {
+      if (!silent) {
+        /* offline */
+      }
+    });
+}
+
+function pushCloudData() {
+  if (!getAuth()) return Promise.resolve();
+  return ensureCloudDataBlobId()
+    .then(function (id) {
+      if (!id) return;
+      var payload = buildCloudPayload();
+      return putJsonBlob(id, payload).then(function (res) {
+        if (!res.ok) return;
+        localStorage.setItem(EFFEX_CLOUD_REV_KEY, String(payload.updatedAt));
+        return putJsonBlob(EFFEX_CLOUD_POINTER, {
+          dataBlobId: id,
+          updatedAt: payload.updatedAt,
+        }).catch(function () {
+          /* ignore */
+        });
+      });
+    })
+    .catch(function () {
+      /* offline */
+    });
+}
+
+function bindEffexDataListeners() {
+  window.addEventListener("effex-data-changed", refreshDataFromStorage);
+  if (effexDataChannel) {
+    effexDataChannel.onmessage = function () {
+      refreshDataFromStorage();
+    };
+  }
+}
+
+function startCloudPullInterval() {
+  if (cloudPullTimer) return;
+  cloudPullTimer = setInterval(function () {
+    if (getAuth()) pullCloudData(true);
+  }, EFFEX_CLOUD_PULL_MS);
 }
 
 function loadUiState() {
@@ -2593,6 +2808,40 @@ function refreshDataFromStorage() {
     renderAssignCalendars("open");
     renderAssignTable("open");
   }
+}
+
+var crossTabDataSyncBound = false;
+var lastMobileLayoutState = null;
+
+function bindCrossTabDataSync() {
+  if (crossTabDataSyncBound) return;
+  crossTabDataSyncBound = true;
+  lastMobileLayoutState = isMobileLayout();
+
+  window.addEventListener("focus", function () {
+    pullCloudData(true);
+    refreshDataFromStorage();
+  });
+  document.addEventListener("visibilitychange", function () {
+    if (!document.hidden) {
+      pullCloudData(true);
+      refreshDataFromStorage();
+    }
+  });
+  window.addEventListener("pageshow", function (e) {
+    if (e.persisted) {
+      pullCloudData(true);
+      refreshDataFromStorage();
+    }
+  });
+  window.addEventListener("resize", function () {
+    var nowMobile = isMobileLayout();
+    if (nowMobile !== lastMobileLayoutState) {
+      lastMobileLayoutState = nowMobile;
+      pullCloudData(true);
+      refreshDataFromStorage();
+    }
+  });
 }
 
 function getOrderScopePrefix() {
@@ -5432,13 +5681,10 @@ function openAssignDetailModal(order) {
   openModal("modal-assign-detail");
 }
 
-function saveAssignOrders(pageKey) {
+function collectAssignSelectionsFromDom(pageKey, orders) {
   var cfg = getAssignConfig(pageKey);
   var screen = document.getElementById(cfg.screenId);
   if (!screen) return;
-
-  var orders = getStoredOrders();
-  var deleteIndices = [];
 
   screen.querySelectorAll(".assign-partner-select").forEach(function (select) {
     var idx = parseInt(select.getAttribute("data-order-index"), 10);
@@ -5470,6 +5716,47 @@ function saveAssignOrders(pageKey) {
     orders[idx].scopeWorkInfo[key].worker = selectedWorker;
     syncOrderLegacyWorkFields(orders[idx]);
   });
+}
+
+function persistAssignSelectionsFromDom(pageKey) {
+  var orders = getStoredOrders();
+  collectAssignSelectionsFromDom(pageKey, orders);
+  saveStoredOrders(orders);
+  updateAssignDateTitle(pageKey);
+  renderAssignCalendars(pageKey);
+  ["assign", "status", "open"].forEach(function (key) {
+    if (key !== pageKey) renderAssignCalendars(key);
+  });
+}
+
+function bindAssignTableLiveSync(pageKey) {
+  var initKey = "assignLiveSync_" + pageKey;
+  if (initializedScreens[initKey]) return;
+  initializedScreens[initKey] = true;
+
+  var cfg = getAssignConfig(pageKey);
+  var screen = document.getElementById(cfg.screenId);
+  if (!screen) return;
+
+  screen.addEventListener("change", function (e) {
+    if (
+      e.target.matches(".assign-partner-select") ||
+      e.target.matches(".assign-worker-select")
+    ) {
+      persistAssignSelectionsFromDom(pageKey);
+    }
+  });
+}
+
+function saveAssignOrders(pageKey) {
+  var cfg = getAssignConfig(pageKey);
+  var screen = document.getElementById(cfg.screenId);
+  if (!screen) return;
+
+  var orders = getStoredOrders();
+  var deleteIndices = [];
+
+  collectAssignSelectionsFromDom(pageKey, orders);
 
   screen.querySelectorAll(".assign-delete-check:checked").forEach(function (check) {
     var idx = parseInt(check.getAttribute("data-order-index"), 10);
@@ -5556,6 +5843,7 @@ function initOrderAssignPage(screen) {
     initializedScreens.orderAssign = true;
     initAssignDateControls("assign");
     initAssignDetailDrawingHandlers();
+    bindAssignTableLiveSync("assign");
 
     var btnSave = document.getElementById("btnAssignSave");
     if (btnSave) {
@@ -5583,6 +5871,7 @@ function initOrderStatusPage(screen) {
     initAssignDateControls("status");
     initStatusWorkerFilterControls();
     initStatusDetailModal();
+    bindAssignTableLiveSync("status");
 
     var editProfileDetail = document.getElementById("btnEditProfileStatusDetail");
     if (editProfileDetail) {
@@ -7021,7 +7310,7 @@ function initOrderOpenPage(screen) {
     initAssignDateControls("open");
     initOpenActionFilterControls();
     initStatusDetailModal();
-
+    bindAssignTableLiveSync("open");
 
     var btnSave = document.getElementById("btnOpenSave");
     if (btnSave) {
@@ -7128,6 +7417,8 @@ function initLoginScreen() {
     }
 
     setAuth(result.user);
+    runCloudSync();
+    startCloudPullInterval();
     showScreen(ROLES[result.user.role].home);
   });
 }
@@ -7469,15 +7760,23 @@ window.addEventListener("storage", function (e) {
   }
   if (e.key === UI_STATE_KEY) {
     loadUiState();
+    applyUiStateToControls();
   }
   refreshDataFromStorage();
 });
 
 document.addEventListener("DOMContentLoaded", function () {
   initModals();
+  bindEffexDataListeners();
+  bindCrossTabDataSync();
   loadUiState();
   populateAllOrderYearSelects();
   applyUiStateToControls();
+
+  if (getAuth()) {
+    runCloudSync();
+    startCloudPullInterval();
+  }
 
   var parsed = parseHash();
   var page = parsed.page;

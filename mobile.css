@@ -6494,3 +6494,94 @@
     border-right: 1px solid #333 !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   모바일 v23 — 2번 신규가입 스크롤(취소·저장까지) · 시공범위 2행
+   (PC 미변경 · 구조·기능 유지)
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  #screen-signup.signup-page.is-active {
+    height: 100dvh !important;
+    min-height: 100dvh !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+  }
+
+  #screen-signup .signup-header {
+    flex: 0 0 auto !important;
+  }
+
+  /* flex 본문 → block: 스크롤 높이가 폼 전체를 포함하도록 */
+  #screen-signup .signup-body {
+    display: block !important;
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior-y: contain !important;
+    touch-action: pan-y !important;
+    padding-bottom: calc(var(--m-footer-h) + 8px) !important;
+    scroll-padding-bottom: var(--m-footer-h) !important;
+  }
+
+  #screen-signup .signup-form-box {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* 취소·저장이 하단 푸터 위까지 스크롤되도록 여백 */
+  #screen-signup .signup-actions {
+    margin-top: 16px !important;
+    margin-bottom: calc(var(--m-footer-h) + 8px) !important;
+    flex-shrink: 0 !important;
+  }
+
+  #screen-signup .signup-actions__btn {
+    flex-shrink: 0 !important;
+  }
+
+  /* 시공범위 — 4개 옵션 2행(2열×2행) */
+  #screen-signup .signup-field--scope .signup-field__control {
+    height: auto !important;
+    min-height: 96px !important;
+    overflow: visible !important;
+  }
+
+  #screen-signup .signup-scope-options {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: stretch !important;
+    align-content: stretch !important;
+    width: 100% !important;
+    min-height: 96px !important;
+    height: auto !important;
+  }
+
+  #screen-signup .signup-scope-option {
+    flex: 0 0 50% !important;
+    width: 50% !important;
+    max-width: 50% !important;
+    min-height: 48px !important;
+    box-sizing: border-box !important;
+    border-right: 1px solid #b8b8b8 !important;
+    border-bottom: 1px solid #b8b8b8 !important;
+  }
+
+  #screen-signup .signup-scope-option:nth-child(2n) {
+    border-right: none !important;
+  }
+
+  #screen-signup .signup-scope-option:nth-child(n + 3) {
+    border-bottom: none !important;
+  }
+
+  #screen-signup .signup-scope-option > span:first-child {
+    white-space: normal !important;
+    line-height: 1.25 !important;
+    text-align: center !important;
+    word-break: keep-all !important;
+  }
+}

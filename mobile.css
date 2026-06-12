@@ -4171,3 +4171,224 @@
     border-top: 1px solid var(--color-navy-dark) !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   모바일 v9 — 집계 시공매출 · 3번 글자 · 4~6번 연월·스택 행
+   (PC 미변경 · 구조·기능 유지)
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* ── 8번: 시공매출 금액 표시 복구 ── */
+  #screen-order-summary {
+    --os-summary-sales-w: 92px;
+  }
+
+  #screen-order-summary .order-summary-table {
+    width: calc(
+      5 * var(--os-summary-data-w) + var(--os-summary-sales-w) +
+        5 * var(--os-summary-gap)
+    ) !important;
+    min-width: calc(
+      5 * var(--os-summary-data-w) + var(--os-summary-sales-w) +
+        5 * var(--os-summary-gap)
+    ) !important;
+  }
+
+  #screen-order-summary .order-summary-table__col-head.order-summary-table__col-head--sales,
+  #screen-order-summary .order-summary-table__cell.order-summary-table__cell--sales {
+    width: var(--os-summary-sales-w) !important;
+    min-width: var(--os-summary-sales-w) !important;
+    max-width: var(--os-summary-sales-w) !important;
+  }
+
+  #screen-order-summary
+    .order-summary-table__cell--sales
+    .order-summary-table__cell-box--sales {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 2px !important;
+    padding: 0 4px !important;
+    overflow: visible !important;
+    min-height: var(--os-summary-cell-h) !important;
+    height: var(--os-summary-cell-h) !important;
+    max-height: var(--os-summary-cell-h) !important;
+  }
+
+  #screen-order-summary
+    .order-summary-table__cell--sales
+    .order-summary-table__cell-box--sales-count {
+    justify-content: flex-end !important;
+    padding-right: 4px !important;
+    padding-left: 2px !important;
+  }
+
+  #screen-order-summary
+    .order-summary-table__cell--sales
+    .order-summary-table__cell-box--sales
+    > span:not(.order-summary-table__sales-unit) {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    width: auto !important;
+    max-width: calc(100% - 30px) !important;
+    height: auto !important;
+    min-height: 0 !important;
+    flex: 1 1 auto !important;
+    white-space: nowrap !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    text-align: right !important;
+  }
+
+  #screen-order-summary .order-summary-table__cell--sales .order-summary-table__sales-unit {
+    display: inline-flex !important;
+    flex: 0 0 auto !important;
+    width: auto !important;
+    height: auto !important;
+    min-height: 0 !important;
+    font-size: 8px !important;
+    line-height: 1.1 !important;
+    white-space: nowrap !important;
+    color: #333 !important;
+    font-weight: 600 !important;
+  }
+
+  #screen-order-summary
+    .order-summary-table__cell--sales
+    .order-summary-table__cell-box--sales-ratio
+    > span {
+    justify-content: center !important;
+    text-align: center !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* ── 3번 오더등록: 텍스트 크기 소폭 확대 ── */
+  #screen-order {
+    --order-field-h: 30px !important;
+    --order-label-w: 54px !important;
+    --order-font: 11px !important;
+    --order-input-font: 11px !important;
+  }
+
+  #screen-order .order-field__label,
+  #screen-order .order-field__label span {
+    font-size: var(--order-font) !important;
+  }
+
+  #screen-order .order-field__control input,
+  #screen-order .order-field__control select,
+  #screen-order .order-select,
+  #screen-order .order-scope-option > span:first-child,
+  #screen-order .order-scope-sales-input,
+  #screen-order .order-date-btn,
+  #screen-order .order-upload-btn,
+  #screen-order .order-delete-btn {
+    font-size: var(--order-input-font) !important;
+  }
+
+  #screen-order .order-register__btn {
+    font-size: 13px !important;
+    min-height: 40px !important;
+  }
+
+  /* ── 4~6번: 연도·월 드롭다운 같은 행 ── */
+  #screen-order-assign .assign-ym,
+  #screen-order-status .assign-ym,
+  #screen-order-open .assign-ym {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: stretch !important;
+    gap: 6px !important;
+    width: 100% !important;
+    margin-bottom: var(--m-zone-gap, 10px) !important;
+    box-sizing: border-box !important;
+  }
+
+  #screen-order-assign .assign-ym__row,
+  #screen-order-status .assign-ym__row,
+  #screen-order-open .assign-ym__row {
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+    width: auto !important;
+    margin-bottom: 0 !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 4px !important;
+  }
+
+  #screen-order-assign .assign-ym__select,
+  #screen-order-status .assign-ym__select,
+  #screen-order-open .assign-ym__select {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    width: auto !important;
+    padding-left: 8px !important;
+    padding-right: 24px !important;
+  }
+
+  #screen-order-assign .assign-ym__arrows,
+  #screen-order-status .assign-ym__arrows,
+  #screen-order-open .assign-ym__arrows {
+    flex: 0 0 auto !important;
+  }
+
+  /* ── 4~6번: 동일 오더번호 — 스택 항목 높이 합 맞춤 ── */
+  #screen-order-assign .assign-table__row-main:has(.assign-cell-stack) > td,
+  #screen-order-status .assign-table__row-main:has(.assign-cell-stack) > td,
+  #screen-order-open .assign-table__row-main:has(.assign-cell-stack) > td {
+    vertical-align: top !important;
+    height: 1px !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
+
+  #screen-order-assign .assign-cell-stack,
+  #screen-order-status .assign-cell-stack,
+  #screen-order-open .assign-cell-stack {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: stretch !important;
+    align-items: stretch !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 100% !important;
+    min-height: 100% !important;
+    gap: 4px !important;
+    box-sizing: border-box !important;
+  }
+
+  #screen-order-assign .assign-stack-item,
+  #screen-order-status .assign-stack-item,
+  #screen-order-open .assign-stack-item,
+  #screen-order-assign .assign-cell-stack--partner .assign-partner-select,
+  #screen-order-status .assign-cell-stack--partner .assign-partner-select,
+  #screen-order-open .assign-cell-stack--partner .assign-partner-select,
+  #screen-order-assign .assign-cell-stack--worker .assign-worker-select,
+  #screen-order-status .assign-cell-stack--worker .assign-worker-select,
+  #screen-order-open .assign-cell-stack--worker .assign-worker-select {
+    flex: 1 1 0 !important;
+    min-height: 44px !important;
+    height: auto !important;
+    max-height: none !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+  }
+}
+
+@media (max-width: 480px) {
+  #screen-order {
+    --order-field-h: 28px !important;
+    --order-label-w: 50px !important;
+    --order-font: 10px !important;
+    --order-input-font: 10px !important;
+  }
+}

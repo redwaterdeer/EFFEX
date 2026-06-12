@@ -6111,3 +6111,109 @@
     box-sizing: border-box !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   모바일 v20 — 7번 통계 X축(월) 텍스트 고정 (스크롤 영역 밖)
+   (PC 미변경 · 구조·기능 유지)
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* 바깥 래퍼: 세로 분리만 — thead(그래프+X축) 고정 */
+  #screen-order-stats .stats-body .assign-table-wrap {
+    overflow: hidden !important;
+    display: flex !important;
+    flex-direction: column !important;
+    max-height: min(42vh, 40dvh) !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  #screen-order-stats .stats-table {
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+    table-layout: fixed !important;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+  }
+
+  #screen-order-stats .stats-table thead {
+    display: block !important;
+    flex: 0 0 auto !important;
+    position: relative !important;
+    top: auto !important;
+    z-index: 20 !important;
+    background: #fff !important;
+    overflow: visible !important;
+  }
+
+  #screen-order-stats .stats-table thead tr {
+    display: table !important;
+    width: 100% !important;
+    table-layout: fixed !important;
+  }
+
+  /* 본문만 스크롤 — X축(월 헤더)은 thead에 고정 */
+  #screen-order-stats .stats-table tbody {
+    display: block !important;
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    max-height: none !important;
+    -webkit-overflow-scrolling: touch !important;
+    width: 100% !important;
+  }
+
+  #screen-order-stats .stats-table tbody tr {
+    display: table !important;
+    width: 100% !important;
+    table-layout: fixed !important;
+  }
+
+  /* 월 열 — 화면 너비에 맞춤 (가로 스크롤 없이 X축 전체 표시) */
+  #screen-order-stats .stats-table .stats-table__month-col {
+    width: calc(
+      (100% - var(--stats-mob-rank-w) - var(--stats-mob-scope-w) - var(--stats-mob-total-w)) /
+        12
+    ) !important;
+    min-width: 0 !important;
+    max-width: none !important;
+  }
+
+  /* 차트 셀 내 X 라벨(::after) 제거 — 스크롤되는 영역에서 분리 */
+  #screen-order-stats .stats-chart-row th.stats-table__month-col::after {
+    content: none !important;
+    display: none !important;
+  }
+
+  #screen-order-stats .stats-chart-row th.stats-chart-row__cell.stats-table__month-col {
+    padding-bottom: 0 !important;
+  }
+
+  #screen-order-stats .stats-chart-row th.stats-chart-row__cell .stats-chart__plot {
+    height: 100% !important;
+    max-height: none !important;
+  }
+
+  /* X축 월 헤더 — thead 고정 블록 내 항상 표시 */
+  #screen-order-stats .stats-table thead tr:not(.stats-chart-row) .stats-table__month-col,
+  #screen-order-stats .stats-table thead tr:not(.stats-chart-row) .stats-table__total-col {
+    position: relative !important;
+    z-index: 19 !important;
+    overflow: visible !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    font-size: clamp(9px, 2.35vw, 11px) !important;
+    font-weight: 600 !important;
+    color: #fff !important;
+    white-space: nowrap !important;
+    line-height: 1.2 !important;
+    min-height: 28px !important;
+    padding: 5px 1px !important;
+    text-align: center !important;
+    box-sizing: border-box !important;
+  }
+}

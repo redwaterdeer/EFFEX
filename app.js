@@ -994,15 +994,25 @@ function initAppPage(config) {
   return auth;
 }
 
+function syncAssignDetailModalBodyState() {
+  var open = document.getElementById("modal-assign-detail");
+  document.body.classList.toggle(
+    "assign-detail-modal-open",
+    !!(open && open.classList.contains("is-open"))
+  );
+}
+
 function openModal(id) {
   var el = document.getElementById(id);
   if (el) el.classList.add("is-open");
+  if (id === "modal-assign-detail") syncAssignDetailModalBodyState();
 }
 
 function closeModal(id) {
   var el = document.getElementById(id);
   if (el) el.classList.remove("is-open");
   if (id === "modal-status-detail") closeStatusActionDatePicker();
+  if (id === "modal-assign-detail") syncAssignDetailModalBodyState();
 }
 
 function initModals() {
@@ -1017,6 +1027,7 @@ function initModals() {
       if (e.target === overlay) {
         overlay.classList.remove("is-open");
         if (overlay.id === "modal-status-detail") closeStatusActionDatePicker();
+        if (overlay.id === "modal-assign-detail") syncAssignDetailModalBodyState();
       }
     });
   });

@@ -7036,3 +7036,105 @@
     font-size: 14px !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   모바일 v27 — 4번 도면 버튼 균등 배분 · 5번 상세 파란 박스 두께
+   (PC 미변경 · 구조·기능 유지)
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* ── 4번 상세: 도면 업로드·수정·삭제 가로·세로 동일 배분 ── */
+  #modal-assign-detail .assign-detail-modal__form .modal-drawing-field-group {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: stretch !important;
+    flex: 1 1 0% !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .modal-drawing-field-group .order-field__control--upload {
+    flex: 1 1 0 !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: 100% !important;
+    display: flex !important;
+    align-items: stretch !important;
+    padding: 0 !important;
+    border: none !important;
+    box-sizing: border-box !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .modal-drawing-actions {
+    flex: 2 1 0 !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: stretch !important;
+    overflow: hidden !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .assign-detail-modal__download,
+  #modal-assign-detail .assign-detail-modal__form .assign-detail-modal__drawing-action-btn {
+    flex: 1 1 0 !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: 100% !important;
+    min-height: 100% !important;
+    max-height: none !important;
+    margin: 0 !important;
+    padding: 0 2px !important;
+    font-size: 9px !important;
+    line-height: 1.1 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+    border-radius: 0 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .assign-detail-modal__download
+    .assign-detail-modal__drawing-btn-text,
+  #modal-assign-detail .assign-detail-modal__form .assign-detail-modal__drawing-action-btn span {
+    font-size: 9px !important;
+    line-height: 1.1 !important;
+  }
+
+  /* ── 5번 상세: 시공정보 등 파란 박스 두께 → 현장정보 섹션 타이틀과 동일 ── */
+  #modal-status-detail
+    .status-detail-modal__section:not(:first-of-type)
+    .order-field__label,
+  #modal-status-detail
+    .status-detail-modal__section:not(:first-of-type)
+    label.order-field__label {
+    min-height: 0 !important;
+    height: auto !important;
+    max-height: none !important;
+    padding: 8px 6px !important;
+    font-size: 12px !important;
+    line-height: 1.2 !important;
+    box-sizing: border-box !important;
+  }
+
+  #modal-status-detail .status-detail-modal__scope-tag {
+    min-height: 0 !important;
+    height: auto !important;
+    padding: 8px 6px !important;
+    font-size: 12px !important;
+    line-height: 1.2 !important;
+    box-sizing: border-box !important;
+  }
+}

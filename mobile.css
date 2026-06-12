@@ -3949,3 +3949,225 @@
     pointer-events: none !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   모바일 v8 — 8번 집계표: 항목 박스 경계 · 시공오더 표시 · 목대 뒤 스크롤
+   (PC 미변경 · 구조·기능 유지)
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  #screen-order-summary {
+    --os-summary-gap: 4px;
+    --os-summary-data-w: 76px;
+    --os-summary-fixed-w: var(--os-summary-data-w);
+    --os-summary-cell-h: 46px;
+    --os-summary-surface: #ececec;
+  }
+
+  #screen-order-summary .order-summary-table-wrap {
+    position: relative !important;
+    overflow-x: auto !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    isolation: isolate !important;
+    background: var(--os-summary-surface) !important;
+    overscroll-behavior-x: contain !important;
+  }
+
+  /* 가로 스크롤 시 데이터·헤더가 목대 열 뒤로 숨김 */
+  #screen-order-summary .order-summary-table-wrap::before {
+    content: "" !important;
+    display: block !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    bottom: 0 !important;
+    width: calc(var(--os-summary-fixed-w) + var(--os-summary-gap) + 2px) !important;
+    background: var(--os-summary-surface) !important;
+    z-index: 35 !important;
+    pointer-events: none !important;
+  }
+
+  #screen-order-summary .order-summary-table {
+    width: calc(
+      6 * var(--os-summary-data-w) + 5 * var(--os-summary-gap)
+    ) !important;
+    min-width: calc(
+      6 * var(--os-summary-data-w) + 5 * var(--os-summary-gap)
+    ) !important;
+    max-width: none !important;
+    table-layout: fixed !important;
+    border-collapse: separate !important;
+    border-spacing: var(--os-summary-gap) var(--os-summary-gap) !important;
+    background: var(--os-summary-surface) !important;
+  }
+
+  /* thead 코너: 목대 열과 정렬 · 시공오더·미배정 헤더가 옆에 보이도록 */
+  #screen-order-summary .order-summary-table thead tr:last-child th.order-summary-table__corner {
+    display: table-cell !important;
+    visibility: visible !important;
+    width: var(--os-summary-fixed-w) !important;
+    min-width: var(--os-summary-fixed-w) !important;
+    max-width: var(--os-summary-fixed-w) !important;
+    height: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    background: var(--os-summary-surface) !important;
+    opacity: 1 !important;
+    overflow: hidden !important;
+    line-height: 0 !important;
+    font-size: 0 !important;
+    pointer-events: none !important;
+    position: sticky !important;
+    left: 0 !important;
+    z-index: 34 !important;
+    clip: auto !important;
+    transform: none !important;
+    box-shadow: none !important;
+  }
+
+  #screen-order-summary .order-summary-table__col-head,
+  #screen-order-summary .order-summary-table__cell,
+  #screen-order-summary .order-summary-table__row-head {
+    width: var(--os-summary-data-w) !important;
+    min-width: var(--os-summary-data-w) !important;
+    max-width: var(--os-summary-data-w) !important;
+    box-sizing: border-box !important;
+    vertical-align: middle !important;
+    transform: none !important;
+  }
+
+  /* 항목별 박스 경계 (기존 테두리 색) */
+  #screen-order-summary .order-summary-table thead tr:last-child th.order-summary-table__col-head {
+    background: #9a9a9a !important;
+    color: #fff !important;
+    border: 1px solid #707070 !important;
+    min-height: var(--os-summary-cell-h) !important;
+    height: var(--os-summary-cell-h) !important;
+    max-height: var(--os-summary-cell-h) !important;
+    padding: 0 4px !important;
+    position: relative !important;
+    z-index: 0 !important;
+    overflow: hidden !important;
+  }
+
+  #screen-order-summary .order-summary-table tbody .order-summary-table__row-head {
+    position: sticky !important;
+    left: 0 !important;
+    z-index: 36 !important;
+    background: var(--color-navy) !important;
+    background-color: var(--color-navy) !important;
+    color: #fff !important;
+    border: 1px solid var(--color-navy-dark) !important;
+    min-height: var(--os-summary-cell-h) !important;
+    height: var(--os-summary-cell-h) !important;
+    max-height: var(--os-summary-cell-h) !important;
+    padding: 0 4px !important;
+    box-sizing: border-box !important;
+    isolation: isolate !important;
+    overflow: hidden !important;
+    box-shadow: none !important;
+  }
+
+  #screen-order-summary .order-summary-table tbody .order-summary-table__cell-box {
+    background: #fff !important;
+    border: 1px solid #b8b8b8 !important;
+    min-height: var(--os-summary-cell-h) !important;
+    height: var(--os-summary-cell-h) !important;
+    max-height: var(--os-summary-cell-h) !important;
+    box-sizing: border-box !important;
+    position: relative !important;
+    z-index: 0 !important;
+    overflow: hidden !important;
+    width: 100% !important;
+    padding: 0 4px !important;
+    transform: none !important;
+  }
+
+  #screen-order-summary .order-summary-table tbody .order-summary-table__cell {
+    position: relative !important;
+    z-index: 0 !important;
+    background: var(--os-summary-surface) !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+  }
+
+  #screen-order-summary .order-summary-table tbody .order-summary-table__cell-btn {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    position: relative !important;
+    z-index: 0 !important;
+    overflow: hidden !important;
+  }
+
+  /* 목대 우측 덮개 — 스크롤 데이터가 파란 열 사이로 비치지 않게 */
+  #screen-order-summary .order-summary-table__row-head::before {
+    content: none !important;
+    display: none !important;
+  }
+
+  #screen-order-summary .order-summary-table__row-head::after,
+  #screen-order-summary
+    .order-summary-table
+    tbody
+    tr:first-child
+    .order-summary-table__row-head::after {
+    content: "" !important;
+    display: block !important;
+    position: absolute !important;
+    top: 0 !important;
+    right: calc(-1 * var(--os-summary-gap)) !important;
+    width: var(--os-summary-gap) !important;
+    height: 100% !important;
+    background: var(--os-summary-surface) !important;
+    pointer-events: none !important;
+    z-index: 37 !important;
+  }
+
+  #screen-order-summary .order-summary-table__row-head span,
+  #screen-order-summary .order-summary-table__col-head span {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: var(--os-summary-cell-h) !important;
+    text-align: center !important;
+    line-height: 1.2 !important;
+    transform: none !important;
+    white-space: normal !important;
+    word-break: keep-all !important;
+    overflow-wrap: anywhere !important;
+    font-size: 11px !important;
+  }
+
+  #screen-order-summary .order-summary-table tbody .order-summary-table__cell-box span {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    height: 100% !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+
+  #screen-order-summary .order-summary-table tbody tr {
+    background: var(--os-summary-surface) !important;
+  }
+
+  #screen-order-summary .order-summary-table tbody tr:first-child .order-summary-table__row-head,
+  #screen-order-summary .order-summary-table tbody tr:first-child .order-summary-table__cell,
+  #screen-order-summary .order-summary-table tbody tr:first-child .order-summary-table__cell-box {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+    border-top: 1px solid #b8b8b8 !important;
+  }
+
+  #screen-order-summary .order-summary-table tbody tr:first-child .order-summary-table__row-head {
+    border-top: 1px solid var(--color-navy-dark) !important;
+  }
+}

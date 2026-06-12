@@ -1,0 +1,3988 @@
+/* EFFEX 모바일 전용 (2~8번). PC(769px+)는 이 파일을 로드하지 않습니다. */
+
+@media (max-width: 768px) {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* ── 1번 로그인 ── */
+  #screen-login.is-active {
+    overflow-y: auto !important;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  #screen-login .login-screen {
+    align-items: flex-start;
+    justify-content: flex-start;
+    min-height: min(100%, 100dvh);
+    padding: env(safe-area-inset-top, 0px) 16px 32px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: #9a9a9a #e8e8e8;
+  }
+
+  #screen-login .login-screen::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  #screen-login .login-screen::-webkit-scrollbar-thumb {
+    background: #9a9a9a;
+    border-radius: 4px;
+  }
+
+  /* 로고: 크기 유지, 최상단(노치 safe-area만) */
+  #screen-login .login-screen__logo {
+    margin-top: env(safe-area-inset-top, 0px) !important;
+    margin-bottom: 28px !important;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    overflow: visible;
+  }
+
+  #screen-login .login-screen__logo img {
+    width: min(100%, 380px);
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  #screen-login .order-mobile-footer--auth {
+    display: none !important;
+  }
+
+  /* ── 2번 신규가입 ── */
+  #screen-signup.is-active {
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: 100%;
+    min-height: 100dvh;
+    overflow: hidden;
+    background: #fff;
+  }
+
+  #screen-signup .signup-header {
+    flex-shrink: 0;
+    min-height: 52px;
+    padding: calc(10px + env(safe-area-inset-top, 0px)) 12px 10px;
+    background: linear-gradient(to right, #d9d9d9, #adacac);
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
+  }
+
+  #screen-signup .signup-header__logo img {
+    height: 32px;
+    width: auto;
+  }
+
+  #screen-signup .signup-body {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 14px 10px calc(56px + env(safe-area-inset-bottom, 0px));
+  }
+
+  #screen-signup .signup-form-box {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+
+  #screen-signup .signup-field {
+    flex-direction: column;
+    gap: 0;
+    margin-bottom: 12px;
+    transform: none !important;
+    min-height: 0;
+  }
+
+  #screen-signup .signup-field__label {
+    width: 100%;
+    flex: 0 0 auto;
+    min-height: 40px;
+    border-radius: 0;
+    transform: none !important;
+  }
+
+  #screen-signup .signup-field__label span {
+    transform: none !important;
+  }
+
+  #screen-signup .signup-field__divider {
+    display: none;
+  }
+
+  #screen-signup .signup-field__control {
+    width: 100%;
+    min-height: 48px;
+    border: 1px solid #b8b8b8;
+    border-top: none;
+    border-radius: 0 !important;
+    transform: none !important;
+  }
+
+  #screen-signup .signup-role-options,
+  #screen-signup .signup-scope-options {
+    width: 100%;
+    min-height: 48px;
+    flex-wrap: nowrap;
+  }
+
+  #screen-signup .signup-role-option,
+  #screen-signup .signup-scope-option {
+    flex: 1 1 0;
+    min-height: 48px;
+    border-radius: 0 !important;
+    transform: none !important;
+  }
+
+  #screen-signup .signup-actions {
+    margin-top: 16px;
+    gap: 8px;
+  }
+
+  #screen-signup .signup-actions__btn {
+    flex: 1;
+    min-height: 48px;
+    font-size: 16px;
+  }
+
+  #screen-signup .order-mobile-footer--auth {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 100;
+    padding: 12px 12px calc(12px + env(safe-area-inset-bottom, 0px));
+    background: rgba(244, 245, 247, 0.98);
+    border-top: 1px solid #e0e0e0;
+    font-size: 14px;
+    pointer-events: none;
+  }
+
+  #screen-signup .order-mobile-footer--auth .order-footer__link {
+    pointer-events: auto;
+  }
+
+  /* ── 3~8번 공통 레이아웃 ── */
+  #screen-order.is-active,
+  #screen-order-assign.is-active,
+  #screen-order-status.is-active,
+  #screen-order-open.is-active,
+  #screen-order-stats.is-active,
+  #screen-order-summary.is-active {
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: 100%;
+    min-height: 100dvh;
+    overflow: hidden;
+    background: #fff;
+  }
+
+  #screen-order .order-topbar,
+  #screen-order-assign .order-topbar,
+  #screen-order-status .order-topbar,
+  #screen-order-open .order-topbar,
+  #screen-order-stats .order-topbar,
+  #screen-order-summary .order-topbar {
+    flex-shrink: 0;
+    padding-top: env(safe-area-inset-top, 0px) !important;
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+    padding-bottom: 8px !important;
+    row-gap: 8px !important;
+    overflow: visible !important;
+  }
+
+  /* 로고: 크기(168×40) 유지, 최상단 */
+  #screen-order .order-topbar__logo,
+  #screen-order-assign .order-topbar__logo,
+  #screen-order-status .order-topbar__logo,
+  #screen-order-open .order-topbar__logo,
+  #screen-order-stats .order-topbar__logo,
+  #screen-order-summary .order-topbar__logo {
+    margin: 0 auto 8px !important;
+    width: min(168px, 48vw) !important;
+    height: 40px !important;
+    min-height: 40px !important;
+    max-height: 40px !important;
+    overflow: visible !important;
+    z-index: 3 !important;
+  }
+
+  #screen-order .order-topbar__logo .order-topbar__logo-img,
+  #screen-order-assign .order-topbar__logo .order-topbar__logo-img,
+  #screen-order-status .order-topbar__logo .order-topbar__logo-img,
+  #screen-order-open .order-topbar__logo .order-topbar__logo-img,
+  #screen-order-stats .order-topbar__logo .order-topbar__logo-img,
+  #screen-order-summary .order-topbar__logo .order-topbar__logo-img {
+    object-fit: contain !important;
+    object-position: center center !important;
+  }
+
+  #screen-order .order-topbar__menu,
+  #screen-order-assign .order-topbar__menu,
+  #screen-order-status .order-topbar__menu,
+  #screen-order-open .order-topbar__menu,
+  #screen-order-stats .order-topbar__menu,
+  #screen-order-summary .order-topbar__menu {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+    align-self: stretch !important;
+    z-index: 2 !important;
+    overflow: visible !important;
+  }
+
+  /* 본문: 세로 스크롤(하단 푸터·상단바 제외 영역) */
+  #screen-signup .signup-body,
+  #screen-order .assign-body,
+  #screen-order-assign .assign-body,
+  #screen-order-status .assign-body,
+  #screen-order-open .assign-body,
+  #screen-order-stats .assign-body,
+  #screen-order-summary .order-summary-body {
+    flex: 1 1 auto;
+    min-height: 0;
+    width: 100%;
+    max-width: 100%;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-bottom: calc(52px + env(safe-area-inset-bottom, 0px)) !important;
+    overflow-y: scroll !important;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
+    touch-action: pan-y;
+    scrollbar-width: thin;
+    scrollbar-color: #9a9a9a #e8e8e8;
+  }
+
+  #screen-signup .signup-body::-webkit-scrollbar,
+  #screen-order .assign-body::-webkit-scrollbar,
+  #screen-order-assign .assign-body::-webkit-scrollbar,
+  #screen-order-status .assign-body::-webkit-scrollbar,
+  #screen-order-open .assign-body::-webkit-scrollbar,
+  #screen-order-stats .assign-body::-webkit-scrollbar,
+  #screen-order-summary .order-summary-body::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  #screen-signup .signup-body::-webkit-scrollbar-thumb,
+  #screen-order .assign-body::-webkit-scrollbar-thumb,
+  #screen-order-assign .assign-body::-webkit-scrollbar-thumb,
+  #screen-order-status .assign-body::-webkit-scrollbar-thumb,
+  #screen-order-open .assign-body::-webkit-scrollbar-thumb,
+  #screen-order-stats .assign-body::-webkit-scrollbar-thumb,
+  #screen-order-summary .order-summary-body::-webkit-scrollbar-thumb {
+    background: #9a9a9a;
+    border-radius: 4px;
+  }
+
+  #screen-order .assign-panel,
+  #screen-order-assign .assign-panel,
+  #screen-order-status .assign-panel,
+  #screen-order-open .assign-panel,
+  #screen-order-stats .assign-panel,
+  #screen-order-summary .assign-panel {
+    width: 100%;
+    max-width: 100%;
+    padding: 10px 6px;
+    box-sizing: border-box;
+  }
+
+  /* 하단: 가입 수정 | 로그 아웃 */
+  .order-page .order-mobile-footer {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 100;
+    padding: 12px 12px calc(12px + env(safe-area-inset-bottom, 0px));
+    background: rgba(244, 245, 247, 0.98);
+    border-top: 1px solid #e0e0e0;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.06);
+    font-size: 14px;
+    font-weight: 500;
+    pointer-events: none;
+  }
+
+  .order-page .order-mobile-footer .order-footer__link {
+    pointer-events: auto;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    padding: 0 12px;
+  }
+
+  /* ── 3번 오더등록 ── */
+  #screen-order .assign-body {
+    overflow-x: scroll !important;
+    overflow-y: scroll !important;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    touch-action: pan-x pan-y;
+    scrollbar-width: thin;
+    scrollbar-color: #9a9a9a #e8e8e8;
+  }
+
+  #screen-order .assign-body::-webkit-scrollbar {
+    width: 8px;
+    height: 10px;
+  }
+
+  #screen-order .assign-body::-webkit-scrollbar-thumb {
+    background: #9a9a9a;
+    border-radius: 4px;
+  }
+
+  #screen-order .order-form {
+    min-width: 520px;
+    width: max-content;
+    max-width: none;
+  }
+
+  #screen-order {
+    --order-field-h: 48px;
+    --order-label-w: 86px;
+  }
+
+  #screen-order .order-form > .order-field:nth-child(-n + 10) {
+    height: var(--order-field-h);
+    min-height: var(--order-field-h);
+    max-height: var(--order-field-h);
+    margin-bottom: 10px;
+    transform: none !important;
+  }
+
+  #screen-order .order-form > .order-field:nth-child(-n + 10) .order-field__label span,
+  #screen-order .order-form > .order-field:nth-child(-n + 10) .order-field__control input,
+  #screen-order .order-form > .order-field:nth-child(-n + 10) .order-scope-option > span:first-child {
+    transform: none !important;
+  }
+
+  #screen-order .order-form > .order-field:nth-child(-n + 10) .order-field__control,
+  #screen-order .order-form > .order-field:nth-child(-n + 10) .order-scope-options,
+  #screen-order .order-form > .order-field:nth-child(-n + 10) .order-scope-sales-options {
+    min-height: var(--order-field-h) !important;
+    max-height: var(--order-field-h) !important;
+    border: 1px solid #b8b8b8;
+    box-sizing: border-box;
+  }
+
+  #screen-order .order-register__btn {
+    width: 100%;
+    min-height: 48px;
+    font-size: 16px;
+  }
+
+  /* 3번: 시공일자 달력 — 화면 정중앙 모달 (PC·1·8번·상단 회색바 미변경) */
+  body.order-date-picker-modal-open {
+    overflow: hidden !important;
+    touch-action: none;
+  }
+
+  body.order-date-picker-modal-open .screen.is-active {
+    overflow: hidden !important;
+  }
+
+  .order-date-picker-backdrop {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
+    z-index: 10040;
+    background: rgba(0, 0, 0, 0.45);
+    touch-action: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .order-date-picker-backdrop[hidden] {
+    display: none !important;
+  }
+
+  #orderDatePickerPopup[hidden] {
+    display: none !important;
+  }
+
+  /* 3번: section 안에 남은 달력은 표시하지 않음(body 백드롭만 사용) */
+  #screen-order #orderDatePickerPopup:not([hidden]) {
+    display: none !important;
+  }
+
+  .order-date-picker-backdrop:not([hidden]) {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 16px !important;
+    box-sizing: border-box !important;
+  }
+
+  #orderDatePickerBackdrop #orderDatePickerPopup:not([hidden]) {
+    display: block !important;
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    inset: auto !important;
+    width: min(340px, calc(100vw - 32px)) !important;
+    height: max-content !important;
+    max-height: min(90vh, 90dvh) !important;
+    margin: 0 !important;
+    transform: none !important;
+    flex-shrink: 0 !important;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 8px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.28);
+    pointer-events: auto;
+  }
+
+  /* ── 4~6번 배정·현황·미마감 ── */
+  #screen-order-assign .assign-layout,
+  #screen-order-status .assign-layout,
+  #screen-order-open .assign-layout {
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+
+  #screen-order-assign .assign-sidebar,
+  #screen-order-status .assign-sidebar,
+  #screen-order-open .assign-sidebar,
+  #screen-order-assign .assign-main,
+  #screen-order-status .assign-main,
+  #screen-order-open .assign-main {
+    width: 100%;
+    min-width: 0;
+  }
+
+  #screen-order-assign .assign-date-title,
+  #screen-order-status .assign-date-title,
+  #screen-order-open .assign-date-title {
+    font-size: clamp(20px, 5.5vw, 26px);
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  #screen-order-assign .assign-ym__select,
+  #screen-order-status .assign-ym__select,
+  #screen-order-open .assign-ym__select {
+    min-height: 44px;
+    font-size: 16px;
+  }
+
+  #screen-order-assign .assign-calendar,
+  #screen-order-status .assign-calendar,
+  #screen-order-open .assign-calendar {
+    min-height: 190px;
+    max-height: 220px;
+  }
+
+  #screen-order-status .assign-table-wrap,
+  #screen-order-open .assign-table-wrap {
+    overflow-x: scroll !important;
+    overflow-y: scroll !important;
+    max-height: min(52vh, 48dvh);
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: #9a9a9a #e8e8e8;
+    overscroll-behavior: contain;
+    touch-action: pan-x pan-y;
+  }
+
+  #screen-order-status .assign-table-wrap::-webkit-scrollbar,
+  #screen-order-open .assign-table-wrap::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  #screen-order-status .assign-table,
+  #screen-order-open .assign-table {
+    min-width: 680px;
+  }
+
+  #screen-order-assign .assign-save .order-register__btn,
+  #screen-order-status .assign-save .order-register__btn,
+  #screen-order-open .assign-save .order-register__btn {
+    width: 100%;
+    min-height: 48px;
+    font-size: 16px;
+  }
+
+  #screen-order-status .assign-open-filter__btn,
+  #screen-order-open .assign-open-filter__btn,
+  #screen-order-status .assign-partner-select,
+  #screen-order-status .assign-worker-select,
+  #screen-order-open .assign-partner-select,
+  #screen-order-open .assign-worker-select {
+    min-height: 44px;
+    font-size: 15px;
+  }
+
+  /* ── 7번 통계 ── */
+  #screen-order-stats .stats-main {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-height: 0;
+  }
+
+  #screen-order-stats .stats-mode-nav--top {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  #screen-order-stats .stats-mode-nav--top .stats-mode-nav__btn {
+    flex: 1 1 calc(33.33% - 6px);
+    min-height: 44px;
+    min-width: 0;
+    font-size: 14px;
+  }
+
+  #screen-order-stats .stats-content {
+    flex-direction: column !important;
+    gap: 14px !important;
+  }
+
+  #screen-order-stats .stats-filters {
+    width: 100% !important;
+    flex: 0 0 auto !important;
+    padding-top: 0 !important;
+    align-self: stretch !important;
+  }
+
+  #screen-order-stats .stats-filters-form .order-field {
+    flex-direction: column;
+    transform: none !important;
+    margin-bottom: 10px;
+  }
+
+  #screen-order-stats .stats-filters-form .order-field__divider {
+    display: none;
+  }
+
+  #screen-order-stats .stats-filters-form .order-field__label {
+    width: 100%;
+    flex: 0 0 auto;
+    min-height: 38px;
+    transform: none !important;
+  }
+
+  #screen-order-stats .stats-filters-form .order-field__label span {
+    transform: none !important;
+  }
+
+  #screen-order-stats .stats-filters-form .order-field__control {
+    width: 100%;
+    min-height: 44px;
+    border: 1px solid #b8b8b8;
+    border-top: none;
+    transform: none !important;
+  }
+
+  #screen-order-stats .stats-body {
+    width: 100%;
+    min-width: 0;
+  }
+
+  #screen-order-stats .stats-body .assign-table-wrap {
+    overflow-x: scroll !important;
+    overflow-y: scroll !important;
+    max-height: min(52vh, 48dvh);
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: #9a9a9a #e8e8e8;
+    overscroll-behavior: contain;
+    touch-action: pan-x pan-y;
+  }
+
+  #screen-order-stats .stats-body .assign-table-wrap::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  #screen-order-stats .stats-table {
+    min-width: 600px;
+  }
+
+  #screen-order-stats .stats-chart__plot {
+    min-height: 100px;
+  }
+
+  /* ── 8번 집계표 ── */
+  #screen-order-summary .order-summary-toolbar {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 8px !important;
+  }
+
+  #screen-order-summary .order-summary-metric-field {
+    display: flex !important;
+    width: 100% !important;
+  }
+
+  #screen-order-summary .order-summary-toggle {
+    display: none !important;
+  }
+
+  #screen-order-summary .order-summary-ym__select {
+    width: 100%;
+    min-height: 44px;
+    font-size: 16px;
+  }
+
+  #screen-order-summary .order-summary-table-wrap {
+    overflow-x: scroll !important;
+    overflow-y: scroll !important;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+    max-width: 100%;
+    max-height: min(58vh, 52dvh);
+    margin: 0;
+    padding-bottom: 4px;
+    scrollbar-width: thin;
+    scrollbar-color: #9a9a9a #e8e8e8;
+    overscroll-behavior: contain;
+    touch-action: pan-x pan-y;
+  }
+
+  #screen-order-summary .order-summary-table-wrap::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  #screen-order-summary .order-summary-table-wrap::-webkit-scrollbar-thumb {
+    background: #9a9a9a;
+    border-radius: 4px;
+  }
+
+  /* 목대 위 회색 잔상(단위행·빈 코너) 제거 */
+  #screen-order-summary .order-summary-table__unit-row,
+  #screen-order-summary .order-summary-table thead tr:first-child {
+    display: none !important;
+    height: 0 !important;
+    max-height: 0 !important;
+    visibility: collapse !important;
+    border: none !important;
+    background: transparent !important;
+  }
+
+  #screen-order-summary .order-summary-table thead tr:last-child th.order-summary-table__corner,
+  #screen-order-summary .order-summary-table thead th[aria-hidden="true"] {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    background: transparent !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+  }
+
+  #screen-order-summary .order-summary-table {
+    border-spacing: 4px 0 !important;
+  }
+
+  #screen-order-summary .order-summary-table tbody tr:first-child .order-summary-table__row-head,
+  #screen-order-summary .order-summary-table tbody tr:first-child .order-summary-table__cell {
+    margin-top: 0 !important;
+    padding-top: 6px !important;
+    border-top: none !important;
+    box-shadow: none !important;
+    background-image: none !important;
+  }
+
+  #screen-order-summary .order-summary-table tbody tr:first-child .order-summary-table__row-head::before,
+  #screen-order-summary .order-summary-table tbody tr:first-child .order-summary-table__row-head::after {
+    display: none !important;
+    content: none !important;
+  }
+
+  #screen-order-summary .order-summary-table__row-head {
+    position: sticky;
+    left: 0;
+    z-index: 3;
+    box-shadow: none !important;
+  }
+
+  /* 8번: 본문·집계 영역 바탕 — 3~7번 assign-body(#f0f0f0)·panel(#ececec)와 동일
+     (상단 회색바·연/월·집계 드롭다운·행/열 헤더·데이터 흰박스 색은 유지) */
+  #screen-order-summary .order-summary-body.assign-body {
+    background: #f0f0f0 !important;
+  }
+
+  #screen-order-summary .assign-panel.order-summary-panel {
+    background: #ececec !important;
+  }
+
+  #screen-order-summary .order-summary-toolbar,
+  #screen-order-summary .order-summary-ym,
+  #screen-order-summary .order-summary-ym__row,
+  #screen-order-summary .order-summary-ym__field {
+    background: transparent !important;
+  }
+
+  #screen-order-summary .order-summary-ym__select,
+  #screen-order-summary .order-summary-metric-field .order-summary-ym__select {
+    background: #fff !important;
+  }
+
+  #screen-order-summary .order-summary-table-wrap {
+    background: #ececec !important;
+  }
+
+  #screen-order-summary .order-summary-table-wrap::before {
+    background: #ececec !important;
+  }
+
+  #screen-order-summary .order-summary-table,
+  #screen-order-summary .order-summary-table tbody tr,
+  #screen-order-summary .order-summary-table tbody .order-summary-table__cell {
+    background: #ececec !important;
+  }
+
+  #screen-order-summary .order-summary-table tbody tr:first-child .order-summary-table__cell {
+    background: #ececec !important;
+  }
+
+  #screen-order-summary .order-summary-table__row-head::after,
+  #screen-order-summary
+    .order-summary-table
+    tbody
+    tr:first-child
+    .order-summary-table__row-head::after {
+    background: #ececec !important;
+  }
+
+  #screen-order-summary .order-summary-table thead tr:last-child th.order-summary-table__col-head,
+  #screen-order-summary .order-summary-table__col-head {
+    background: var(--color-navy) !important;
+    color: #fff !important;
+  }
+
+  #screen-order-summary .order-summary-table tbody .order-summary-table__row-head,
+  #screen-order-summary .order-summary-table tbody tr .order-summary-table__row-head {
+    background: var(--color-navy) !important;
+  }
+
+  #screen-order-summary .order-summary-table tbody .order-summary-table__cell-box,
+  #screen-order-summary .order-summary-table tbody tr:first-child .order-summary-table__cell-box {
+    background: #fff !important;
+  }
+
+  /* ── 모달(3~8 공통) — 4번 #modal-assign-detail 은 하단 전용 규칙 사용 ── */
+  .modal-overlay:not(#modal-assign-detail) {
+    padding: 8px;
+    align-items: flex-end;
+  }
+
+  .modal-overlay:not(#modal-assign-detail) > .modal,
+  .modal-overlay:not(#modal-assign-detail) > .assign-detail-modal,
+  .modal-overlay:not(#modal-assign-detail) > .status-detail-modal,
+  .modal-overlay:not(#modal-assign-detail) > .order-summary-list-modal,
+  #modal-status-detail .assign-detail-modal,
+  #modal-order-summary-list .order-summary-list-modal {
+    width: 100%;
+    max-width: 100%;
+    max-height: min(92vh, 92dvh);
+    border-radius: 14px 14px 0 0;
+    padding: 16px 12px calc(16px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .order-summary-list-modal__body {
+    max-height: min(58vh, 58dvh);
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .modal-overlay:not(#modal-assign-detail) .assign-detail-modal__form,
+  .status-detail-modal .status-detail-modal__section {
+    max-height: calc(92vh - 120px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .status-detail-modal__photos {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  /* 터치·접근성 */
+  #screen-signup button,
+  #screen-order button,
+  #screen-order-assign button,
+  #screen-order-status button,
+  #screen-order-open button,
+  #screen-order-stats button,
+  #screen-order-summary button,
+  #screen-order .order-topbar__link,
+  #screen-order-assign .order-topbar__link,
+  #screen-order-status .order-topbar__link,
+  #screen-order-open .order-topbar__link,
+  #screen-order-stats .order-topbar__link,
+  #screen-order-summary .order-topbar__link {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  #screen-signup input,
+  #screen-signup select,
+  #screen-order input,
+  #screen-order select,
+  #screen-order-assign select,
+  #screen-order-status select,
+  #screen-order-open select,
+  #screen-order-stats select,
+  #screen-order-summary select {
+    font-size: 16px;
+  }
+
+  /* 3~8번: 상단바(로고·메뉴 2단) — PC 레이아웃과 분리 */
+  #screen-order .order-topbar,
+  #screen-order-assign .order-topbar,
+  #screen-order-status .order-topbar,
+  #screen-order-open .order-topbar,
+  #screen-order-stats .order-topbar,
+  #screen-order-summary .order-topbar {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-areas: "logo" "menu" !important;
+    height: auto !important;
+    min-height: 0;
+    padding-top: env(safe-area-inset-top, 0px) !important;
+    row-gap: 8px !important;
+    overflow: visible !important;
+    background: linear-gradient(to right, #d9d9d9, #adacac) !important;
+  }
+
+  #screen-order .order-topbar__logo,
+  #screen-order-assign .order-topbar__logo,
+  #screen-order-status .order-topbar__logo,
+  #screen-order-open .order-topbar__logo,
+  #screen-order-stats .order-topbar__logo,
+  #screen-order-summary .order-topbar__logo {
+    grid-area: logo !important;
+    position: relative !important;
+    left: auto !important;
+    top: auto !important;
+    transform: none !important;
+    align-self: start !important;
+    justify-self: center !important;
+    margin: 0 auto 8px !important;
+    width: min(168px, 48vw) !important;
+    height: 40px !important;
+    min-height: 40px !important;
+    max-height: 40px !important;
+    overflow: visible !important;
+  }
+
+  #screen-order .order-topbar__login-msg,
+  #screen-order-assign .order-topbar__login-msg,
+  #screen-order-status .order-topbar__login-msg,
+  #screen-order-open .order-topbar__login-msg,
+  #screen-order-stats .order-topbar__login-msg,
+  #screen-order-summary .order-topbar__login-msg,
+  #screen-order .order-topbar__edit-profile,
+  #screen-order .order-topbar__logout,
+  #screen-order-assign .order-topbar__edit-profile,
+  #screen-order-assign .order-topbar__logout,
+  #screen-order-status .order-topbar__edit-profile,
+  #screen-order-status .order-topbar__logout,
+  #screen-order-open .order-topbar__edit-profile,
+  #screen-order-open .order-topbar__logout,
+  #screen-order-stats .order-topbar__edit-profile,
+  #screen-order-stats .order-topbar__logout,
+  #screen-order-summary .order-topbar__edit-profile,
+  #screen-order-summary .order-topbar__logout {
+    display: none !important;
+  }
+
+  #screen-order .order-topbar__aside,
+  #screen-order-assign .order-topbar__aside,
+  #screen-order-status .order-topbar__aside,
+  #screen-order-open .order-topbar__aside,
+  #screen-order-stats .order-topbar__aside,
+  #screen-order-summary .order-topbar__aside {
+    position: static !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  #screen-order .order-topbar__menu,
+  #screen-order-assign .order-topbar__menu,
+  #screen-order-status .order-topbar__menu,
+  #screen-order-open .order-topbar__menu,
+  #screen-order-stats .order-topbar__menu,
+  #screen-order-summary .order-topbar__menu {
+    grid-area: menu !important;
+    position: relative !important;
+    left: auto !important;
+    transform: none !important;
+    display: grid !important;
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    width: 100% !important;
+    gap: 4px !important;
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+
+  #screen-order .order-topbar__menu .order-topbar__link,
+  #screen-order-assign .order-topbar__menu .order-topbar__link,
+  #screen-order-status .order-topbar__menu .order-topbar__link,
+  #screen-order-open .order-topbar__menu .order-topbar__link,
+  #screen-order-stats .order-topbar__menu .order-topbar__link,
+  #screen-order-summary .order-topbar__menu .order-topbar__link {
+    min-width: 0 !important;
+    width: 100% !important;
+    min-height: 30px !important;
+    padding: 3px 2px !important;
+    font-size: 10px !important;
+    border: 1px solid #c9c9c9 !important;
+    background: #f7f7f7 !important;
+    border-radius: 7px !important;
+    justify-content: center !important;
+    transform: none !important;
+  }
+
+  #screen-order .order-topbar__menu .order-topbar__link--active,
+  #screen-order-assign .order-topbar__menu .order-topbar__link--active,
+  #screen-order-status .order-topbar__menu .order-topbar__link--active,
+  #screen-order-open .order-topbar__menu .order-topbar__link--active,
+  #screen-order-stats .order-topbar__menu .order-topbar__link--active,
+  #screen-order-summary .order-topbar__menu .order-topbar__link--active {
+    border-color: #9a9a9a !important;
+    background: #9a9a9a !important;
+    color: #fff !important;
+  }
+
+  /* 화면 번호: 상단 메뉴와 겹치지 않게 */
+  #screen-signup .signup-page__num,
+  #screen-order .order-page__num,
+  #screen-order-assign .order-page__num,
+  #screen-order-status .order-page__num,
+  #screen-order-open .order-page__num,
+  #screen-order-stats .order-page__num,
+  #screen-order-summary .order-page__num {
+    top: auto !important;
+    bottom: calc(56px + env(safe-area-inset-bottom, 0px)) !important;
+    right: 8px !important;
+    font-size: clamp(28px, 8vw, 40px) !important;
+    opacity: 0.22;
+    z-index: 2 !important;
+  }
+
+  #screen-order .order-form > .order-field {
+    transform: none !important;
+    margin-bottom: 10px;
+  }
+
+  /* 3번: 권역 — 도/시·군/구 드롭다운 나란히 (상단바·1·8번·PC 미변경) */
+  #screen-order .order-field.order-field--region {
+    overflow: visible !important;
+  }
+
+  #screen-order .order-form > .order-field.order-field--region > .order-field__region-group {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+    grid-template-rows: var(--order-field-h) !important;
+    flex: 1 1 auto !important;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: var(--order-field-h) !important;
+    min-height: var(--order-field-h) !important;
+    max-height: var(--order-field-h) !important;
+    overflow: visible !important;
+    gap: 0 !important;
+    align-items: stretch !important;
+  }
+
+  #screen-order
+    .order-field--region
+    .order-field__region-group
+    > .order-field__control--region-item {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    flex: unset !important;
+    height: 100% !important;
+    min-height: var(--order-field-h) !important;
+    max-height: var(--order-field-h) !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+    padding: 0 2px !important;
+  }
+
+  #screen-order
+    .order-field--region
+    .order-field__region-group
+    > .order-field__control--region-item
+    + .order-field__control--region-item {
+    border-left: 1px solid #b8b8b8 !important;
+  }
+
+  #screen-order .order-field--region #orderCity.order-select,
+  #screen-order .order-field--region #orderDistrict.order-select {
+    display: block !important;
+    visibility: visible !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    opacity: 1 !important;
+    -webkit-text-fill-color: currentColor;
+  }
+
+  #screen-order .order-field--region #orderDistrict.order-select:disabled {
+    color: #999 !important;
+    opacity: 1 !important;
+    -webkit-text-fill-color: #999 !important;
+  }
+
+  #screen-order .order-field--upload .order-field__control {
+    flex-wrap: nowrap;
+  }
+
+  #screen-order .order-upload-btn,
+  #screen-order .order-delete-btn,
+  #screen-order .order-date-btn {
+    flex-shrink: 0;
+    min-width: 64px;
+  }
+
+  /* 3번: 시공일자~도면3 높이·테두리 통일 */
+  #screen-order .order-form > .order-field:nth-child(-n + 10) .order-field__label,
+  #screen-order .order-form > .order-field:nth-child(-n + 10) .order-field__control,
+  #screen-order .order-form > .order-field:nth-child(-n + 10) .order-field__region-group,
+  #screen-order .order-form > .order-field:nth-child(-n + 10) .order-field__control--region-item,
+  #screen-order .order-form > .order-field:nth-child(-n + 10) .order-scope-options,
+  #screen-order .order-form > .order-field:nth-child(-n + 10) .order-scope-sales-options {
+    height: var(--order-field-h);
+    min-height: var(--order-field-h);
+    max-height: var(--order-field-h);
+    box-sizing: border-box;
+  }
+
+  #screen-order .order-scope-option,
+  #screen-order .order-scope-sales-cell {
+    min-height: var(--order-field-h);
+    height: 100%;
+  }
+
+  /* 5~6번: 미니 달력·스택 */
+  #screen-order-status .assign-mini-cal,
+  #screen-order-open .assign-mini-cal {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  #screen-order-status .assign-stack,
+  #screen-order-open .assign-stack {
+    gap: 8px;
+  }
+
+  #screen-order-status .assign-stack-item,
+  #screen-order-open .assign-stack-item {
+    min-height: 48px;
+    padding: 8px 10px;
+  }
+
+  #screen-order-assign .assign-cell-box,
+  #screen-order-status .assign-cell-box,
+  #screen-order-open .assign-cell-box {
+    min-height: 44px;
+  }
+
+  /* 7번: 통계 모드 탭 */
+  #screen-order-stats .stats-mode-nav--top {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    width: 100%;
+  }
+
+  #screen-order-stats .stats-mode-nav--top .stats-mode-nav__btn {
+    flex: unset;
+    width: 100%;
+  }
+
+  #screen-order-stats .stats-chart-scope__label {
+    font-size: 11px;
+  }
+
+  /* 8번: 목대 위 회색 박스 추가 제거 */
+  #screen-order-summary .order-summary-table thead::before,
+  #screen-order-summary .order-summary-table thead::after,
+  #screen-order-summary .order-summary-table tbody::before {
+    display: none !important;
+    content: none !important;
+  }
+
+  #screen-order-summary .order-summary-table thead tr:last-child th.order-summary-table__col-head {
+    background: var(--color-navy) !important;
+    color: #fff !important;
+    box-shadow: none !important;
+  }
+
+  #screen-order-summary .order-summary-table tbody tr:first-child .order-summary-table__row-head {
+    background: var(--color-navy) !important;
+  }
+
+  /* 모달: 필드 세로 배치 (4번 #modal-assign-detail 은 하단 전용 규칙 사용) */
+  #modal-status-detail .assign-detail-modal .order-field,
+  .status-detail-modal .order-field {
+    flex-direction: column;
+    transform: none !important;
+    margin-bottom: 10px;
+  }
+
+  #modal-status-detail .assign-detail-modal .order-field__divider,
+  .status-detail-modal .order-field__divider {
+    display: none;
+  }
+
+  #modal-status-detail .assign-detail-modal .order-field__label,
+  .status-detail-modal .order-field__label {
+    width: 100%;
+    min-height: 38px;
+    transform: none !important;
+  }
+
+  #modal-status-detail .assign-detail-modal .order-field__control,
+  .status-detail-modal .order-field__control {
+    width: 100%;
+    min-height: 44px;
+    border: 1px solid #b8b8b8;
+    border-top: none;
+    transform: none !important;
+  }
+
+  /* 2~8: 기울임·둥근 모서리 해제(데이터·PC와 동일 DOM) */
+  #screen-signup,
+  #screen-order,
+  #screen-order-assign,
+  #screen-order-status,
+  #screen-order-open,
+  #screen-order-stats,
+  #screen-order-summary {
+    --skew-angle: 0deg;
+  }
+
+  #screen-signup .signup-field,
+  #screen-signup .signup-role-option,
+  #screen-signup .signup-scope-option,
+  #screen-order .order-field,
+  #screen-order .order-scope-option,
+  #screen-order-summary .order-summary-table__cell-box,
+  .assign-cell-box,
+  .assign-ym__select,
+  .order-summary-ym__select {
+    border-radius: 0 !important;
+    transform: none !important;
+  }
+
+  /* 화면 바깥 가로 넘침만 막고, 본문은 assign-body 등에서 스크롤 */
+  #screen-signup.is-active,
+  #screen-order.is-active,
+  #screen-order-assign.is-active,
+  #screen-order-status.is-active,
+  #screen-order-open.is-active,
+  #screen-order-stats.is-active,
+  #screen-order-summary.is-active {
+    overflow-x: hidden;
+    overflow-y: hidden;
+  }
+
+  /* style.css 모바일 블록보다 우선: 본문 세로 스크롤 유지 */
+  #screen-order .assign-body,
+  #screen-order-assign .assign-body,
+  #screen-order-status .assign-body,
+  #screen-order-open .assign-body,
+  #screen-order-stats .assign-body,
+  #screen-order-summary .order-summary-body {
+    overflow-x: hidden !important;
+    overflow-y: scroll !important;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
+    touch-action: pan-y;
+  }
+
+  #screen-order .assign-body {
+    overflow-x: scroll !important;
+    touch-action: pan-x pan-y;
+  }
+
+  /* 3~8: flex 체인으로 본문 영역 높이·스크롤 확보 */
+  #screen-order.order-page,
+  #screen-order-assign.order-page,
+  #screen-order-status.order-page,
+  #screen-order-open.order-page,
+  #screen-order-stats.order-page,
+  #screen-order-summary.order-page {
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100%;
+    height: 100dvh;
+    min-height: 0;
+  }
+
+  #screen-order.order-page > .order-topbar,
+  #screen-order-assign.order-page > .order-topbar,
+  #screen-order-status.order-page > .order-topbar,
+  #screen-order-open.order-page > .order-topbar,
+  #screen-order-stats.order-page > .order-topbar,
+  #screen-order-summary.order-page > .order-topbar {
+    flex: 0 0 auto;
+  }
+
+  #screen-order.order-page > .assign-body,
+  #screen-order-assign.order-page > .assign-body,
+  #screen-order-status.order-page > .assign-body,
+  #screen-order-open.order-page > .assign-body,
+  #screen-order-stats.order-page > .assign-body,
+  #screen-order-summary.order-page > .order-summary-body {
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+
+  .order-summary-list-modal__body,
+  .assign-detail-modal__form,
+  .status-detail-modal .status-detail-modal__section {
+    overflow-y: scroll;
+    scrollbar-width: thin;
+    scrollbar-color: #9a9a9a #e8e8e8;
+  }
+
+  /* 넓은 표·폼: 내부 래퍼에서 가로·세로 스크롤 */
+  #screen-order-assign .assign-table-wrap::-webkit-scrollbar-thumb,
+  #screen-order-status .assign-table-wrap::-webkit-scrollbar-thumb,
+  #screen-order-open .assign-table-wrap::-webkit-scrollbar-thumb,
+  #screen-order-stats .stats-body .assign-table-wrap::-webkit-scrollbar-thumb {
+    background: #9a9a9a;
+    border-radius: 4px;
+  }
+
+  #screen-order-status .assign-panel,
+  #screen-order-open .assign-panel,
+  #screen-order-stats .assign-panel,
+  #screen-order-summary .assign-panel,
+  #screen-order-summary .assign-panel.order-summary-panel {
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow-x: visible !important;
+    overflow-y: visible !important;
+    min-width: 0;
+  }
+
+  #screen-order-assign .assign-main,
+  #screen-order-status .assign-main,
+  #screen-order-open .assign-main,
+  #screen-order-stats .stats-body,
+  #screen-order-stats .stats-content {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  #screen-order-stats .stats-content,
+  #screen-order-assign .assign-layout,
+  #screen-order-status .assign-layout,
+  #screen-order-open .assign-layout {
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  /* 4번: 오더 상세 팝업(#modal-assign-detail) — 8번 집계 팝업과 동일 좌하단 시트 (1·3·8·상단바 미변경) */
+  #modal-assign-detail,
+  #modal-assign-detail .assign-detail-modal {
+    --skew-angle: 0deg !important;
+  }
+
+  #modal-assign-detail,
+  #modal-assign-detail * {
+    --skew-angle: 0deg !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal *,
+  #modal-assign-detail .assign-detail-modal *::before,
+  #modal-assign-detail .assign-detail-modal *::after {
+    transform: none !important;
+    border-radius: 0 !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal.modal {
+    --order-label-w: 70px;
+    --order-field-h: 44px;
+    --order-font: 10px;
+    --order-input-font: 11px;
+    --modal-field-gap: 6px;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+    border: 1px solid #333 !important;
+    background: #ededed !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form {
+    flex: 1 1 auto;
+    min-height: 0;
+    max-height: none !important;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    box-sizing: border-box;
+    touch-action: pan-y;
+  }
+
+  #modal-assign-detail .order-field--scope .order-field__label,
+  #modal-assign-detail .order-field--scope-sales .order-field__label {
+    align-self: stretch !important;
+    min-height: var(--order-field-h) !important;
+    height: 100% !important;
+  }
+
+  #modal-assign-detail .order-field,
+  #modal-assign-detail .order-field__label,
+  #modal-assign-detail .order-field__label span,
+  #modal-assign-detail .order-field__divider,
+  #modal-assign-detail .order-field__control,
+  #modal-assign-detail .modal-field-value,
+  #modal-assign-detail .modal-field-input,
+  #modal-assign-detail .order-scope-option,
+  #modal-assign-detail .order-scope-option > span,
+  #modal-assign-detail .order-scope-option > span:first-child,
+  #modal-assign-detail .order-scope-option__dot,
+  #modal-assign-detail .order-scope-sales-cell,
+  #modal-assign-detail .order-scope-sales-input,
+  #modal-assign-detail .order-field--upload.modal-field--drawing label.order-field__label,
+  #modal-assign-detail .order-field--upload.modal-field--drawing label.order-field__label span,
+  #modal-assign-detail .assign-detail-modal__download,
+  #modal-assign-detail .assign-detail-modal__drawing-btn-text,
+  #modal-assign-detail .assign-detail-modal__drawing-action-btn,
+  #modal-assign-detail .assign-detail-modal__drawing-action-btn span {
+    transform: none !important;
+    font-style: normal !important;
+  }
+
+  #modal-assign-detail .modal-field-value {
+    display: flex !important;
+    align-items: center !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    padding: 0 !important;
+    line-height: 1.3 !important;
+    word-break: break-word !important;
+    overflow-wrap: anywhere !important;
+    overflow-x: hidden !important;
+    overflow-y: hidden !important;
+    box-sizing: border-box !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__field-row {
+    flex-direction: column !important;
+    gap: 6px !important;
+    margin-bottom: 6px !important;
+    width: 100% !important;
+  }
+
+  #modal-assign-detail .order-field--modal-inline {
+    flex: 1 1 100% !important;
+    min-width: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-bottom: 0 !important;
+  }
+
+  #modal-assign-detail .order-field--modal-inline .order-field__control--md {
+    flex: 1 1 0% !important;
+    width: 0 !important;
+    max-width: none !important;
+    min-width: 0 !important;
+  }
+
+  /* 가로형 라벨+입력 — 시공구분·시공매출·도면 제외 고정 높이 */
+  #modal-assign-detail
+    .assign-detail-modal__form
+    > .order-field:not(.order-field--scope):not(.order-field--scope-sales):not(
+      .order-field--upload
+    ),
+  #modal-assign-detail .assign-detail-modal__field-row .order-field--modal-inline {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: stretch !important;
+    margin-bottom: 6px !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    height: var(--order-field-h) !important;
+    min-height: var(--order-field-h) !important;
+    max-height: var(--order-field-h) !important;
+    gap: 0 !important;
+    transform: none !important;
+    box-sizing: border-box !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .order-field {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: stretch !important;
+    margin-bottom: 6px !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    gap: 0 !important;
+    transform: none !important;
+    box-sizing: border-box !important;
+  }
+
+  #modal-assign-detail
+    .assign-detail-modal__form
+    .order-field:not(.order-field--scope):not(.order-field--scope-sales):not(
+      .order-field--upload
+    ) {
+    height: var(--order-field-h) !important;
+    min-height: var(--order-field-h) !important;
+    max-height: var(--order-field-h) !important;
+    overflow: hidden !important;
+  }
+
+  #modal-assign-detail .order-field--scope,
+  #modal-assign-detail .order-field--scope-sales {
+    height: auto !important;
+    min-height: var(--order-field-h) !important;
+    max-height: none !important;
+    margin-bottom: 6px !important;
+    overflow: visible !important;
+  }
+
+  #modal-assign-detail .order-field__divider {
+    display: block !important;
+    flex: 0 0 4px !important;
+    width: 4px !important;
+    min-height: auto !important;
+    align-self: stretch !important;
+    background: var(--color-red, #e31e24) !important;
+    transform: none !important;
+  }
+
+  #modal-assign-detail .order-field__label {
+    flex: 0 0 var(--order-label-w) !important;
+    width: var(--order-label-w) !important;
+    height: var(--order-field-h) !important;
+    min-height: var(--order-field-h) !important;
+    max-height: var(--order-field-h) !important;
+    font-size: var(--order-font) !important;
+    font-weight: 700 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    background: var(--color-navy) !important;
+    color: #fff !important;
+    border-radius: 0 !important;
+    transform: none !important;
+    box-sizing: border-box !important;
+    padding: 0 4px !important;
+    line-height: 1.2 !important;
+  }
+
+  #modal-assign-detail .order-field__label span {
+    transform: none !important;
+    font-style: normal !important;
+    line-height: 1.2;
+    word-break: keep-all;
+    white-space: normal;
+  }
+
+  #modal-assign-detail .order-field__control {
+    flex: 1 1 0% !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: 100% !important;
+    min-height: var(--order-field-h) !important;
+    max-height: var(--order-field-h) !important;
+    padding: 0 8px !important;
+    font-size: var(--order-input-font) !important;
+    border: 1px solid #b8b8b8 !important;
+    border-left: none !important;
+    transform: none !important;
+    box-sizing: border-box !important;
+  }
+
+  #modal-assign-detail .order-field--scope .order-field__control,
+  #modal-assign-detail .order-field--scope-sales .order-field__control {
+    min-height: var(--order-field-h) !important;
+    height: auto !important;
+    max-height: none !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    border: 1px solid #b8b8b8 !important;
+    border-left: none !important;
+    box-sizing: border-box !important;
+  }
+
+  #modal-assign-detail .order-scope-options,
+  #modal-assign-detail .order-scope-sales-options {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: stretch !important;
+    width: 100%;
+    height: auto !important;
+    min-height: var(--order-field-h) !important;
+    max-height: none !important;
+    border: none !important;
+    box-sizing: border-box;
+    overflow: visible;
+  }
+
+  #modal-assign-detail .order-scope-option,
+  #modal-assign-detail .order-scope-sales-cell {
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+    min-height: var(--order-field-h) !important;
+    height: 100% !important;
+    max-height: var(--order-field-h) !important;
+    padding: 2px 1px !important;
+    font-size: 11px !important;
+    font-style: normal !important;
+    border: none !important;
+    border-right: 1px solid #b8b8b8 !important;
+    box-sizing: border-box !important;
+    transform: none !important;
+    white-space: normal !important;
+    line-height: 1.2 !important;
+    overflow: visible !important;
+  }
+
+  #modal-assign-detail .order-scope-option:last-child,
+  #modal-assign-detail .order-scope-sales-cell:last-child {
+    border-right: none !important;
+  }
+
+  #modal-assign-detail .order-scope-option__dot {
+    width: 10px;
+    height: 10px;
+    flex-shrink: 0;
+    transform: none !important;
+  }
+
+  #modal-assign-detail .order-scope-sales-cell .order-scope-sales-input {
+    width: 100% !important;
+    height: 100% !important;
+    min-height: var(--order-field-h) !important;
+    max-height: var(--order-field-h) !important;
+    font-size: 11px !important;
+    font-style: normal !important;
+    text-align: center !important;
+    transform: none !important;
+    box-sizing: border-box !important;
+    line-height: 1.2 !important;
+    overflow: visible !important;
+  }
+
+  #modal-assign-detail .order-field--upload.modal-field--drawing {
+    flex-direction: row !important;
+    align-items: stretch !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: var(--order-field-h) !important;
+    max-height: none !important;
+    margin-bottom: 6px !important;
+    box-sizing: border-box !important;
+    overflow: visible !important;
+  }
+
+  #modal-assign-detail .order-field--upload.modal-field--drawing > .order-field__control {
+    display: none !important;
+  }
+
+  #modal-assign-detail .modal-field--drawing {
+    margin-bottom: 6px !important;
+    height: auto !important;
+    min-height: var(--order-field-h) !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  #modal-assign-detail .order-field--upload.modal-field--drawing .order-field__label,
+  #modal-assign-detail .order-field--upload.modal-field--drawing label.order-field__label {
+    height: auto !important;
+    min-height: var(--order-field-h) !important;
+    max-height: none !important;
+  }
+
+  #modal-assign-detail .modal-drawing-field-group {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: stretch !important;
+    flex: 1 1 0% !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: auto !important;
+    min-height: var(--order-field-h) !important;
+    max-height: none !important;
+    gap: 0 !important;
+    overflow: visible !important;
+    border: 1px solid #b8b8b8 !important;
+    border-left: none !important;
+    box-sizing: border-box !important;
+    transform: none !important;
+  }
+
+  #modal-assign-detail .modal-drawing-field-group .order-field__control--upload {
+    flex: 1 1 auto;
+    min-width: 0;
+    max-width: none;
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    padding: 0;
+    border: none !important;
+    transform: none !important;
+  }
+
+  #modal-assign-detail .modal-drawing-actions {
+    flex: 0 0 auto;
+    flex-shrink: 0;
+    display: flex;
+    gap: 0;
+    height: var(--order-field-h) !important;
+    min-height: var(--order-field-h) !important;
+    max-height: var(--order-field-h) !important;
+    align-self: stretch !important;
+    transform: none !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__download,
+  #modal-assign-detail .assign-detail-modal__drawing-action-btn {
+    min-height: var(--order-field-h) !important;
+    height: 100% !important;
+    min-width: 0 !important;
+    flex: 1 1 0 !important;
+    padding: 0 4px !important;
+    font-size: 11px !important;
+    transform: none !important;
+    box-sizing: border-box !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__drawing-btn-text,
+  #modal-assign-detail .assign-detail-modal__drawing-action-btn span {
+    transform: none !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__footer {
+    flex: 0 0 auto;
+    margin-top: 10px !important;
+    padding-top: 10px;
+    border-top: 1px solid #c8c8c8;
+    gap: 8px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  #modal-assign-detail .assign-detail-modal__close,
+  #modal-assign-detail .assign-detail-modal__save {
+    flex: 1;
+    min-width: 0;
+    max-width: none;
+    min-height: 44px;
+    height: 44px;
+    font-size: 15px;
+  }
+
+  /* 4번 상세: 항목별 박스 높이·두께 통일 (시공구분·시공매출·도면은 높이 유연) */
+  #modal-assign-detail
+    .assign-detail-modal__form
+    > .order-field:not(.order-field--scope):not(.order-field--scope-sales):not(
+      .modal-field--drawing
+    ),
+  #modal-assign-detail .assign-detail-modal__field-row > .order-field--modal-inline,
+  #modal-assign-detail
+    .assign-detail-modal__form
+    > .order-field:not(.order-field--scope):not(.order-field--scope-sales):not(
+      .modal-field--drawing
+    )
+    .order-field__label,
+  #modal-assign-detail
+    .assign-detail-modal__form
+    > .order-field:not(.order-field--scope):not(.order-field--scope-sales):not(
+      .modal-field--drawing
+    )
+    .order-field__control {
+    height: var(--order-field-h) !important;
+    min-height: var(--order-field-h) !important;
+    max-height: var(--order-field-h) !important;
+    box-sizing: border-box !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .order-field,
+  #modal-assign-detail .assign-detail-modal__field-row > .order-field--modal-inline {
+    margin-bottom: 6px !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__field-row {
+    margin-bottom: 0 !important;
+  }
+
+  #modal-assign-detail .modal-field-value,
+  #modal-assign-detail .modal-field-input,
+  #modal-assign-detail .order-field__control input,
+  #modal-assign-detail .order-scope-option,
+  #modal-assign-detail .order-scope-option > span,
+  #modal-assign-detail .order-scope-option > span:first-child,
+  #modal-assign-detail .order-scope-option__dot,
+  #modal-assign-detail .order-scope-sales-cell,
+  #modal-assign-detail .order-scope-sales-input,
+  #modal-assign-detail .order-field--upload.modal-field--drawing .order-field__label,
+  #modal-assign-detail .order-field--upload.modal-field--drawing .order-field__label span,
+  #modal-assign-detail .assign-detail-modal__drawing-btn-text,
+  #modal-assign-detail .assign-detail-modal__drawing-action-btn,
+  #modal-assign-detail .assign-detail-modal__drawing-action-btn span {
+    transform: none !important;
+    writing-mode: horizontal-tb !important;
+    text-orientation: mixed !important;
+    font-style: normal !important;
+  }
+
+  /* 4번 상세: 항목 행 높이·테두리·텍스트 각도 최종 통일 */
+  #modal-assign-detail
+    .assign-detail-modal__form
+    > .order-field:not(.order-field--scope):not(.order-field--scope-sales):not(
+      .modal-field--drawing
+    ),
+  #modal-assign-detail .assign-detail-modal__field-row > .order-field--modal-inline {
+    gap: 0 !important;
+    overflow: hidden !important;
+  }
+
+  #modal-assign-detail .order-field--upload.modal-field--drawing {
+    gap: 0 !important;
+    overflow: visible !important;
+  }
+
+  #modal-assign-detail .order-field--scope,
+  #modal-assign-detail .order-field--scope-sales {
+    gap: 0 !important;
+    overflow: visible !important;
+  }
+
+  #modal-assign-detail .order-field--scope .order-field__control,
+  #modal-assign-detail .order-field--scope-sales .order-field__control {
+    flex: 1 1 0% !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    height: auto !important;
+    min-height: var(--order-field-h) !important;
+    max-height: none !important;
+    overflow: visible !important;
+    border: 1px solid #b8b8b8 !important;
+    border-left: none !important;
+    background: #fff !important;
+    box-sizing: border-box !important;
+    transform: none !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form > .order-field:not(.order-field--upload):not(.order-field--scope):not(.order-field--scope-sales) .order-field__control {
+    flex: 1 1 0% !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    height: 100% !important;
+    min-height: var(--order-field-h) !important;
+    max-height: var(--order-field-h) !important;
+    border: 1px solid #b8b8b8 !important;
+    border-left: none !important;
+    background: #fff !important;
+    box-sizing: border-box !important;
+    transform: none !important;
+  }
+
+  #modal-assign-detail .order-scope-options,
+  #modal-assign-detail .order-scope-sales-options {
+    height: auto !important;
+    min-height: var(--order-field-h) !important;
+    max-height: none !important;
+    border: none !important;
+    overflow: visible !important;
+  }
+
+  #modal-assign-detail .order-scope-option,
+  #modal-assign-detail .order-scope-sales-cell {
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 2px !important;
+    height: auto !important;
+    min-height: var(--order-field-h) !important;
+    max-height: none !important;
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    word-break: keep-all !important;
+    font-style: normal !important;
+    transform: none !important;
+  }
+
+  /* 4번 상세: 시공구분·시공매출 행 — 텍스트 잘림 방지(높이만 유연) */
+  #modal-assign-detail .order-field--scope,
+  #modal-assign-detail .order-field--scope-sales {
+    height: auto !important;
+    min-height: var(--order-field-h) !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  #modal-assign-detail .order-field--scope .order-field__label,
+  #modal-assign-detail .order-field--scope-sales .order-field__label {
+    height: auto !important;
+    min-height: var(--order-field-h) !important;
+    max-height: none !important;
+    align-self: stretch !important;
+  }
+
+  #modal-assign-detail .order-field--scope .order-field__control,
+  #modal-assign-detail .order-field--scope-sales .order-field__control,
+  #modal-assign-detail .order-scope-options,
+  #modal-assign-detail .order-scope-sales-options {
+    height: auto !important;
+    min-height: var(--order-field-h) !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  #modal-assign-detail .order-field--upload.modal-field--drawing > .modal-drawing-field-group {
+    flex: 1 1 0% !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    height: 100% !important;
+    min-height: var(--order-field-h) !important;
+    max-height: var(--order-field-h) !important;
+    border: 1px solid #b8b8b8 !important;
+    border-left: none !important;
+    box-sizing: border-box !important;
+    transform: none !important;
+  }
+
+  #modal-assign-detail .modal-drawing-field-group .order-field__control--upload {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    border: none !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: stretch !important;
+    transform: none !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__download,
+  #modal-assign-detail .assign-detail-modal__drawing-action-btn {
+    align-self: stretch !important;
+    height: 100% !important;
+    min-height: var(--order-field-h) !important;
+    max-height: var(--order-field-h) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transform: none !important;
+  }
+
+  /* 4번 상세 팝업 — 스큐(기울임) 제거 · 시공구분/시공매출/도면 텍스트 잘림 방지 */
+  #modal-assign-detail .order-scope-option,
+  #modal-assign-detail .order-scope-option > span,
+  #modal-assign-detail .order-scope-option > span:first-child,
+  #modal-assign-detail .order-scope-option__dot,
+  #modal-assign-detail .order-scope-sales-cell,
+  #modal-assign-detail .order-scope-sales-cell .order-scope-sales-input,
+  #modal-assign-detail .order-field--upload.modal-field--drawing .order-field__label,
+  #modal-assign-detail .order-field--upload.modal-field--drawing .order-field__label span,
+  #modal-assign-detail .assign-detail-modal__drawing-btn-text,
+  #modal-assign-detail .assign-detail-modal__drawing-action-btn,
+  #modal-assign-detail .assign-detail-modal__drawing-action-btn span {
+    transform: none !important;
+    font-style: normal !important;
+  }
+
+  #modal-assign-detail .order-field--scope,
+  #modal-assign-detail .order-field--scope-sales {
+    height: auto !important;
+    min-height: var(--order-field-h) !important;
+    max-height: none !important;
+    overflow: visible !important;
+    align-items: stretch !important;
+  }
+
+  #modal-assign-detail .order-field--scope .order-field__label,
+  #modal-assign-detail .order-field--scope-sales .order-field__label,
+  #modal-assign-detail .order-field--upload.modal-field--drawing .order-field__label {
+    height: auto !important;
+    min-height: var(--order-field-h) !important;
+    max-height: none !important;
+    padding: 4px 3px !important;
+    line-height: 1.25 !important;
+    white-space: normal !important;
+    word-break: keep-all !important;
+  }
+
+  #modal-assign-detail .order-scope-options,
+  #modal-assign-detail .order-scope-sales-options,
+  #modal-assign-detail .order-field--scope .order-field__control,
+  #modal-assign-detail .order-field--scope-sales .order-field__control {
+    height: auto !important;
+    min-height: var(--order-field-h) !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  #modal-assign-detail .order-scope-option,
+  #modal-assign-detail .order-scope-sales-cell {
+    height: auto !important;
+    min-height: var(--order-field-h) !important;
+    max-height: none !important;
+    padding: 4px 2px !important;
+    font-size: 10px !important;
+    line-height: 1.25 !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    word-break: keep-all !important;
+    white-space: normal !important;
+  }
+
+  #modal-assign-detail .order-scope-sales-cell .order-scope-sales-input {
+    height: auto !important;
+    min-height: 1.5em !important;
+    max-height: none !important;
+    padding: 2px 1px !important;
+    line-height: 1.25 !important;
+    overflow: visible !important;
+  }
+
+  #modal-assign-detail .order-field--upload.modal-field--drawing {
+    height: auto !important;
+    min-height: var(--order-field-h) !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  #modal-assign-detail .modal-drawing-field-group {
+    overflow: visible !important;
+    min-height: var(--order-field-h) !important;
+    height: auto !important;
+    max-height: none !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__download,
+  #modal-assign-detail .assign-detail-modal__drawing-action-btn {
+    font-size: 10px !important;
+    padding: 4px 3px !important;
+    white-space: nowrap !important;
+    overflow: visible !important;
+  }
+
+  /* 4번 상세 팝업 최종: 기울임(스큐) 제거 · 시공구분/시공매출/도면 텍스트 잘림 방지 */
+  #modal-assign-detail .assign-detail-modal .order-field {
+    transform: none !important;
+  }
+
+  #modal-assign-detail .order-scope-option,
+  #modal-assign-detail .order-scope-option > span,
+  #modal-assign-detail .order-scope-option > span:first-child,
+  #modal-assign-detail .order-scope-option__dot,
+  #modal-assign-detail .order-scope-sales-cell,
+  #modal-assign-detail .order-scope-sales-cell .order-scope-sales-input,
+  #modal-assign-detail .order-field--upload.modal-field--drawing .order-field__label,
+  #modal-assign-detail .order-field--upload.modal-field--drawing .order-field__label span,
+  #modal-assign-detail .assign-detail-modal__drawing-btn-text,
+  #modal-assign-detail .assign-detail-modal__drawing-action-btn span {
+    transform: none !important;
+    font-style: normal !important;
+  }
+
+  #modal-assign-detail .order-field--scope,
+  #modal-assign-detail .order-field--scope-sales,
+  #modal-assign-detail .order-field--upload.modal-field--drawing {
+    height: auto !important;
+    min-height: var(--order-field-h) !important;
+    max-height: none !important;
+    overflow: visible !important;
+    align-items: stretch !important;
+  }
+
+  #modal-assign-detail .order-field--scope .order-field__label,
+  #modal-assign-detail .order-field--scope-sales .order-field__label,
+  #modal-assign-detail .order-field--upload.modal-field--drawing .order-field__label {
+    height: auto !important;
+    min-height: var(--order-field-h) !important;
+    max-height: none !important;
+    font-size: 10px !important;
+    padding: 4px 2px !important;
+    line-height: 1.25 !important;
+    white-space: normal !important;
+    word-break: keep-all !important;
+  }
+
+  #modal-assign-detail .order-field--scope .order-field__control,
+  #modal-assign-detail .order-field--scope-sales .order-field__control,
+  #modal-assign-detail .order-scope-options,
+  #modal-assign-detail .order-scope-sales-options {
+    height: auto !important;
+    min-height: var(--order-field-h) !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  #modal-assign-detail .order-scope-option,
+  #modal-assign-detail .order-scope-sales-cell {
+    height: auto !important;
+    min-height: 38px !important;
+    max-height: none !important;
+    padding: 4px 1px !important;
+    font-size: 9px !important;
+    line-height: 1.25 !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    white-space: normal !important;
+    word-break: keep-all !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  #modal-assign-detail .order-scope-sales-cell .order-scope-sales-input {
+    height: auto !important;
+    min-height: 34px !important;
+    max-height: none !important;
+    padding: 2px 1px !important;
+    font-size: 9px !important;
+    line-height: 1.25 !important;
+    overflow: visible !important;
+    text-align: center !important;
+  }
+
+  #modal-assign-detail .modal-drawing-field-group,
+  #modal-assign-detail .modal-drawing-actions {
+    height: auto !important;
+    min-height: var(--order-field-h) !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__download,
+  #modal-assign-detail .assign-detail-modal__drawing-action-btn {
+    min-height: var(--order-field-h) !important;
+    height: auto !important;
+    font-size: 9px !important;
+    padding: 4px 2px !important;
+  }
+
+  /* 4번 상세 팝업 — 스큐(기울임) 제거 · 텍스트 잘림 방지 (최종) */
+  #modal-assign-detail,
+  #modal-assign-detail .assign-detail-modal,
+  #modal-assign-detail .assign-detail-modal * {
+    --skew-angle: 0deg !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal .order-field,
+  #modal-assign-detail .order-scope-option,
+  #modal-assign-detail .order-scope-option *,
+  #modal-assign-detail .order-scope-sales-cell,
+  #modal-assign-detail .order-scope-sales-cell *,
+  #modal-assign-detail .order-field--upload.modal-field--drawing,
+  #modal-assign-detail .order-field--upload.modal-field--drawing *,
+  #modal-assign-detail .modal-drawing-field-group,
+  #modal-assign-detail .modal-drawing-field-group *,
+  #modal-assign-detail .modal-drawing-actions,
+  #modal-assign-detail .modal-drawing-actions * {
+    transform: none !important;
+    font-style: normal !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal.modal {
+    --order-label-w: 52px;
+    --order-field-h: 30px;
+    --order-font: 8px;
+    --order-input-font: 9px;
+  }
+
+  #modal-assign-detail .order-field--scope,
+  #modal-assign-detail .order-field--scope-sales,
+  #modal-assign-detail .order-field--upload.modal-field--drawing {
+    height: var(--order-field-h) !important;
+    min-height: var(--order-field-h) !important;
+    max-height: var(--order-field-h) !important;
+    overflow: hidden !important;
+    align-items: stretch !important;
+    box-sizing: border-box !important;
+  }
+
+  #modal-assign-detail .order-field--scope .order-field__label,
+  #modal-assign-detail .order-field--scope-sales .order-field__label,
+  #modal-assign-detail .order-field--upload.modal-field--drawing .order-field__label {
+    height: var(--order-field-h) !important;
+    min-height: var(--order-field-h) !important;
+    max-height: var(--order-field-h) !important;
+    padding: 0 2px !important;
+    font-size: var(--order-font) !important;
+    line-height: 1.15 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+  }
+
+  #modal-assign-detail .order-field--scope .order-field__control,
+  #modal-assign-detail .order-field--scope-sales .order-field__control {
+    height: var(--order-field-h) !important;
+    min-height: var(--order-field-h) !important;
+    max-height: var(--order-field-h) !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    border-width: 1px !important;
+    border-style: solid !important;
+    border-color: #b8b8b8 !important;
+    border-left: none !important;
+    box-sizing: border-box !important;
+  }
+
+  #modal-assign-detail .order-scope-options,
+  #modal-assign-detail .order-scope-sales-options {
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    border: none !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+  }
+
+  #modal-assign-detail .order-scope-option,
+  #modal-assign-detail .order-scope-sales-cell {
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    padding: 0 2px !important;
+    font-size: 9px !important;
+    line-height: 1.15 !important;
+    overflow: hidden !important;
+    border: none !important;
+    border-right: 1px solid #b8b8b8 !important;
+    box-sizing: border-box !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  #modal-assign-detail .order-scope-option:last-child,
+  #modal-assign-detail .order-scope-sales-cell:last-child {
+    border-right: none !important;
+  }
+
+  #modal-assign-detail .order-scope-sales-cell .order-scope-sales-input {
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    padding: 0 2px !important;
+    font-size: 9px !important;
+    line-height: 1.15 !important;
+    overflow: hidden !important;
+    text-align: center !important;
+    border: none !important;
+    box-sizing: border-box !important;
+  }
+
+  #modal-assign-detail .modal-drawing-field-group {
+    height: var(--order-field-h) !important;
+    min-height: var(--order-field-h) !important;
+    max-height: var(--order-field-h) !important;
+    overflow: hidden !important;
+    border-width: 1px !important;
+    border-style: solid !important;
+    border-color: #b8b8b8 !important;
+    border-left: none !important;
+    box-sizing: border-box !important;
+  }
+
+  #modal-assign-detail .modal-drawing-actions {
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__download,
+  #modal-assign-detail .assign-detail-modal__drawing-action-btn {
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    font-size: 9px !important;
+    padding: 0 3px !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__drawing-btn-text,
+  #modal-assign-detail .assign-detail-modal__drawing-action-btn span {
+    font-size: 9px !important;
+    line-height: 1.15 !important;
+    white-space: nowrap !important;
+    overflow: visible !important;
+  }
+
+  /* 4번 상세: 항목 박스 높이·두께 통일 (1·3·8·상단바 미변경) */
+  #modal-assign-detail .assign-detail-modal__form > .order-field,
+  #modal-assign-detail .assign-detail-modal__field-row > .order-field--modal-inline {
+    height: var(--order-field-h) !important;
+    min-height: var(--order-field-h) !important;
+    max-height: var(--order-field-h) !important;
+    overflow: hidden !important;
+    align-items: stretch !important;
+    box-sizing: border-box !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .order-field__label,
+  #modal-assign-detail .assign-detail-modal__field-row .order-field__label {
+    height: var(--order-field-h) !important;
+    min-height: var(--order-field-h) !important;
+    max-height: var(--order-field-h) !important;
+    align-self: stretch !important;
+    box-sizing: border-box !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .order-field__control,
+  #modal-assign-detail .assign-detail-modal__form .modal-drawing-field-group {
+    flex: 1 1 0% !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    height: var(--order-field-h) !important;
+    min-height: var(--order-field-h) !important;
+    max-height: var(--order-field-h) !important;
+    border: 1px solid #b8b8b8 !important;
+    border-left: none !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .order-scope-options,
+  #modal-assign-detail .assign-detail-modal__form .order-scope-sales-options {
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    border: none !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .order-scope-option,
+  #modal-assign-detail .assign-detail-modal__form .order-scope-sales-cell {
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    padding: 2px 1px !important;
+    border: none !important;
+    border-right: 1px solid #b8b8b8 !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .order-scope-option:last-child,
+  #modal-assign-detail .assign-detail-modal__form .order-scope-sales-cell:last-child {
+    border-right: none !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .order-scope-sales-cell .order-scope-sales-input,
+  #modal-assign-detail .assign-detail-modal__form .modal-field-value {
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .modal-drawing-actions {
+    height: var(--order-field-h) !important;
+    min-height: var(--order-field-h) !important;
+    max-height: var(--order-field-h) !important;
+    align-self: stretch !important;
+    overflow: hidden !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .assign-detail-modal__download,
+  #modal-assign-detail .assign-detail-modal__form .assign-detail-modal__drawing-action-btn {
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    padding: 0 4px !important;
+    box-sizing: border-box !important;
+    border-left: 1px solid #b8b8b8 !important;
+  }
+
+  /* 4번 상세: 항목 박스 테두리 두께 통일 (3번 시공일자~도면3 패턴) */
+  #modal-assign-detail .assign-detail-modal__form .order-field__label,
+  #modal-assign-detail .assign-detail-modal__field-row .order-field__label,
+  #modal-assign-detail .assign-detail-modal__form .order-field__control,
+  #modal-assign-detail .assign-detail-modal__form .modal-drawing-field-group {
+    border-width: 1px !important;
+    border-style: solid !important;
+    box-sizing: border-box !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .order-field__label,
+  #modal-assign-detail .assign-detail-modal__field-row .order-field__label {
+    border-color: transparent !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .order-field__control,
+  #modal-assign-detail .assign-detail-modal__form .modal-drawing-field-group {
+    border-color: #b8b8b8 !important;
+    border-left: none !important;
+  }
+
+  #modal-assign-detail .order-field--scope,
+  #modal-assign-detail .order-field--scope-sales,
+  #modal-assign-detail .order-field--upload.modal-field--drawing {
+    height: var(--order-field-h) !important;
+    min-height: var(--order-field-h) !important;
+    max-height: var(--order-field-h) !important;
+    overflow: hidden !important;
+  }
+
+  #modal-assign-detail .order-field--scope .order-field__label,
+  #modal-assign-detail .order-field--scope-sales .order-field__label,
+  #modal-assign-detail .order-field--upload.modal-field--drawing .order-field__label {
+    height: var(--order-field-h) !important;
+    min-height: var(--order-field-h) !important;
+    max-height: var(--order-field-h) !important;
+    padding: 0 4px !important;
+    overflow: hidden !important;
+  }
+
+  /* 4번 상세: 항목 박스 높이·테두리 최종 통일 (중간 규칙 덮어쓰기) */
+  #modal-assign-detail .assign-detail-modal__form .order-field__control {
+    padding: 0 !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .modal-field-value,
+  #modal-assign-detail .assign-detail-modal__form .modal-field-input {
+    display: flex !important;
+    align-items: center !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    margin: 0 !important;
+    padding: 0 6px !important;
+    border: none !important;
+    box-sizing: border-box !important;
+    line-height: 1.25 !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .modal-drawing-field-group .order-field__control--upload {
+    display: flex !important;
+    align-items: stretch !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    padding: 0 !important;
+    border: none !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .assign-detail-modal__download {
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    margin: 0 !important;
+    padding: 0 6px !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .assign-detail-modal__drawing-action-btn {
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    margin: 0 !important;
+    padding: 0 4px !important;
+    border: none !important;
+    border-left: 1px solid #b8b8b8 !important;
+    border-radius: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .order-scope-option,
+  #modal-assign-detail .assign-detail-modal__form .order-scope-sales-cell {
+    border-right: 1px solid #b8b8b8 !important;
+    box-sizing: border-box !important;
+  }
+
+  /* 4번 상세 팝업 — 텍스트·행 높이 축소 (768px 모바일, 1·3·8·상단바·PC 미변경) */
+  #modal-assign-detail .assign-detail-modal.modal {
+    --order-label-w: 60px;
+    --order-field-h: 34px;
+    --order-font: 9px;
+    --order-input-font: 9px;
+    --modal-field-gap: 4px;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form > .order-field,
+  #modal-assign-detail .assign-detail-modal__field-row > .order-field--modal-inline {
+    margin-bottom: 4px !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__field-row {
+    gap: 4px !important;
+    margin-bottom: 0 !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .order-field__label,
+  #modal-assign-detail .assign-detail-modal__form .order-field__label span,
+  #modal-assign-detail .order-field--scope .order-field__label,
+  #modal-assign-detail .order-field--scope-sales .order-field__label,
+  #modal-assign-detail .order-field--upload.modal-field--drawing .order-field__label,
+  #modal-assign-detail .order-field--upload.modal-field--drawing .order-field__label span {
+    font-size: var(--order-font) !important;
+    padding: 0 2px !important;
+    line-height: 1.15 !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .modal-field-value,
+  #modal-assign-detail .assign-detail-modal__form .modal-field-input,
+  #modal-assign-detail .modal-field-value,
+  #modal-assign-detail .modal-field-input,
+  #modal-assign-detail .assign-detail-modal__form .order-field__control {
+    font-size: var(--order-input-font) !important;
+    line-height: 1.15 !important;
+    padding: 0 3px !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .order-scope-option,
+  #modal-assign-detail .assign-detail-modal__form .order-scope-option > span,
+  #modal-assign-detail .assign-detail-modal__form .order-scope-option > span:first-child,
+  #modal-assign-detail .assign-detail-modal__form .order-scope-sales-cell,
+  #modal-assign-detail .assign-detail-modal__form .order-scope-sales-cell .order-scope-sales-input,
+  #modal-assign-detail .order-scope-sales-cell .order-scope-sales-input,
+  #modal-assign-detail .assign-detail-modal__form .assign-detail-modal__download,
+  #modal-assign-detail .assign-detail-modal__form .assign-detail-modal__drawing-action-btn,
+  #modal-assign-detail .assign-detail-modal__download,
+  #modal-assign-detail .assign-detail-modal__drawing-action-btn,
+  #modal-assign-detail .assign-detail-modal__drawing-btn-text,
+  #modal-assign-detail .assign-detail-modal__drawing-action-btn span {
+    font-size: 9px !important;
+    line-height: 1.15 !important;
+    padding: 0 1px !important;
+  }
+
+  #modal-assign-detail .order-scope-option__dot {
+    width: 7px;
+    height: 7px;
+  }
+
+  #modal-assign-detail .assign-detail-modal__footer {
+    margin-top: 6px !important;
+    padding-top: 6px;
+    gap: 6px;
+  }
+
+  #modal-assign-detail .assign-detail-modal__close,
+  #modal-assign-detail .assign-detail-modal__save {
+    min-height: 28px;
+    height: 28px;
+    font-size: 11px;
+  }
+
+  #modal-assign-detail > .modal.assign-detail-modal {
+    padding: 8px 8px calc(8px + env(safe-area-inset-bottom, 0px)) !important;
+    max-height: min(90vh, 90dvh) !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .modal-drawing-actions {
+    flex: 0 0 68px !important;
+  }
+
+}
+
+@media (max-width: 480px) {
+  html,
+  body {
+    overflow-x: hidden !important;
+    overflow-y: hidden !important;
+    height: 100%;
+    height: 100dvh;
+  }
+
+  #screen-order .assign-body {
+    overflow-x: scroll !important;
+    overflow-y: scroll !important;
+  }
+
+  #screen-order .order-topbar__menu .order-topbar__link,
+  #screen-order-assign .order-topbar__menu .order-topbar__link,
+  #screen-order-status .order-topbar__menu .order-topbar__link,
+  #screen-order-open .order-topbar__menu .order-topbar__link,
+  #screen-order-stats .order-topbar__menu .order-topbar__link,
+  #screen-order-summary .order-topbar__menu .order-topbar__link {
+    font-size: 9px !important;
+    min-height: 28px !important;
+    padding: 2px 1px !important;
+  }
+
+  #screen-order-summary .order-summary-table__col-head span {
+    font-size: 10px !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal.modal {
+    --order-label-w: 52px;
+    --order-field-h: 30px;
+    --order-font: 8px;
+    --order-input-font: 9px;
+    max-height: min(
+      92dvh,
+      calc(
+        100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) -
+          16px
+      )
+    ) !important;
+    padding: 10px 8px calc(10px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .order-scope-option,
+  #modal-assign-detail .assign-detail-modal__form .order-scope-sales-cell {
+    font-size: 9px !important;
+    font-style: normal !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    padding: 2px 1px !important;
+    transform: none !important;
+    white-space: normal !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .order-scope-sales-cell .order-scope-sales-input {
+    font-size: 9px !important;
+    font-style: normal !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    transform: none !important;
+    box-sizing: border-box !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .assign-detail-modal__download,
+  #modal-assign-detail .assign-detail-modal__form .assign-detail-modal__drawing-action-btn {
+    font-size: 9px !important;
+    font-style: normal !important;
+    padding: 0 3px !important;
+    transform: none !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__drawing-btn-text,
+  #modal-assign-detail .assign-detail-modal__drawing-action-btn span,
+  #modal-assign-detail .order-field--upload.modal-field--drawing .order-field__label span {
+    font-style: normal !important;
+    transform: none !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .modal-drawing-actions {
+    flex: 0 0 68px !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    overflow: hidden !important;
+  }
+
+  #modal-assign-detail .order-scope-sales-cell .order-scope-sales-input {
+    font-size: 9px !important;
+  }
+
+  #modal-assign-detail .order-field--upload.modal-field--drawing .order-field__label span {
+    font-size: 9px !important;
+    line-height: 1.15 !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form > .order-field:not(.order-field--scope):not(.order-field--scope-sales):not(.modal-field--drawing),
+  #modal-assign-detail .assign-detail-modal__field-row > .order-field--modal-inline {
+    height: var(--order-field-h) !important;
+    min-height: var(--order-field-h) !important;
+    max-height: var(--order-field-h) !important;
+  }
+
+  #modal-assign-detail .order-scope-option,
+  #modal-assign-detail .order-scope-option > span,
+  #modal-assign-detail .order-scope-option > span:first-child,
+  #modal-assign-detail .order-scope-sales-cell,
+  #modal-assign-detail .order-scope-sales-cell .order-scope-sales-input,
+  #modal-assign-detail .order-field--upload.modal-field--drawing .order-field__label span,
+  #modal-assign-detail .assign-detail-modal__drawing-btn-text,
+  #modal-assign-detail .assign-detail-modal__drawing-action-btn span {
+    transform: none !important;
+    font-style: normal !important;
+    font-size: 9px !important;
+    line-height: 1.15 !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  /* 4번 상세: 항목 박스 높이·두께 통일 (480px — 1·3·8·상단바 미변경) */
+  #modal-assign-detail .assign-detail-modal__form > .order-field,
+  #modal-assign-detail .assign-detail-modal__field-row > .order-field--modal-inline {
+    height: var(--order-field-h) !important;
+    min-height: var(--order-field-h) !important;
+    max-height: var(--order-field-h) !important;
+    overflow: hidden !important;
+    align-items: stretch !important;
+    box-sizing: border-box !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .order-field__label,
+  #modal-assign-detail .assign-detail-modal__field-row .order-field__label {
+    height: var(--order-field-h) !important;
+    min-height: var(--order-field-h) !important;
+    max-height: var(--order-field-h) !important;
+    align-self: stretch !important;
+    box-sizing: border-box !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .order-field__control,
+  #modal-assign-detail .assign-detail-modal__form .modal-drawing-field-group {
+    flex: 1 1 0% !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    height: var(--order-field-h) !important;
+    min-height: var(--order-field-h) !important;
+    max-height: var(--order-field-h) !important;
+    border: 1px solid #b8b8b8 !important;
+    border-left: none !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .order-scope-options,
+  #modal-assign-detail .assign-detail-modal__form .order-scope-sales-options {
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    border: none !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .order-scope-option,
+  #modal-assign-detail .assign-detail-modal__form .order-scope-sales-cell {
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    padding: 2px 1px !important;
+    border: none !important;
+    border-right: 1px solid #b8b8b8 !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .order-scope-option:last-child,
+  #modal-assign-detail .assign-detail-modal__form .order-scope-sales-cell:last-child {
+    border-right: none !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .order-scope-sales-cell .order-scope-sales-input,
+  #modal-assign-detail .assign-detail-modal__form .modal-field-value {
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .modal-drawing-actions {
+    height: var(--order-field-h) !important;
+    min-height: var(--order-field-h) !important;
+    max-height: var(--order-field-h) !important;
+    align-self: stretch !important;
+    overflow: hidden !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .assign-detail-modal__download,
+  #modal-assign-detail .assign-detail-modal__form .assign-detail-modal__drawing-action-btn {
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    padding: 0 3px !important;
+    box-sizing: border-box !important;
+    border-left: 1px solid #b8b8b8 !important;
+  }
+
+  /* 4번 상세: 항목 박스 테두리 두께 통일 (480px) */
+  #modal-assign-detail .assign-detail-modal__form .order-field__label,
+  #modal-assign-detail .assign-detail-modal__field-row .order-field__label,
+  #modal-assign-detail .assign-detail-modal__form .order-field__control,
+  #modal-assign-detail .assign-detail-modal__form .modal-drawing-field-group {
+    border-width: 1px !important;
+    border-style: solid !important;
+    box-sizing: border-box !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .order-field__label,
+  #modal-assign-detail .assign-detail-modal__field-row .order-field__label {
+    border-color: transparent !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .order-field__control,
+  #modal-assign-detail .assign-detail-modal__form .modal-drawing-field-group {
+    border-color: #b8b8b8 !important;
+    border-left: none !important;
+  }
+
+  #modal-assign-detail .order-field--scope,
+  #modal-assign-detail .order-field--scope-sales,
+  #modal-assign-detail .order-field--upload.modal-field--drawing {
+    height: var(--order-field-h) !important;
+    min-height: var(--order-field-h) !important;
+    max-height: var(--order-field-h) !important;
+    overflow: hidden !important;
+  }
+
+  #modal-assign-detail .order-field--scope .order-field__label,
+  #modal-assign-detail .order-field--scope-sales .order-field__label,
+  #modal-assign-detail .order-field--upload.modal-field--drawing .order-field__label {
+    height: var(--order-field-h) !important;
+    min-height: var(--order-field-h) !important;
+    max-height: var(--order-field-h) !important;
+    padding: 0 3px !important;
+    overflow: hidden !important;
+  }
+
+  /* 4번 상세: 항목 박스 높이·테두리 최종 통일 (480px — 중간 규칙 덮어쓰기) */
+  #modal-assign-detail .assign-detail-modal__form .order-field__control {
+    padding: 0 !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .modal-field-value,
+  #modal-assign-detail .assign-detail-modal__form .modal-field-input {
+    display: flex !important;
+    align-items: center !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    margin: 0 !important;
+    padding: 0 5px !important;
+    border: none !important;
+    box-sizing: border-box !important;
+    line-height: 1.25 !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .modal-drawing-field-group .order-field__control--upload {
+    display: flex !important;
+    align-items: stretch !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    padding: 0 !important;
+    border: none !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .assign-detail-modal__download {
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    margin: 0 !important;
+    padding: 0 4px !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .assign-detail-modal__drawing-action-btn {
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    margin: 0 !important;
+    padding: 0 3px !important;
+    border: none !important;
+    border-left: 1px solid #b8b8b8 !important;
+    border-radius: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .order-scope-option,
+  #modal-assign-detail .assign-detail-modal__form .order-scope-sales-cell {
+    border-right: 1px solid #b8b8b8 !important;
+    box-sizing: border-box !important;
+  }
+}
+
+/* 4번 상세 팝업 — 항목 박스 높이·테두리 최종 통일 (768px 이하, 1·3·8·상단바·PC 미변경) */
+@media (max-width: 768px) {
+  #modal-assign-detail .assign-detail-modal.modal {
+    --order-field-h: 30px;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form > .order-field,
+  #modal-assign-detail .assign-detail-modal__field-row > .order-field--modal-inline {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: stretch !important;
+    width: 100% !important;
+    height: var(--order-field-h) !important;
+    min-height: var(--order-field-h) !important;
+    max-height: var(--order-field-h) !important;
+    margin-bottom: 6px !important;
+    gap: 0 !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+    transform: none !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__field-row {
+    margin-bottom: 0 !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .order-field__label,
+  #modal-assign-detail .assign-detail-modal__field-row .order-field__label {
+    flex: 0 0 var(--order-label-w) !important;
+    width: var(--order-label-w) !important;
+    height: var(--order-field-h) !important;
+    min-height: var(--order-field-h) !important;
+    max-height: var(--order-field-h) !important;
+    padding: 0 4px !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+    align-self: stretch !important;
+    border: none !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .order-field__divider {
+    flex: 0 0 4px !important;
+    width: 4px !important;
+    align-self: stretch !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .order-field__control,
+  #modal-assign-detail .assign-detail-modal__form .modal-drawing-field-group {
+    flex: 1 1 0% !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    height: var(--order-field-h) !important;
+    min-height: var(--order-field-h) !important;
+    max-height: var(--order-field-h) !important;
+    padding: 0 !important;
+    border: 1px solid #b8b8b8 !important;
+    border-left: none !important;
+    background: #fff !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+    transform: none !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .order-scope-options,
+  #modal-assign-detail .assign-detail-modal__form .order-scope-sales-options {
+    display: flex !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    border: none !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .order-scope-option,
+  #modal-assign-detail .assign-detail-modal__form .order-scope-sales-cell {
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    margin: 0 !important;
+    padding: 0 2px !important;
+    border: none !important;
+    border-right: 1px solid #b8b8b8 !important;
+    border-radius: 0 !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+    transform: none !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .order-scope-option:last-child,
+  #modal-assign-detail .assign-detail-modal__form .order-scope-sales-cell:last-child {
+    border-right: none !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .order-scope-sales-cell .order-scope-sales-input,
+  #modal-assign-detail .assign-detail-modal__form .modal-field-value,
+  #modal-assign-detail .assign-detail-modal__form .modal-field-input {
+    display: flex !important;
+    align-items: center !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    margin: 0 !important;
+    padding: 0 6px !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-sizing: border-box !important;
+    line-height: 1.25 !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    transform: none !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .order-scope-sales-cell .order-scope-sales-input {
+    padding: 0 2px !important;
+    text-align: center !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .modal-drawing-field-group .order-field__control--upload {
+    display: flex !important;
+    align-items: stretch !important;
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    padding: 0 !important;
+    border: none !important;
+    box-sizing: border-box !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .modal-drawing-actions {
+    display: flex !important;
+    flex: 0 0 auto !important;
+    align-self: stretch !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .assign-detail-modal__download,
+  #modal-assign-detail .assign-detail-modal__form .assign-detail-modal__drawing-action-btn {
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    margin: 0 !important;
+    padding: 0 4px !important;
+    border: none !important;
+    border-left: 1px solid #b8b8b8 !important;
+    border-radius: 0 !important;
+    box-sizing: border-box !important;
+    transform: none !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .assign-detail-modal__download {
+    border-left: none !important;
+  }
+
+  /* 4번 상세: 오더번호~도면3 박스 두께 최종 통일 (상위 height:auto 규칙 덮어쓰기) */
+  #modal-assign-detail .assign-detail-modal__form > .order-field.order-field--scope,
+  #modal-assign-detail .assign-detail-modal__form > .order-field.order-field--scope-sales,
+  #modal-assign-detail
+    .assign-detail-modal__form
+    > .order-field.order-field--upload.modal-field--drawing {
+    height: var(--order-field-h) !important;
+    min-height: var(--order-field-h) !important;
+    max-height: var(--order-field-h) !important;
+    overflow: hidden !important;
+    align-items: stretch !important;
+    gap: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .order-field--scope .order-field__label,
+  #modal-assign-detail .assign-detail-modal__form .order-field--scope-sales .order-field__label,
+  #modal-assign-detail
+    .assign-detail-modal__form
+    .order-field--upload.modal-field--drawing
+    .order-field__label,
+  #modal-assign-detail
+    .assign-detail-modal__form
+    .order-field--upload.modal-field--drawing
+    label.order-field__label {
+    height: var(--order-field-h) !important;
+    min-height: var(--order-field-h) !important;
+    max-height: var(--order-field-h) !important;
+    padding: 0 4px !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .order-field__control--md,
+  #modal-assign-detail .assign-detail-modal__form .order-field__control--full {
+    flex: 1 1 0% !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    height: var(--order-field-h) !important;
+    min-height: var(--order-field-h) !important;
+    max-height: var(--order-field-h) !important;
+    padding: 0 !important;
+    border-width: 1px !important;
+    border-style: solid !important;
+    border-color: #b8b8b8 !important;
+    border-left: none !important;
+    background: #fff !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .order-field__control,
+  #modal-assign-detail .assign-detail-modal__form .modal-drawing-field-group {
+    border-width: 1px !important;
+    border-style: solid !important;
+    border-color: #b8b8b8 !important;
+    border-left: none !important;
+    box-sizing: border-box !important;
+  }
+
+  #modal-assign-detail
+    .assign-detail-modal__form
+    .order-field--scope
+    .order-field__control,
+  #modal-assign-detail
+    .assign-detail-modal__form
+    .order-field--scope-sales
+    .order-field__control {
+    height: var(--order-field-h) !important;
+    min-height: var(--order-field-h) !important;
+    max-height: var(--order-field-h) !important;
+    overflow: hidden !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .modal-drawing-field-group {
+    height: var(--order-field-h) !important;
+    min-height: var(--order-field-h) !important;
+    max-height: var(--order-field-h) !important;
+    overflow: hidden !important;
+    align-self: stretch !important;
+    border-width: 1px !important;
+    border-style: solid !important;
+    border-color: #b8b8b8 !important;
+    border-left: none !important;
+    box-sizing: border-box !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .modal-drawing-actions {
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    overflow: hidden !important;
+    align-self: stretch !important;
+  }
+
+  /* 오더번호~도면3: 행·라벨·입력 박스 높이·테두리 1px 통일 (3번 시공일자~도면3 패턴) */
+  #modal-assign-detail .assign-detail-modal__form > .order-field,
+  #modal-assign-detail .assign-detail-modal__field-row > .order-field--modal-inline,
+  #modal-assign-detail .assign-detail-modal__form > .order-field.order-field--scope,
+  #modal-assign-detail .assign-detail-modal__form > .order-field.order-field--scope-sales,
+  #modal-assign-detail
+    .assign-detail-modal__form
+    > .order-field.order-field--upload.modal-field--drawing {
+    height: var(--order-field-h) !important;
+    min-height: var(--order-field-h) !important;
+    max-height: var(--order-field-h) !important;
+    overflow: hidden !important;
+    align-items: stretch !important;
+    box-sizing: border-box !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .order-field__label,
+  #modal-assign-detail .assign-detail-modal__field-row .order-field__label,
+  #modal-assign-detail .assign-detail-modal__form .order-field__control,
+  #modal-assign-detail .assign-detail-modal__form .order-field__control--md,
+  #modal-assign-detail .assign-detail-modal__form .order-field__control--full {
+    height: var(--order-field-h) !important;
+    min-height: var(--order-field-h) !important;
+    max-height: var(--order-field-h) !important;
+    box-sizing: border-box !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .order-scope-options,
+  #modal-assign-detail .assign-detail-modal__form .order-scope-sales-options {
+    height: var(--order-field-h) !important;
+    min-height: var(--order-field-h) !important;
+    max-height: var(--order-field-h) !important;
+    box-sizing: border-box !important;
+    border: none !important;
+    overflow: hidden !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .order-field__control,
+  #modal-assign-detail .assign-detail-modal__form .order-field__control--md,
+  #modal-assign-detail .assign-detail-modal__form .order-field__control--full {
+    border-width: 1px !important;
+    border-style: solid !important;
+    border-color: #b8b8b8 !important;
+    border-left: none !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .order-scope-option,
+  #modal-assign-detail .assign-detail-modal__form .order-scope-sales-cell {
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    border: none !important;
+    border-right: 1px solid #b8b8b8 !important;
+    border-right-width: 1px !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .assign-detail-modal__download,
+  #modal-assign-detail .assign-detail-modal__form .assign-detail-modal__drawing-action-btn {
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    align-self: stretch !important;
+    box-sizing: border-box !important;
+  }
+}
+
+/* 4번 상세 팝업 — 오더번호~도면3 박스 높이·테두리 1px 최종 통일 (1·3·8·상단바·PC 미변경) */
+@media (max-width: 768px) {
+  #modal-assign-detail .assign-detail-modal.modal .assign-detail-modal__form > .order-field,
+  #modal-assign-detail .assign-detail-modal.modal .assign-detail-modal__field-row > .order-field--modal-inline {
+    height: var(--order-field-h) !important;
+    min-height: var(--order-field-h) !important;
+    max-height: var(--order-field-h) !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal.modal .assign-detail-modal__form .order-field__label {
+    height: var(--order-field-h) !important;
+    min-height: var(--order-field-h) !important;
+    max-height: var(--order-field-h) !important;
+    box-sizing: border-box !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal.modal .assign-detail-modal__form .order-field__control,
+  #modal-assign-detail .assign-detail-modal.modal .assign-detail-modal__form .order-field__control--md,
+  #modal-assign-detail .assign-detail-modal.modal .assign-detail-modal__form .order-field__control--full,
+  #modal-assign-detail .assign-detail-modal.modal .assign-detail-modal__form .order-field--scope .order-field__control,
+  #modal-assign-detail .assign-detail-modal.modal .assign-detail-modal__form .order-field--scope-sales .order-field__control,
+  #modal-assign-detail .assign-detail-modal.modal .assign-detail-modal__form .modal-drawing-field-group {
+    height: var(--order-field-h) !important;
+    min-height: var(--order-field-h) !important;
+    max-height: var(--order-field-h) !important;
+    padding: 0 !important;
+    border-width: 1px !important;
+    border-style: solid !important;
+    border-color: #b8b8b8 !important;
+    border-left: none !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+  }
+
+  /* 4번 상세 팝업 — 8번 집계 리스트(#modal-order-summary-list)와 동일 좌하단 시트 (1·3·8·상단바·PC 미변경) */
+  #modal-assign-detail.modal-overlay,
+  #modal-assign-detail.modal-overlay.is-open {
+    display: flex !important;
+    align-items: flex-end !important;
+    justify-content: flex-start !important;
+    padding: 8px !important;
+    margin: 0 !important;
+    inset: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  #modal-assign-detail > .modal.assign-detail-modal {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    height: auto !important;
+    margin: 0 !important;
+    align-self: stretch !important;
+    max-height: min(92vh, 92dvh) !important;
+    border-radius: 14px 14px 0 0 !important;
+    padding: 16px 12px calc(16px + env(safe-area-inset-bottom, 0px)) !important;
+    box-sizing: border-box !important;
+    transform: none !important;
+    position: static !important;
+    left: auto !important;
+    right: auto !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+  }
+
+  /* 4번 상세 팝업 — 텍스트·행 높이 축소(화면 비율). 1·3·8·상단바·PC 미변경 */
+  #modal-assign-detail .assign-detail-modal.modal {
+    --order-label-w: 52px;
+    --order-field-h: 30px;
+    --order-font: 8px;
+    --order-input-font: 9px;
+    --modal-field-gap: 4px;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form > .order-field,
+  #modal-assign-detail .assign-detail-modal__field-row > .order-field--modal-inline {
+    margin-bottom: 4px !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__field-row {
+    gap: 4px !important;
+    margin-bottom: 0 !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .order-field__label,
+  #modal-assign-detail .assign-detail-modal__form .order-field__label span,
+  #modal-assign-detail .order-field--scope .order-field__label,
+  #modal-assign-detail .order-field--scope-sales .order-field__label,
+  #modal-assign-detail .order-field--upload.modal-field--drawing .order-field__label,
+  #modal-assign-detail .order-field--upload.modal-field--drawing .order-field__label span {
+    font-size: var(--order-font) !important;
+    padding: 0 2px !important;
+    line-height: 1.15 !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .modal-field-value,
+  #modal-assign-detail .assign-detail-modal__form .modal-field-input,
+  #modal-assign-detail .modal-field-value,
+  #modal-assign-detail .modal-field-input,
+  #modal-assign-detail .assign-detail-modal__form .order-field__control {
+    font-size: var(--order-input-font) !important;
+    line-height: 1.15 !important;
+    padding: 0 3px !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .order-scope-option,
+  #modal-assign-detail .assign-detail-modal__form .order-scope-option > span,
+  #modal-assign-detail .assign-detail-modal__form .order-scope-option > span:first-child,
+  #modal-assign-detail .assign-detail-modal__form .order-scope-sales-cell,
+  #modal-assign-detail .assign-detail-modal__form .order-scope-sales-cell .order-scope-sales-input,
+  #modal-assign-detail .order-scope-sales-cell .order-scope-sales-input,
+  #modal-assign-detail .assign-detail-modal__form .assign-detail-modal__download,
+  #modal-assign-detail .assign-detail-modal__form .assign-detail-modal__drawing-action-btn,
+  #modal-assign-detail .assign-detail-modal__download,
+  #modal-assign-detail .assign-detail-modal__drawing-action-btn,
+  #modal-assign-detail .assign-detail-modal__drawing-btn-text,
+  #modal-assign-detail .assign-detail-modal__drawing-action-btn span {
+    font-size: 9px !important;
+    line-height: 1.15 !important;
+    padding: 0 1px !important;
+  }
+
+  #modal-assign-detail .order-scope-option__dot {
+    width: 6px;
+    height: 6px;
+  }
+
+  #modal-assign-detail .assign-detail-modal__footer {
+    margin-top: 5px !important;
+    padding-top: 5px;
+    gap: 5px;
+  }
+
+  #modal-assign-detail .assign-detail-modal__close,
+  #modal-assign-detail .assign-detail-modal__save {
+    min-height: 28px;
+    height: 28px;
+    font-size: 11px;
+  }
+
+  #modal-assign-detail > .modal.assign-detail-modal {
+    padding: 8px 8px calc(8px + env(safe-area-inset-bottom, 0px)) !important;
+    max-height: min(90vh, 90dvh) !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .modal-drawing-actions {
+    flex: 0 0 68px !important;
+  }
+}
+
+/* 4번: 하단 목록 테두리박스 — 달력(.assign-mini-cal) 가로 테두리 이내 (1·3·8·상단바·5~7·PC 미변경) */
+@media (max-width: 768px) {
+  #screen-order-assign .assign-panel {
+    overflow-x: clip !important;
+    min-width: 0 !important;
+    box-sizing: border-box;
+  }
+
+  #screen-order-assign .assign-layout {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
+    align-items: stretch;
+    box-sizing: border-box;
+  }
+
+  #screen-order-assign .assign-sidebar,
+  #screen-order-assign .assign-main {
+    grid-column: 1 / -1 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box;
+    overflow: hidden !important;
+  }
+
+  #screen-order-assign .assign-main {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+
+  #screen-order-assign .assign-calendar,
+  #screen-order-assign .assign-calendar .assign-mini-cal {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box;
+  }
+
+  #screen-order-assign .assign-table-wrap {
+    flex: 1 1 auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    align-self: stretch !important;
+    max-height: 100% !important;
+    box-sizing: border-box !important;
+    scrollbar-gutter: auto !important;
+    margin: 0 !important;
+    padding-left: clamp(8px, 1vh, 12px) !important;
+    padding-right: clamp(8px, 1vh, 12px) !important;
+    overflow-x: auto !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: #9a9a9a #e8e8e8;
+    overscroll-behavior: contain;
+    touch-action: pan-x pan-y;
+    contain: none !important;
+  }
+
+  #screen-order-assign .assign-table-wrap::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  #screen-order-assign .assign-table {
+    min-width: 680px;
+    width: max-content;
+  }
+
+  /* No.~삭제 셀 박스 — assign-table-wrap 테두리 밖으로 넘치지 않음 */
+  #screen-order-assign .assign-table td {
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+  }
+
+  #screen-order-assign .assign-cell-box,
+  #screen-order-assign .assign-cell-box--wide,
+  #screen-order-assign .assign-cell-box--compact,
+  #screen-order-assign .assign-cell-box--no,
+  #screen-order-assign .assign-cell-box--check {
+    display: flex !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+
+  #screen-order-assign .assign-partner-select,
+  #screen-order-assign .assign-worker-select,
+  #screen-order-assign .assign-stack-item {
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+  }
+}
+
+/* 4번 상세 팝업 — 기울임 제거·항목 박스 테두리 통일·입력값 좌측 정렬 (1·3·8·PC 미변경) */
+@media (max-width: 768px) {
+  #modal-assign-detail {
+    --skew-angle: 0deg !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal,
+  #modal-assign-detail .assign-detail-modal *,
+  #modal-assign-detail .assign-detail-modal *::before,
+  #modal-assign-detail .assign-detail-modal *::after {
+    transform: none !important;
+    font-style: normal !important;
+    font-synthesis: none !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal .order-field,
+  #modal-assign-detail .assign-detail-modal .order-field__label,
+  #modal-assign-detail .assign-detail-modal .order-field__label span,
+  #modal-assign-detail .assign-detail-modal .order-field__divider,
+  #modal-assign-detail .assign-detail-modal .order-field__control,
+  #modal-assign-detail .assign-detail-modal .modal-field-value,
+  #modal-assign-detail .assign-detail-modal .modal-field-input {
+    transform: none !important;
+    font-style: normal !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form > .order-field,
+  #modal-assign-detail .assign-detail-modal__field-row > .order-field--modal-inline,
+  #modal-assign-detail .assign-detail-modal__form > .order-field.order-field--scope,
+  #modal-assign-detail .assign-detail-modal__form > .order-field.order-field--scope-sales,
+  #modal-assign-detail
+    .assign-detail-modal__form
+    > .order-field.order-field--upload.modal-field--drawing {
+    height: var(--order-field-h) !important;
+    min-height: var(--order-field-h) !important;
+    max-height: var(--order-field-h) !important;
+    margin-bottom: 6px !important;
+    gap: 0 !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+    transform: none !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .order-field__control,
+  #modal-assign-detail .assign-detail-modal__form .order-field__control--md,
+  #modal-assign-detail .assign-detail-modal__form .order-field__control--full,
+  #modal-assign-detail .assign-detail-modal__form .order-field--scope .order-field__control,
+  #modal-assign-detail .assign-detail-modal__form .order-field--scope-sales .order-field__control,
+  #modal-assign-detail .assign-detail-modal__form .modal-drawing-field-group {
+    flex: 1 1 0% !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    height: var(--order-field-h) !important;
+    min-height: var(--order-field-h) !important;
+    max-height: var(--order-field-h) !important;
+    padding: 0 !important;
+    border-width: 1px !important;
+    border-style: solid !important;
+    border-color: #b8b8b8 !important;
+    border-left: none !important;
+    background: #fff !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+    transform: none !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .order-scope-options,
+  #modal-assign-detail .assign-detail-modal__form .order-scope-sales-options {
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    border: none !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .order-scope-option,
+  #modal-assign-detail .assign-detail-modal__form .order-scope-sales-cell {
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    margin: 0 !important;
+    border: none !important;
+    border-right: 1px solid #b8b8b8 !important;
+    border-radius: 0 !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+    transform: none !important;
+    font-style: normal !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .order-scope-option:last-child,
+  #modal-assign-detail .assign-detail-modal__form .order-scope-sales-cell:last-child {
+    border-right: none !important;
+  }
+
+  /* 8번 집계표 셀과 동일 — 입력값 좌측 정렬·긴 텍스트 가로 스크롤 */
+  #modal-assign-detail .assign-detail-modal__form .modal-field-value,
+  #modal-assign-detail .assign-detail-modal__form .modal-field-input,
+  #modal-assign-detail .modal-field-value,
+  #modal-assign-detail .modal-field-input {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    margin: 0 !important;
+    padding: 0 8px !important;
+    border: none !important;
+    box-sizing: border-box !important;
+    text-align: left !important;
+    line-height: var(--order-field-h) !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    white-space: nowrap !important;
+    text-overflow: clip !important;
+    transform: none !important;
+    font-style: normal !important;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-x;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .order-field__control {
+    display: flex !important;
+    align-items: stretch !important;
+    justify-content: flex-start !important;
+  }
+}
+
+/* 4번: 목록박스가 저장 버튼·하단 푸터를 가리지 않도록 세로 공간 분배 (1·3·8·PC 미변경) */
+@media (max-width: 768px) {
+  #screen-order-assign.order-page {
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    overflow: hidden !important;
+  }
+
+  #screen-order-assign.order-page > .order-topbar {
+    flex: 0 0 auto !important;
+  }
+
+  #screen-order-assign.order-page > .assign-body {
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    align-items: stretch !important;
+    overflow: hidden !important;
+    overflow-x: hidden !important;
+    overflow-y: hidden !important;
+    padding-bottom: 0 !important;
+    box-sizing: border-box !important;
+    touch-action: pan-x pan-y;
+  }
+
+  #screen-order-assign .assign-panel {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  #screen-order-assign .assign-date-title {
+    flex: 0 0 auto !important;
+    margin-bottom: 8px !important;
+  }
+
+  #screen-order-assign .assign-layout {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+
+  #screen-order-assign .assign-sidebar {
+    flex: 0 0 auto !important;
+    overflow: visible !important;
+  }
+
+  #screen-order-assign .assign-ym,
+  #screen-order-assign .assign-ym__row,
+  #screen-order-assign .assign-ym__select {
+    flex-shrink: 0 !important;
+  }
+
+  #screen-order-assign .assign-calendar {
+    flex: 0 0 auto !important;
+    min-height: 0 !important;
+  }
+
+  #screen-order-assign .assign-main {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: hidden !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  #screen-order-assign .assign-table-wrap {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    height: auto !important;
+    overflow-x: auto !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    contain: none !important;
+    touch-action: pan-x pan-y;
+  }
+
+}
+
+/* 4번: 목록 테두리박스 가로 — 달력·패널 안쪽으로 고정 (1·3·8·PC 미변경) */
+@media (max-width: 768px) {
+  #screen-order-assign.order-page > .assign-body {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+    overflow-x: hidden !important;
+    overflow-y: hidden !important;
+  }
+
+  #screen-order-assign .assign-panel {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+  }
+
+  #screen-order-assign .assign-layout {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
+  }
+
+  #screen-order-assign .assign-sidebar {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  #screen-order-assign .assign-main {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
+    flex: 1 1 auto !important;
+  }
+
+  #screen-order-assign .assign-table-wrap {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    flex: 1 1 0% !important;
+    align-self: stretch !important;
+    box-sizing: border-box !important;
+    scrollbar-gutter: auto !important;
+    contain: none !important;
+    padding: 8px !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  #screen-order-assign .assign-table {
+    min-width: 680px;
+    width: max-content;
+    max-width: none;
+  }
+}
+
+/* 4번: No.~삭제 목록 외곽 박스 제거 — 달력 바로 아래 패널 안에 통합 (1·3·8·PC·기능 미변경) */
+@media (max-width: 768px) {
+  #screen-order-assign .assign-layout {
+    gap: 6px !important;
+  }
+
+  #screen-order-assign .assign-sidebar {
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+  }
+
+  #screen-order-assign .assign-calendar {
+    margin-bottom: 0 !important;
+  }
+
+  #screen-order-assign .assign-main {
+    background: transparent !important;
+    border: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  #screen-order-assign .assign-table-wrap {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    scrollbar-color: #9a9a9a transparent !important;
+  }
+
+  #screen-order-assign .assign-table-wrap::-webkit-scrollbar-track {
+    background: transparent !important;
+  }
+
+  /* 목록(No.~삭제) 하단 여백 축소 */
+  #screen-order-assign .assign-panel {
+    flex: 0 1 auto !important;
+    padding-bottom: 4px !important;
+  }
+
+  #screen-order-assign .assign-layout {
+    flex: 0 1 auto !important;
+    gap: 4px !important;
+  }
+
+  #screen-order-assign .assign-main {
+    flex: 0 1 auto !important;
+  }
+
+  #screen-order-assign .assign-table-wrap {
+    flex: 0 1 auto !important;
+    max-height: min(16vh, 14dvh) !important;
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+  }
+
+  #screen-order-assign .assign-main {
+    max-height: min(16vh, 14dvh) !important;
+  }
+
+  #screen-order-assign .assign-table tbody tr.assign-table__row-main:last-child td {
+    padding-bottom: 0 !important;
+  }
+
+  /* 좌우 스크롤 영역 — 하단 테두리와 목록 사이 여백 추가 축소 */
+  #screen-order-assign .assign-table-wrap {
+    height: fit-content !important;
+    scrollbar-gutter: auto !important;
+    padding: 0 !important;
+    margin-bottom: 0 !important;
+    line-height: 1 !important;
+  }
+
+  #screen-order-assign .assign-table-wrap::-webkit-scrollbar {
+    width: 2px !important;
+    height: 2px !important;
+  }
+
+  #screen-order-assign .assign-table-wrap::-webkit-scrollbar-thumb {
+    margin: 0 !important;
+  }
+
+  #screen-order-assign .assign-table {
+    --assign-row-gap: 0px !important;
+    --assign-cell-pad-y: 0px !important;
+    --assign-cell-gap-x: 0px !important;
+    --assign-row-input-h: 36px !important;
+    margin: 0 !important;
+    border-spacing: 0 !important;
+  }
+
+  #screen-order-assign .assign-table__th {
+    padding: 0 1px 0 !important;
+    line-height: 1.1 !important;
+  }
+
+  #screen-order-assign .assign-table tbody td {
+    padding: 0 !important;
+    line-height: 1 !important;
+  }
+
+  #screen-order-assign .assign-table tbody tr.assign-table__row-main:first-child td,
+  #screen-order-assign .assign-table tbody tr.assign-table__row-main:last-child td {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
+
+  #screen-order-assign .assign-cell-box,
+  #screen-order-assign .assign-cell-box--wide,
+  #screen-order-assign .assign-cell-box--compact,
+  #screen-order-assign .assign-cell-box--no,
+  #screen-order-assign .assign-cell-box--check {
+    min-height: 36px !important;
+    height: 36px !important;
+  }
+
+  #screen-order-assign .assign-partner-select,
+  #screen-order-assign .assign-worker-select,
+  #screen-order-assign .assign-stack-item {
+    min-height: 36px !important;
+    height: 36px !important;
+  }
+
+  /* 달력 포함 전체 박스 · 테이블만 좌우 스크롤 · 저장 버튼 고정 */
+  #screen-order-assign.order-page > .assign-body {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+
+  /* 연도·월 드롭다운 텍스트 중앙 정렬 */
+  #screen-order-assign .assign-ym__select {
+    text-align: center !important;
+    text-align-last: center !important;
+    -webkit-text-align-last: center !important;
+    padding-left: 28px !important;
+    padding-right: 28px !important;
+  }
+
+  #screen-order-assign .assign-panel {
+    flex: 0 0 auto !important;
+    flex-grow: 0 !important;
+    order: 1 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    min-height: auto !important;
+    box-sizing: border-box !important;
+    overflow-x: hidden !important;
+    overflow-y: visible !important;
+    padding-bottom: 6px !important;
+    margin-bottom: 0 !important;
+    border: 1px solid #b0b0b0 !important;
+    border-bottom: 1px solid #b0b0b0 !important;
+    background: #ececec !important;
+  }
+
+  #screen-order-assign .assign-layout {
+    flex: 0 0 auto !important;
+    flex-grow: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    min-height: auto !important;
+    overflow-x: hidden !important;
+    overflow-y: visible !important;
+  }
+
+  #screen-order-assign .assign-sidebar,
+  #screen-order-assign .assign-main {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  #screen-order-assign .assign-main {
+    flex: 0 0 auto !important;
+    flex-grow: 0 !important;
+    max-height: none !important;
+    overflow-x: hidden !important;
+    overflow-y: visible !important;
+    display: flex !important;
+    flex-direction: column !important;
+    position: relative !important;
+    z-index: 2 !important;
+    background: #ececec !important;
+  }
+
+  #screen-order-assign .assign-table-wrap {
+    flex: 0 0 auto !important;
+    flex-grow: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    border: none !important;
+    background: #ececec !important;
+    box-shadow: none !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow-x: auto !important;
+    overflow-y: auto !important;
+    position: relative !important;
+    z-index: 1 !important;
+    isolation: isolate !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* 상하 스크롤 시 목록 뒤(달력 등) 비침 방지 */
+  #screen-order-assign .assign-table-wrap .assign-table {
+    background: #ececec !important;
+  }
+
+  #screen-order-assign .assign-table-wrap .assign-table thead .assign-table__th {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 3 !important;
+    background: #ececec !important;
+  }
+
+  #screen-order-assign .assign-table-wrap .assign-table tbody tr.assign-table__row-main td {
+    background-color: #ececec !important;
+  }
+
+  #screen-order-assign
+    .assign-table-wrap
+    .assign-table
+    tbody
+    tr.assign-table__row-main--highlight
+    td {
+    background-color: #fff8e6 !important;
+  }
+
+  /* 저장 버튼 고정 · No.~삭제 테이블만 좌우 스크롤 */
+  #screen-order-assign > .assign-body > .assign-save--in-scroll,
+  #screen-order-assign .assign-table-wrap .assign-save--in-scroll {
+    display: none !important;
+  }
+
+  #screen-order-assign .assign-main > .assign-save--in-scroll {
+    display: flex !important;
+    flex: 0 0 auto !important;
+    flex-shrink: 0 !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    margin: 4px 0 0 !important;
+    padding: 4px 8px 2px !important;
+    border: none !important;
+    background: #ececec !important;
+    box-shadow: none !important;
+    box-sizing: border-box !important;
+    overflow: visible !important;
+    position: relative !important;
+    z-index: 1 !important;
+  }
+
+  #screen-order-assign .assign-main > .assign-save--in-scroll .order-register__btn {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: 44px !important;
+    margin: 0 !important;
+  }
+
+  #screen-order-assign.order-page > .assign-body {
+    padding-bottom: calc(52px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+}

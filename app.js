@@ -420,6 +420,7 @@ var statsPickerState = { year: 2026, mode: "assign", view: "assign" };
 var initializedScreens = {};
 var canEnterSignup = false;
 var signupEditMode = false;
+var assignMobilePendingSave = { assign: false, status: false };
 
 function getAuth() {
   try {
@@ -848,6 +849,18 @@ function showScreen(page, params) {
   if (AUTH_PAGES.indexOf(page) >= 0 && getAuth() && !canAccessOrderPageByRole(page)) {
     page = "order-status";
     screenId = "screen-order-status";
+  }
+
+  if (isMobileLayout()) {
+    var activeScreen = document.querySelector(".screen.is-active");
+    if (activeScreen) {
+      if (activeScreen.id === "screen-order-assign" && page !== "order-assign") {
+        clearAssignMobilePendingSave("assign");
+      }
+      if (activeScreen.id === "screen-order-status" && page !== "order-status") {
+        clearAssignMobilePendingSave("status");
+      }
+    }
   }
 
   document.querySelectorAll(".screen").forEach(function (el) {
@@ -2903,9 +2916,11 @@ function refreshDataFromStorage() {
   } else if (page === "order-stats") {
     renderStatsView();
   } else if (page === "order-assign") {
+    if (shouldDeferAssignMobileRefresh("assign")) return;
     renderAssignCalendars("assign");
     renderAssignTable("assign");
   } else if (page === "order-status") {
+    if (shouldDeferAssignMobileRefresh("status")) return;
     renderAssignCalendars("status");
     renderAssignTable("status");
   } else if (page === "order-open") {
@@ -5834,6 +5849,26 @@ function persistAssignSelectionsFromDom(pageKey) {
   });
 }
 
+function shouldDeferAssignMobileRefresh(pageKey) {
+  return (
+    isMobileLayout() &&
+    (pageKey === "assign" || pageKey === "status") &&
+    assignMobilePendingSave[pageKey]
+  );
+}
+
+function markAssignMobilePendingSave(pageKey) {
+  if (isMobileLayout() && (pageKey === "assign" || pageKey === "status")) {
+    assignMobilePendingSave[pageKey] = true;
+  }
+}
+
+function clearAssignMobilePendingSave(pageKey) {
+  if (pageKey === "assign" || pageKey === "status") {
+    assignMobilePendingSave[pageKey] = false;
+  }
+}
+
 function bindAssignTableLiveSync(pageKey) {
   var initKey = "assignLiveSync_" + pageKey;
   if (initializedScreens[initKey]) return;
@@ -5852,6 +5887,7 @@ function bindAssignTableLiveSync(pageKey) {
         isMobileLayout() &&
         (pageKey === "assign" || pageKey === "status")
       ) {
+        markAssignMobilePendingSave(pageKey);
         return;
       }
       persistAssignSelectionsFromDom(pageKey);
@@ -5882,6 +5918,7 @@ function saveAssignOrders(pageKey) {
   });
 
   saveStoredOrders(orders);
+  clearAssignMobilePendingSave(pageKey);
   alert("저장이 완료되었습니다.");
   updateAssignDateTitle(pageKey);
   renderAssignTable(pageKey);

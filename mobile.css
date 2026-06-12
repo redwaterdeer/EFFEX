@@ -4803,3 +4803,447 @@
     white-space: nowrap !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   모바일 v12 — 4~6 열별 박스 높이 분할 · 로고 소폭 확대 · 7번 그래프 하단
+   (PC 미변경 · 구조·기능 유지)
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* 로고만 소폭 확대 (상단바·메뉴 버튼 크기 유지) */
+  #screen-order .order-topbar,
+  #screen-order-assign .order-topbar,
+  #screen-order-status .order-topbar,
+  #screen-order-open .order-topbar,
+  #screen-order-stats .order-topbar,
+  #screen-order-summary .order-topbar {
+    --mob-topbar-logo-w: clamp(46px, 19vw, 70px);
+  }
+
+  #screen-order .order-topbar__logo .order-topbar__logo-img,
+  #screen-order-assign .order-topbar__logo .order-topbar__logo-img,
+  #screen-order-status .order-topbar__logo .order-topbar__logo-img,
+  #screen-order-open .order-topbar__logo .order-topbar__logo-img,
+  #screen-order-stats .order-topbar__logo .order-topbar__logo-img,
+  #screen-order-summary .order-topbar__logo .order-topbar__logo-img {
+    transform: scale(1.4) !important;
+    transform-origin: left center !important;
+  }
+
+  /* ── 4~6번: 열마다 박스 개수에 따라 행 높이 균등 분할 ── */
+  #screen-order-assign .assign-table td,
+  #screen-order-status .assign-table td,
+  #screen-order-open .assign-table td {
+    vertical-align: top !important;
+  }
+
+  #screen-order-assign .assign-table__row-main:has(.assign-cell-stack) > td,
+  #screen-order-status .assign-table__row-main:has(.assign-cell-stack) > td,
+  #screen-order-open .assign-table__row-main:has(.assign-cell-stack) > td {
+    vertical-align: top !important;
+    height: 1px !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
+
+  #screen-order-assign .assign-table .assign-cell-box,
+  #screen-order-status .assign-table .assign-cell-box,
+  #screen-order-open .assign-table .assign-cell-box {
+    height: 100% !important;
+    min-height: var(--assign-row-input-h) !important;
+    box-sizing: border-box !important;
+  }
+
+  #screen-order-assign .assign-table .assign-cell-stack,
+  #screen-order-status .assign-table .assign-cell-stack,
+  #screen-order-open .assign-table .assign-cell-stack {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: stretch !important;
+    align-items: stretch !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 100% !important;
+    gap: var(--assign-row-input-gap) !important;
+    box-sizing: border-box !important;
+  }
+
+  #screen-order-assign .assign-table .assign-stack-item,
+  #screen-order-status .assign-table .assign-stack-item,
+  #screen-order-open .assign-table .assign-stack-item,
+  #screen-order-assign .assign-table .assign-cell-stack--partner .assign-partner-select,
+  #screen-order-status .assign-table .assign-cell-stack--partner .assign-partner-select,
+  #screen-order-open .assign-table .assign-cell-stack--partner .assign-partner-select,
+  #screen-order-assign .assign-table .assign-cell-stack--worker .assign-worker-select,
+  #screen-order-status .assign-table .assign-cell-stack--worker .assign-worker-select,
+  #screen-order-open .assign-table .assign-cell-stack--worker .assign-worker-select {
+    flex: 1 1 0 !important;
+    min-height: 0 !important;
+    height: auto !important;
+    max-height: none !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+  }
+
+  #screen-order-assign .assign-table__cell-scope--stacked,
+  #screen-order-status .assign-table__cell-scope--stacked,
+  #screen-order-open .assign-table__cell-scope--stacked,
+  #screen-order-assign .assign-table__cell-partner--stacked,
+  #screen-order-status .assign-table__cell-partner--stacked,
+  #screen-order-open .assign-table__cell-partner--stacked,
+  #screen-order-assign .assign-table__cell-worker--stacked,
+  #screen-order-status .assign-table__cell-worker--stacked,
+  #screen-order-open .assign-table__cell-worker--stacked {
+    vertical-align: top !important;
+  }
+
+  /* ── 7번 통계: 막대 그래프를 화면 하단(표 아래)에 표시 ── */
+  #screen-order-stats.order-page > .assign-body {
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: 0 !important;
+  }
+
+  #screen-order-stats .assign-panel.stats-panel {
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    height: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  #screen-order-stats .stats-main {
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    gap: 8px !important;
+  }
+
+  #screen-order-stats .stats-content {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  #screen-order-stats .stats-filters {
+    flex: 0 0 auto !important;
+  }
+
+  #screen-order-stats .stats-body {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  #screen-order-stats .stats-unit-label {
+    flex: 0 0 auto !important;
+  }
+
+  #screen-order-stats .stats-body .assign-table-wrap {
+    flex: 1 1 auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+    padding-top: 0 !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  #screen-order-stats .stats-table {
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    width: 100% !important;
+    min-width: 600px !important;
+    table-layout: fixed !important;
+  }
+
+  #screen-order-stats .stats-table thead {
+    display: contents !important;
+  }
+
+  #screen-order-stats .stats-table thead tr:not(.stats-chart-row) {
+    order: 1 !important;
+    display: table !important;
+    width: 100% !important;
+    table-layout: fixed !important;
+  }
+
+  #screen-order-stats .stats-table tbody {
+    order: 2 !important;
+    display: block !important;
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    max-height: min(34vh, 32dvh) !important;
+    overflow-x: auto !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    touch-action: pan-x pan-y !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  #screen-order-stats .stats-table tbody tr {
+    display: table !important;
+    width: 100% !important;
+    table-layout: fixed !important;
+  }
+
+  #screen-order-stats .stats-table thead tr.stats-chart-row {
+    order: 3 !important;
+    display: table !important;
+    width: 100% !important;
+    table-layout: fixed !important;
+    flex: 0 0 auto !important;
+    background: var(--color-white) !important;
+  }
+
+  #screen-order-stats .stats-table thead tr.stats-chart-row .assign-table__th {
+    background: var(--color-white) !important;
+    border-top: 1px solid #333 !important;
+    border-bottom: none !important;
+    padding-top: 8px !important;
+    padding-bottom: 4px !important;
+  }
+
+  #screen-order-stats .stats-chart__plot {
+    min-height: clamp(100px, 22vh, 168px) !important;
+    height: 100% !important;
+  }
+
+  #screen-order-stats .stats-chart-scope {
+    min-height: clamp(100px, 22vh, 168px) !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   모바일 v13 — 4~6번 목록 박스 구조 (첨부 이미지 기준)
+   열별 박스 개수에 따라 행 높이 균등 분할 · 단일 열은 전체 높이
+   (PC 미변경 · 구조·기능 유지)
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  #screen-order-assign,
+  #screen-order-status,
+  #screen-order-open {
+    --mob-assign-box-gap: var(--assign-row-input-gap, 2px);
+    --mob-assign-box-min-h: var(--assign-row-input-h, 28px);
+  }
+
+  /* 스택(2개 이상) 행: 모든 열 동일 높이 */
+  #screen-order-assign .assign-table tbody tr.assign-table__row-main:has(.assign-cell-stack) > td,
+  #screen-order-status .assign-table tbody tr.assign-table__row-main:has(.assign-cell-stack) > td,
+  #screen-order-open .assign-table tbody tr.assign-table__row-main:has(.assign-cell-stack) > td {
+    height: 1px !important;
+    vertical-align: top !important;
+    padding: 2px 3px !important;
+    box-sizing: border-box !important;
+  }
+
+  #screen-order-assign .assign-table tbody tr.assign-table__row-main:not(:has(.assign-cell-stack)) > td,
+  #screen-order-status .assign-table tbody tr.assign-table__row-main:not(:has(.assign-cell-stack)) > td,
+  #screen-order-open .assign-table tbody tr.assign-table__row-main:not(:has(.assign-cell-stack)) > td {
+    vertical-align: middle !important;
+    padding: 4px 3px !important;
+    box-sizing: border-box !important;
+  }
+
+  /* 단일 박스 — 흰 테두리 박스, 가운데 정렬, 행 전체 높이 */
+  #screen-order-assign .assign-table .assign-cell-box,
+  #screen-order-status .assign-table .assign-cell-box,
+  #screen-order-open .assign-table .assign-cell-box {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: var(--mob-assign-box-min-h) !important;
+    max-height: none !important;
+    padding: 0 8px !important;
+    margin: 0 !important;
+    background: var(--color-white) !important;
+    border: 1px solid #b8b8b8 !important;
+    border-radius: 0 !important;
+    font-size: clamp(11px, 2.8vw, 13px) !important;
+    color: #333 !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    box-sizing: border-box !important;
+  }
+
+  #screen-order-assign .assign-table .assign-cell-box--wide,
+  #screen-order-status .assign-table .assign-cell-box--wide,
+  #screen-order-open .assign-table .assign-cell-box--wide {
+    justify-content: center !important;
+    line-height: 1.3 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
+
+  #screen-order-assign .assign-table .assign-cell-box--compact,
+  #screen-order-status .assign-table .assign-cell-box--compact,
+  #screen-order-open .assign-table .assign-cell-box--compact {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: 100% !important;
+    min-height: var(--mob-assign-box-min-h) !important;
+    max-width: 72px !important;
+    min-width: 56px !important;
+    margin: 0 auto !important;
+    padding: 0 6px !important;
+  }
+
+  #screen-order-assign .assign-table .assign-cell-box--no,
+  #screen-order-status .assign-table .assign-cell-box--no,
+  #screen-order-open .assign-table .assign-cell-box--no {
+    max-width: 52px !important;
+    min-width: 40px !important;
+    margin: 0 auto !important;
+  }
+
+  /* 스택 열 — 박스 개수만큼 행 높이 균등 분할 */
+  #screen-order-assign .assign-table .assign-cell-stack,
+  #screen-order-status .assign-table .assign-cell-stack,
+  #screen-order-open .assign-table .assign-cell-stack {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    justify-content: stretch !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 100% !important;
+    gap: var(--mob-assign-box-gap) !important;
+    box-sizing: border-box !important;
+  }
+
+  #screen-order-assign .assign-table .assign-cell-stack:has(.assign-stack-item:nth-child(2)),
+  #screen-order-status .assign-table .assign-cell-stack:has(.assign-stack-item:nth-child(2)),
+  #screen-order-open .assign-table .assign-cell-stack:has(.assign-stack-item:nth-child(2)),
+  #screen-order-assign .assign-table .assign-cell-stack:has(.assign-partner-select:nth-child(2)),
+  #screen-order-status .assign-table .assign-cell-stack:has(.assign-partner-select:nth-child(2)),
+  #screen-order-open .assign-table .assign-cell-stack:has(.assign-partner-select:nth-child(2)),
+  #screen-order-assign .assign-table .assign-cell-stack:has(.assign-worker-select:nth-child(2)),
+  #screen-order-status .assign-table .assign-cell-stack:has(.assign-worker-select:nth-child(2)),
+  #screen-order-open .assign-table .assign-cell-stack:has(.assign-worker-select:nth-child(2)) {
+    min-height: calc(var(--mob-assign-box-min-h) * 2 + var(--mob-assign-box-gap)) !important;
+  }
+
+  #screen-order-assign .assign-table .assign-cell-stack:has(.assign-stack-item:nth-child(3)),
+  #screen-order-status .assign-table .assign-cell-stack:has(.assign-stack-item:nth-child(3)),
+  #screen-order-open .assign-table .assign-cell-stack:has(.assign-stack-item:nth-child(3)),
+  #screen-order-assign .assign-table .assign-cell-stack:has(.assign-partner-select:nth-child(3)),
+  #screen-order-status .assign-table .assign-cell-stack:has(.assign-partner-select:nth-child(3)),
+  #screen-order-open .assign-table .assign-cell-stack:has(.assign-partner-select:nth-child(3)),
+  #screen-order-assign .assign-table .assign-cell-stack:has(.assign-worker-select:nth-child(3)),
+  #screen-order-status .assign-table .assign-cell-stack:has(.assign-worker-select:nth-child(3)),
+  #screen-order-open .assign-table .assign-cell-stack:has(.assign-worker-select:nth-child(3)) {
+    min-height: calc(var(--mob-assign-box-min-h) * 3 + var(--mob-assign-box-gap) * 2) !important;
+  }
+
+  #screen-order-assign .assign-table .assign-stack-item,
+  #screen-order-status .assign-table .assign-stack-item,
+  #screen-order-open .assign-table .assign-stack-item {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex: 1 1 0 !important;
+    min-height: 0 !important;
+    height: auto !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 8px !important;
+    background: var(--color-white) !important;
+    border: 1px solid #b8b8b8 !important;
+    border-radius: 0 !important;
+    font-size: clamp(11px, 2.8vw, 13px) !important;
+    color: #333 !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    box-sizing: border-box !important;
+  }
+
+  #screen-order-assign .assign-table .assign-cell-stack .assign-partner-select,
+  #screen-order-status .assign-table .assign-cell-stack .assign-partner-select,
+  #screen-order-open .assign-table .assign-cell-stack .assign-partner-select,
+  #screen-order-assign .assign-table .assign-cell-stack .assign-worker-select,
+  #screen-order-status .assign-table .assign-cell-stack .assign-worker-select,
+  #screen-order-open .assign-table .assign-cell-stack .assign-worker-select {
+    flex: 1 1 0 !important;
+    min-height: 0 !important;
+    height: auto !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 24px 0 8px !important;
+    font-size: clamp(11px, 2.8vw, 13px) !important;
+    text-align: center !important;
+    text-align-last: center !important;
+    border: 1px solid #b8b8b8 !important;
+    border-radius: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  /* 단일 협력사·기사 select — 박스형 */
+  #screen-order-assign .assign-table td > .assign-partner-select,
+  #screen-order-status .assign-table td > .assign-partner-select,
+  #screen-order-open .assign-table td > .assign-partner-select,
+  #screen-order-assign .assign-table td > .assign-worker-select,
+  #screen-order-status .assign-table td > .assign-worker-select,
+  #screen-order-open .assign-table td > .assign-worker-select {
+    width: 100% !important;
+    height: 100% !important;
+    min-height: var(--mob-assign-box-min-h) !important;
+    margin: 0 !important;
+    padding: 0 24px 0 8px !important;
+    font-size: clamp(11px, 2.8vw, 13px) !important;
+    border: 1px solid #b8b8b8 !important;
+    border-radius: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  #screen-order-assign .assign-table .assign-detail-link,
+  #screen-order-status .assign-table .assign-detail-link,
+  #screen-order-open .assign-table .assign-detail-link {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    font-size: clamp(11px, 2.8vw, 13px) !important;
+    font-weight: 500 !important;
+    color: #333 !important;
+    text-decoration: none !important;
+    white-space: nowrap !important;
+  }
+
+  #screen-order-assign .assign-table .assign-cell-box--check,
+  #screen-order-status .assign-table .assign-cell-box--check,
+  #screen-order-open .assign-table .assign-cell-box--check {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  #screen-order-assign .assign-table .assign-delete-check,
+  #screen-order-status .assign-table .assign-delete-check,
+  #screen-order-open .assign-table .assign-delete-check {
+    margin: 0 auto !important;
+  }
+}

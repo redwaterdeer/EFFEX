@@ -5768,3 +5768,122 @@
     background: #fff !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   모바일 v17 — 7번 통계 그래프 테두리 잘림 방지
+   (PC 미변경 · 구조·기능 유지)
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  #screen-order-stats {
+    --stats-mob-chart-h: clamp(100px, 20vh, 156px);
+    --stats-mob-chart-pad-top: 18px;
+    --stats-mob-chart-pad-side: 4px;
+  }
+
+  #screen-order-stats .stats-body {
+    overflow: visible !important;
+    min-height: 0 !important;
+  }
+
+  #screen-order-stats .stats-body .assign-table-wrap {
+    max-height: none !important;
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+    padding: var(--stats-mob-chart-pad-top) var(--stats-mob-chart-pad-side) 6px !important;
+    box-sizing: border-box !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  #screen-order-stats .stats-table {
+    overflow: visible !important;
+    min-height: 0 !important;
+    flex-shrink: 0 !important;
+  }
+
+  #screen-order-stats .stats-table thead tr.stats-chart-row {
+    flex: 0 0 auto !important;
+    overflow: visible !important;
+  }
+
+  #screen-order-stats .stats-table thead tr.stats-chart-row .assign-table__th {
+    height: auto !important;
+    min-height: calc(var(--stats-mob-chart-h) + 6px) !important;
+    max-height: none !important;
+    overflow: visible !important;
+    padding-top: 0 !important;
+    padding-bottom: 2px !important;
+    box-sizing: border-box !important;
+  }
+
+  #screen-order-stats .stats-chart-row__rank,
+  #screen-order-stats .stats-chart-row__scope,
+  #screen-order-stats .stats-chart-row__cell,
+  #screen-order-stats .stats-chart-row__total {
+    overflow: visible !important;
+  }
+
+  #screen-order-stats .stats-chart-row__scope .stats-chart-scope,
+  #screen-order-stats .stats-chart-yaxis,
+  #screen-order-stats .stats-chart-yaxis__ticks,
+  #screen-order-stats .stats-chart-yaxis__tick,
+  #screen-order-stats .stats-chart__plot,
+  #screen-order-stats .stats-chart__bar-area {
+    overflow: visible !important;
+  }
+
+  #screen-order-stats .stats-chart-row__scope .stats-chart-scope {
+    min-height: var(--stats-mob-chart-h) !important;
+    height: 100% !important;
+  }
+
+  #screen-order-stats .stats-chart-yaxis__ticks {
+    min-height: var(--stats-mob-chart-h) !important;
+    padding-top: 6px !important;
+    padding-bottom: 2px !important;
+    box-sizing: border-box !important;
+  }
+
+  #screen-order-stats .stats-chart-yaxis__tick {
+    overflow: visible !important;
+  }
+
+  #screen-order-stats .stats-chart-yaxis__tick-label {
+    overflow: visible !important;
+    white-space: nowrap !important;
+  }
+
+  #screen-order-stats .stats-chart-row__cell.stats-table__month-col {
+    height: auto !important;
+    min-height: var(--stats-mob-chart-h) !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  #screen-order-stats .stats-chart__plot {
+    min-height: var(--stats-mob-chart-h) !important;
+    height: 100% !important;
+    max-height: none !important;
+    overflow: visible !important;
+    padding: 8px 2px 2px !important;
+    box-sizing: border-box !important;
+  }
+
+  #screen-order-stats .stats-chart__bar-value {
+    overflow: visible !important;
+    z-index: 3 !important;
+    white-space: nowrap !important;
+  }
+
+  #screen-order-stats .stats-chart__bar {
+    overflow: visible !important;
+  }
+
+  #screen-order-stats .stats-table thead tr:not(.stats-chart-row) {
+    flex: 0 0 auto !important;
+  }
+
+  #screen-order-stats .stats-table tbody {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+  }
+}

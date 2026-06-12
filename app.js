@@ -513,6 +513,13 @@ function clearAuth() {
   localStorage.removeItem(AUTH_KEY);
 }
 
+function clearLoginForm() {
+  var idEl = document.getElementById("userId");
+  var pwEl = document.getElementById("password");
+  if (idEl) idEl.value = "";
+  if (pwEl) pwEl.value = "";
+}
+
 function canAccessNav(item, role) {
   return item.roles.indexOf(role) !== -1;
 }
@@ -661,9 +668,39 @@ function getActiveScreen() {
   return document.querySelector(".screen.is-active");
 }
 
+function resetSignupForm() {
+  var idEl = document.getElementById("signupId");
+  var pwEl = document.getElementById("signupPw");
+  var nameEl = document.getElementById("signupName");
+  var phoneEl = document.getElementById("signupPhone");
+  if (idEl) idEl.value = "";
+  if (pwEl) pwEl.value = "";
+  if (nameEl) nameEl.value = "";
+  if (phoneEl) phoneEl.value = "";
+
+  var partnerCompany = document.getElementById("partnerCompany");
+  var bizNo = document.getElementById("bizNo");
+  var bizAddress = document.getElementById("bizAddress");
+  if (partnerCompany) partnerCompany.value = "";
+  if (bizNo) bizNo.value = "";
+  if (bizAddress) bizAddress.value = "";
+
+  var workerPartner = document.getElementById("workerPartner");
+  if (workerPartner) workerPartner.value = "";
+
+  document.querySelectorAll(".signup-scope-option").forEach(function (btn) {
+    btn.classList.remove("signup-scope-option--active");
+  });
+
+  setSignupRole("admin");
+}
+
 function goToSignup() {
   signupEditMode = false;
   canEnterSignup = true;
+  if (isMobileLayout()) {
+    resetSignupForm();
+  }
   showScreen("signup");
 }
 
@@ -964,6 +1001,7 @@ function initLogout(screenEl) {
     el.addEventListener("click", function (e) {
       e.preventDefault();
       clearAuth();
+      clearLoginForm();
       showScreen("login");
     });
   });
@@ -5810,6 +5848,12 @@ function bindAssignTableLiveSync(pageKey) {
       e.target.matches(".assign-partner-select") ||
       e.target.matches(".assign-worker-select")
     ) {
+      if (
+        isMobileLayout() &&
+        (pageKey === "assign" || pageKey === "status")
+      ) {
+        return;
+      }
       persistAssignSelectionsFromDom(pageKey);
     }
   });
@@ -7487,6 +7531,8 @@ function initLoginScreen() {
   if (initializedScreens.login) return;
   initializedScreens.login = true;
 
+  initLogout(document.getElementById("screen-login"));
+
   var form = document.getElementById("loginForm");
   var btnSignup = document.getElementById("btnSignup");
 
@@ -7600,6 +7646,8 @@ function refreshWorkerPartnerSelect() {
 function initSignupScreen() {
   if (initializedScreens.signup) return;
   initializedScreens.signup = true;
+
+  initLogout(document.getElementById("screen-signup"));
 
   bindFormattedInput("signupPhone", formatPhone);
   bindFormattedInput("bizNo", formatBizNo);

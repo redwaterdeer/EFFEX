@@ -6005,3 +6005,109 @@
     overflow: visible !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   모바일 v19 — 7번 통계 그래프 X축(월) 텍스트 표시
+   (PC 미변경 · 구조·기능 유지)
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  #screen-order-stats {
+    --stats-mob-xlabel-h: 16px;
+    --stats-mob-month-w: 56px;
+  }
+
+  /* 차트+월헤더 함께 고정 → 스크롤 시 X축 글자 유지 */
+  #screen-order-stats .stats-table thead {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 18 !important;
+    background: #fff !important;
+  }
+
+  /* 그래프 하단 X축(월) 라벨 영역 */
+  #screen-order-stats .stats-chart-row th.stats-chart-row__cell.stats-table__month-col {
+    position: relative !important;
+    padding-bottom: var(--stats-mob-xlabel-h) !important;
+    box-sizing: border-box !important;
+    overflow: visible !important;
+  }
+
+  #screen-order-stats .stats-chart-row th.stats-table__month-col::after {
+    position: absolute !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 2px !important;
+    display: block !important;
+    text-align: center !important;
+    font-size: clamp(9px, 2.35vw, 11px) !important;
+    font-weight: 600 !important;
+    color: #333 !important;
+    line-height: 1.1 !important;
+    white-space: nowrap !important;
+    z-index: 8 !important;
+    pointer-events: none !important;
+    overflow: visible !important;
+  }
+
+  #screen-order-stats .stats-chart-row th.stats-table__month-col:nth-child(3)::after {
+    content: "1월" !important;
+  }
+  #screen-order-stats .stats-chart-row th.stats-table__month-col:nth-child(4)::after {
+    content: "2월" !important;
+  }
+  #screen-order-stats .stats-chart-row th.stats-table__month-col:nth-child(5)::after {
+    content: "3월" !important;
+  }
+  #screen-order-stats .stats-chart-row th.stats-table__month-col:nth-child(6)::after {
+    content: "4월" !important;
+  }
+  #screen-order-stats .stats-chart-row th.stats-table__month-col:nth-child(7)::after {
+    content: "5월" !important;
+  }
+  #screen-order-stats .stats-chart-row th.stats-table__month-col:nth-child(8)::after {
+    content: "6월" !important;
+  }
+  #screen-order-stats .stats-chart-row th.stats-table__month-col:nth-child(9)::after {
+    content: "7월" !important;
+  }
+  #screen-order-stats .stats-chart-row th.stats-table__month-col:nth-child(10)::after {
+    content: "8월" !important;
+  }
+  #screen-order-stats .stats-chart-row th.stats-table__month-col:nth-child(11)::after {
+    content: "9월" !important;
+  }
+  #screen-order-stats .stats-chart-row th.stats-table__month-col:nth-child(12)::after {
+    content: "10월" !important;
+  }
+  #screen-order-stats .stats-chart-row th.stats-table__month-col:nth-child(13)::after {
+    content: "11월" !important;
+  }
+  #screen-order-stats .stats-chart-row th.stats-table__month-col:nth-child(14)::after {
+    content: "12월" !important;
+  }
+
+  #screen-order-stats .stats-chart-row th.stats-chart-row__cell .stats-chart__plot {
+    height: calc(100% - var(--stats-mob-xlabel-h)) !important;
+    max-height: calc(100% - var(--stats-mob-xlabel-h)) !important;
+    padding-bottom: 2px !important;
+    box-sizing: border-box !important;
+  }
+
+  /* 월 헤더 행(X축) 텍스트 가독성 */
+  #screen-order-stats .stats-table thead tr:not(.stats-chart-row) .stats-table__month-col,
+  #screen-order-stats .stats-table thead tr:not(.stats-chart-row) .stats-table__total-col {
+    overflow: visible !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    font-size: clamp(10px, 2.5vw, 12px) !important;
+    font-weight: 600 !important;
+    color: #fff !important;
+    white-space: nowrap !important;
+    line-height: 1.2 !important;
+    min-height: 28px !important;
+    padding: 5px 2px !important;
+    vertical-align: middle !important;
+    text-align: center !important;
+    box-sizing: border-box !important;
+  }
+}

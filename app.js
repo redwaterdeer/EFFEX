@@ -2831,23 +2831,27 @@ function isMobileLayout() {
 }
 
 function ensureAssignSavePlacement() {
-  var screen = document.getElementById("screen-order-assign");
-  if (!screen) return;
-  var body = screen.querySelector(".assign-body");
-  var panel = screen.querySelector(".assign-panel");
-  var saveWrap = screen.querySelector(".assign-save");
-  if (!body || !panel || !saveWrap) return;
+  ["screen-order-assign", "screen-order-status", "screen-order-open"].forEach(
+    function (screenId) {
+      var screen = document.getElementById(screenId);
+      if (!screen) return;
+      var body = screen.querySelector(".assign-body");
+      var panel = screen.querySelector(".assign-panel");
+      var saveWrap = screen.querySelector(".assign-save");
+      if (!body || !panel || !saveWrap) return;
 
-  if (isMobileLayout()) {
-    if (saveWrap.parentElement !== panel) {
-      panel.appendChild(saveWrap);
+      if (isMobileLayout()) {
+        if (saveWrap.parentElement !== panel) {
+          panel.appendChild(saveWrap);
+        }
+        return;
+      }
+
+      if (saveWrap.parentElement !== body) {
+        body.appendChild(saveWrap);
+      }
     }
-    return;
-  }
-
-  if (saveWrap.parentElement !== body) {
-    body.appendChild(saveWrap);
-  }
+  );
 }
 
 function refreshDataFromStorage() {
@@ -5924,6 +5928,7 @@ function initOrderAssignPage(screen) {
 
 /* 5번: 배정현황 */
 function initOrderStatusPage(screen) {
+  ensureAssignSavePlacement();
   if (!getAuth()) return;
 
   initLogout(screen);
@@ -7364,6 +7369,7 @@ function initOrderStatsPage(screen) {
 
 /* 6번: 미마감 */
 function initOrderOpenPage(screen) {
+  ensureAssignSavePlacement();
   if (!getAuth()) return;
 
   initLogout(screen);

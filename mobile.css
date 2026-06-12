@@ -3128,3 +3128,126 @@
     box-sizing: border-box !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   모바일 공간 재구성 v3 — 영역 겹침 방지 (1·3번·PC 미변경)
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  :root {
+    --m-footer-h: calc(52px + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* 화면 번호 워터마크 — 푸터·본문과 겹침 방지 */
+  #screen-order-assign .order-page__num,
+  #screen-order-status .order-page__num,
+  #screen-order-open .order-page__num,
+  #screen-order-stats .order-page__num {
+    display: none !important;
+  }
+
+  /* 4·5·6: 본문 이중 스크롤 제거 · 푸터 여백 단일화 */
+  #screen-order-assign.order-page > .assign-body,
+  #screen-order-status.order-page > .assign-body,
+  #screen-order-open.order-page > .assign-body {
+    overflow: hidden !important;
+    overflow-x: hidden !important;
+    overflow-y: hidden !important;
+    padding-bottom: var(--m-footer-h) !important;
+    touch-action: manipulation;
+  }
+
+  #screen-order-assign .assign-panel,
+  #screen-order-status .assign-panel,
+  #screen-order-open .assign-panel {
+    padding-bottom: 8px !important;
+  }
+
+  #screen-order-assign .assign-calendar,
+  #screen-order-status .assign-calendar,
+  #screen-order-open .assign-calendar {
+    min-height: 150px !important;
+    max-height: 175px !important;
+  }
+
+  /* 5·6 저장 — 4번과 동일하게 패널 테두리 안 */
+  #screen-order-status .assign-panel > .assign-save,
+  #screen-order-open .assign-panel > .assign-save {
+    flex: 0 0 auto !important;
+    width: 100% !important;
+    margin: 8px 0 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  #screen-order-status > .assign-body > .assign-save,
+  #screen-order-open > .assign-body > .assign-save {
+    display: none !important;
+  }
+
+  #screen-order-status .assign-panel > .assign-save .order-register__btn,
+  #screen-order-open .assign-panel > .assign-save .order-register__btn {
+    width: 100% !important;
+    min-height: 48px !important;
+    font-size: 16px !important;
+  }
+
+  /* 7번 통계 — 본문·푸터 겹침 방지 */
+  #screen-order-stats.order-page > .assign-body {
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    padding-bottom: var(--m-footer-h) !important;
+  }
+
+  #screen-order-stats .stats-body .assign-table-wrap {
+    max-height: min(42vh, 38dvh) !important;
+  }
+
+  /* 8번: 건수/금액 드롭다운 제거 · 토글 버튼 사용 (PC와 동일) */
+  #screen-order-summary .order-summary-metric-field {
+    display: none !important;
+  }
+
+  #screen-order-summary .order-summary-toggle {
+    display: flex !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  #screen-order-summary .order-summary-toggle__btn {
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+    min-height: 44px !important;
+  }
+
+  #screen-order-summary .order-summary-toolbar {
+    gap: 10px !important;
+    margin-bottom: 10px !important;
+  }
+
+  #screen-order-summary .order-summary-ym__row {
+    flex-wrap: nowrap !important;
+    gap: 8px !important;
+  }
+
+  #screen-order-summary .order-summary-ym__field {
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+  }
+
+  #screen-order-summary .order-summary-table-wrap {
+    max-height: min(
+      calc(100dvh - 220px - var(--m-footer-h)),
+      52dvh
+    ) !important;
+  }
+
+  /* 2번 가입 — 하단 푸터 여백 */
+  #screen-signup .signup-body {
+    padding-bottom: var(--m-footer-h) !important;
+  }
+
+  /* 하단 푸터 최상위 (본문 위) */
+  .order-page .order-mobile-footer {
+    z-index: 200 !important;
+  }
+}

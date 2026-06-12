@@ -1891,9 +1891,19 @@ table {
   flex-shrink: 0;
 }
 
-/* PC: 집계 표시는 버튼 토글만 사용 */
+/* PC: 집계 표시는 버튼 토글만 사용 (건수/금액 드롭다운 없음) */
 .order-summary-metric-field {
-  display: none;
+  display: none !important;
+}
+
+@media (min-width: 769px) {
+  #screen-order-summary .order-summary-metric-field {
+    display: none !important;
+  }
+
+  #screen-order-summary .order-summary-toggle {
+    display: inline-flex !important;
+  }
 }
 
 .order-summary-ym__row {

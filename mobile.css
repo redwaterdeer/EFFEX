@@ -5247,3 +5247,190 @@
     margin: 0 auto !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   모바일 v14 — 8번 연·월 중앙 · 3번 테두리 통일 · 4~6 박스 구조 보강
+   (PC 미변경 · 구조·기능 유지)
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* ── 8번 집계표: 연도·월 드롭다운 텍스트 중앙 ── */
+  #screen-order-summary .order-summary-ym__select {
+    text-align: center !important;
+    text-align-last: center !important;
+    -webkit-text-align-last: center !important;
+    padding-left: 28px !important;
+    padding-right: 28px !important;
+  }
+
+  /* ── 3번 오더등록: 내용 박스 테두리 1px 통일 ── */
+  #screen-order .order-form > .order-field:nth-child(-n + 10) {
+    border: 1px solid #b8b8b8 !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+    gap: 0 !important;
+  }
+
+  #screen-order .order-form > .order-field:nth-child(-n + 10) .order-field__label {
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  #screen-order .order-form > .order-field:nth-child(-n + 10) > .order-field__divider {
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  #screen-order .order-form > .order-field:nth-child(-n + 10) > .order-field__control,
+  #screen-order .order-form > .order-field:nth-child(-n + 10) > .order-field__region-group {
+    border: none !important;
+    border-left: 1px solid #b8b8b8 !important;
+    box-shadow: none !important;
+  }
+
+  #screen-order .order-form > .order-field:nth-child(-n + 10) .order-scope-options,
+  #screen-order .order-form > .order-field:nth-child(-n + 10) .order-scope-sales-options {
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  #screen-order .order-form > .order-field:nth-child(-n + 10) .order-scope-option,
+  #screen-order .order-form > .order-field:nth-child(-n + 10) .order-scope-sales-cell {
+    border: none !important;
+    border-right: 1px solid #b8b8b8 !important;
+    box-shadow: none !important;
+  }
+
+  #screen-order .order-form > .order-field:nth-child(-n + 10) .order-scope-option:last-child,
+  #screen-order .order-form > .order-field:nth-child(-n + 10) .order-scope-sales-cell:last-child {
+    border-right: none !important;
+  }
+
+  #screen-order
+    .order-field--region
+    .order-field__region-group
+    > .order-field__control--region-item {
+    border: none !important;
+    border-left: 1px solid #b8b8b8 !important;
+    box-shadow: none !important;
+  }
+
+  #screen-order
+    .order-field--region
+    .order-field__region-group
+    > .order-field__control--region-item:first-child {
+    border-left: none !important;
+  }
+
+  #screen-order .order-date-btn,
+  #screen-order .order-upload-btn,
+  #screen-order .order-delete-btn {
+    border: none !important;
+    border-left: 1px solid #b8b8b8 !important;
+    box-shadow: none !important;
+  }
+
+  /* ── 4~6번: 목록 박스 — 첨부 이미지 구조 (v13 보강 · 충돌 규칙 덮어쓰기) ── */
+  #screen-order-assign,
+  #screen-order-status,
+  #screen-order-open {
+    --mob-assign-box-gap: 2px;
+    --mob-assign-box-min-h: clamp(28px, 7.5vw, 34px);
+  }
+
+  #screen-order-assign .assign-cell-box,
+  #screen-order-status .assign-cell-box,
+  #screen-order-open .assign-cell-box,
+  #screen-order-status .assign-stack-item,
+  #screen-order-open .assign-stack-item {
+    min-height: 0 !important;
+  }
+
+  #screen-order-assign .assign-table .assign-cell-box,
+  #screen-order-status .assign-table .assign-cell-box,
+  #screen-order-open .assign-table .assign-cell-box {
+    min-height: var(--mob-assign-box-min-h) !important;
+  }
+
+  #screen-order-assign .assign-table tbody tr.assign-table__row-main,
+  #screen-order-status .assign-table tbody tr.assign-table__row-main,
+  #screen-order-open .assign-table tbody tr.assign-table__row-main {
+    height: 1px !important;
+  }
+
+  #screen-order-assign .assign-table tbody tr.assign-table__row-main > td,
+  #screen-order-status .assign-table tbody tr.assign-table__row-main > td,
+  #screen-order-open .assign-table tbody tr.assign-table__row-main > td {
+    height: inherit !important;
+    vertical-align: top !important;
+    padding: 2px 3px !important;
+    box-sizing: border-box !important;
+  }
+
+  #screen-order-assign .assign-table .assign-cell-box,
+  #screen-order-status .assign-table .assign-cell-box,
+  #screen-order-open .assign-table .assign-cell-box,
+  #screen-order-assign .assign-table .assign-stack-item,
+  #screen-order-status .assign-table .assign-stack-item,
+  #screen-order-open .assign-table .assign-stack-item,
+  #screen-order-assign .assign-table .assign-cell-stack .assign-partner-select,
+  #screen-order-status .assign-table .assign-cell-stack .assign-partner-select,
+  #screen-order-open .assign-table .assign-cell-stack .assign-partner-select,
+  #screen-order-assign .assign-table .assign-cell-stack .assign-worker-select,
+  #screen-order-status .assign-table .assign-cell-stack .assign-worker-select,
+  #screen-order-open .assign-table .assign-cell-stack .assign-worker-select,
+  #screen-order-assign .assign-table td > .assign-partner-select,
+  #screen-order-status .assign-table td > .assign-partner-select,
+  #screen-order-open .assign-table td > .assign-partner-select,
+  #screen-order-assign .assign-table td > .assign-worker-select,
+  #screen-order-status .assign-table td > .assign-worker-select,
+  #screen-order-open .assign-table td > .assign-worker-select {
+    border-width: 1px !important;
+    border-style: solid !important;
+    border-color: #b8b8b8 !important;
+    box-shadow: none !important;
+  }
+
+  #screen-order-assign .assign-table .assign-cell-stack,
+  #screen-order-status .assign-table .assign-cell-stack,
+  #screen-order-open .assign-table .assign-cell-stack {
+    gap: var(--mob-assign-box-gap) !important;
+  }
+
+  #screen-order-assign .assign-table .assign-cell-stack:has(.assign-stack-item:nth-child(2)),
+  #screen-order-status .assign-table .assign-cell-stack:has(.assign-stack-item:nth-child(2)),
+  #screen-order-open .assign-table .assign-cell-stack:has(.assign-stack-item:nth-child(2)),
+  #screen-order-assign .assign-table .assign-cell-stack:has(.assign-partner-select:nth-child(2)),
+  #screen-order-status .assign-table .assign-cell-stack:has(.assign-partner-select:nth-child(2)),
+  #screen-order-open .assign-table .assign-cell-stack:has(.assign-partner-select:nth-child(2)),
+  #screen-order-assign .assign-table .assign-cell-stack:has(.assign-worker-select:nth-child(2)),
+  #screen-order-status .assign-table .assign-cell-stack:has(.assign-worker-select:nth-child(2)),
+  #screen-order-open .assign-table .assign-cell-stack:has(.assign-worker-select:nth-child(2)) {
+    min-height: calc(var(--mob-assign-box-min-h) * 2 + var(--mob-assign-box-gap)) !important;
+  }
+
+  #screen-order-assign .assign-table .assign-cell-stack:has(.assign-stack-item:nth-child(3)),
+  #screen-order-status .assign-table .assign-cell-stack:has(.assign-stack-item:nth-child(3)),
+  #screen-order-open .assign-table .assign-cell-stack:has(.assign-partner-select:nth-child(3)),
+  #screen-order-status .assign-table .assign-cell-stack:has(.assign-partner-select:nth-child(3)),
+  #screen-order-open .assign-table .assign-cell-stack:has(.assign-partner-select:nth-child(3)),
+  #screen-order-assign .assign-table .assign-cell-stack:has(.assign-worker-select:nth-child(3)),
+  #screen-order-status .assign-table .assign-cell-stack:has(.assign-worker-select:nth-child(3)),
+  #screen-order-open .assign-table .assign-cell-stack:has(.assign-worker-select:nth-child(3)) {
+    min-height: calc(var(--mob-assign-box-min-h) * 3 + var(--mob-assign-box-gap) * 2) !important;
+  }
+
+  #screen-order-assign .assign-table .assign-stack-item,
+  #screen-order-status .assign-table .assign-stack-item,
+  #screen-order-open .assign-table .assign-stack-item,
+  #screen-order-assign .assign-table .assign-cell-stack .assign-partner-select,
+  #screen-order-status .assign-table .assign-cell-stack .assign-partner-select,
+  #screen-order-open .assign-table .assign-cell-stack .assign-partner-select,
+  #screen-order-assign .assign-table .assign-cell-stack .assign-worker-select,
+  #screen-order-status .assign-table .assign-cell-stack .assign-worker-select,
+  #screen-order-open .assign-table .assign-cell-stack .assign-worker-select {
+    flex: 1 1 0 !important;
+    min-height: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
+}

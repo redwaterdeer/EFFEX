@@ -5887,3 +5887,121 @@
     min-height: 0 !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   모바일 v18 — 7번 통계 Y축 고정 · 월별 그래프 가로 슬라이드 (8번 집계표 방식)
+   (PC 미변경 · 구조·기능 유지)
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  #screen-order-stats {
+    --stats-mob-month-w: 52px;
+    --stats-mob-fixed-w: calc(var(--stats-mob-rank-w) + var(--stats-mob-scope-w));
+  }
+
+  /* 가로 스크롤 컨테이너 (8번 집계표와 동일) */
+  #screen-order-stats .stats-body .assign-table-wrap {
+    overflow-x: auto !important;
+    overflow-y: auto !important;
+    max-height: min(42vh, 40dvh) !important;
+    -webkit-overflow-scrolling: touch !important;
+    touch-action: pan-x pan-y !important;
+    overscroll-behavior: contain !important;
+    scrollbar-width: thin !important;
+    scrollbar-color: #9a9a9a #e8e8e8 !important;
+  }
+
+  #screen-order-stats .stats-body .assign-table-wrap::-webkit-scrollbar {
+    width: 8px !important;
+    height: 8px !important;
+  }
+
+  /* flex 레이아웃 해제 → sticky 열 동작 복원 */
+  #screen-order-stats .stats-table {
+    display: table !important;
+    width: max-content !important;
+    min-width: calc(
+      var(--stats-mob-fixed-w) + var(--stats-mob-total-w) +
+        12 * var(--stats-mob-month-w)
+    ) !important;
+    table-layout: fixed !important;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+  }
+
+  #screen-order-stats .stats-table thead {
+    display: table-header-group !important;
+  }
+
+  #screen-order-stats .stats-table tbody {
+    display: table-row-group !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  #screen-order-stats .stats-table thead tr,
+  #screen-order-stats .stats-table tbody tr {
+    display: table-row !important;
+  }
+
+  #screen-order-stats .stats-table .stats-table__month-col {
+    width: var(--stats-mob-month-w) !important;
+    min-width: var(--stats-mob-month-w) !important;
+    max-width: var(--stats-mob-month-w) !important;
+  }
+
+  /* ── Y축·Rank·구분 열 좌측 고정 ── */
+  #screen-order-stats .stats-table .stats-table__rank-col,
+  #screen-order-stats .stats-table .stats-chart-row__rank {
+    position: sticky !important;
+    left: 0 !important;
+    z-index: 14 !important;
+    background: #fff !important;
+    background-clip: padding-box !important;
+  }
+
+  #screen-order-stats .stats-table .stats-table__scope-col,
+  #screen-order-stats .stats-table .stats-chart-row__scope,
+  #screen-order-stats .stats-table tbody .assign-table__td--scope {
+    position: sticky !important;
+    left: var(--stats-mob-rank-w) !important;
+    z-index: 13 !important;
+    background: #fff !important;
+    background-clip: padding-box !important;
+    box-shadow: 4px 0 6px -4px rgba(0, 0, 0, 0.14) !important;
+  }
+
+  #screen-order-stats .stats-table thead tr:not(.stats-chart-row) .stats-table__rank-col {
+    background: var(--color-btn) !important;
+    color: #fff !important;
+    z-index: 16 !important;
+  }
+
+  #screen-order-stats .stats-table thead tr:not(.stats-chart-row) .stats-table__scope-col {
+    background: var(--color-btn) !important;
+    color: #fff !important;
+    z-index: 15 !important;
+  }
+
+  #screen-order-stats .stats-chart-row__scope {
+    background: #fff !important;
+    z-index: 13 !important;
+  }
+
+  #screen-order-stats .stats-table tbody tr.stats-table__totals-row .stats-table__rank-col,
+  #screen-order-stats .stats-table tbody tr.stats-table__totals-row .assign-table__td--scope {
+    background: var(--color-btn) !important;
+    color: #fff !important;
+    z-index: 14 !important;
+  }
+
+  /* Y축 세로선 — 구분|1월 경계 고정 */
+  #screen-order-stats .stats-chart-row__scope::after {
+    z-index: 17 !important;
+  }
+
+  #screen-order-stats .stats-chart-row__scope .stats-chart-scope {
+    position: absolute !important;
+    inset: 0 !important;
+    overflow: visible !important;
+  }
+}

@@ -6412,3 +6412,85 @@
     box-sizing: border-box !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   모바일 v22 — 7번 통계 그래프 구조(첨부 이미지) · X축 합계까지 · 월별 합계 행
+   (PC 미변경 · 구조·기능 유지)
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* 차트 → 월 헤더 → 합계 행 → 본문 (이미지 구조) */
+  #screen-order-stats .stats-table .stats-table__total-col {
+    width: var(--stats-mob-total-w) !important;
+    min-width: var(--stats-mob-total-w) !important;
+    max-width: var(--stats-mob-total-w) !important;
+  }
+
+  /* X축 범위: 1월~12월 + 합계 열까지만 (여백 없음) */
+  #screen-order-stats .stats-table {
+    width: max-content !important;
+    min-width: calc(
+      var(--stats-mob-fixed-w) + var(--stats-mob-total-w) +
+        12 * var(--stats-mob-month-w)
+    ) !important;
+    max-width: calc(
+      var(--stats-mob-fixed-w) + var(--stats-mob-total-w) +
+        12 * var(--stats-mob-month-w)
+    ) !important;
+  }
+
+  /* 차트 합계 열 — 월 막대와 동일 높이·스타일 */
+  #screen-order-stats .stats-chart-row__total.stats-table__total-col {
+    height: var(--stats-mob-chart-h) !important;
+    min-height: var(--stats-mob-chart-h) !important;
+    max-height: var(--stats-mob-chart-h) !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+    vertical-align: bottom !important;
+    background: #fff !important;
+    border-bottom: none !important;
+  }
+
+  #screen-order-stats .stats-chart-row__total .stats-chart__plot {
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    padding: 3px 2px 2px !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+  }
+
+  /* 월별 합계 행 — 헤더 바로 아래 (이미지: 좌측 Rank·구분 어둡게, 월·합계 흰 배경) */
+  #screen-order-stats .stats-table tbody tr.stats-table__totals-row .assign-table__td.stats-table__month-col,
+  #screen-order-stats .stats-table tbody tr.stats-table__totals-row .assign-table__td.stats-table__total-col {
+    background: #fff !important;
+    color: #333 !important;
+    font-weight: 600 !important;
+    text-align: center !important;
+    border-top: 1px solid #333 !important;
+    padding: 5px 2px !important;
+    line-height: 1.2 !important;
+    vertical-align: middle !important;
+  }
+
+  #screen-order-stats .stats-table tbody tr.stats-table__totals-row .stats-table__rank-col {
+    background: var(--color-btn) !important;
+    color: #fff !important;
+    border-top: 1px solid #333 !important;
+  }
+
+  #screen-order-stats .stats-table tbody tr.stats-table__totals-row .assign-table__td--scope {
+    background: var(--color-btn) !important;
+    color: #fff !important;
+    border-top: 1px solid #333 !important;
+    font-weight: 600 !important;
+  }
+
+  /* 차트와 월 헤더 사이 구분 — Y축은 구분|1월 경계 */
+  #screen-order-stats .stats-table thead tr:not(.stats-chart-row) .assign-table__th {
+    border-top: 1px solid #333 !important;
+  }
+
+  #screen-order-stats .stats-chart-row__scope {
+    border-right: 1px solid #333 !important;
+  }
+}

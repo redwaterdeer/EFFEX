@@ -7109,6 +7109,36 @@ function buildStatsChartScopeHtml(axisMax, filters, ratioScale) {
   return html;
 }
 
+function buildStatsChartBarCellHtml(value, axisMax, filters) {
+  var heightPct = axisMax > 0 ? (value / axisMax) * 100 : 0;
+  var valueText = formatStatsValue(value, filters.metric);
+  var valueDisplayText = normalizeStatsDisplayText(valueText, filters.metric);
+  var valueBottom = heightPct > 0 ? heightPct : 0;
+  var valueHtml = "";
+
+  if (value > 0) {
+    valueHtml =
+      '<span class="stats-chart__bar-value" style="bottom:calc(' +
+      valueBottom +
+      '% + 4px)">' +
+      escapeHtml(valueDisplayText) +
+      "</span>";
+  }
+
+  var titleAttr = ' title="' + escapeHtml(valueDisplayText) + '"';
+  return (
+    '<div class="stats-chart__plot">' +
+    '<div class="stats-chart__bar-area">' +
+    valueHtml +
+    '<div class="stats-chart__bar" style="height:' +
+    heightPct +
+    '%"' +
+    titleAttr +
+    "></div>" +
+    "</div></div>"
+  );
+}
+
 function renderStatsChart() {
   var row = document.getElementById("statsChartRow");
   if (!row) return;
@@ -7124,9 +7154,14 @@ function renderStatsChart() {
   var axisMax;
   var ratioScale = null;
   var scopeCell = row.querySelector(".stats-chart-row__scope");
+  var totalCell = row.querySelector(".stats-chart-row__total");
+  var mobileChart = isMobileLayout();
 
   for (m = 0; m < months.length; m++) {
     if (months[m] > max) max = months[m];
+  }
+  if (mobileChart && statsShowsTotals() && result.grandTotal > max) {
+    max = result.grandTotal;
   }
 
   if (filters.metric === "ratio") {
@@ -7141,34 +7176,19 @@ function renderStatsChart() {
   }
 
   for (m = 0; m < 12; m++) {
-    var value = months[m];
-    var heightPct = axisMax > 0 ? (value / axisMax) * 100 : 0;
-    var valueText = formatStatsValue(value, filters.metric);
-    var valueDisplayText = normalizeStatsDisplayText(valueText, filters.metric);
-    var valueBottom = heightPct > 0 ? heightPct : 0;
-    var valueHtml = "";
-    var isZeroText = isStatsDisplayZeroText(valueText, filters.metric);
+    cells[m].innerHTML = buildStatsChartBarCellHtml(months[m], axisMax, filters);
+  }
 
-    if (value > 0) {
-      valueHtml =
-        '<span class="stats-chart__bar-value" style="bottom:calc(' +
-        valueBottom +
-        '% + 4px)">' +
-        escapeHtml(valueDisplayText) +
-        "</span>";
+  if (totalCell) {
+    if (mobileChart && statsShowsTotals()) {
+      totalCell.innerHTML = buildStatsChartBarCellHtml(
+        result.grandTotal,
+        axisMax,
+        filters
+      );
+    } else {
+      totalCell.innerHTML = "";
     }
-
-    var titleAttr = ' title="' + escapeHtml(valueDisplayText) + '"';
-    cells[m].innerHTML =
-      '<div class="stats-chart__plot">' +
-      '<div class="stats-chart__bar-area">' +
-      valueHtml +
-      '<div class="stats-chart__bar" style="height:' +
-      heightPct +
-      '%"' +
-      titleAttr +
-      '></div>' +
-      "</div></div>";
   }
 }
 
@@ -7184,7 +7204,8 @@ function renderStatsTable() {
   var grandTotal = result.grandTotal;
   var rowLabels = result.rowLabels || {};
   var showTotals = statsShowsTotals();
-  var html = "";
+  var dataHtml = "";
+  var totalsHtml = "";
   var m;
   var rowKeys = (result.rowKeys || []).slice();
 
@@ -7195,12 +7216,12 @@ function renderStatsTable() {
   rowKeys.forEach(function (key, index) {
     var label = rowLabels[key] || key;
     var rowMonths = matrix[key] || [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    html += "<tr>";
-    html +=
+    dataHtml += "<tr>";
+    dataHtml +=
       '<td class="assign-table__td stats-table__rank-col">' +
       escapeHtml(String(index + 1)) +
       "</td>";
-    html +=
+    dataHtml +=
       '<td class="assign-table__td assign-table__td--scope">' +
       escapeHtml(label) +
       "</td>";
@@ -7209,7 +7230,7 @@ function renderStatsTable() {
         formatStatsValue(rowMonths[m], filters.metric),
         filters.metric
       );
-      html +=
+      dataHtml +=
         '<td class="assign-table__td stats-table__month-col">' +
         escapeHtml(monthText) +
         "</td>";
@@ -7219,24 +7240,24 @@ function renderStatsTable() {
         formatStatsValue(rowTotals[key] || 0, filters.metric),
         filters.metric
       );
-      html +=
+      dataHtml +=
         '<td class="assign-table__td assign-table__td--total stats-table__total-col">' +
         escapeHtml(rowTotalText) +
         "</td>";
     }
-    html += "</tr>";
+    dataHtml += "</tr>";
   });
 
   if (showTotals) {
-    html += '<tr class="stats-table__totals-row">';
-    html += '<td class="assign-table__td stats-table__rank-col"></td>';
-    html += '<td class="assign-table__td assign-table__td--scope">합계</td>';
+    totalsHtml += '<tr class="stats-table__totals-row">';
+    totalsHtml += '<td class="assign-table__td stats-table__rank-col"></td>';
+    totalsHtml += '<td class="assign-table__td assign-table__td--scope">합계</td>';
     for (m = 0; m < 12; m++) {
       var colTotalText = normalizeStatsDisplayText(
         formatStatsValue(colTotals[m], filters.metric),
         filters.metric
       );
-      html +=
+      totalsHtml +=
         '<td class="assign-table__td assign-table__td--total stats-table__month-col">' +
         escapeHtml(colTotalText) +
         "</td>";
@@ -7245,14 +7266,16 @@ function renderStatsTable() {
       formatStatsValue(grandTotal, filters.metric),
       filters.metric
     );
-    html +=
+    totalsHtml +=
       '<td class="assign-table__td assign-table__td--total stats-table__total-col">' +
       escapeHtml(grandTotalText) +
       "</td>";
-    html += "</tr>";
+    totalsHtml += "</tr>";
   }
 
-  tbody.innerHTML = html;
+  tbody.innerHTML = isMobileLayout()
+    ? totalsHtml + dataHtml
+    : dataHtml + totalsHtml;
   updateStatsTotalsVisibility(filters);
 }
 

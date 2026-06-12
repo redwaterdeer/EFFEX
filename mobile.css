@@ -3757,3 +3757,195 @@
     color: #fff !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   모바일 v7 — 로고·메뉴 동일 행(로고 좌) · 선택 날짜 텍스트 숨김
+   (PC 미변경 · 구조·기능 유지)
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* 3~8번: 로고 좌측 · 오더등록~통계 메뉴 같은 행 */
+  #screen-order .order-topbar,
+  #screen-order-assign .order-topbar,
+  #screen-order-status .order-topbar,
+  #screen-order-open .order-topbar,
+  #screen-order-stats .order-topbar,
+  #screen-order-summary .order-topbar {
+    --mob-topbar-pad-v: clamp(4px, 1.1vw, 7px);
+    --mob-topbar-pad-h: clamp(4px, 1.6vw, 9px);
+    --mob-topbar-gap: clamp(3px, 0.85vw, 5px);
+    --mob-topbar-menu-gap: clamp(2px, 0.4vw, 3px);
+    --mob-topbar-nav-h: clamp(28px, 7.8vw, 40px);
+    --mob-topbar-logo-w: clamp(32px, 14vw, 54px);
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: var(--mob-topbar-gap) !important;
+    grid-template-columns: unset !important;
+    grid-template-areas: unset !important;
+    grid-template-rows: unset !important;
+    height: calc(
+      var(--mob-topbar-nav-h) + var(--mob-topbar-pad-v) * 2 +
+        env(safe-area-inset-top, 0px)
+    ) !important;
+    min-height: calc(
+      var(--mob-topbar-nav-h) + var(--mob-topbar-pad-v) * 2 +
+        env(safe-area-inset-top, 0px)
+    ) !important;
+    max-height: none !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    padding-top: calc(
+      var(--mob-topbar-pad-v) + env(safe-area-inset-top, 0px)
+    ) !important;
+    padding-right: max(
+      var(--mob-topbar-pad-h),
+      env(safe-area-inset-right, 0px)
+    ) !important;
+    padding-bottom: var(--mob-topbar-pad-v) !important;
+    padding-left: max(
+      var(--mob-topbar-pad-h),
+      env(safe-area-inset-left, 0px)
+    ) !important;
+    row-gap: 0 !important;
+    column-gap: var(--mob-topbar-gap) !important;
+    overflow-x: hidden !important;
+    overflow-y: hidden !important;
+    contain: layout style !important;
+    box-sizing: border-box !important;
+    background: linear-gradient(to right, #d9d9d9, #adacac) !important;
+  }
+
+  #screen-order .order-topbar__logo,
+  #screen-order-assign .order-topbar__logo,
+  #screen-order-status .order-topbar__logo,
+  #screen-order-open .order-topbar__logo,
+  #screen-order-stats .order-topbar__logo,
+  #screen-order-summary .order-topbar__logo {
+    grid-area: unset !important;
+    order: 0 !important;
+    flex: 0 0 var(--mob-topbar-logo-w) !important;
+    width: var(--mob-topbar-logo-w) !important;
+    height: var(--mob-topbar-nav-h) !important;
+    min-width: var(--mob-topbar-logo-w) !important;
+    min-height: var(--mob-topbar-nav-h) !important;
+    max-height: var(--mob-topbar-nav-h) !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    position: relative !important;
+    left: auto !important;
+    top: auto !important;
+    transform: none !important;
+    justify-self: auto !important;
+    align-self: center !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    flex-shrink: 0 !important;
+    flex-grow: 0 !important;
+    overflow: visible !important;
+    box-sizing: border-box !important;
+    line-height: 0 !important;
+    isolation: isolate !important;
+  }
+
+  #screen-order .order-topbar__logo .order-topbar__logo-img,
+  #screen-order-assign .order-topbar__logo .order-topbar__logo-img,
+  #screen-order-status .order-topbar__logo .order-topbar__logo-img,
+  #screen-order-open .order-topbar__logo .order-topbar__logo-img,
+  #screen-order-stats .order-topbar__logo .order-topbar__logo-img,
+  #screen-order-summary .order-topbar__logo .order-topbar__logo-img {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    transform: scale(1.26) !important;
+    transform-origin: left center !important;
+    object-fit: contain !important;
+    object-position: left center !important;
+  }
+
+  #screen-order .order-topbar__menu,
+  #screen-order-assign .order-topbar__menu,
+  #screen-order-status .order-topbar__menu,
+  #screen-order-open .order-topbar__menu,
+  #screen-order-stats .order-topbar__menu,
+  #screen-order-summary .order-topbar__menu {
+    grid-area: unset !important;
+    order: 1 !important;
+    flex: 1 1 0% !important;
+    flex-shrink: 1 !important;
+    flex-grow: 1 !important;
+    position: relative !important;
+    display: grid !important;
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    grid-auto-flow: column !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: var(--mob-topbar-nav-h) !important;
+    min-height: var(--mob-topbar-nav-h) !important;
+    max-height: var(--mob-topbar-nav-h) !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    gap: var(--mob-topbar-menu-gap) !important;
+    overflow: hidden !important;
+    align-self: center !important;
+    align-items: center !important;
+    align-content: center !important;
+    box-sizing: border-box !important;
+  }
+
+  #screen-order .order-topbar__menu .order-topbar__link,
+  #screen-order-assign .order-topbar__menu .order-topbar__link,
+  #screen-order-status .order-topbar__menu .order-topbar__link,
+  #screen-order-open .order-topbar__menu .order-topbar__link,
+  #screen-order-stats .order-topbar__menu .order-topbar__link,
+  #screen-order-summary .order-topbar__menu .order-topbar__link {
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    height: 100% !important;
+    max-height: var(--mob-topbar-nav-h) !important;
+    padding: 2px 1px !important;
+    font-size: clamp(8px, 2.35vw, 11px) !important;
+    line-height: 1.15 !important;
+    white-space: normal !important;
+    word-break: keep-all !important;
+    overflow-wrap: anywhere !important;
+    border: 1px solid #c9c9c9 !important;
+    background: #f7f7f7 !important;
+    border-radius: clamp(5px, 1.5vw, 10px) !important;
+    justify-content: center !important;
+    align-items: center !important;
+    text-align: center !important;
+    transform: none !important;
+    box-sizing: border-box !important;
+  }
+
+  #screen-order .order-topbar__menu .order-topbar__link--active,
+  #screen-order-assign .order-topbar__menu .order-topbar__link--active,
+  #screen-order-status .order-topbar__menu .order-topbar__link--active,
+  #screen-order-open .order-topbar__menu .order-topbar__link--active,
+  #screen-order-stats .order-topbar__menu .order-topbar__link--active,
+  #screen-order-summary .order-topbar__menu .order-topbar__link--active {
+    border-color: #9a9a9a !important;
+    background: #9a9a9a !important;
+    color: #fff !important;
+  }
+
+  /* 4~6번: 선택 날짜 제목(예: 5월 17일) 표시 제거 — 달력·기능은 유지 */
+  #screen-order-assign .assign-date-title,
+  #screen-order-status .assign-date-title,
+  #screen-order-open .assign-date-title {
+    display: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+}

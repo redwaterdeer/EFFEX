@@ -994,25 +994,15 @@ function initAppPage(config) {
   return auth;
 }
 
-function syncAssignDetailModalBodyState() {
-  var open = document.getElementById("modal-assign-detail");
-  document.body.classList.toggle(
-    "assign-detail-modal-open",
-    !!(open && open.classList.contains("is-open"))
-  );
-}
-
 function openModal(id) {
   var el = document.getElementById(id);
   if (el) el.classList.add("is-open");
-  if (id === "modal-assign-detail") syncAssignDetailModalBodyState();
 }
 
 function closeModal(id) {
   var el = document.getElementById(id);
   if (el) el.classList.remove("is-open");
   if (id === "modal-status-detail") closeStatusActionDatePicker();
-  if (id === "modal-assign-detail") syncAssignDetailModalBodyState();
 }
 
 function initModals() {
@@ -1027,7 +1017,6 @@ function initModals() {
       if (e.target === overlay) {
         overlay.classList.remove("is-open");
         if (overlay.id === "modal-status-detail") closeStatusActionDatePicker();
-        if (overlay.id === "modal-assign-detail") syncAssignDetailModalBodyState();
       }
     });
   });
@@ -2830,26 +2819,6 @@ function isMobileLayout() {
   return window.matchMedia("(max-width: 768px)").matches;
 }
 
-function ensureAssignSavePlacement() {
-  var screen = document.getElementById("screen-order-assign");
-  if (!screen) return;
-  var body = screen.querySelector(".assign-body");
-  var main = screen.querySelector(".assign-main");
-  var saveWrap = screen.querySelector(".assign-save--in-scroll");
-  if (!body || !main || !saveWrap) return;
-
-  if (isMobileLayout()) {
-    if (saveWrap.parentElement !== main) {
-      main.appendChild(saveWrap);
-    }
-    return;
-  }
-
-  if (saveWrap.parentElement !== body) {
-    body.appendChild(saveWrap);
-  }
-}
-
 function refreshDataFromStorage() {
   loadUiState();
   applyUiStateToControls();
@@ -2903,7 +2872,6 @@ function bindCrossTabDataSync() {
       pullCloudData(true);
       refreshDataFromStorage();
     }
-    ensureAssignSavePlacement();
   });
 }
 
@@ -5897,7 +5865,6 @@ function initAssignDateControls(pageKey) {
 
 /* 4번: 오더배정 */
 function initOrderAssignPage(screen) {
-  ensureAssignSavePlacement();
   if (!getAuth()) return;
 
   initLogout(screen);
@@ -7860,6 +7827,5 @@ document.addEventListener("DOMContentLoaded", function () {
     location.replace("#login");
   }
 
-  ensureAssignSavePlacement();
   showScreen(page, parsed.params);
 });

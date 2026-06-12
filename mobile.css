@@ -1,4 +1,4 @@
-/* EFFEX 모바일 전용 (2~8번). PC(769px+)는 이 파일을 로드하지 않습니다. */
+﻿/* EFFEX 모바일 전용 (2~8번). PC(769px+)는 이 파일을 로드하지 않습니다. */
 
 @media (max-width: 768px) {
   html {
@@ -2530,6 +2530,291 @@
     flex: 0 0 68px !important;
   }
 
+  /* ═══════════════════════════════════════════════════════════
+     모바일 4~7번 UI/UX v2 — PC 기능 유지 · 터치·세로 화면 최적화
+     (1·3·8번·PC 미변경 · 상단 규칙 덮어쓰기)
+     ═══════════════════════════════════════════════════════════ */
+
+  /* ── 4·5·6 공통 셸 ── */
+  #screen-order-assign.order-page,
+  #screen-order-status.order-page,
+  #screen-order-open.order-page {
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    overflow: hidden !important;
+  }
+
+  #screen-order-assign.order-page > .assign-body,
+  #screen-order-status.order-page > .assign-body,
+  #screen-order-open.order-page > .assign-body {
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+    overflow-x: hidden !important;
+    overflow-y: hidden !important;
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+    padding-bottom: calc(52px + env(safe-area-inset-bottom, 0px)) !important;
+    touch-action: manipulation;
+  }
+
+  #screen-order-assign .assign-panel,
+  #screen-order-status .assign-panel,
+  #screen-order-open .assign-panel {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 10px 8px !important;
+    border: 1px solid #b0b0b0 !important;
+    background: #ececec !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+  }
+
+  #screen-order-assign .assign-date-title,
+  #screen-order-status .assign-date-title,
+  #screen-order-open .assign-date-title {
+    flex: 0 0 auto !important;
+    margin-bottom: 8px !important;
+  }
+
+  #screen-order-assign .assign-ym__select,
+  #screen-order-status .assign-ym__select,
+  #screen-order-open .assign-ym__select {
+    text-align: center !important;
+    text-align-last: center !important;
+    -webkit-text-align-last: center !important;
+    padding-left: 28px !important;
+    padding-right: 28px !important;
+  }
+
+  #screen-order-assign .assign-layout,
+  #screen-order-status .assign-layout,
+  #screen-order-open .assign-layout {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    overflow: hidden !important;
+  }
+
+  #screen-order-assign .assign-sidebar,
+  #screen-order-status .assign-sidebar,
+  #screen-order-open .assign-sidebar {
+    flex: 0 0 auto !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  #screen-order-assign .assign-calendar,
+  #screen-order-status .assign-calendar,
+  #screen-order-open .assign-calendar {
+    min-height: 170px !important;
+    max-height: 200px !important;
+  }
+
+  #screen-order-assign .assign-main,
+  #screen-order-status .assign-main,
+  #screen-order-open .assign-main {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  #screen-order-assign .assign-table-wrap,
+  #screen-order-status .assign-table-wrap,
+  #screen-order-open .assign-table-wrap {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    background: #ececec !important;
+    box-shadow: none !important;
+    overflow-x: auto !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    touch-action: pan-x pan-y;
+    isolation: isolate;
+  }
+
+  #screen-order-assign .assign-table,
+  #screen-order-status .assign-table,
+  #screen-order-open .assign-table {
+    min-width: 680px;
+    width: max-content;
+    max-width: none;
+    background: #ececec !important;
+  }
+
+  #screen-order-assign .assign-table thead .assign-table__th,
+  #screen-order-status .assign-table thead .assign-table__th,
+  #screen-order-open .assign-table thead .assign-table__th {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 2 !important;
+    background: #ececec !important;
+  }
+
+  #screen-order-assign .assign-table tbody tr.assign-table__row-main td,
+  #screen-order-status .assign-table tbody tr.assign-table__row-main td,
+  #screen-order-open .assign-table tbody tr.assign-table__row-main td {
+    background-color: #ececec !important;
+  }
+
+  #screen-order-assign
+    .assign-table
+    tbody
+    tr.assign-table__row-main--highlight
+    td {
+    background-color: #fff8e6 !important;
+  }
+
+  #screen-order-assign .assign-table td,
+  #screen-order-assign .assign-cell-box,
+  #screen-order-assign .assign-partner-select,
+  #screen-order-assign .assign-worker-select {
+    box-sizing: border-box !important;
+  }
+
+  /* 4번 저장 — 패널 하단(테두리 안), 테이블만 좌우 스크롤 */
+  #screen-order-assign .assign-panel > .assign-save {
+    flex: 0 0 auto !important;
+    width: 100% !important;
+    margin: 8px 0 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  #screen-order-assign > .assign-body > .assign-save {
+    display: none !important;
+  }
+
+  #screen-order-assign .assign-panel > .assign-save .order-register__btn {
+    width: 100% !important;
+    min-height: 48px !important;
+    font-size: 16px !important;
+  }
+
+  #screen-order-status .assign-save,
+  #screen-order-open .assign-save {
+    flex: 0 0 auto !important;
+    width: 100% !important;
+    margin-top: 8px !important;
+    padding: 0 8px !important;
+    box-sizing: border-box !important;
+  }
+
+  /* ── 7번 통계 ── */
+  #screen-order-stats.order-page {
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    overflow: hidden !important;
+  }
+
+  #screen-order-stats.order-page > .assign-body {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: calc(52px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  #screen-order-stats .stats-content {
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+
+  #screen-order-stats .stats-filters {
+    width: 100% !important;
+    flex: 0 0 auto !important;
+  }
+
+  #screen-order-stats .stats-body {
+    width: 100% !important;
+    min-width: 0 !important;
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+  }
+
+  #screen-order-stats .stats-body .assign-table-wrap {
+    overflow-x: auto !important;
+    overflow-y: auto !important;
+    max-height: min(48vh, 44dvh) !important;
+    width: 100% !important;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-x pan-y;
+  }
+
+  #screen-order-stats .stats-table {
+    min-width: 600px;
+  }
+
+  /* ── 4번 상세 팝업: 터치·표시 ── */
+  #modal-assign-detail.modal-overlay:not(.is-open) {
+    display: none !important;
+    pointer-events: none !important;
+    visibility: hidden !important;
+  }
+
+  #modal-assign-detail.modal-overlay.is-open {
+    display: flex !important;
+    align-items: flex-end !important;
+    justify-content: flex-start !important;
+    padding: 8px !important;
+    inset: 0 !important;
+    z-index: 10050 !important;
+    pointer-events: auto !important;
+    visibility: visible !important;
+  }
+
+  body.assign-detail-modal-open .screen.is-active,
+  body:has(#modal-assign-detail.is-open) .screen.is-active {
+    pointer-events: none !important;
+    touch-action: none !important;
+  }
+
+  body.assign-detail-modal-open .order-page .order-mobile-footer,
+  body:has(#modal-assign-detail.is-open) .order-page .order-mobile-footer {
+    pointer-events: none !important;
+  }
+
+  #modal-assign-detail.modal-overlay.is-open > .modal.assign-detail-modal {
+    pointer-events: auto !important;
+    touch-action: manipulation !important;
+    position: relative !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    align-self: stretch !important;
+  }
+
+  #modal-assign-detail.modal-overlay.is-open button,
+  #modal-assign-detail.modal-overlay.is-open input:not([type="hidden"]),
+  #modal-assign-detail.modal-overlay.is-open label,
+  #modal-assign-detail.modal-overlay.is-open .assign-detail-modal__download,
+  #modal-assign-detail.modal-overlay.is-open .assign-detail-modal__drawing-action-btn {
+    pointer-events: auto !important;
+    touch-action: manipulation !important;
+  }
 }
 
 @media (max-width: 480px) {
@@ -2841,895 +3126,5 @@
   #modal-assign-detail .assign-detail-modal__form .order-scope-sales-cell {
     border-right: 1px solid #b8b8b8 !important;
     box-sizing: border-box !important;
-  }
-}
-
-/* 4번 상세 팝업 — 항목 박스 높이·테두리 최종 통일 (768px 이하, 1·3·8·상단바·PC 미변경) */
-@media (max-width: 768px) {
-  #modal-assign-detail .assign-detail-modal.modal {
-    --order-field-h: 30px;
-  }
-
-  #modal-assign-detail .assign-detail-modal__form > .order-field,
-  #modal-assign-detail .assign-detail-modal__field-row > .order-field--modal-inline {
-    display: flex !important;
-    flex-direction: row !important;
-    flex-wrap: nowrap !important;
-    align-items: stretch !important;
-    width: 100% !important;
-    height: var(--order-field-h) !important;
-    min-height: var(--order-field-h) !important;
-    max-height: var(--order-field-h) !important;
-    margin-bottom: 6px !important;
-    gap: 0 !important;
-    overflow: hidden !important;
-    box-sizing: border-box !important;
-    transform: none !important;
-  }
-
-  #modal-assign-detail .assign-detail-modal__field-row {
-    margin-bottom: 0 !important;
-  }
-
-  #modal-assign-detail .assign-detail-modal__form .order-field__label,
-  #modal-assign-detail .assign-detail-modal__field-row .order-field__label {
-    flex: 0 0 var(--order-label-w) !important;
-    width: var(--order-label-w) !important;
-    height: var(--order-field-h) !important;
-    min-height: var(--order-field-h) !important;
-    max-height: var(--order-field-h) !important;
-    padding: 0 4px !important;
-    overflow: hidden !important;
-    box-sizing: border-box !important;
-    align-self: stretch !important;
-    border: none !important;
-  }
-
-  #modal-assign-detail .assign-detail-modal__form .order-field__divider {
-    flex: 0 0 4px !important;
-    width: 4px !important;
-    align-self: stretch !important;
-  }
-
-  #modal-assign-detail .assign-detail-modal__form .order-field__control,
-  #modal-assign-detail .assign-detail-modal__form .modal-drawing-field-group {
-    flex: 1 1 0% !important;
-    width: 0 !important;
-    min-width: 0 !important;
-    height: var(--order-field-h) !important;
-    min-height: var(--order-field-h) !important;
-    max-height: var(--order-field-h) !important;
-    padding: 0 !important;
-    border: 1px solid #b8b8b8 !important;
-    border-left: none !important;
-    background: #fff !important;
-    box-sizing: border-box !important;
-    overflow: hidden !important;
-    transform: none !important;
-  }
-
-  #modal-assign-detail .assign-detail-modal__form .order-scope-options,
-  #modal-assign-detail .assign-detail-modal__form .order-scope-sales-options {
-    display: flex !important;
-    width: 100% !important;
-    height: 100% !important;
-    min-height: 0 !important;
-    max-height: 100% !important;
-    border: none !important;
-    overflow: hidden !important;
-    box-sizing: border-box !important;
-  }
-
-  #modal-assign-detail .assign-detail-modal__form .order-scope-option,
-  #modal-assign-detail .assign-detail-modal__form .order-scope-sales-cell {
-    flex: 1 1 0 !important;
-    min-width: 0 !important;
-    height: 100% !important;
-    min-height: 0 !important;
-    max-height: 100% !important;
-    margin: 0 !important;
-    padding: 0 2px !important;
-    border: none !important;
-    border-right: 1px solid #b8b8b8 !important;
-    border-radius: 0 !important;
-    box-sizing: border-box !important;
-    overflow: hidden !important;
-    transform: none !important;
-  }
-
-  #modal-assign-detail .assign-detail-modal__form .order-scope-option:last-child,
-  #modal-assign-detail .assign-detail-modal__form .order-scope-sales-cell:last-child {
-    border-right: none !important;
-  }
-
-  #modal-assign-detail .assign-detail-modal__form .order-scope-sales-cell .order-scope-sales-input,
-  #modal-assign-detail .assign-detail-modal__form .modal-field-value,
-  #modal-assign-detail .assign-detail-modal__form .modal-field-input {
-    display: flex !important;
-    align-items: center !important;
-    width: 100% !important;
-    height: 100% !important;
-    min-height: 0 !important;
-    max-height: 100% !important;
-    margin: 0 !important;
-    padding: 0 6px !important;
-    border: none !important;
-    border-radius: 0 !important;
-    box-sizing: border-box !important;
-    line-height: 1.25 !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    transform: none !important;
-  }
-
-  #modal-assign-detail .assign-detail-modal__form .order-scope-sales-cell .order-scope-sales-input {
-    padding: 0 2px !important;
-    text-align: center !important;
-  }
-
-  #modal-assign-detail .assign-detail-modal__form .modal-drawing-field-group .order-field__control--upload {
-    display: flex !important;
-    align-items: stretch !important;
-    flex: 1 1 auto !important;
-    min-width: 0 !important;
-    height: 100% !important;
-    min-height: 0 !important;
-    max-height: 100% !important;
-    padding: 0 !important;
-    border: none !important;
-    box-sizing: border-box !important;
-  }
-
-  #modal-assign-detail .assign-detail-modal__form .modal-drawing-actions {
-    display: flex !important;
-    flex: 0 0 auto !important;
-    align-self: stretch !important;
-    height: 100% !important;
-    min-height: 0 !important;
-    max-height: 100% !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    overflow: hidden !important;
-    box-sizing: border-box !important;
-  }
-
-  #modal-assign-detail .assign-detail-modal__form .assign-detail-modal__download,
-  #modal-assign-detail .assign-detail-modal__form .assign-detail-modal__drawing-action-btn {
-    height: 100% !important;
-    min-height: 0 !important;
-    max-height: 100% !important;
-    margin: 0 !important;
-    padding: 0 4px !important;
-    border: none !important;
-    border-left: 1px solid #b8b8b8 !important;
-    border-radius: 0 !important;
-    box-sizing: border-box !important;
-    transform: none !important;
-  }
-
-  #modal-assign-detail .assign-detail-modal__form .assign-detail-modal__download {
-    border-left: none !important;
-  }
-
-  /* 4번 상세: 오더번호~도면3 박스 두께 최종 통일 (상위 height:auto 규칙 덮어쓰기) */
-  #modal-assign-detail .assign-detail-modal__form > .order-field.order-field--scope,
-  #modal-assign-detail .assign-detail-modal__form > .order-field.order-field--scope-sales,
-  #modal-assign-detail
-    .assign-detail-modal__form
-    > .order-field.order-field--upload.modal-field--drawing {
-    height: var(--order-field-h) !important;
-    min-height: var(--order-field-h) !important;
-    max-height: var(--order-field-h) !important;
-    overflow: hidden !important;
-    align-items: stretch !important;
-    gap: 0 !important;
-    box-sizing: border-box !important;
-  }
-
-  #modal-assign-detail .assign-detail-modal__form .order-field--scope .order-field__label,
-  #modal-assign-detail .assign-detail-modal__form .order-field--scope-sales .order-field__label,
-  #modal-assign-detail
-    .assign-detail-modal__form
-    .order-field--upload.modal-field--drawing
-    .order-field__label,
-  #modal-assign-detail
-    .assign-detail-modal__form
-    .order-field--upload.modal-field--drawing
-    label.order-field__label {
-    height: var(--order-field-h) !important;
-    min-height: var(--order-field-h) !important;
-    max-height: var(--order-field-h) !important;
-    padding: 0 4px !important;
-    overflow: hidden !important;
-    box-sizing: border-box !important;
-  }
-
-  #modal-assign-detail .assign-detail-modal__form .order-field__control--md,
-  #modal-assign-detail .assign-detail-modal__form .order-field__control--full {
-    flex: 1 1 0% !important;
-    width: 0 !important;
-    min-width: 0 !important;
-    height: var(--order-field-h) !important;
-    min-height: var(--order-field-h) !important;
-    max-height: var(--order-field-h) !important;
-    padding: 0 !important;
-    border-width: 1px !important;
-    border-style: solid !important;
-    border-color: #b8b8b8 !important;
-    border-left: none !important;
-    background: #fff !important;
-    box-sizing: border-box !important;
-    overflow: hidden !important;
-  }
-
-  #modal-assign-detail .assign-detail-modal__form .order-field__control,
-  #modal-assign-detail .assign-detail-modal__form .modal-drawing-field-group {
-    border-width: 1px !important;
-    border-style: solid !important;
-    border-color: #b8b8b8 !important;
-    border-left: none !important;
-    box-sizing: border-box !important;
-  }
-
-  #modal-assign-detail
-    .assign-detail-modal__form
-    .order-field--scope
-    .order-field__control,
-  #modal-assign-detail
-    .assign-detail-modal__form
-    .order-field--scope-sales
-    .order-field__control {
-    height: var(--order-field-h) !important;
-    min-height: var(--order-field-h) !important;
-    max-height: var(--order-field-h) !important;
-    overflow: hidden !important;
-  }
-
-  #modal-assign-detail .assign-detail-modal__form .modal-drawing-field-group {
-    height: var(--order-field-h) !important;
-    min-height: var(--order-field-h) !important;
-    max-height: var(--order-field-h) !important;
-    overflow: hidden !important;
-    align-self: stretch !important;
-    border-width: 1px !important;
-    border-style: solid !important;
-    border-color: #b8b8b8 !important;
-    border-left: none !important;
-    box-sizing: border-box !important;
-  }
-
-  #modal-assign-detail .assign-detail-modal__form .modal-drawing-actions {
-    height: 100% !important;
-    min-height: 0 !important;
-    max-height: 100% !important;
-    overflow: hidden !important;
-    align-self: stretch !important;
-  }
-
-  /* 오더번호~도면3: 행·라벨·입력 박스 높이·테두리 1px 통일 (3번 시공일자~도면3 패턴) */
-  #modal-assign-detail .assign-detail-modal__form > .order-field,
-  #modal-assign-detail .assign-detail-modal__field-row > .order-field--modal-inline,
-  #modal-assign-detail .assign-detail-modal__form > .order-field.order-field--scope,
-  #modal-assign-detail .assign-detail-modal__form > .order-field.order-field--scope-sales,
-  #modal-assign-detail
-    .assign-detail-modal__form
-    > .order-field.order-field--upload.modal-field--drawing {
-    height: var(--order-field-h) !important;
-    min-height: var(--order-field-h) !important;
-    max-height: var(--order-field-h) !important;
-    overflow: hidden !important;
-    align-items: stretch !important;
-    box-sizing: border-box !important;
-  }
-
-  #modal-assign-detail .assign-detail-modal__form .order-field__label,
-  #modal-assign-detail .assign-detail-modal__field-row .order-field__label,
-  #modal-assign-detail .assign-detail-modal__form .order-field__control,
-  #modal-assign-detail .assign-detail-modal__form .order-field__control--md,
-  #modal-assign-detail .assign-detail-modal__form .order-field__control--full {
-    height: var(--order-field-h) !important;
-    min-height: var(--order-field-h) !important;
-    max-height: var(--order-field-h) !important;
-    box-sizing: border-box !important;
-  }
-
-  #modal-assign-detail .assign-detail-modal__form .order-scope-options,
-  #modal-assign-detail .assign-detail-modal__form .order-scope-sales-options {
-    height: var(--order-field-h) !important;
-    min-height: var(--order-field-h) !important;
-    max-height: var(--order-field-h) !important;
-    box-sizing: border-box !important;
-    border: none !important;
-    overflow: hidden !important;
-  }
-
-  #modal-assign-detail .assign-detail-modal__form .order-field__control,
-  #modal-assign-detail .assign-detail-modal__form .order-field__control--md,
-  #modal-assign-detail .assign-detail-modal__form .order-field__control--full {
-    border-width: 1px !important;
-    border-style: solid !important;
-    border-color: #b8b8b8 !important;
-    border-left: none !important;
-  }
-
-  #modal-assign-detail .assign-detail-modal__form .order-scope-option,
-  #modal-assign-detail .assign-detail-modal__form .order-scope-sales-cell {
-    height: 100% !important;
-    min-height: 0 !important;
-    max-height: 100% !important;
-    border: none !important;
-    border-right: 1px solid #b8b8b8 !important;
-    border-right-width: 1px !important;
-    box-sizing: border-box !important;
-    overflow: hidden !important;
-  }
-
-  #modal-assign-detail .assign-detail-modal__form .assign-detail-modal__download,
-  #modal-assign-detail .assign-detail-modal__form .assign-detail-modal__drawing-action-btn {
-    height: 100% !important;
-    min-height: 0 !important;
-    max-height: 100% !important;
-    align-self: stretch !important;
-    box-sizing: border-box !important;
-  }
-}
-
-/* 4번 상세 팝업 — 오더번호~도면3 박스 높이·테두리 1px 최종 통일 (1·3·8·상단바·PC 미변경) */
-@media (max-width: 768px) {
-  #modal-assign-detail .assign-detail-modal.modal .assign-detail-modal__form > .order-field,
-  #modal-assign-detail .assign-detail-modal.modal .assign-detail-modal__field-row > .order-field--modal-inline {
-    height: var(--order-field-h) !important;
-    min-height: var(--order-field-h) !important;
-    max-height: var(--order-field-h) !important;
-    overflow: hidden !important;
-    box-sizing: border-box !important;
-  }
-
-  #modal-assign-detail .assign-detail-modal.modal .assign-detail-modal__form .order-field__label {
-    height: var(--order-field-h) !important;
-    min-height: var(--order-field-h) !important;
-    max-height: var(--order-field-h) !important;
-    box-sizing: border-box !important;
-  }
-
-  #modal-assign-detail .assign-detail-modal.modal .assign-detail-modal__form .order-field__control,
-  #modal-assign-detail .assign-detail-modal.modal .assign-detail-modal__form .order-field__control--md,
-  #modal-assign-detail .assign-detail-modal.modal .assign-detail-modal__form .order-field__control--full,
-  #modal-assign-detail .assign-detail-modal.modal .assign-detail-modal__form .order-field--scope .order-field__control,
-  #modal-assign-detail .assign-detail-modal.modal .assign-detail-modal__form .order-field--scope-sales .order-field__control,
-  #modal-assign-detail .assign-detail-modal.modal .assign-detail-modal__form .modal-drawing-field-group {
-    height: var(--order-field-h) !important;
-    min-height: var(--order-field-h) !important;
-    max-height: var(--order-field-h) !important;
-    padding: 0 !important;
-    border-width: 1px !important;
-    border-style: solid !important;
-    border-color: #b8b8b8 !important;
-    border-left: none !important;
-    box-sizing: border-box !important;
-    overflow: hidden !important;
-  }
-
-  /* 4번 상세 팝업 — 8번 집계 리스트(#modal-order-summary-list)와 동일 좌하단 시트 (1·3·8·상단바·PC 미변경) */
-  #modal-assign-detail.modal-overlay,
-  #modal-assign-detail.modal-overlay.is-open {
-    display: flex !important;
-    align-items: flex-end !important;
-    justify-content: flex-start !important;
-    padding: 8px !important;
-    margin: 0 !important;
-    inset: 0 !important;
-    box-sizing: border-box !important;
-  }
-
-  #modal-assign-detail > .modal.assign-detail-modal {
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: 0 !important;
-    height: auto !important;
-    margin: 0 !important;
-    align-self: stretch !important;
-    max-height: min(92vh, 92dvh) !important;
-    border-radius: 14px 14px 0 0 !important;
-    padding: 16px 12px calc(16px + env(safe-area-inset-bottom, 0px)) !important;
-    box-sizing: border-box !important;
-    transform: none !important;
-    position: static !important;
-    left: auto !important;
-    right: auto !important;
-  }
-
-  #modal-assign-detail .assign-detail-modal__form {
-    width: 100% !important;
-    max-width: 100% !important;
-    margin: 0 !important;
-  }
-
-  /* 4번 상세 팝업 — 텍스트·행 높이 축소(화면 비율). 1·3·8·상단바·PC 미변경 */
-  #modal-assign-detail .assign-detail-modal.modal {
-    --order-label-w: 52px;
-    --order-field-h: 30px;
-    --order-font: 8px;
-    --order-input-font: 9px;
-    --modal-field-gap: 4px;
-  }
-
-  #modal-assign-detail .assign-detail-modal__form > .order-field,
-  #modal-assign-detail .assign-detail-modal__field-row > .order-field--modal-inline {
-    margin-bottom: 4px !important;
-  }
-
-  #modal-assign-detail .assign-detail-modal__field-row {
-    gap: 4px !important;
-    margin-bottom: 0 !important;
-  }
-
-  #modal-assign-detail .assign-detail-modal__form .order-field__label,
-  #modal-assign-detail .assign-detail-modal__form .order-field__label span,
-  #modal-assign-detail .order-field--scope .order-field__label,
-  #modal-assign-detail .order-field--scope-sales .order-field__label,
-  #modal-assign-detail .order-field--upload.modal-field--drawing .order-field__label,
-  #modal-assign-detail .order-field--upload.modal-field--drawing .order-field__label span {
-    font-size: var(--order-font) !important;
-    padding: 0 2px !important;
-    line-height: 1.15 !important;
-  }
-
-  #modal-assign-detail .assign-detail-modal__form .modal-field-value,
-  #modal-assign-detail .assign-detail-modal__form .modal-field-input,
-  #modal-assign-detail .modal-field-value,
-  #modal-assign-detail .modal-field-input,
-  #modal-assign-detail .assign-detail-modal__form .order-field__control {
-    font-size: var(--order-input-font) !important;
-    line-height: 1.15 !important;
-    padding: 0 3px !important;
-  }
-
-  #modal-assign-detail .assign-detail-modal__form .order-scope-option,
-  #modal-assign-detail .assign-detail-modal__form .order-scope-option > span,
-  #modal-assign-detail .assign-detail-modal__form .order-scope-option > span:first-child,
-  #modal-assign-detail .assign-detail-modal__form .order-scope-sales-cell,
-  #modal-assign-detail .assign-detail-modal__form .order-scope-sales-cell .order-scope-sales-input,
-  #modal-assign-detail .order-scope-sales-cell .order-scope-sales-input,
-  #modal-assign-detail .assign-detail-modal__form .assign-detail-modal__download,
-  #modal-assign-detail .assign-detail-modal__form .assign-detail-modal__drawing-action-btn,
-  #modal-assign-detail .assign-detail-modal__download,
-  #modal-assign-detail .assign-detail-modal__drawing-action-btn,
-  #modal-assign-detail .assign-detail-modal__drawing-btn-text,
-  #modal-assign-detail .assign-detail-modal__drawing-action-btn span {
-    font-size: 9px !important;
-    line-height: 1.15 !important;
-    padding: 0 1px !important;
-  }
-
-  #modal-assign-detail .order-scope-option__dot {
-    width: 6px;
-    height: 6px;
-  }
-
-  #modal-assign-detail .assign-detail-modal__footer {
-    margin-top: 5px !important;
-    padding-top: 5px;
-    gap: 5px;
-  }
-
-  #modal-assign-detail .assign-detail-modal__close,
-  #modal-assign-detail .assign-detail-modal__save {
-    min-height: 28px;
-    height: 28px;
-    font-size: 11px;
-  }
-
-  #modal-assign-detail > .modal.assign-detail-modal {
-    padding: 8px 8px calc(8px + env(safe-area-inset-bottom, 0px)) !important;
-    max-height: min(90vh, 90dvh) !important;
-  }
-
-  #modal-assign-detail .assign-detail-modal__form .modal-drawing-actions {
-    flex: 0 0 68px !important;
-  }
-}
-
-/* 4번: 하단 목록 테두리박스 — 달력(.assign-mini-cal) 가로 테두리 이내 (1·3·8·상단바·5~7·PC 미변경) */
-@media (max-width: 768px) {
-  #screen-order-assign .assign-panel {
-    overflow-x: clip !important;
-    min-width: 0 !important;
-    box-sizing: border-box;
-  }
-
-  #screen-order-assign .assign-layout {
-    display: grid !important;
-    grid-template-columns: minmax(0, 1fr) !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: 0 !important;
-    overflow: hidden !important;
-    align-items: stretch;
-    box-sizing: border-box;
-  }
-
-  #screen-order-assign .assign-sidebar,
-  #screen-order-assign .assign-main {
-    grid-column: 1 / -1 !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: 0 !important;
-    box-sizing: border-box;
-    overflow: hidden !important;
-  }
-
-  #screen-order-assign .assign-main {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: stretch !important;
-  }
-
-  #screen-order-assign .assign-calendar,
-  #screen-order-assign .assign-calendar .assign-mini-cal {
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: 0 !important;
-    box-sizing: border-box;
-  }
-
-  #screen-order-assign .assign-table-wrap {
-    flex: 1 1 auto !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: 0 !important;
-    min-height: 0 !important;
-    align-self: stretch !important;
-    max-height: 100% !important;
-    box-sizing: border-box !important;
-    scrollbar-gutter: auto !important;
-    margin: 0 !important;
-    padding-left: clamp(8px, 1vh, 12px) !important;
-    padding-right: clamp(8px, 1vh, 12px) !important;
-    overflow-x: auto !important;
-    overflow-y: auto !important;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
-    scrollbar-color: #9a9a9a #e8e8e8;
-    overscroll-behavior: contain;
-    touch-action: pan-x pan-y;
-    contain: none !important;
-  }
-
-  #screen-order-assign .assign-table-wrap::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-  }
-
-  #screen-order-assign .assign-table {
-    min-width: 680px;
-    width: max-content;
-  }
-
-  /* No.~삭제 셀 박스 — assign-table-wrap 테두리 밖으로 넘치지 않음 */
-  #screen-order-assign .assign-table td {
-    overflow: hidden !important;
-    box-sizing: border-box !important;
-  }
-
-  #screen-order-assign .assign-cell-box,
-  #screen-order-assign .assign-cell-box--wide,
-  #screen-order-assign .assign-cell-box--compact,
-  #screen-order-assign .assign-cell-box--no,
-  #screen-order-assign .assign-cell-box--check {
-    display: flex !important;
-    width: 100% !important;
-    min-width: 0 !important;
-    max-width: 100% !important;
-    box-sizing: border-box !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    white-space: nowrap !important;
-  }
-
-  #screen-order-assign .assign-partner-select,
-  #screen-order-assign .assign-worker-select,
-  #screen-order-assign .assign-stack-item {
-    max-width: 100% !important;
-    min-width: 0 !important;
-    box-sizing: border-box !important;
-  }
-}
-
-/* 4번 상세 팝업 — 기울임 제거·항목 박스 테두리 통일·입력값 좌측 정렬 (1·3·8·PC 미변경) */
-@media (max-width: 768px) {
-  #modal-assign-detail {
-    --skew-angle: 0deg !important;
-  }
-
-  #modal-assign-detail .assign-detail-modal,
-  #modal-assign-detail .assign-detail-modal *,
-  #modal-assign-detail .assign-detail-modal *::before,
-  #modal-assign-detail .assign-detail-modal *::after {
-    transform: none !important;
-    font-style: normal !important;
-    font-synthesis: none !important;
-  }
-
-  #modal-assign-detail .assign-detail-modal .order-field,
-  #modal-assign-detail .assign-detail-modal .order-field__label,
-  #modal-assign-detail .assign-detail-modal .order-field__label span,
-  #modal-assign-detail .assign-detail-modal .order-field__divider,
-  #modal-assign-detail .assign-detail-modal .order-field__control,
-  #modal-assign-detail .assign-detail-modal .modal-field-value,
-  #modal-assign-detail .assign-detail-modal .modal-field-input {
-    transform: none !important;
-    font-style: normal !important;
-  }
-
-  #modal-assign-detail .assign-detail-modal__form > .order-field,
-  #modal-assign-detail .assign-detail-modal__field-row > .order-field--modal-inline,
-  #modal-assign-detail .assign-detail-modal__form > .order-field.order-field--scope,
-  #modal-assign-detail .assign-detail-modal__form > .order-field.order-field--scope-sales,
-  #modal-assign-detail
-    .assign-detail-modal__form
-    > .order-field.order-field--upload.modal-field--drawing {
-    height: var(--order-field-h) !important;
-    min-height: var(--order-field-h) !important;
-    max-height: var(--order-field-h) !important;
-    margin-bottom: 6px !important;
-    gap: 0 !important;
-    overflow: hidden !important;
-    box-sizing: border-box !important;
-    transform: none !important;
-  }
-
-  #modal-assign-detail .assign-detail-modal__form .order-field__control,
-  #modal-assign-detail .assign-detail-modal__form .order-field__control--md,
-  #modal-assign-detail .assign-detail-modal__form .order-field__control--full,
-  #modal-assign-detail .assign-detail-modal__form .order-field--scope .order-field__control,
-  #modal-assign-detail .assign-detail-modal__form .order-field--scope-sales .order-field__control,
-  #modal-assign-detail .assign-detail-modal__form .modal-drawing-field-group {
-    flex: 1 1 0% !important;
-    width: 0 !important;
-    min-width: 0 !important;
-    height: var(--order-field-h) !important;
-    min-height: var(--order-field-h) !important;
-    max-height: var(--order-field-h) !important;
-    padding: 0 !important;
-    border-width: 1px !important;
-    border-style: solid !important;
-    border-color: #b8b8b8 !important;
-    border-left: none !important;
-    background: #fff !important;
-    box-sizing: border-box !important;
-    overflow: hidden !important;
-    transform: none !important;
-  }
-
-  #modal-assign-detail .assign-detail-modal__form .order-scope-options,
-  #modal-assign-detail .assign-detail-modal__form .order-scope-sales-options {
-    height: 100% !important;
-    min-height: 0 !important;
-    max-height: 100% !important;
-    border: none !important;
-    overflow: hidden !important;
-    box-sizing: border-box !important;
-  }
-
-  #modal-assign-detail .assign-detail-modal__form .order-scope-option,
-  #modal-assign-detail .assign-detail-modal__form .order-scope-sales-cell {
-    height: 100% !important;
-    min-height: 0 !important;
-    max-height: 100% !important;
-    margin: 0 !important;
-    border: none !important;
-    border-right: 1px solid #b8b8b8 !important;
-    border-radius: 0 !important;
-    box-sizing: border-box !important;
-    overflow: hidden !important;
-    transform: none !important;
-    font-style: normal !important;
-  }
-
-  #modal-assign-detail .assign-detail-modal__form .order-scope-option:last-child,
-  #modal-assign-detail .assign-detail-modal__form .order-scope-sales-cell:last-child {
-    border-right: none !important;
-  }
-
-  /* 8번 집계표 셀과 동일 — 입력값 좌측 정렬·긴 텍스트 가로 스크롤 */
-  #modal-assign-detail .assign-detail-modal__form .modal-field-value,
-  #modal-assign-detail .assign-detail-modal__form .modal-field-input,
-  #modal-assign-detail .modal-field-value,
-  #modal-assign-detail .modal-field-input {
-    display: block !important;
-    width: 100% !important;
-    height: 100% !important;
-    min-height: 0 !important;
-    max-height: 100% !important;
-    margin: 0 !important;
-    padding: 0 8px !important;
-    border: none !important;
-    box-sizing: border-box !important;
-    text-align: left !important;
-    line-height: var(--order-field-h) !important;
-    overflow-x: auto !important;
-    overflow-y: hidden !important;
-    white-space: nowrap !important;
-    text-overflow: clip !important;
-    transform: none !important;
-    font-style: normal !important;
-    -webkit-overflow-scrolling: touch;
-    touch-action: pan-x;
-  }
-
-  #modal-assign-detail .assign-detail-modal__form .order-field__control {
-    display: flex !important;
-    align-items: stretch !important;
-    justify-content: flex-start !important;
-  }
-}
-
-/* 4번: 목록박스가 저장 버튼·하단 푸터를 가리지 않도록 세로 공간 분배 (1·3·8·PC 미변경) */
-@media (max-width: 768px) {
-  #screen-order-assign.order-page {
-    display: flex !important;
-    flex-direction: column !important;
-    height: 100dvh !important;
-    max-height: 100dvh !important;
-    overflow: hidden !important;
-  }
-
-  #screen-order-assign.order-page > .order-topbar {
-    flex: 0 0 auto !important;
-  }
-
-  #screen-order-assign.order-page > .assign-body {
-    display: flex !important;
-    flex-direction: column !important;
-    flex: 1 1 auto !important;
-    min-height: 0 !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    align-items: stretch !important;
-    overflow: hidden !important;
-    overflow-x: hidden !important;
-    overflow-y: hidden !important;
-    padding-bottom: 0 !important;
-    box-sizing: border-box !important;
-    touch-action: pan-x pan-y;
-  }
-
-  #screen-order-assign .assign-panel {
-    flex: 1 1 auto !important;
-    min-height: 0 !important;
-    overflow: hidden !important;
-    display: flex !important;
-    flex-direction: column !important;
-  }
-
-  #screen-order-assign .assign-date-title {
-    flex: 0 0 auto !important;
-    margin-bottom: 8px !important;
-  }
-
-  #screen-order-assign .assign-layout {
-    flex: 1 1 auto !important;
-    min-height: 0 !important;
-    overflow: hidden !important;
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 10px !important;
-  }
-
-  #screen-order-assign .assign-sidebar {
-    flex: 0 0 auto !important;
-    overflow: visible !important;
-  }
-
-  #screen-order-assign .assign-ym,
-  #screen-order-assign .assign-ym__row,
-  #screen-order-assign .assign-ym__select {
-    flex-shrink: 0 !important;
-  }
-
-  #screen-order-assign .assign-calendar {
-    flex: 0 0 auto !important;
-    min-height: 0 !important;
-  }
-
-  #screen-order-assign .assign-main {
-    flex: 1 1 auto !important;
-    min-height: 0 !important;
-    max-height: none !important;
-    overflow: hidden !important;
-    display: flex !important;
-    flex-direction: column !important;
-  }
-
-  #screen-order-assign .assign-table-wrap {
-    flex: 1 1 auto !important;
-    min-height: 0 !important;
-    max-height: 100% !important;
-    height: auto !important;
-    overflow-x: auto !important;
-    overflow-y: auto !important;
-    -webkit-overflow-scrolling: touch;
-    contain: none !important;
-    touch-action: pan-x pan-y;
-  }
-
-  #screen-order-assign .assign-save {
-    flex: 0 0 auto !important;
-    flex-shrink: 0 !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    margin-top: 8px !important;
-    margin-bottom: calc(52px + env(safe-area-inset-bottom, 0px)) !important;
-    padding: 4px 0 6px !important;
-    position: relative !important;
-    z-index: 5 !important;
-    background: #f0f0f0 !important;
-    box-sizing: border-box !important;
-    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.06);
-  }
-
-  #screen-order-assign .assign-save .order-register__btn {
-    width: 100% !important;
-    min-height: 48px !important;
-  }
-}
-
-/* 4번: 목록 테두리박스 가로 — 달력·패널 안쪽으로 고정 (1·3·8·PC 미변경) */
-@media (max-width: 768px) {
-  #screen-order-assign.order-page > .assign-body {
-    padding-left: 8px !important;
-    padding-right: 8px !important;
-    overflow-x: hidden !important;
-    overflow-y: hidden !important;
-  }
-
-  #screen-order-assign .assign-panel {
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: 0 !important;
-    overflow-x: hidden !important;
-    box-sizing: border-box !important;
-  }
-
-  #screen-order-assign .assign-layout {
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: 0 !important;
-    overflow: hidden !important;
-  }
-
-  #screen-order-assign .assign-sidebar {
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: 0 !important;
-  }
-
-  #screen-order-assign .assign-main {
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: 0 !important;
-    overflow: hidden !important;
-    flex: 1 1 auto !important;
-  }
-
-  #screen-order-assign .assign-table-wrap {
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: 0 !important;
-    flex: 1 1 0% !important;
-    align-self: stretch !important;
-    box-sizing: border-box !important;
-    scrollbar-gutter: auto !important;
-    contain: none !important;
-    padding: 8px !important;
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-  }
-
-  #screen-order-assign .assign-table {
-    min-width: 680px;
-    width: max-content;
-    max-width: none;
   }
 }

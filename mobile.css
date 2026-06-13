@@ -7632,3 +7632,204 @@
     gap: 6px !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   모바일 v31 — 5번 상세: 도면 행 · 파란박스 통일 · 조치일자/조치사원
+   (PC 미변경 · 구조·기능 유지)
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  #modal-status-detail .assign-detail-modal.status-detail-modal {
+    --status-detail-blue-pad: 3px 5px;
+    --status-detail-blue-font: 10px;
+    --status-detail-blue-lh: 1.15;
+    --status-detail-control-pad: 3px 5px;
+    --status-detail-control-font: 11px;
+    --status-detail-control-lh: 1.2;
+  }
+
+  /* ── 파란색 박스(섹션 타이틀·필드 라벨) 두께 통일 ── */
+  #modal-status-detail .status-detail-modal__section-title,
+  #modal-status-detail .status-detail-modal__section-head .status-detail-modal__section-title,
+  #modal-status-detail .assign-detail-modal .order-field__label,
+  #modal-status-detail label.order-field__label,
+  #modal-status-detail .status-detail-modal__section .order-field__label,
+  #modal-status-detail .status-detail-modal__work-block .order-field__label {
+    min-height: 0 !important;
+    height: auto !important;
+    max-height: none !important;
+    padding: var(--status-detail-blue-pad) !important;
+    font-size: var(--status-detail-blue-font) !important;
+    line-height: var(--status-detail-blue-lh) !important;
+    font-weight: 700 !important;
+    box-sizing: border-box !important;
+  }
+
+  /* ── 도면1~3: 다른 필드와 동일한 세로 박스·내용 두께 ── */
+  #modal-status-detail .order-field.modal-field--drawing,
+  #modal-status-detail .order-field.order-field--upload.modal-field--drawing {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    width: auto !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    margin: 0 4px 3px !important;
+    overflow: hidden !important;
+    gap: 0 !important;
+  }
+
+  #modal-status-detail .order-field.modal-field--drawing .order-field__divider,
+  #modal-status-detail .order-field.order-field--upload.modal-field--drawing .order-field__divider {
+    display: none !important;
+  }
+
+  #modal-status-detail .order-field.modal-field--drawing > .modal-drawing-field-group {
+    width: 100% !important;
+    flex: 0 0 auto !important;
+    min-height: 0 !important;
+    height: auto !important;
+    max-height: none !important;
+    margin: 0 !important;
+    border: none !important;
+    border-top: 1px solid #b8b8b8 !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+  }
+
+  #modal-status-detail .order-field.modal-field--drawing .modal-drawing-field-group {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: stretch !important;
+    gap: 0 !important;
+  }
+
+  #modal-status-detail .order-field.modal-field--drawing .modal-drawing-field-group .order-field__control--upload {
+    flex: 1 1 0 !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    min-height: 0 !important;
+    height: auto !important;
+    padding: 0 !important;
+    border: none !important;
+  }
+
+  #modal-status-detail .order-field.modal-field--drawing .modal-drawing-actions {
+    flex: 2 1 0 !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    height: auto !important;
+    max-height: none !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: stretch !important;
+  }
+
+  #modal-status-detail .order-field.modal-field--drawing .assign-detail-modal__download,
+  #modal-status-detail .order-field.modal-field--drawing .assign-detail-modal__drawing-action-btn {
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    width: auto !important;
+    min-height: 0 !important;
+    height: auto !important;
+    max-height: none !important;
+    margin: 0 !important;
+    padding: var(--status-detail-control-pad) !important;
+    font-size: 9px !important;
+    line-height: var(--status-detail-control-lh) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+    border-left: 1px solid #b8b8b8 !important;
+    border-radius: 0 !important;
+  }
+
+  #modal-status-detail .order-field.modal-field--drawing .assign-detail-modal__download {
+    border-left: none !important;
+  }
+
+  #modal-status-detail .order-field.modal-field--drawing .assign-detail-modal__drawing-btn-text,
+  #modal-status-detail .order-field.modal-field--drawing .assign-detail-modal__drawing-action-btn span {
+    font-size: 9px !important;
+    line-height: var(--status-detail-control-lh) !important;
+  }
+
+  /* ── 조치일자: 달력 버튼 오른쪽 끝 ── */
+  #modal-status-detail .order-field--date .order-field__control,
+  #modal-status-detail .order-field--date .order-field__control--date {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: stretch !important;
+    flex: unset !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: 0 !important;
+    height: auto !important;
+    padding: 0 !important;
+    gap: 0 !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+  }
+
+  #modal-status-detail .order-field--date .status-detail-action-schedule,
+  #modal-status-detail .order-field--date .modal-field-input {
+    flex: 1 1 auto !important;
+    width: auto !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: var(--status-detail-control-pad) !important;
+    font-size: var(--status-detail-control-font) !important;
+    line-height: var(--status-detail-control-lh) !important;
+    text-align: left !important;
+    border: none !important;
+    background: transparent !important;
+    box-sizing: border-box !important;
+  }
+
+  #modal-status-detail .order-field--date .order-date-btn {
+    flex: 0 0 auto !important;
+    margin-left: auto !important;
+    align-self: stretch !important;
+    min-width: 34px !important;
+    width: auto !important;
+    padding: 0 6px !important;
+    border: none !important;
+    border-left: 1px solid #b8b8b8 !important;
+    border-radius: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  #modal-status-detail .order-field--date .order-date-btn__icon {
+    width: 16px !important;
+    height: 16px !important;
+  }
+
+  /* ── 조치사원: 드롭다운 화살표 오른쪽 끝 ── */
+  #modal-status-detail .status-detail-action-worker,
+  #modal-status-detail select.status-detail-action-worker {
+    width: 100% !important;
+    min-height: 0 !important;
+    height: auto !important;
+    padding: var(--status-detail-control-pad) !important;
+    padding-right: 22px !important;
+    font-size: var(--status-detail-control-font) !important;
+    line-height: var(--status-detail-control-lh) !important;
+    text-align: left !important;
+    text-align-last: left !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    background-color: transparent !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 12 8'%3E%3Cpath fill='%23333' d='M1 1l5 5 5-5'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 5px center !important;
+    background-size: 10px 6px !important;
+    border: none !important;
+    box-sizing: border-box !important;
+  }
+}

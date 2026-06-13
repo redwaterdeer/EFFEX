@@ -2728,7 +2728,10 @@ function bindEffexDataListeners() {
   window.addEventListener("effex-data-changed", refreshDataFromStorage);
   if (effexDataChannel) {
     effexDataChannel.onmessage = function () {
-      refreshDataFromStorage();
+      pullCloudData(true).then(function () {
+        refreshDataFromStorage();
+        refreshOpenAssignModalsFromStorage();
+      });
     };
   }
 }
@@ -2881,6 +2884,10 @@ function isMobileLayout() {
   return window.matchMedia("(max-width: 768px)").matches;
 }
 
+function isStatusDetailMobilePrimaryLayout() {
+  return isMobileLayout() && activeAssignPageKey === "status";
+}
+
 function ensureAssignSavePlacement() {
   ["screen-order-assign", "screen-order-status", "screen-order-open"].forEach(
     function (screenId) {
@@ -2926,6 +2933,32 @@ function refreshDataFromStorage() {
   } else if (page === "order-open") {
     renderAssignCalendars("open");
     renderAssignTable("open");
+  }
+}
+
+function refreshOpenAssignModalsFromStorage() {
+  var statusModal = document.getElementById("modal-status-detail");
+  if (statusModal && statusModal.classList.contains("is-open")) {
+    var statusIdxEl = document.getElementById("statusDetailOrderIndex");
+    var statusIdx = statusIdxEl ? parseInt(statusIdxEl.value, 10) : -1;
+    if (statusIdx >= 0) {
+      var orders = getStoredOrders();
+      if (orders[statusIdx]) {
+        openStatusDetailModal(orders[statusIdx]);
+      }
+    }
+  }
+
+  var assignModal = document.getElementById("modal-assign-detail");
+  if (assignModal && assignModal.classList.contains("is-open")) {
+    var assignIdxEl = document.getElementById("assignDetailOrderIndex");
+    var assignIdx = assignIdxEl ? parseInt(assignIdxEl.value, 10) : -1;
+    if (assignIdx >= 0) {
+      var assignOrders = getStoredOrders();
+      if (assignOrders[assignIdx]) {
+        openAssignDetailModal(assignOrders[assignIdx]);
+      }
+    }
   }
 }
 
@@ -4541,18 +4574,19 @@ function buildStatusDetailWorkBlockHtml(scopeKey, scopeLabel, partnerText, workD
       getStatusAccidentTypeOptionsHtml(workData.accidentType) +
       "</select>";
 
-  var actionFieldsHtml = isOpenMode
-    ? ""
-    : buildStatusDetailActionFieldsInnerHtml(
-        scopeKeyAttr,
-        scopeLabel,
-        scheduleIso,
-        scheduleDisplay,
-        partnerUserId,
-        scopeKey,
-        workData,
-        false
-      );
+  var actionFieldsHtml =
+    isOpenMode || isStatusDetailMobilePrimaryLayout()
+      ? ""
+      : buildStatusDetailActionFieldsInnerHtml(
+          scopeKeyAttr,
+          scopeLabel,
+          scheduleIso,
+          scheduleDisplay,
+          partnerUserId,
+          scopeKey,
+          workData,
+          false
+        );
 
   return (
     '<div class="status-detail-modal__work-block" data-scope-key="' +
@@ -4634,7 +4668,8 @@ function buildStatusDetailActionFieldsInnerHtml(
   partnerUserId,
   scopeKey,
   workData,
-  includeResult
+  includeResult,
+  primaryOnly
 ) {
   var actionPartnerId = (workData.actionPartner || partnerUserId || "").trim();
   var actionPartnerOptions = getAssignPartnerOptions(actionPartnerId, scopeKey);
@@ -4704,12 +4739,45 @@ function buildStatusDetailActionFieldsInnerHtml(
     getStatusActionResultOptionsHtml(workData.actionResult) +
     "</select></div></div>";
 
+  if (primaryOnly) {
+    return actionDateFieldHtml + actionWorkerFieldHtml + actionContentFieldHtml;
+  }
+
   return (
     actionDateFieldHtml +
     actionPartnerFieldHtml +
     actionWorkerFieldHtml +
     actionContentFieldHtml +
     (includeResult ? actionResultFieldHtml : "")
+  );
+}
+
+function buildStatusDetailMobilePrimaryActionBlockHtml(
+  scopeKey,
+  scopeLabel,
+  partnerUserId,
+  workData
+) {
+  var scopeKeyAttr = escapeHtml(scopeKey);
+  var scheduleIso = parseStatusActionScheduleIso(workData.actionSchedule);
+  var scheduleDisplay = scheduleIso ? formatOrderConstructDateDisplay(scheduleIso) : "";
+
+  return (
+    '<div class="status-detail-modal__work-block status-detail-modal__work-block--primary-action" data-scope-key="' +
+    scopeKeyAttr +
+    '">' +
+    buildStatusDetailActionFieldsInnerHtml(
+      scopeKeyAttr,
+      scopeLabel,
+      scheduleIso,
+      scheduleDisplay,
+      partnerUserId,
+      scopeKey,
+      workData,
+      false,
+      true
+    ) +
+    "</div>"
   );
 }
 
@@ -4894,13 +4962,48 @@ function setActiveStatusDetailScope(scopeKey) {
 function renderStatusDetailActionBlocks(order) {
   var container = document.getElementById("statusDetailActionBlocks");
   var section = document.getElementById("statusDetailActionSection");
+  var roundTags = document.getElementById("statusDetailActionRoundTags");
   var isOpenMode = activeAssignPageKey === "open";
+  var mobilePrimary = isStatusDetailMobilePrimaryLayout();
 
-  if (section) section.hidden = !isOpenMode;
+  if (section) {
+    section.hidden = !isOpenMode && !mobilePrimary;
+    section.classList.toggle("status-detail-modal__section--mobile-primary", mobilePrimary);
+  }
+  if (roundTags) roundTags.hidden = !isOpenMode;
   if (!container) return;
 
-  if (!isOpenMode) {
+  if (!isOpenMode && !mobilePrimary) {
     container.innerHTML = "";
+    return;
+  }
+
+  if (mobilePrimary) {
+    var statusKeys = getOrderScopeKeys(order.scope);
+    var statusPartners = normalizeOrderAssignedPartners(order);
+    var statusWorkInfo = normalizeOrderScopeWorkInfo(order);
+    var statusHtml = "";
+
+    if (!statusKeys.length) {
+      container.innerHTML = buildStatusDetailMobilePrimaryActionBlockHtml(
+        "",
+        "",
+        order.assignedPartner || "",
+        statusWorkInfo[""] || getOrderScopeWorkData(order, "")
+      );
+      return;
+    }
+
+    statusKeys.forEach(function (key) {
+      statusHtml += buildStatusDetailMobilePrimaryActionBlockHtml(
+        key,
+        ASSIGN_SCOPE_LABELS[key] || key,
+        statusPartners[key] || order.assignedPartner || "",
+        statusWorkInfo[key] || getOrderScopeWorkData(order, key)
+      );
+    });
+
+    container.innerHTML = statusHtml;
     return;
   }
 
@@ -7929,6 +8032,13 @@ window.addEventListener("popstate", function () {
 });
 
 window.addEventListener("storage", function (e) {
+  if (e.key === EFFEX_CLOUD_REV_KEY) {
+    pullCloudData(true).then(function () {
+      refreshDataFromStorage();
+      refreshOpenAssignModalsFromStorage();
+    });
+    return;
+  }
   if (
     e.key !== ORDERS_STORAGE_KEY &&
     e.key !== UI_STATE_KEY &&
@@ -7940,7 +8050,10 @@ window.addEventListener("storage", function (e) {
     loadUiState();
     applyUiStateToControls();
   }
-  refreshDataFromStorage();
+  pullCloudData(true).then(function () {
+    refreshDataFromStorage();
+    refreshOpenAssignModalsFromStorage();
+  });
 });
 
 document.addEventListener("DOMContentLoaded", function () {

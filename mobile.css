@@ -8067,3 +8067,74 @@
     gap: 6px !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   모바일 v34 — 5번 시공정보 노란박스 · 조치정보 하단 배치 보조
+   (PC 미변경 · 구조·기능 유지)
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* 시공정보: 파란 → 노란(주황) 박스 */
+  #modal-status-detail
+    .status-detail-modal__section[aria-labelledby="statusSectionWorkTitle"]
+    .status-detail-modal__section-title,
+  #modal-status-detail
+    .status-detail-modal__section[aria-labelledby="statusSectionWorkTitle"]
+    .order-field__label,
+  #modal-status-detail
+    .status-detail-modal__section[aria-labelledby="statusSectionWorkTitle"]
+    label.order-field__label {
+    background: var(--color-warning) !important;
+    color: #fff !important;
+    border-color: #d97b12 !important;
+  }
+
+  #modal-status-detail
+    .status-detail-modal__section[aria-labelledby="statusSectionWorkTitle"]
+    .status-detail-modal__scope-tag--active {
+    background: var(--color-warning) !important;
+    border-color: #d97b12 !important;
+    color: #fff !important;
+  }
+
+  /* 모바일 배정현황: 조치정보(조치일자·조치사원·조치내용) 영역 */
+  #modal-status-detail .status-detail-modal__section--mobile-primary {
+    display: block !important;
+  }
+
+  #modal-status-detail .status-detail-modal__section--mobile-primary #statusDetailActionRoundTags {
+    display: none !important;
+  }
+
+  #modal-status-detail
+    .status-detail-modal__section--mobile-primary
+    .status-detail-modal__work-block--primary-action {
+    margin: 0 4px 3px !important;
+    padding: 4px !important;
+    gap: 3px !important;
+    background: #fafafa !important;
+    border: 1px solid #c8c8c8 !important;
+  }
+
+  /* 조치정보·현장정보 등 파란 박스 높이 재확인 */
+  #modal-status-detail
+    .status-detail-modal__section:not([aria-labelledby="statusSectionWorkTitle"])
+    .status-detail-modal__section-title,
+  #modal-status-detail
+    .status-detail-modal__section:not([aria-labelledby="statusSectionWorkTitle"])
+    .order-field__label,
+  #modal-status-detail
+    .status-detail-modal__section:not([aria-labelledby="statusSectionWorkTitle"])
+    label.order-field__label {
+    min-height: var(--status-detail-blue-h, 21px) !important;
+    height: var(--status-detail-blue-h, 21px) !important;
+    max-height: var(--status-detail-blue-h, 21px) !important;
+    padding: 0 5px !important;
+    font-size: 10px !important;
+    line-height: 1 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+  }
+}

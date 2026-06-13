@@ -7275,3 +7275,170 @@
     margin-bottom: 3px !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   모바일 v29 — 5번 배정현황 상세: 영역 박스 텍스트 맞춤 축소
+   (PC 미변경 · 구조·기능 유지)
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  #modal-status-detail .assign-detail-modal.status-detail-modal {
+    --order-field-h: auto;
+    padding: 8px 6px calc(8px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  #modal-status-detail .status-detail-modal__section {
+    margin: 0 0 6px !important;
+  }
+
+  #modal-status-detail .status-detail-modal__section-title {
+    padding: 5px 6px !important;
+    line-height: 1.2 !important;
+    min-height: 0 !important;
+    height: auto !important;
+  }
+
+  #modal-status-detail .status-detail-modal__scope-tags {
+    padding: 4px 6px !important;
+    gap: 4px !important;
+  }
+
+  #modal-status-detail .status-detail-modal__scope-tag {
+    min-height: 0 !important;
+    height: auto !important;
+    padding: 4px 8px !important;
+    line-height: 1.2 !important;
+  }
+
+  #modal-status-detail .assign-detail-modal__field-row {
+    margin: 5px !important;
+    gap: 0 !important;
+  }
+
+  #modal-status-detail .status-detail-modal__section > .order-field:not(.modal-field--drawing) {
+    margin: 0 5px 5px !important;
+  }
+
+  #modal-status-detail .order-field {
+    margin: 0 0 5px !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+  }
+
+  #modal-status-detail .assign-detail-modal .order-field__label,
+  #modal-status-detail label.order-field__label,
+  #modal-status-detail .status-detail-modal__section .order-field__label {
+    min-height: 0 !important;
+    height: auto !important;
+    max-height: none !important;
+    padding: 4px 6px !important;
+    line-height: 1.2 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  #modal-status-detail .assign-detail-modal .order-field__control,
+  #modal-status-detail .order-field__control {
+    min-height: 0 !important;
+    height: auto !important;
+    max-height: none !important;
+    padding: 0 !important;
+  }
+
+  #modal-status-detail .modal-field-value,
+  #modal-status-detail .modal-field-input,
+  #modal-status-detail .order-field__control input,
+  #modal-status-detail .order-field__control select,
+  #modal-status-detail .order-field__control textarea {
+    min-height: 0 !important;
+    height: auto !important;
+    max-height: none !important;
+    padding: 4px 6px !important;
+    line-height: 1.25 !important;
+  }
+
+  #modal-status-detail .status-detail-modal__work-blocks,
+  #modal-status-detail #statusDetailActionBlocks {
+    padding: 5px !important;
+    gap: 6px !important;
+  }
+
+  #modal-status-detail .status-detail-modal__work-block {
+    padding: 5px !important;
+    gap: 5px !important;
+    height: auto !important;
+    min-height: 0 !important;
+  }
+
+  #modal-status-detail .status-detail-modal__work-block > .order-field,
+  #modal-status-detail .status-detail-modal__work-block > .assign-detail-modal__field-row {
+    margin-bottom: 5px !important;
+  }
+
+  #modal-status-detail .order-field.modal-field--drawing {
+    margin: 5px !important;
+    width: calc(100% - 10px) !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+  }
+
+  #modal-status-detail .order-field.modal-field--drawing .order-field__label,
+  #modal-status-detail .order-field.modal-field--drawing label.order-field__label {
+    min-height: 0 !important;
+    height: auto !important;
+    padding: 4px 6px !important;
+  }
+
+  #modal-status-detail .modal-drawing-field-group {
+    min-height: 0 !important;
+    height: auto !important;
+  }
+
+  #modal-status-detail .modal-drawing-actions {
+    height: auto !important;
+    min-height: 0 !important;
+  }
+
+  #modal-status-detail .assign-detail-modal__download,
+  #modal-status-detail .assign-detail-modal__drawing-action-btn {
+    min-height: 0 !important;
+    height: auto !important;
+    padding: 4px 6px !important;
+    line-height: 1.2 !important;
+  }
+
+  #modal-status-detail .status-detail-modal__attach-photos {
+    padding: 5px !important;
+  }
+
+  #modal-status-detail .status-detail-modal__attach-photos-head {
+    gap: 4px !important;
+    margin-bottom: 5px !important;
+  }
+
+  #modal-status-detail .status-detail-modal__attach-photos-title {
+    padding: 4px 6px !important;
+    line-height: 1.2 !important;
+    min-height: 0 !important;
+    height: auto !important;
+  }
+
+  #modal-status-detail .status-detail-modal__photos {
+    gap: 5px !important;
+  }
+
+  #modal-status-detail .status-detail-modal__photo-box {
+    min-height: 0 !important;
+    height: auto !important;
+    max-height: 72px !important;
+    padding: 4px !important;
+    line-height: 1.2 !important;
+  }
+
+  #modal-status-detail .assign-detail-modal__footer {
+    margin-top: 4px !important;
+    padding-top: 6px !important;
+  }
+}

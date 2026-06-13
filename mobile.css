@@ -7974,3 +7974,96 @@
     box-sizing: border-box !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   모바일 v33 — 4번 상세 행간 확대 · 5번 파란박스 높이 통일
+   (PC 미변경 · 구조·기능 유지)
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* ── 4번 오더배정 상세: 행간 간격 동일하게 소폭 확대 ── */
+  #modal-assign-detail .assign-detail-modal.modal {
+    --modal-field-gap: 7px;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form > .order-field,
+  #modal-assign-detail .assign-detail-modal__field-row > .order-field--modal-inline,
+  #modal-assign-detail
+    .assign-detail-modal__form
+    > .order-field:not(.order-field--scope):not(.order-field--scope-sales):not(
+      .modal-field--drawing
+    ),
+  #modal-assign-detail .order-field--scope,
+  #modal-assign-detail .order-field--scope-sales,
+  #modal-assign-detail .order-field--upload.modal-field--drawing,
+  #modal-assign-detail .modal-field--drawing {
+    margin-bottom: 7px !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__field-row {
+    gap: 7px !important;
+    margin-bottom: 7px !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__field-row:last-child {
+    margin-bottom: 0 !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form > .order-field:last-child,
+  #modal-assign-detail .assign-detail-modal__form > .modal-field--drawing:last-of-type {
+    margin-bottom: 0 !important;
+  }
+
+  /* ── 5번 배정현황 상세: 파란색 박스 높이 동일 ── */
+  #modal-status-detail .assign-detail-modal.status-detail-modal {
+    --status-detail-blue-h: 21px;
+  }
+
+  #modal-status-detail .status-detail-modal__section-title,
+  #modal-status-detail .status-detail-modal__section-head .status-detail-modal__section-title,
+  #modal-status-detail .assign-detail-modal .order-field__label,
+  #modal-status-detail label.order-field__label,
+  #modal-status-detail .status-detail-modal__section .order-field__label,
+  #modal-status-detail .status-detail-modal__work-block .order-field__label,
+  #modal-status-detail .order-field.modal-field--drawing .order-field__label,
+  #modal-status-detail .order-field.modal-field--drawing label.order-field__label {
+    min-height: var(--status-detail-blue-h) !important;
+    height: var(--status-detail-blue-h) !important;
+    max-height: var(--status-detail-blue-h) !important;
+    padding: 0 5px !important;
+    font-size: 10px !important;
+    line-height: 1 !important;
+    font-weight: 700 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+  }
+
+  #modal-status-detail .assign-detail-modal .order-field__label span,
+  #modal-status-detail label.order-field__label span {
+    line-height: 1 !important;
+  }
+}
+
+@media (max-width: 480px) {
+  #modal-assign-detail .assign-detail-modal.modal {
+    --modal-field-gap: 6px;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form > .order-field,
+  #modal-assign-detail .assign-detail-modal__field-row > .order-field--modal-inline,
+  #modal-assign-detail
+    .assign-detail-modal__form
+    > .order-field:not(.order-field--scope):not(.order-field--scope-sales):not(
+      .modal-field--drawing
+    ),
+  #modal-assign-detail .order-field--scope,
+  #modal-assign-detail .order-field--scope-sales,
+  #modal-assign-detail .order-field--upload.modal-field--drawing,
+  #modal-assign-detail .modal-field--drawing,
+  #modal-assign-detail .assign-detail-modal__field-row {
+    margin-bottom: 6px !important;
+    gap: 6px !important;
+  }
+}

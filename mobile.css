@@ -7138,3 +7138,140 @@
     box-sizing: border-box !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   모바일 v28 — 4번 도면 버튼·행 높이 · 5번 전체 파란 박스 통일
+   (PC 미변경 · 구조·기능 유지)
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* ── 4번 상세: 행 높이 소폭 확대 · 스크롤 최소화 ── */
+  #modal-assign-detail .assign-detail-modal.modal {
+    --order-field-h: 37px;
+    --modal-field-gap: 4px;
+    padding: 8px 8px calc(8px + env(safe-area-inset-bottom, 0px)) !important;
+    max-height: min(
+      94dvh,
+      calc(
+        100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) -
+          12px
+      )
+    ) !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form > .order-field,
+  #modal-assign-detail .assign-detail-modal__field-row > .order-field--modal-inline,
+  #modal-assign-detail
+    .assign-detail-modal__form
+    > .order-field:not(.order-field--scope):not(.order-field--scope-sales):not(
+      .modal-field--drawing
+    ) {
+    height: var(--order-field-h) !important;
+    min-height: var(--order-field-h) !important;
+    max-height: var(--order-field-h) !important;
+    margin-bottom: 4px !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__field-row {
+    gap: 4px !important;
+    margin-bottom: 0 !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .order-field__label,
+  #modal-assign-detail .assign-detail-modal__field-row .order-field__label {
+    height: var(--order-field-h) !important;
+    min-height: var(--order-field-h) !important;
+    max-height: var(--order-field-h) !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__footer {
+    margin-top: 6px !important;
+    padding-top: 6px !important;
+  }
+
+  /* ── 4번 상세: 도면 버튼 두께 = 파란 라벨 박스와 동일 ── */
+  #modal-assign-detail .order-field--upload.modal-field--drawing {
+    height: var(--order-field-h) !important;
+    min-height: var(--order-field-h) !important;
+    max-height: var(--order-field-h) !important;
+    margin-bottom: 4px !important;
+    align-items: stretch !important;
+    overflow: hidden !important;
+  }
+
+  #modal-assign-detail .order-field--upload.modal-field--drawing .order-field__label,
+  #modal-assign-detail .order-field--upload.modal-field--drawing label.order-field__label {
+    height: var(--order-field-h) !important;
+    min-height: var(--order-field-h) !important;
+    max-height: var(--order-field-h) !important;
+    align-self: stretch !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .modal-drawing-field-group {
+    height: var(--order-field-h) !important;
+    min-height: var(--order-field-h) !important;
+    max-height: var(--order-field-h) !important;
+    overflow: hidden !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .modal-drawing-actions {
+    height: var(--order-field-h) !important;
+    min-height: var(--order-field-h) !important;
+    max-height: var(--order-field-h) !important;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form .assign-detail-modal__download,
+  #modal-assign-detail .assign-detail-modal__form .assign-detail-modal__drawing-action-btn {
+    min-height: var(--order-field-h) !important;
+    height: var(--order-field-h) !important;
+    max-height: var(--order-field-h) !important;
+  }
+
+  /* ── 5번 상세: 모든 파란 박스 → 현장정보와 동일 두께 ── */
+  #modal-status-detail .status-detail-modal__section-title {
+    padding: 8px 6px !important;
+    font-size: 12px !important;
+    line-height: 1.2 !important;
+    min-height: 0 !important;
+    height: auto !important;
+    box-sizing: border-box !important;
+  }
+
+  #modal-status-detail .assign-detail-modal .order-field__label,
+  #modal-status-detail label.order-field__label,
+  #modal-status-detail .status-detail-modal__section .order-field__label {
+    min-height: 36px !important;
+    height: auto !important;
+    max-height: none !important;
+    padding: 0 6px !important;
+    font-size: 11px !important;
+    line-height: 1.2 !important;
+    box-sizing: border-box !important;
+  }
+
+  #modal-status-detail .status-detail-modal__scope-tag {
+    min-height: 36px !important;
+    height: auto !important;
+    padding: 0 6px !important;
+    font-size: 11px !important;
+    line-height: 1.2 !important;
+    box-sizing: border-box !important;
+  }
+}
+
+@media (max-width: 480px) {
+  #modal-assign-detail .assign-detail-modal.modal {
+    --order-field-h: 33px;
+    --modal-field-gap: 3px;
+  }
+
+  #modal-assign-detail .assign-detail-modal__form > .order-field,
+  #modal-assign-detail .assign-detail-modal__field-row > .order-field--modal-inline,
+  #modal-assign-detail
+    .assign-detail-modal__form
+    > .order-field:not(.order-field--scope):not(.order-field--scope-sales):not(
+      .modal-field--drawing
+    ),
+  #modal-assign-detail .order-field--upload.modal-field--drawing {
+    margin-bottom: 3px !important;
+  }
+}

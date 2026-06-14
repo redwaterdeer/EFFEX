@@ -8138,3 +8138,263 @@
     overflow: hidden !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   모바일 v35 — 5번 상세: 조치정보 빨간박스 · 도면 행 · 테두리·높이 통일
+   (PC 미변경 · 구조·기능 유지)
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  #modal-status-detail .assign-detail-modal.status-detail-modal {
+    --status-detail-row-h: 34px;
+    --status-detail-label-w: 52px;
+    --status-detail-gap: 5px;
+    --status-detail-content-h: 28px;
+    --status-detail-blue-h: 21px;
+  }
+
+  /* ── 조치정보: 파란 → 빨간 박스 ── */
+  #modal-status-detail .status-detail-modal__section--mobile-primary .status-detail-modal__section-title,
+  #modal-status-detail .status-detail-modal__section--mobile-primary .order-field__label,
+  #modal-status-detail .status-detail-modal__section--mobile-primary label.order-field__label {
+    background: var(--color-red) !important;
+    color: #fff !important;
+    border-color: #c41a1f !important;
+    min-height: var(--status-detail-blue-h) !important;
+    height: var(--status-detail-blue-h) !important;
+    max-height: var(--status-detail-blue-h) !important;
+    padding: 0 5px !important;
+    font-size: 10px !important;
+    line-height: 1 !important;
+    font-weight: 700 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+  }
+
+  /* ── 시공정보 work-block 테두리: #b8b8b8 통일 ── */
+  #modal-status-detail
+    .status-detail-modal__section[aria-labelledby="statusSectionWorkTitle"]
+    .status-detail-modal__work-block,
+  #modal-status-detail
+    .status-detail-modal__section[aria-labelledby="statusSectionWorkTitle"]
+    .status-detail-modal__work-block--active {
+    border: 1px solid #b8b8b8 !important;
+    background: #fff !important;
+    box-shadow: none !important;
+  }
+
+  /* ── 텍스트 박스 높이·간격 통일 ── */
+  #modal-status-detail .status-detail-modal__section {
+    margin: 0 0 6px !important;
+  }
+
+  #modal-status-detail .status-detail-modal__work-blocks,
+  #modal-status-detail #statusDetailActionBlocks {
+    padding: 5px !important;
+    gap: var(--status-detail-gap) !important;
+  }
+
+  #modal-status-detail .status-detail-modal__work-block,
+  #modal-status-detail .status-detail-modal__work-block--primary-action {
+    padding: 5px !important;
+    gap: var(--status-detail-gap) !important;
+    margin: 0 !important;
+    border: 1px solid #b8b8b8 !important;
+    background: #fff !important;
+    box-sizing: border-box !important;
+  }
+
+  #modal-status-detail .order-field {
+    margin: 0 0 var(--status-detail-gap) !important;
+    gap: 0 !important;
+    border-color: #b8b8b8 !important;
+    box-sizing: border-box !important;
+  }
+
+  #modal-status-detail .order-field:last-child {
+    margin-bottom: 0 !important;
+  }
+
+  #modal-status-detail .status-detail-modal__section > .order-field:not(.modal-field--drawing),
+  #modal-status-detail .status-detail-modal__work-block > .order-field,
+  #modal-status-detail .assign-detail-modal__field-row {
+    margin: 0 0 var(--status-detail-gap) !important;
+  }
+
+  #modal-status-detail .assign-detail-modal__field-row {
+    margin: 5px !important;
+    gap: var(--status-detail-gap) !important;
+  }
+
+  #modal-status-detail .order-field__control {
+    min-height: var(--status-detail-content-h) !important;
+    height: auto !important;
+    max-height: none !important;
+    border-color: #b8b8b8 !important;
+    box-sizing: border-box !important;
+  }
+
+  #modal-status-detail .modal-field-value,
+  #modal-status-detail .modal-field-input,
+  #modal-status-detail .order-field__control input,
+  #modal-status-detail .order-field__control select,
+  #modal-status-detail .order-field__control textarea {
+    min-height: var(--status-detail-content-h) !important;
+    height: var(--status-detail-content-h) !important;
+    max-height: var(--status-detail-content-h) !important;
+    padding: 0 6px !important;
+    font-size: 11px !important;
+    line-height: 1.2 !important;
+    box-sizing: border-box !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  #modal-status-detail .order-field--date .order-field__control--date {
+    min-height: var(--status-detail-content-h) !important;
+    height: var(--status-detail-content-h) !important;
+  }
+
+  #modal-status-detail .order-field--date .status-detail-action-schedule,
+  #modal-status-detail .order-field--date .modal-field-input {
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+  }
+
+  #modal-status-detail .order-field--date .order-date-btn {
+    min-height: 100% !important;
+    height: auto !important;
+  }
+
+  #modal-status-detail select.status-detail-action-worker,
+  #modal-status-detail .status-detail-action-worker {
+    height: var(--status-detail-content-h) !important;
+    min-height: var(--status-detail-content-h) !important;
+    max-height: var(--status-detail-content-h) !important;
+  }
+
+  /* ── 도면: 오더배정 상세처럼 행 전체 균등 3분할 ── */
+  #modal-status-detail .order-field.modal-field--drawing,
+  #modal-status-detail .order-field.order-field--upload.modal-field--drawing {
+    flex-direction: row !important;
+    align-items: stretch !important;
+    flex-wrap: nowrap !important;
+    width: auto !important;
+    height: var(--status-detail-row-h) !important;
+    min-height: var(--status-detail-row-h) !important;
+    max-height: var(--status-detail-row-h) !important;
+    margin: 0 4px var(--status-detail-gap) !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    border: 1px solid #b8b8b8 !important;
+    box-sizing: border-box !important;
+  }
+
+  #modal-status-detail .order-field.modal-field--drawing .order-field__divider,
+  #modal-status-detail .order-field.order-field--upload.modal-field--drawing .order-field__divider {
+    display: none !important;
+  }
+
+  #modal-status-detail .order-field.modal-field--drawing .order-field__label,
+  #modal-status-detail .order-field.modal-field--drawing label.order-field__label {
+    flex: 0 0 var(--status-detail-label-w) !important;
+    width: var(--status-detail-label-w) !important;
+    min-width: var(--status-detail-label-w) !important;
+    max-width: var(--status-detail-label-w) !important;
+    height: 100% !important;
+    min-height: 100% !important;
+    max-height: 100% !important;
+    margin: 0 !important;
+    padding: 0 4px !important;
+    border: none !important;
+    border-right: none !important;
+    box-sizing: border-box !important;
+  }
+
+  #modal-status-detail .order-field.modal-field--drawing > .modal-drawing-field-group {
+    flex: 1 1 0 !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: 100% !important;
+    min-height: 100% !important;
+    max-height: 100% !important;
+    margin: 0 !important;
+    border: none !important;
+    border-left: 1px solid #b8b8b8 !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+  }
+
+  #modal-status-detail .order-field.modal-field--drawing .modal-drawing-field-group {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: stretch !important;
+    gap: 0 !important;
+  }
+
+  #modal-status-detail .order-field.modal-field--drawing .modal-drawing-field-group .order-field__control--upload {
+    flex: 1 1 0 !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: 100% !important;
+    min-height: 100% !important;
+    display: flex !important;
+    align-items: stretch !important;
+    padding: 0 !important;
+    border: none !important;
+    box-sizing: border-box !important;
+  }
+
+  #modal-status-detail .order-field.modal-field--drawing .modal-drawing-actions {
+    flex: 2 1 0 !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: 100% !important;
+    min-height: 100% !important;
+    max-height: 100% !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: stretch !important;
+    overflow: hidden !important;
+  }
+
+  #modal-status-detail .order-field.modal-field--drawing .assign-detail-modal__download,
+  #modal-status-detail .order-field.modal-field--drawing .assign-detail-modal__drawing-action-btn {
+    flex: 1 1 0 !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: 100% !important;
+    min-height: 100% !important;
+    max-height: 100% !important;
+    margin: 0 !important;
+    padding: 0 2px !important;
+    font-size: 9px !important;
+    line-height: 1.1 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+    border-left: 1px solid #b8b8b8 !important;
+    border-radius: 0 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  #modal-status-detail .order-field.modal-field--drawing .assign-detail-modal__download {
+    border-left: none !important;
+  }
+
+  #modal-status-detail .order-field.modal-field--drawing .assign-detail-modal__drawing-btn-text,
+  #modal-status-detail .order-field.modal-field--drawing .assign-detail-modal__drawing-action-btn span {
+    font-size: 9px !important;
+    line-height: 1.1 !important;
+  }
+}

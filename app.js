@@ -727,6 +727,9 @@ function getRegisteredWorkers(partnerUserId) {
 }
 
 function registerUser(user) {
+  var now = new Date().toISOString();
+  if (!user.createdAt) user.createdAt = now;
+  user.updatedAt = now;
   var users = getRegisteredUsers();
   users.push(user);
   saveRegisteredUsers(users);
@@ -896,14 +899,22 @@ function updateRegisteredUser(user) {
 
   for (var i = 0; i < users.length; i++) {
     if ((users[i].userId || "").toLowerCase() === (user.userId || "").toLowerCase()) {
-      users[i] = Object.assign({}, users[i], user);
+      users[i] = Object.assign({}, users[i], user, {
+        updatedAt: new Date().toISOString(),
+      });
       found = true;
       break;
     }
   }
 
   if (!found) {
-    users.push(user);
+    var now = new Date().toISOString();
+    users.push(
+      Object.assign({}, user, {
+        createdAt: user.createdAt || now,
+        updatedAt: now,
+      })
+    );
   }
 
   saveRegisteredUsers(users);
@@ -2711,6 +2722,13 @@ function mergeOrderLists(localOrders, remoteOrders) {
   });
 }
 
+function userRecordVersion(user) {
+  var t = Date.parse((user && user.updatedAt) || "");
+  if (!isNaN(t)) return t;
+  t = Date.parse((user && user.createdAt) || "");
+  return isNaN(t) ? 0 : t;
+}
+
 function mergeUserLists(localUsers, remoteUsers) {
   var map = {};
   (localUsers || []).forEach(function (user) {
@@ -2719,9 +2737,13 @@ function mergeUserLists(localUsers, remoteUsers) {
   (remoteUsers || []).forEach(function (user) {
     if (!user || !user.userId) return;
     var key = user.userId.toLowerCase();
-    if (!map[key]) {
+    var existing = map[key];
+    if (!existing) {
       map[key] = user;
+      return;
     }
+    map[key] =
+      userRecordVersion(user) >= userRecordVersion(existing) ? user : existing;
   });
   return Object.keys(map).map(function (key) {
     return map[key];
@@ -2833,14 +2855,21 @@ function pushCloudData() {
     });
 }
 
+function pullCloudAndRefresh() {
+  return pullCloudData(true).then(function () {
+    refreshDataFromStorage();
+    refreshOpenAssignModalsFromStorage();
+  });
+}
+
 function bindEffexDataListeners() {
-  window.addEventListener("effex-data-changed", refreshDataFromStorage);
+  window.addEventListener("effex-data-changed", function () {
+    refreshDataFromStorage();
+    refreshOpenAssignModalsFromStorage();
+  });
   if (effexDataChannel) {
     effexDataChannel.onmessage = function () {
-      pullCloudData(true).then(function () {
-        refreshDataFromStorage();
-        refreshOpenAssignModalsFromStorage();
-      });
+      pullCloudAndRefresh();
     };
   }
 }
@@ -2848,7 +2877,7 @@ function bindEffexDataListeners() {
 function startCloudPullInterval() {
   if (cloudPullTimer) return;
   cloudPullTimer = setInterval(function () {
-    if (getAuth()) pullCloudData(true);
+    if (getAuth()) pullCloudAndRefresh();
   }, EFFEX_CLOUD_PULL_MS);
 }
 
@@ -3044,6 +3073,8 @@ function refreshDataFromStorage() {
   } else if (page === "order-open") {
     renderAssignCalendars("open");
     renderAssignTable("open");
+  } else if (page === "signup") {
+    refreshWorkerPartnerSelect();
   }
 }
 
@@ -3082,19 +3113,16 @@ function bindCrossTabDataSync() {
   lastMobileLayoutState = isMobileLayout();
 
   window.addEventListener("focus", function () {
-    pullCloudData(true);
-    refreshDataFromStorage();
+    pullCloudAndRefresh();
   });
   document.addEventListener("visibilitychange", function () {
     if (!document.hidden) {
-      pullCloudData(true);
-      refreshDataFromStorage();
+      pullCloudAndRefresh();
     }
   });
   window.addEventListener("pageshow", function (e) {
     if (e.persisted) {
-      pullCloudData(true);
-      refreshDataFromStorage();
+      pullCloudAndRefresh();
     }
   });
   window.addEventListener("resize", function () {
@@ -3108,8 +3136,7 @@ function bindCrossTabDataSync() {
         loadUiState();
         applyUiStateToControls();
       }
-      pullCloudData(true);
-      refreshDataFromStorage();
+      pullCloudAndRefresh();
     }
     ensureAssignSavePlacement();
   });
@@ -3830,7 +3857,11 @@ function getAssignPartnerOptions(selectedUserId, scopeKey) {
 }
 
 function getAssignWorkerOptions(selectedWorker, partnerUserId, scopeKey) {
-  var workers = getRegisteredWorkers(partnerUserId);
+  var partnerId = (partnerUserId || "").trim();
+  if (isMobileLayout() && !partnerId) {
+    return '<option value="">선택</option>';
+  }
+  var workers = getRegisteredWorkers(partnerId);
   if (scopeKey) {
     workers = workers.filter(function (w) {
       if (!w.scope || !w.scope.length) return true;
@@ -3858,6 +3889,29 @@ function getAssignWorkerOptions(selectedWorker, partnerUserId, scopeKey) {
       "</option>";
   });
   return html;
+}
+
+function refreshAssignWorkerSelectsForPartnerSelect(partnerSelect) {
+  if (!partnerSelect || !isMobileLayout()) return;
+  var screen = partnerSelect.closest(".screen");
+  if (!screen) return;
+  var idx = parseInt(partnerSelect.getAttribute("data-order-index"), 10);
+  var scopeKey = partnerSelect.getAttribute("data-scope-key") || "";
+  var partnerId = (partnerSelect.value || "").trim();
+
+  screen.querySelectorAll(".assign-worker-select").forEach(function (workerEl) {
+    if (parseInt(workerEl.getAttribute("data-order-index"), 10) !== idx) return;
+    if ((workerEl.getAttribute("data-scope-key") || "") !== scopeKey) return;
+    var selected = (workerEl.value || "").trim();
+    workerEl.setAttribute("data-partner-id", partnerId);
+    workerEl.innerHTML = getAssignWorkerOptions(selected, partnerId, scopeKey);
+    var stillValid = false;
+    workerEl.querySelectorAll("option").forEach(function (opt) {
+      if ((opt.value || "").trim() === selected) stillValid = true;
+    });
+    if (selected && !stillValid) workerEl.value = "";
+    workerEl.disabled = !partnerId;
+  });
 }
 
 function renderAssignScopeCell(order, useStack, scopeKeys) {
@@ -3983,6 +4037,7 @@ function renderAssignWorkerCell(order, idx, useStack, scopeKeys, readonly) {
     var partnerId = scopeKey ? partners[scopeKey] || "" : order.assignedPartner || "";
     var selectedWorker =
       (scopeKey && workInfo[scopeKey] && workInfo[scopeKey].worker) || order.constructionWorker || "";
+    var workerDisabledAttr = isMobileLayout() && !partnerId ? " disabled" : "";
     return (
       '<select class="assign-worker-select" data-order-index="' +
       idx +
@@ -3990,7 +4045,9 @@ function renderAssignWorkerCell(order, idx, useStack, scopeKeys, readonly) {
       escapeHtml(scopeKey) +
       '" data-partner-id="' +
       escapeHtml(partnerId) +
-      '">' +
+      '"' +
+      workerDisabledAttr +
+      ">" +
       getAssignWorkerOptions(selectedWorker, partnerId, scopeKey) +
       "</select>"
     );
@@ -4001,6 +4058,7 @@ function renderAssignWorkerCell(order, idx, useStack, scopeKeys, readonly) {
       .map(function (key) {
         var partnerId = partners[key] || "";
         var selectedWorker = (workInfo[key] && workInfo[key].worker) || "";
+        var workerDisabledAttr = isMobileLayout() && !partnerId ? " disabled" : "";
         return (
           '<select class="assign-worker-select" data-order-index="' +
           idx +
@@ -4008,7 +4066,9 @@ function renderAssignWorkerCell(order, idx, useStack, scopeKeys, readonly) {
           escapeHtml(key) +
           '" data-partner-id="' +
           escapeHtml(partnerId) +
-          '">' +
+          '"' +
+          workerDisabledAttr +
+          ">" +
           getAssignWorkerOptions(selectedWorker, partnerId, key) +
           "</select>"
         );
@@ -6145,10 +6205,18 @@ function bindAssignTableLiveSync(pageKey) {
   if (!screen) return;
 
   screen.addEventListener("change", function (e) {
-    if (
-      e.target.matches(".assign-partner-select") ||
-      e.target.matches(".assign-worker-select")
-    ) {
+    if (e.target.matches(".assign-partner-select")) {
+      if (isMobileLayout()) {
+        refreshAssignWorkerSelectsForPartnerSelect(e.target);
+        if (pageKey === "assign" || pageKey === "status") {
+          markAssignMobilePendingSave(pageKey);
+          return;
+        }
+      }
+      persistAssignSelectionsFromDom(pageKey);
+      return;
+    }
+    if (e.target.matches(".assign-worker-select")) {
       if (
         isMobileLayout() &&
         (pageKey === "assign" || pageKey === "status")
@@ -8141,6 +8209,7 @@ function buildSignupRecord() {
     phone: formatPhone(document.getElementById("signupPhone").value),
     role: signupCurrentRole,
     createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   };
 
   if (signupCurrentRole === "partner") {
@@ -8196,10 +8265,7 @@ window.addEventListener("popstate", function () {
 
 window.addEventListener("storage", function (e) {
   if (e.key === EFFEX_CLOUD_REV_KEY) {
-    pullCloudData(true).then(function () {
-      refreshDataFromStorage();
-      refreshOpenAssignModalsFromStorage();
-    });
+    pullCloudAndRefresh();
     return;
   }
   if (
@@ -8213,10 +8279,7 @@ window.addEventListener("storage", function (e) {
     loadUiState();
     applyUiStateToControls();
   }
-  pullCloudData(true).then(function () {
-    refreshDataFromStorage();
-    refreshOpenAssignModalsFromStorage();
-  });
+  pullCloudAndRefresh();
 });
 
 document.addEventListener("DOMContentLoaded", function () {

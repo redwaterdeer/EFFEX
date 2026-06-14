@@ -8758,3 +8758,86 @@
     display: none !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   모바일 v41 — 7번 통계: 막대그래프 내부 세로스크롤 제거
+   배정현황 상세처럼 assign-body 전체 상하 스크롤 · PC 미변경
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  #screen-order-stats.order-page > .assign-body {
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior: contain !important;
+    touch-action: pan-y !important;
+  }
+
+  #screen-order-stats .assign-panel,
+  #screen-order-stats .stats-main,
+  #screen-order-stats .stats-content {
+    overflow: visible !important;
+    min-height: auto !important;
+    height: auto !important;
+  }
+
+  #screen-order-stats .stats-body {
+    display: block !important;
+    overflow: visible !important;
+    min-height: auto !important;
+    height: auto !important;
+    flex: none !important;
+  }
+
+  #screen-order-stats .stats-unit-label {
+    flex: none !important;
+  }
+
+  /* 표 영역: 가로만 스크롤 · 세로는 본문(assign-body)과 함께 */
+  #screen-order-stats .stats-body .assign-table-wrap {
+    display: block !important;
+    flex: none !important;
+    max-height: none !important;
+    height: auto !important;
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+    -webkit-overflow-scrolling: touch !important;
+    touch-action: pan-x pan-y !important;
+  }
+
+  #screen-order-stats .stats-table {
+    display: table !important;
+    flex: none !important;
+    flex-direction: unset !important;
+    width: max-content !important;
+    min-width: var(--stats-mob-table-min-w) !important;
+    max-width: var(--stats-mob-table-min-w) !important;
+    overflow: visible !important;
+  }
+
+  #screen-order-stats .stats-table thead {
+    display: table-header-group !important;
+    position: static !important;
+    top: auto !important;
+    flex: none !important;
+    overflow: visible !important;
+    width: auto !important;
+    background: transparent !important;
+  }
+
+  #screen-order-stats .stats-table tbody {
+    display: table-row-group !important;
+    flex: none !important;
+    min-height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    width: auto !important;
+  }
+
+  #screen-order-stats .stats-table thead tr,
+  #screen-order-stats .stats-table tbody tr {
+    display: table-row !important;
+    width: auto !important;
+    min-width: 0 !important;
+    table-layout: fixed !important;
+  }
+}

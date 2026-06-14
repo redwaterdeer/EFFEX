@@ -447,6 +447,28 @@ function getAssignPicker(pageKey) {
   return assignPickerStates[pageKey || activeAssignPageKey];
 }
 
+function getTodayAssignPickerParts() {
+  var now = new Date();
+  return {
+    year: clampOrderYear(now.getFullYear()),
+    month: now.getMonth() + 1,
+    day: now.getDate(),
+  };
+}
+
+function applyMobileAssignPickerTodayInitial(pageKeys) {
+  if (!isMobileLayout()) return;
+  var today = getTodayAssignPickerParts();
+  var keys = pageKeys || ["assign", "status", "open"];
+  keys.forEach(function (key) {
+    var picker = assignPickerStates[key];
+    if (!picker) return;
+    picker.year = today.year;
+    picker.month = today.month;
+    picker.day = today.day;
+  });
+}
+
 var NAV_ITEMS = [];
 
 var MOCK = {
@@ -2852,9 +2874,11 @@ function loadUiState() {
         if (!state.assign[key] || !assignPickerStates[key]) return;
         var saved = state.assign[key];
         var picker = assignPickerStates[key];
-        if (saved.year != null) picker.year = clampOrderYear(saved.year);
-        if (saved.month != null) picker.month = parseInt(saved.month, 10) || picker.month;
-        if (saved.day != null) picker.day = parseInt(saved.day, 10) || picker.day;
+        if (!isMobileLayout()) {
+          if (saved.year != null) picker.year = clampOrderYear(saved.year);
+          if (saved.month != null) picker.month = parseInt(saved.month, 10) || picker.month;
+          if (saved.day != null) picker.day = parseInt(saved.day, 10) || picker.day;
+        }
         if (saved.workerFilter != null) picker.workerFilter = saved.workerFilter;
         if (saved.actionFilter != null) picker.actionFilter = saved.actionFilter;
       });
@@ -3077,6 +3101,13 @@ function bindCrossTabDataSync() {
     var nowMobile = isMobileLayout();
     if (nowMobile !== lastMobileLayoutState) {
       lastMobileLayoutState = nowMobile;
+      if (nowMobile) {
+        applyMobileAssignPickerTodayInitial();
+        applyUiStateToControls();
+      } else {
+        loadUiState();
+        applyUiStateToControls();
+      }
       pullCloudData(true);
       refreshDataFromStorage();
     }
@@ -8192,6 +8223,9 @@ document.addEventListener("DOMContentLoaded", function () {
   initModals();
   bindEffexDataListeners();
   bindCrossTabDataSync();
+  if (isMobileLayout()) {
+    applyMobileAssignPickerTodayInitial();
+  }
   loadUiState();
   populateAllOrderYearSelects();
   applyUiStateToControls();

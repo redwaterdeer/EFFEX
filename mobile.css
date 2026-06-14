@@ -8441,3 +8441,58 @@
     z-index: 20 !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   모바일 v37 — 5번 상세: 닫기·저장 아래 바탕색 불투명 처리
+   (PC 미변경 · 구조·기능 유지)
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  #modal-status-detail .assign-detail-modal.status-detail-modal {
+    position: relative !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior: contain !important;
+    touch-action: pan-y !important;
+    max-height: min(92dvh, 92vh) !important;
+    padding: 8px 8px 0 !important;
+    background: #ededed !important;
+    box-sizing: border-box !important;
+  }
+
+  #modal-status-detail .assign-detail-modal__footer {
+    position: sticky !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    margin: 0 !important;
+    margin-top: 8px !important;
+    padding: 8px 8px calc(8px + env(safe-area-inset-bottom, 0px)) !important;
+    border-top: 1px solid #c8c8c8 !important;
+    background: #ededed !important;
+    z-index: 12 !important;
+    gap: 8px !important;
+    box-sizing: border-box !important;
+    flex: 0 0 auto !important;
+    /* 스크롤 내용이 버튼 아래로 비치지 않도록 바탕색 확장 */
+    box-shadow: 0 24px 0 24px #ededed !important;
+  }
+
+  #modal-status-detail .assign-detail-modal__footer::after {
+    content: "" !important;
+    position: absolute !important;
+    left: 0 !important;
+    right: 0 !important;
+    top: 100% !important;
+    height: calc(24px + env(safe-area-inset-bottom, 0px)) !important;
+    background: #ededed !important;
+    pointer-events: none !important;
+  }
+
+  #modal-status-detail .assign-detail-modal__close,
+  #modal-status-detail .assign-detail-modal__save {
+    min-height: 42px !important;
+    font-size: 14px !important;
+  }
+}

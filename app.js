@@ -176,16 +176,23 @@ function ensureOrderDatePickerBackdrop() {
   backdrop.addEventListener("click", function (e) {
     e.preventDefault();
     e.stopPropagation();
+    var statusPopup = document.getElementById("statusActionDatePickerPopup");
+    if (
+      statusPopup &&
+      !statusPopup.hidden &&
+      statusPopup.parentNode === backdrop
+    ) {
+      closeStatusActionDatePicker();
+      return;
+    }
     closeOrderDatePicker();
   });
   document.body.appendChild(backdrop);
   return backdrop;
 }
 
-function applyMobileOrderDatePickerCenter(popup) {
-  var backdrop = document.getElementById("orderDatePickerBackdrop");
-  if (!popup) return;
-  mountOrderDatePickerToBodyIfMobile();
+function applyMobileDatePickerCenterOnBackdrop(popup, backdrop, zIndex) {
+  if (!popup || !backdrop) return;
   popup.classList.add("order-date-picker--mobile-modal");
   popup.setAttribute("aria-modal", "true");
   popup.style.setProperty("display", "block", "important");
@@ -201,26 +208,34 @@ function applyMobileOrderDatePickerCenter(popup) {
   popup.style.setProperty("max-height", "min(90vh, 90dvh)", "important");
   popup.style.setProperty("flex-shrink", "0", "important");
   popup.style.removeProperty("z-index");
-  if (backdrop) {
-    backdrop.style.setProperty("display", "flex", "important");
-    backdrop.style.setProperty("align-items", "center", "important");
-    backdrop.style.setProperty("justify-content", "center", "important");
-    backdrop.style.setProperty("position", "fixed", "important");
-    backdrop.style.setProperty("inset", "0", "important");
-    backdrop.style.setProperty("width", "100%", "important");
-    backdrop.style.setProperty("height", "100%", "important");
-    backdrop.style.setProperty("min-height", "100dvh", "important");
-    backdrop.style.setProperty("z-index", "10040", "important");
-    backdrop.style.setProperty("background", "rgba(0, 0, 0, 0.45)", "important");
-    backdrop.style.setProperty("padding", "16px", "important");
-    backdrop.style.setProperty("box-sizing", "border-box", "important");
-  }
+  backdrop.style.setProperty("display", "flex", "important");
+  backdrop.style.setProperty("align-items", "center", "important");
+  backdrop.style.setProperty("justify-content", "center", "important");
+  backdrop.style.setProperty("position", "fixed", "important");
+  backdrop.style.setProperty("inset", "0", "important");
+  backdrop.style.setProperty("width", "100%", "important");
+  backdrop.style.setProperty("height", "100%", "important");
+  backdrop.style.setProperty("min-height", "100dvh", "important");
+  backdrop.style.setProperty("z-index", String(zIndex || 10040), "important");
+  backdrop.style.setProperty("background", "rgba(0, 0, 0, 0.45)", "important");
+  backdrop.style.setProperty("padding", "16px", "important");
+  backdrop.style.setProperty("box-sizing", "border-box", "important");
   if (!popup.dataset.mobileClickStop) {
     popup.addEventListener("click", function (e) {
       e.stopPropagation();
     });
     popup.dataset.mobileClickStop = "1";
   }
+}
+
+function applyMobileOrderDatePickerCenter(popup) {
+  if (!popup) return;
+  mountOrderDatePickerToBodyIfMobile();
+  applyMobileDatePickerCenterOnBackdrop(
+    popup,
+    document.getElementById("orderDatePickerBackdrop"),
+    10040
+  );
 }
 
 function clearMobileOrderDatePickerPosition(popup) {
@@ -311,7 +326,7 @@ function restoreStatusActionDatePickerFromBody() {
 
 function mountStatusActionDatePickerToBodyIfMobile() {
   var popup = document.getElementById("statusActionDatePickerPopup");
-  var backdrop = ensureStatusActionDatePickerBackdrop();
+  var backdrop = ensureOrderDatePickerBackdrop();
   if (!popup || !backdrop) return;
 
   if (!isMobileOrderViewport()) {
@@ -335,104 +350,14 @@ function mountStatusActionDatePickerToBodyIfMobile() {
 
 var statusActionDatePickerMobileViewportBound = false;
 
-function ensureStatusActionDatePickerBackdrop() {
-  var backdrop = document.getElementById("statusActionDatePickerBackdrop");
-  if (backdrop) return backdrop;
-
-  backdrop = document.createElement("div");
-  backdrop.id = "statusActionDatePickerBackdrop";
-  backdrop.className = "order-date-picker-backdrop";
-  backdrop.hidden = true;
-  backdrop.setAttribute("aria-hidden", "true");
-  backdrop.addEventListener("click", function (e) {
-    e.preventDefault();
-    e.stopPropagation();
-    closeStatusActionDatePicker();
-  });
-  document.body.appendChild(backdrop);
-  return backdrop;
-}
-
 function applyMobileStatusActionDatePickerCenter(popup) {
-  var backdrop = document.getElementById("statusActionDatePickerBackdrop");
   if (!popup) return;
   mountStatusActionDatePickerToBodyIfMobile();
-  popup.classList.add("order-date-picker--mobile-modal");
-  popup.setAttribute("aria-modal", "true");
-  popup.style.setProperty("display", "block", "important");
-  popup.style.setProperty("position", "relative", "important");
-  popup.style.setProperty("top", "auto", "important");
-  popup.style.setProperty("left", "auto", "important");
-  popup.style.setProperty("right", "auto", "important");
-  popup.style.setProperty("bottom", "auto", "important");
-  popup.style.setProperty("inset", "auto", "important");
-  popup.style.setProperty("margin", "0", "important");
-  popup.style.setProperty("transform", "none", "important");
-  popup.style.setProperty("width", "min(340px, calc(100vw - 32px))", "important");
-  popup.style.setProperty("max-height", "min(90vh, 90dvh)", "important");
-  popup.style.setProperty("flex-shrink", "0", "important");
-  popup.style.removeProperty("z-index");
+  var backdrop = document.getElementById("orderDatePickerBackdrop");
   if (backdrop) {
-    backdrop.style.setProperty("display", "flex", "important");
-    backdrop.style.setProperty("align-items", "center", "important");
-    backdrop.style.setProperty("justify-content", "center", "important");
-    backdrop.style.setProperty("position", "fixed", "important");
-    backdrop.style.setProperty("inset", "0", "important");
-    backdrop.style.setProperty("width", "100%", "important");
-    backdrop.style.setProperty("height", "100%", "important");
-    backdrop.style.setProperty("min-height", "100dvh", "important");
-    backdrop.style.setProperty("z-index", "10060", "important");
-    backdrop.style.setProperty("background", "rgba(0, 0, 0, 0.45)", "important");
-    backdrop.style.setProperty("padding", "16px", "important");
-    backdrop.style.setProperty("box-sizing", "border-box", "important");
+    backdrop.classList.add("order-date-picker-backdrop--status-detail");
   }
-  if (!popup.dataset.mobileClickStop) {
-    popup.addEventListener("click", function (e) {
-      e.stopPropagation();
-    });
-    popup.dataset.mobileClickStop = "1";
-  }
-}
-
-function clearMobileStatusActionDatePickerPosition(popup) {
-  var backdrop = document.getElementById("statusActionDatePickerBackdrop");
-  if (!popup) return;
-  popup.classList.remove("order-date-picker--mobile-modal");
-  popup.removeAttribute("aria-modal");
-  [
-    "display",
-    "position",
-    "top",
-    "left",
-    "right",
-    "bottom",
-    "inset",
-    "margin",
-    "transform",
-    "z-index",
-    "width",
-    "max-height",
-    "flex-shrink",
-  ].forEach(function (prop) {
-    popup.style.removeProperty(prop);
-  });
-  if (backdrop) {
-    [
-      "display",
-      "align-items",
-      "justify-content",
-      "position",
-      "inset",
-      "width",
-      "height",
-      "z-index",
-      "background",
-      "padding",
-      "box-sizing",
-    ].forEach(function (prop) {
-      backdrop.style.removeProperty(prop);
-    });
-  }
+  applyMobileDatePickerCenterOnBackdrop(popup, backdrop, 10060);
 }
 
 function onStatusActionDatePickerMobileViewportChange() {
@@ -5347,8 +5272,8 @@ function openStatusActionDatePicker(scopeKey) {
 
   if (isMobileOrderViewport()) {
     bindStatusActionDatePickerMobileViewport();
-    clearMobileStatusActionDatePickerPosition(popup);
-    var backdrop = ensureStatusActionDatePickerBackdrop();
+    clearMobileOrderDatePickerPosition(popup);
+    var backdrop = ensureOrderDatePickerBackdrop();
     mountStatusActionDatePickerToBodyIfMobile();
     if (popup.parentNode !== backdrop) {
       backdrop.appendChild(popup);
@@ -5372,7 +5297,7 @@ function openStatusActionDatePicker(scopeKey) {
   }
 
   restoreStatusActionDatePickerFromBody();
-  clearMobileStatusActionDatePickerPosition(popup);
+  clearMobileOrderDatePickerPosition(popup);
   popup.hidden = false;
   var rect = btn.getBoundingClientRect();
   popup.style.position = "fixed";
@@ -5388,13 +5313,14 @@ function closeStatusActionDatePicker() {
   var popup = document.getElementById("statusActionDatePickerPopup");
   if (!popup) return;
   popup.hidden = true;
-  var backdrop = document.getElementById("statusActionDatePickerBackdrop");
-  if (backdrop) {
+  var backdrop = document.getElementById("orderDatePickerBackdrop");
+  if (backdrop && popup.parentNode === backdrop) {
     backdrop.hidden = true;
     backdrop.setAttribute("aria-hidden", "true");
+    backdrop.classList.remove("order-date-picker-backdrop--status-detail");
   }
   document.body.classList.remove("order-date-picker-modal-open");
-  clearMobileStatusActionDatePickerPosition(popup);
+  clearMobileOrderDatePickerPosition(popup);
   if (isMobileOrderViewport()) {
     restoreStatusActionDatePickerFromBody();
   }

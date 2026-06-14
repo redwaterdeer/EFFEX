@@ -289,6 +289,168 @@ var statusActionDatePickerState = {
 var statusActionDatePickerScopeKey = "";
 var statusDetailActiveActionRound = {};
 
+var statusActionDatePickerMount = {
+  parent: null,
+  next: null,
+  onBody: false,
+};
+
+function restoreStatusActionDatePickerFromBody() {
+  var popup = document.getElementById("statusActionDatePickerPopup");
+  if (!popup || !statusActionDatePickerMount.onBody || !statusActionDatePickerMount.parent) return;
+  if (
+    statusActionDatePickerMount.next &&
+    statusActionDatePickerMount.next.parentNode === statusActionDatePickerMount.parent
+  ) {
+    statusActionDatePickerMount.parent.insertBefore(popup, statusActionDatePickerMount.next);
+  } else {
+    statusActionDatePickerMount.parent.appendChild(popup);
+  }
+  statusActionDatePickerMount.onBody = false;
+}
+
+function mountStatusActionDatePickerToBodyIfMobile() {
+  var popup = document.getElementById("statusActionDatePickerPopup");
+  var backdrop = ensureStatusActionDatePickerBackdrop();
+  if (!popup || !backdrop) return;
+
+  if (!isMobileOrderViewport()) {
+    restoreStatusActionDatePickerFromBody();
+    return;
+  }
+
+  if (!statusActionDatePickerMount.parent) {
+    statusActionDatePickerMount.parent = popup.parentNode;
+    statusActionDatePickerMount.next = popup.nextSibling;
+  }
+
+  if (backdrop.parentNode !== document.body) {
+    document.body.appendChild(backdrop);
+  }
+  if (popup.parentNode !== backdrop) {
+    backdrop.appendChild(popup);
+  }
+  statusActionDatePickerMount.onBody = true;
+}
+
+var statusActionDatePickerMobileViewportBound = false;
+
+function ensureStatusActionDatePickerBackdrop() {
+  var backdrop = document.getElementById("statusActionDatePickerBackdrop");
+  if (backdrop) return backdrop;
+
+  backdrop = document.createElement("div");
+  backdrop.id = "statusActionDatePickerBackdrop";
+  backdrop.className = "order-date-picker-backdrop";
+  backdrop.hidden = true;
+  backdrop.setAttribute("aria-hidden", "true");
+  backdrop.addEventListener("click", function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    closeStatusActionDatePicker();
+  });
+  document.body.appendChild(backdrop);
+  return backdrop;
+}
+
+function applyMobileStatusActionDatePickerCenter(popup) {
+  var backdrop = document.getElementById("statusActionDatePickerBackdrop");
+  if (!popup) return;
+  mountStatusActionDatePickerToBodyIfMobile();
+  popup.classList.add("order-date-picker--mobile-modal");
+  popup.setAttribute("aria-modal", "true");
+  popup.style.setProperty("display", "block", "important");
+  popup.style.setProperty("position", "relative", "important");
+  popup.style.setProperty("top", "auto", "important");
+  popup.style.setProperty("left", "auto", "important");
+  popup.style.setProperty("right", "auto", "important");
+  popup.style.setProperty("bottom", "auto", "important");
+  popup.style.setProperty("inset", "auto", "important");
+  popup.style.setProperty("margin", "0", "important");
+  popup.style.setProperty("transform", "none", "important");
+  popup.style.setProperty("width", "min(340px, calc(100vw - 32px))", "important");
+  popup.style.setProperty("max-height", "min(90vh, 90dvh)", "important");
+  popup.style.setProperty("flex-shrink", "0", "important");
+  popup.style.removeProperty("z-index");
+  if (backdrop) {
+    backdrop.style.setProperty("display", "flex", "important");
+    backdrop.style.setProperty("align-items", "center", "important");
+    backdrop.style.setProperty("justify-content", "center", "important");
+    backdrop.style.setProperty("position", "fixed", "important");
+    backdrop.style.setProperty("inset", "0", "important");
+    backdrop.style.setProperty("width", "100%", "important");
+    backdrop.style.setProperty("height", "100%", "important");
+    backdrop.style.setProperty("min-height", "100dvh", "important");
+    backdrop.style.setProperty("z-index", "10060", "important");
+    backdrop.style.setProperty("background", "rgba(0, 0, 0, 0.45)", "important");
+    backdrop.style.setProperty("padding", "16px", "important");
+    backdrop.style.setProperty("box-sizing", "border-box", "important");
+  }
+  if (!popup.dataset.mobileClickStop) {
+    popup.addEventListener("click", function (e) {
+      e.stopPropagation();
+    });
+    popup.dataset.mobileClickStop = "1";
+  }
+}
+
+function clearMobileStatusActionDatePickerPosition(popup) {
+  var backdrop = document.getElementById("statusActionDatePickerBackdrop");
+  if (!popup) return;
+  popup.classList.remove("order-date-picker--mobile-modal");
+  popup.removeAttribute("aria-modal");
+  [
+    "display",
+    "position",
+    "top",
+    "left",
+    "right",
+    "bottom",
+    "inset",
+    "margin",
+    "transform",
+    "z-index",
+    "width",
+    "max-height",
+    "flex-shrink",
+  ].forEach(function (prop) {
+    popup.style.removeProperty(prop);
+  });
+  if (backdrop) {
+    [
+      "display",
+      "align-items",
+      "justify-content",
+      "position",
+      "inset",
+      "width",
+      "height",
+      "z-index",
+      "background",
+      "padding",
+      "box-sizing",
+    ].forEach(function (prop) {
+      backdrop.style.removeProperty(prop);
+    });
+  }
+}
+
+function onStatusActionDatePickerMobileViewportChange() {
+  var popup = document.getElementById("statusActionDatePickerPopup");
+  if (!popup || popup.hidden || !isMobileOrderViewport()) return;
+  applyMobileStatusActionDatePickerCenter(popup);
+}
+
+function bindStatusActionDatePickerMobileViewport() {
+  if (statusActionDatePickerMobileViewportBound) return;
+  statusActionDatePickerMobileViewportBound = true;
+  window.addEventListener("resize", onStatusActionDatePickerMobileViewportChange);
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener("resize", onStatusActionDatePickerMobileViewportChange);
+    window.visualViewport.addEventListener("scroll", onStatusActionDatePickerMobileViewportChange);
+  }
+}
+
 var STATUS_ACCIDENT_TYPE_OPTIONS = [
   "",
   "시공하자",
@@ -5182,16 +5344,60 @@ function openStatusActionDatePicker(scopeKey) {
   statusActionDatePickerState.selectedIso = existing;
 
   renderStatusActionDatePickerGrid();
-  popup.hidden = false;
 
+  if (isMobileOrderViewport()) {
+    bindStatusActionDatePickerMobileViewport();
+    clearMobileStatusActionDatePickerPosition(popup);
+    var backdrop = ensureStatusActionDatePickerBackdrop();
+    mountStatusActionDatePickerToBodyIfMobile();
+    if (popup.parentNode !== backdrop) {
+      backdrop.appendChild(popup);
+    }
+    document.body.classList.add("order-date-picker-modal-open");
+    backdrop.hidden = false;
+    backdrop.setAttribute("aria-hidden", "false");
+    popup.hidden = false;
+    applyMobileStatusActionDatePickerCenter(popup);
+    requestAnimationFrame(function () {
+      mountStatusActionDatePickerToBodyIfMobile();
+      applyMobileStatusActionDatePickerCenter(popup);
+    });
+    window.setTimeout(function () {
+      if (!popup.hidden && isMobileOrderViewport()) {
+        mountStatusActionDatePickerToBodyIfMobile();
+        applyMobileStatusActionDatePickerCenter(popup);
+      }
+    }, 50);
+    return;
+  }
+
+  restoreStatusActionDatePickerFromBody();
+  clearMobileStatusActionDatePickerPosition(popup);
+  popup.hidden = false;
   var rect = btn.getBoundingClientRect();
+  popup.style.position = "fixed";
   popup.style.top = rect.bottom + 8 + "px";
   popup.style.left = rect.left + "px";
+  popup.style.right = "auto";
+  popup.style.bottom = "auto";
+  popup.style.transform = "";
+  popup.style.zIndex = "1000";
 }
 
 function closeStatusActionDatePicker() {
   var popup = document.getElementById("statusActionDatePickerPopup");
-  if (popup) popup.hidden = true;
+  if (!popup) return;
+  popup.hidden = true;
+  var backdrop = document.getElementById("statusActionDatePickerBackdrop");
+  if (backdrop) {
+    backdrop.hidden = true;
+    backdrop.setAttribute("aria-hidden", "true");
+  }
+  document.body.classList.remove("order-date-picker-modal-open");
+  clearMobileStatusActionDatePickerPosition(popup);
+  if (isMobileOrderViewport()) {
+    restoreStatusActionDatePickerFromBody();
+  }
 }
 
 function shiftStatusActionDatePickerMonth(delta) {

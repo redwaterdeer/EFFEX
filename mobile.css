@@ -8531,3 +8531,46 @@
     font-size: 14px !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   모바일 v39 — 5번 사고유형 · 6번 시공협력사/조치사원/조치결과 ▼ 오른쪽 끝
+   (PC 미변경 · 구조·기능 유지)
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  #modal-status-detail .order-field__control:has(select.status-detail-accident-type),
+  #modal-status-detail .order-field__control:has(select.status-detail-action-partner),
+  #modal-status-detail .order-field__control:has(select.status-detail-action-worker),
+  #modal-status-detail .order-field__control:has(select.status-detail-action-result) {
+    padding: 0 !important;
+    overflow: hidden !important;
+  }
+
+  #modal-status-detail .order-field__control select.status-detail-accident-type,
+  #modal-status-detail .order-field__control select.status-detail-action-partner,
+  #modal-status-detail .order-field__control select.status-detail-action-worker,
+  #modal-status-detail .order-field__control select.status-detail-action-result {
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    height: var(--status-detail-content-h, 28px) !important;
+    max-height: var(--status-detail-content-h, 28px) !important;
+    margin: 0 !important;
+    padding: 0 6px !important;
+    padding-right: 28px !important;
+    font-size: 11px !important;
+    line-height: 1.2 !important;
+    text-align: left !important;
+    text-align-last: left !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    background-color: transparent !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 12 8'%3E%3Cpath fill='%23333' d='M1 1l5 5 5-5'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: calc(100% - 5px) center !important;
+    background-size: 10px 6px !important;
+    border: none !important;
+    box-sizing: border-box !important;
+  }
+}

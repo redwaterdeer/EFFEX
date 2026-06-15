@@ -2802,6 +2802,81 @@ function mergeAssignedPartnersMaps(a, b) {
   return out;
 }
 
+function prepareOrdersForMerge(orders) {
+  var now = new Date().toISOString();
+  return (orders || [])
+    .map(function (order) {
+      if (!order || !order.orderNo) return null;
+      var copy = JSON.parse(JSON.stringify(order));
+      if (!copy.createdAt) copy.createdAt = now;
+      if (!copy.updatedAt) copy.updatedAt = copy.createdAt;
+      return copy;
+    })
+    .filter(Boolean);
+}
+
+function prepareUsersForMerge(users) {
+  var now = new Date().toISOString();
+  return (users || [])
+    .map(function (user) {
+      if (!user || !user.userId) return null;
+      var copy = JSON.parse(JSON.stringify(user));
+      if (!copy.createdAt) copy.createdAt = now;
+      if (!copy.updatedAt) copy.updatedAt = copy.createdAt;
+      return copy;
+    })
+    .filter(Boolean);
+}
+
+function mergePlainObjects(a, b) {
+  var out = {};
+  var keys = {};
+  Object.keys(a || {}).forEach(function (key) {
+    keys[key] = true;
+  });
+  Object.keys(b || {}).forEach(function (key) {
+    keys[key] = true;
+  });
+  Object.keys(keys).forEach(function (key) {
+    out[key] = pickPreferredMergeFieldValue((a || {})[key], (b || {})[key]);
+  });
+  return out;
+}
+
+function mergeOrderTopLevelFields(local, remote, merged) {
+  var scalarFields = [
+    "siteName",
+    "constructDate",
+    "city",
+    "district",
+    "address",
+    "issue",
+    "sales",
+    "salesAmount",
+    "progressStatus",
+    "constructionWorker",
+    "createdBy",
+    "drawing1",
+    "drawing2",
+    "drawing3",
+    "drawing1Data",
+    "drawing2Data",
+    "drawing3Data",
+  ];
+  var i;
+  for (i = 0; i < scalarFields.length; i++) {
+    merged[scalarFields[i]] = pickPreferredMergeFieldValue(
+      local[scalarFields[i]],
+      remote[scalarFields[i]]
+    );
+  }
+  merged.scope = mergePlainObjects(local.scope, remote.scope);
+  merged.scopeSales = mergePlainObjects(local.scopeSales, remote.scopeSales);
+  if (local.scopePhotos || remote.scopePhotos) {
+    merged.scopePhotos = mergePlainObjects(local.scopePhotos, remote.scopePhotos);
+  }
+}
+
 function orderDataRichness(order) {
   if (!order) return 0;
   var score = 0;
@@ -2837,6 +2912,7 @@ function mergeOrderRecords(local, remote) {
     secondary = primary === remote ? local : remote;
   }
   var merged = JSON.parse(JSON.stringify(primary));
+  mergeOrderTopLevelFields(local, remote, merged);
   merged.scopeWorkInfo = mergeOrderScopeWorkInfoRecords(local, remote);
   merged.assignedPartners = mergeAssignedPartnersMaps(
     normalizeOrderAssignedPartners(local),
@@ -2937,6 +3013,9 @@ function mergeUserRecords(local, remote) {
   if (!merged.createdAt) {
     merged.createdAt = pickPreferredMergeFieldValue(local.createdAt, remote.createdAt) || merged.updatedAt;
   }
+  merged.partnerCompany = pickPreferredMergeFieldValue(local.partnerCompany, remote.partnerCompany);
+  merged.name = pickPreferredMergeFieldValue(local.name, remote.name);
+  merged.phone = pickPreferredMergeFieldValue(local.phone, remote.phone);
   return merged;
 }
 
@@ -2954,7 +3033,7 @@ function mergeUserLists(localUsers, remoteUsers) {
   });
 }
 
-function saveMergedCloudData(mergedOrders, mergedUsers, updatedAt) {
+function saveMergedCloudData(mergedOrders, mergedUsers, updatedAt, options) {
   var localOrders = getStoredOrders();
   var localUsers = getRegisteredUsers();
   var ordersChanged = JSON.stringify(mergedOrders) !== JSON.stringify(localOrders);
@@ -2973,16 +3052,11 @@ function saveMergedCloudData(mergedOrders, mergedUsers, updatedAt) {
     refreshDataFromStorage();
     refreshOpenAssignModalsFromStorage();
     notifyEffexDataChanged();
-    scheduleCloudSync();
+    if (!options || !options.skipPushSchedule) {
+      scheduleCloudSync();
+    }
   }
   return ordersChanged || usersChanged;
-}
-
-function mergeCloudIntoLocal(remote) {
-  if (!remote) return false;
-  var mergedOrders = mergeOrderLists(getStoredOrders(), remote.orders || []);
-  var mergedUsers = mergeUserLists(getRegisteredUsers(), remote.users || []);
-  return saveMergedCloudData(mergedOrders, mergedUsers, remote.updatedAt || Date.now());
 }
 
 function fetchCloudData() {
@@ -3002,53 +3076,67 @@ function putCloudData(payload) {
 
 function mergeRemoteCloudPayload(remote) {
   return {
-    orders: mergeOrderLists(getStoredOrders(), remote && remote.orders ? remote.orders : []),
-    users: mergeUserLists(getRegisteredUsers(), remote && remote.users ? remote.users : []),
+    orders: mergeOrderLists(
+      prepareOrdersForMerge(getStoredOrders()),
+      prepareOrdersForMerge(remote && remote.orders ? remote.orders : [])
+    ),
+    users: mergeUserLists(
+      prepareUsersForMerge(getRegisteredUsers()),
+      prepareUsersForMerge(remote && remote.users ? remote.users : [])
+    ),
   };
 }
 
-function syncCloudPayload(retriesLeft) {
+function uploadMergedCloudPayload(remote, retriesLeft) {
+  var merged = mergeRemoteCloudPayload(remote);
+  var payload = {
+    orders: merged.orders,
+    users: merged.users,
+    updatedAt: Date.now(),
+  };
+  saveMergedCloudData(merged.orders, merged.users, payload.updatedAt, { skipPushSchedule: true });
+  return putCloudData(payload).then(function (res) {
+    if (!res.ok && retriesLeft > 0) {
+      return shareAllDataWithCloud(retriesLeft - 1);
+    }
+    if (res.ok) {
+      localStorage.setItem(EFFEX_CLOUD_REV_KEY, String(payload.updatedAt));
+    }
+  });
+}
+
+function shareAllDataWithCloud(retriesLeft) {
   if (!getAuth()) return Promise.resolve();
   return fetchCloudData()
     .then(function (remote) {
-      var merged = mergeRemoteCloudPayload(remote);
-      var payload = {
-        orders: merged.orders,
-        users: merged.users,
-        updatedAt: Date.now(),
-      };
-      saveMergedCloudData(merged.orders, merged.users, payload.updatedAt);
-      return putCloudData(payload).then(function (res) {
-        if (!res.ok) {
-          if (retriesLeft > 0) return syncCloudPayload(retriesLeft - 1);
-          return;
-        }
-        localStorage.setItem(EFFEX_CLOUD_REV_KEY, String(payload.updatedAt));
-      });
+      return uploadMergedCloudPayload(remote, retriesLeft);
     })
     .catch(function () {
-      if (retriesLeft > 0) return syncCloudPayload(retriesLeft - 1);
+      if (retriesLeft > 0) return shareAllDataWithCloud(retriesLeft - 1);
+      return uploadMergedCloudPayload(null, 0);
     });
+}
+
+function mergeCloudIntoLocal(remote) {
+  if (!remote) return false;
+  var merged = mergeRemoteCloudPayload(remote);
+  return saveMergedCloudData(merged.orders, merged.users, remote.updatedAt || Date.now());
 }
 
 function scheduleCloudSync() {
   if (!getAuth()) return;
   clearTimeout(cloudSyncTimer);
   cloudSyncTimer = setTimeout(function () {
-    syncCloudPayload(2);
+    shareAllDataWithCloud(2);
   }, 300);
 }
 
 function runCloudSync() {
   if (!getAuth() || cloudSyncRunning) return Promise.resolve();
   cloudSyncRunning = true;
-  return pullCloudData(true)
-    .then(function () {
-      return syncCloudPayload(2);
-    })
-    .finally(function () {
-      cloudSyncRunning = false;
-    });
+  return shareAllDataWithCloud(2).finally(function () {
+    cloudSyncRunning = false;
+  });
 }
 
 function pullCloudData(silent) {
@@ -3065,7 +3153,7 @@ function pullCloudData(silent) {
 }
 
 function pushCloudData() {
-  return syncCloudPayload(2);
+  return shareAllDataWithCloud(2);
 }
 
 function pullCloudAndRefresh() {
@@ -8140,9 +8228,10 @@ function initLoginScreen() {
     }
 
     setAuth(result.user);
-    runCloudSync();
     startCloudPullInterval();
-    showScreen(ROLES[result.user.role].home);
+    runCloudSync().then(function () {
+      showScreen(ROLES[result.user.role].home);
+    });
   });
 }
 
@@ -8506,11 +8595,6 @@ document.addEventListener("DOMContentLoaded", function () {
   populateAllOrderYearSelects();
   applyUiStateToControls();
 
-  if (getAuth()) {
-    runCloudSync();
-    startCloudPullInterval();
-  }
-
   var parsed = parseHash();
   var page = parsed.page;
 
@@ -8530,5 +8614,13 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   ensureAssignSavePlacement();
-  showScreen(page, parsed.params);
+
+  if (getAuth()) {
+    startCloudPullInterval();
+    runCloudSync().then(function () {
+      showScreen(page, parsed.params);
+    });
+  } else {
+    showScreen(page, parsed.params);
+  }
 });

@@ -10,7 +10,7 @@ var EFFEX_CORS_PROXIES = [
   "https://corsproxy.io/?",
   "https://api.codetabs.com/v1/proxy?quest=",
 ];
-var EFFEX_CLOUD_PULL_MS = 2000;
+var EFFEX_CLOUD_PULL_MS = 1500;
 var LOGO_URL = "https://i.ibb.co/8DW6cys2/3.png";
 var LOGO_URL_INACTIVE = "https://i.ibb.co/5WH4s329/3.png";
 var currentProjectId = null;
@@ -2689,8 +2689,8 @@ function saveStoredOrders(orders) {
 var effexDataChannel =
   typeof BroadcastChannel !== "undefined" ? new BroadcastChannel("effex-data") : null;
 var cloudSyncTimer = null;
-var cloudSyncRunning = false;
 var cloudPullTimer = null;
+var cloudSyncChain = Promise.resolve();
 
 function notifyEffexDataChanged() {
   window.dispatchEvent(new CustomEvent("effex-data-changed"));
@@ -2843,7 +2843,7 @@ function mergePlainObjects(a, b) {
   return out;
 }
 
-function mergeOrderTopLevelFields(local, remote, merged) {
+function mergeOrderTopLevelFields(local, remote, merged, primary, secondary) {
   var scalarFields = [
     "siteName",
     "constructDate",
@@ -2866,15 +2866,30 @@ function mergeOrderTopLevelFields(local, remote, merged) {
   var i;
   for (i = 0; i < scalarFields.length; i++) {
     merged[scalarFields[i]] = pickPreferredMergeFieldValue(
-      local[scalarFields[i]],
-      remote[scalarFields[i]]
+      secondary[scalarFields[i]],
+      primary[scalarFields[i]]
     );
   }
-  merged.scope = mergePlainObjects(local.scope, remote.scope);
-  merged.scopeSales = mergePlainObjects(local.scopeSales, remote.scopeSales);
+  merged.scope = mergePlainObjectsPreferPrimary(primary.scope, secondary.scope);
+  merged.scopeSales = mergePlainObjectsPreferPrimary(primary.scopeSales, secondary.scopeSales);
   if (local.scopePhotos || remote.scopePhotos) {
-    merged.scopePhotos = mergePlainObjects(local.scopePhotos, remote.scopePhotos);
+    merged.scopePhotos = mergePlainObjectsPreferPrimary(primary.scopePhotos, secondary.scopePhotos);
   }
+}
+
+function mergePlainObjectsPreferPrimary(primary, secondary) {
+  var out = {};
+  var keys = {};
+  Object.keys(primary || {}).forEach(function (key) {
+    keys[key] = true;
+  });
+  Object.keys(secondary || {}).forEach(function (key) {
+    keys[key] = true;
+  });
+  Object.keys(keys).forEach(function (key) {
+    out[key] = pickPreferredMergeFieldValue((secondary || {})[key], (primary || {})[key]);
+  });
+  return out;
 }
 
 function orderDataRichness(order) {
@@ -2912,7 +2927,7 @@ function mergeOrderRecords(local, remote) {
     secondary = primary === remote ? local : remote;
   }
   var merged = JSON.parse(JSON.stringify(primary));
-  mergeOrderTopLevelFields(local, remote, merged);
+  mergeOrderTopLevelFields(local, remote, merged, primary, secondary);
   merged.scopeWorkInfo = mergeOrderScopeWorkInfoRecords(local, remote);
   merged.assignedPartners = mergeAssignedPartnersMaps(
     normalizeOrderAssignedPartners(local),
@@ -3013,9 +3028,9 @@ function mergeUserRecords(local, remote) {
   if (!merged.createdAt) {
     merged.createdAt = pickPreferredMergeFieldValue(local.createdAt, remote.createdAt) || merged.updatedAt;
   }
-  merged.partnerCompany = pickPreferredMergeFieldValue(local.partnerCompany, remote.partnerCompany);
-  merged.name = pickPreferredMergeFieldValue(local.name, remote.name);
-  merged.phone = pickPreferredMergeFieldValue(local.phone, remote.phone);
+  merged.partnerCompany = pickPreferredMergeFieldValue(secondary.partnerCompany, primary.partnerCompany);
+  merged.name = pickPreferredMergeFieldValue(secondary.name, primary.name);
+  merged.phone = pickPreferredMergeFieldValue(secondary.phone, primary.phone);
   return merged;
 }
 
@@ -3105,16 +3120,27 @@ function uploadMergedCloudPayload(remote, retriesLeft) {
   });
 }
 
-function shareAllDataWithCloud(retriesLeft) {
-  if (!getAuth()) return Promise.resolve();
+function shareAllDataWithCloudInner(retriesLeft) {
   return fetchCloudData()
     .then(function (remote) {
       return uploadMergedCloudPayload(remote, retriesLeft);
     })
     .catch(function () {
-      if (retriesLeft > 0) return shareAllDataWithCloud(retriesLeft - 1);
+      if (retriesLeft > 0) return shareAllDataWithCloudInner(retriesLeft - 1);
       return uploadMergedCloudPayload(null, 0);
     });
+}
+
+function shareAllDataWithCloud(retriesLeft) {
+  if (!getAuth()) return Promise.resolve();
+  cloudSyncChain = cloudSyncChain
+    .catch(function () {
+      /* 이전 동기화 실패 후에도 다음 작업 계속 */
+    })
+    .then(function () {
+      return shareAllDataWithCloudInner(retriesLeft);
+    });
+  return cloudSyncChain;
 }
 
 function mergeCloudIntoLocal(remote) {
@@ -3128,28 +3154,16 @@ function scheduleCloudSync() {
   clearTimeout(cloudSyncTimer);
   cloudSyncTimer = setTimeout(function () {
     shareAllDataWithCloud(2);
-  }, 300);
+  }, 150);
 }
 
 function runCloudSync() {
-  if (!getAuth() || cloudSyncRunning) return Promise.resolve();
-  cloudSyncRunning = true;
-  return shareAllDataWithCloud(2).finally(function () {
-    cloudSyncRunning = false;
-  });
+  if (!getAuth()) return Promise.resolve();
+  return shareAllDataWithCloud(2);
 }
 
 function pullCloudData(silent) {
-  if (!getAuth()) return Promise.resolve();
-  return fetchCloudData()
-    .then(function (remote) {
-      if (remote) mergeCloudIntoLocal(remote);
-    })
-    .catch(function () {
-      if (!silent) {
-        /* offline */
-      }
-    });
+  return shareAllDataWithCloud(silent ? 1 : 2);
 }
 
 function pushCloudData() {
@@ -3157,10 +3171,7 @@ function pushCloudData() {
 }
 
 function pullCloudAndRefresh() {
-  return pullCloudData(true).then(function () {
-    refreshDataFromStorage();
-    refreshOpenAssignModalsFromStorage();
-  });
+  return shareAllDataWithCloud(1);
 }
 
 function bindEffexDataListeners() {

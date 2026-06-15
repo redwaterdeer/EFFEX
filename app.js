@@ -468,7 +468,6 @@ function applyMobileAssignPickerTodayInitial(pageKeys) {
     picker.day = today.day;
   });
   saveUiState();
-  scheduleCloudSync();
 }
 
 var NAV_ITEMS = [];
@@ -2721,52 +2720,124 @@ function buildCloudPayload() {
   return {
     orders: getStoredOrders(),
     users: getRegisteredUsers(),
-    uiState: {
-      assign: assignPickerStates,
-    },
     updatedAt: Date.now(),
   };
 }
 
-function applyRemoteAssignPickerState(remoteAssign) {
-  if (!remoteAssign || isMobileLayout()) return false;
-  var changed = false;
-  ["assign", "status", "open"].forEach(function (key) {
-    var saved = remoteAssign[key];
-    var picker = assignPickerStates[key];
-    if (!saved || !picker) return;
-    if (saved.year != null) {
-      var year = clampOrderYear(saved.year);
-      if (picker.year !== year) {
-        picker.year = year;
-        changed = true;
-      }
-    }
-    if (saved.month != null) {
-      var month = parseInt(saved.month, 10) || picker.month;
-      if (picker.month !== month) {
-        picker.month = month;
-        changed = true;
-      }
-    }
-    if (saved.day != null) {
-      var day = parseInt(saved.day, 10) || picker.day;
-      if (picker.day !== day) {
-        picker.day = day;
-        changed = true;
-      }
-    }
-    if (saved.actionFilter != null && key === "open" && picker.actionFilter !== saved.actionFilter) {
-      picker.actionFilter = saved.actionFilter;
-      changed = true;
-    }
-    if (saved.workerFilter != null && key === "status" && picker.workerFilter !== saved.workerFilter) {
-      picker.workerFilter = saved.workerFilter;
-      changed = true;
-    }
+var ORDER_SCOPE_WORK_MERGE_FIELDS = [
+  "accidentType",
+  "worker",
+  "partner",
+  "actionResult",
+  "actionSchedule",
+  "actionContent",
+  "progress",
+  "actionWorker",
+];
+
+function pickPreferredMergeFieldValue(a, b) {
+  var av = (a == null ? "" : String(a)).trim();
+  var bv = (b == null ? "" : String(b)).trim();
+  if (bv && bv !== "선택") return b;
+  if (av && av !== "선택") return a;
+  return bv || av || "";
+}
+
+function mergeScopeWorkFields(a, b) {
+  var out = {};
+  var i;
+  var field;
+  for (i = 0; i < ORDER_SCOPE_WORK_MERGE_FIELDS.length; i++) {
+    field = ORDER_SCOPE_WORK_MERGE_FIELDS[i];
+    out[field] = pickPreferredMergeFieldValue(a[field], b[field]);
+  }
+  return out;
+}
+
+function mergeOrderScopeWorkInfoRecords(localOrder, remoteOrder) {
+  var left = normalizeOrderScopeWorkInfo(localOrder);
+  var right = normalizeOrderScopeWorkInfo(remoteOrder);
+  var keys = {};
+  var combined = {};
+  Object.keys(left).forEach(function (key) {
+    keys[key] = true;
   });
-  if (changed) saveUiState();
-  return changed;
+  Object.keys(right).forEach(function (key) {
+    keys[key] = true;
+  });
+  Object.keys(keys).forEach(function (key) {
+    combined[key] = mergeScopeWorkFields(left[key] || {}, right[key] || {});
+  });
+  return combined;
+}
+
+function mergeAssignedPartnersMaps(a, b) {
+  var out = {};
+  var keys = {};
+  Object.keys(a || {}).forEach(function (key) {
+    keys[key] = true;
+  });
+  Object.keys(b || {}).forEach(function (key) {
+    keys[key] = true;
+  });
+  Object.keys(keys).forEach(function (key) {
+    out[key] = pickPreferredMergeFieldValue((a || {})[key], (b || {})[key]);
+  });
+  return out;
+}
+
+function orderDataRichness(order) {
+  if (!order) return 0;
+  var score = 0;
+  var info = normalizeOrderScopeWorkInfo(order);
+  Object.keys(info).forEach(function (key) {
+    var data = info[key] || {};
+    if ((data.accidentType || "").trim() && data.accidentType !== "선택") score += 10;
+    if ((data.worker || "").trim()) score += 4;
+    if ((data.actionResult || "").trim()) score += 4;
+    if ((data.actionSchedule || "").trim()) score += 2;
+    if ((data.actionContent || "").trim()) score += 2;
+  });
+  if ((order.accidentType || "").trim() && order.accidentType !== "선택") score += 5;
+  if ((order.assignedPartner || "").trim()) score += 3;
+  return score;
+}
+
+function mergeOrderRecords(local, remote) {
+  if (!local) return remote;
+  if (!remote) return local;
+  var localTime = orderRecordTime(local);
+  var remoteTime = orderRecordTime(remote);
+  var primary;
+  var secondary;
+  if (remoteTime > localTime) {
+    primary = remote;
+    secondary = local;
+  } else if (localTime > remoteTime) {
+    primary = local;
+    secondary = remote;
+  } else {
+    primary = orderDataRichness(remote) >= orderDataRichness(local) ? remote : local;
+    secondary = primary === remote ? local : remote;
+  }
+  var merged = JSON.parse(JSON.stringify(primary));
+  merged.scopeWorkInfo = mergeOrderScopeWorkInfoRecords(local, remote);
+  merged.assignedPartners = mergeAssignedPartnersMaps(
+    normalizeOrderAssignedPartners(local),
+    normalizeOrderAssignedPartners(remote)
+  );
+  syncOrderAssignedPartner(merged);
+  merged.accidentType = pickPreferredMergeFieldValue(local.accidentType, remote.accidentType);
+  if (remoteTime > localTime) {
+    merged.updatedAt = remote.updatedAt || remote.createdAt || merged.updatedAt;
+  } else if (localTime > remoteTime) {
+    merged.updatedAt = local.updatedAt || local.createdAt || merged.updatedAt;
+  } else {
+    merged.updatedAt =
+      primary.updatedAt || secondary.updatedAt || primary.createdAt || secondary.createdAt;
+  }
+  applyComputedProgressStatusToOrder(merged);
+  return merged;
 }
 
 function orderRecordTime(order) {
@@ -2777,19 +2848,13 @@ function orderRecordTime(order) {
 
 function mergeOrderLists(localOrders, remoteOrders) {
   var map = {};
-  (localOrders || []).forEach(function (order) {
-    if (order && order.orderNo) map[order.orderNo] = order;
-  });
-  (remoteOrders || []).forEach(function (order) {
+  function upsert(order) {
     if (!order || !order.orderNo) return;
     var existing = map[order.orderNo];
-    if (!existing) {
-      map[order.orderNo] = order;
-      return;
-    }
-    map[order.orderNo] =
-      orderRecordTime(order) > orderRecordTime(existing) ? order : existing;
-  });
+    map[order.orderNo] = existing ? mergeOrderRecords(existing, order) : order;
+  }
+  (localOrders || []).forEach(upsert);
+  (remoteOrders || []).forEach(upsert);
   return Object.keys(map).map(function (key) {
     return map[key];
   });
@@ -2839,9 +2904,8 @@ function saveMergedCloudData(mergedOrders, mergedUsers, updatedAt) {
     localStorage.setItem(EFFEX_CLOUD_REV_KEY, String(updatedAt));
   }
   if (ordersChanged || usersChanged) {
-    loadUiState();
-    applyUiStateToControls();
     refreshDataFromStorage();
+    scheduleCloudSync();
   }
   return ordersChanged || usersChanged;
 }
@@ -2850,29 +2914,7 @@ function mergeCloudIntoLocal(remote) {
   if (!remote) return false;
   var mergedOrders = mergeOrderLists(getStoredOrders(), remote.orders || []);
   var mergedUsers = mergeUserLists(getRegisteredUsers(), remote.users || []);
-  var dataChanged = saveMergedCloudData(mergedOrders, mergedUsers, remote.updatedAt || Date.now());
-  var pickerChanged = false;
-  if (remote.uiState && remote.uiState.assign) {
-    pickerChanged = applyRemoteAssignPickerState(remote.uiState.assign);
-  }
-  if (pickerChanged) {
-    applyUiStateToControls();
-    var active = document.querySelector(".screen.is-active");
-    if (active) {
-      if (active.id === "screen-order-assign") {
-        updateAssignDateTitle("assign");
-        renderAssignTable("assign");
-      } else if (active.id === "screen-order-status") {
-        updateAssignDateTitle("status");
-        renderAssignTable("status");
-      } else if (active.id === "screen-order-open") {
-        syncOpenActionFilterFromControls();
-        updateAssignDateTitle("open");
-        renderAssignTable("open");
-      }
-    }
-  }
-  return dataChanged || pickerChanged;
+  return saveMergedCloudData(mergedOrders, mergedUsers, remote.updatedAt || Date.now());
 }
 
 function fetchCloudData() {
@@ -2933,9 +2975,6 @@ function pushCloudData() {
       var payload = {
         orders: mergedOrders,
         users: mergedUsers,
-        uiState: {
-          assign: assignPickerStates,
-        },
         updatedAt: Date.now(),
       };
       saveMergedCloudData(mergedOrders, mergedUsers, payload.updatedAt);
@@ -3151,8 +3190,6 @@ function ensureAssignSavePlacement() {
 }
 
 function refreshDataFromStorage() {
-  loadUiState();
-  applyUiStateToControls();
   var active = document.querySelector(".screen.is-active");
   if (!active) return;
   var page = active.id.replace(/^screen-/, "");
@@ -4407,6 +4444,7 @@ function getAssignYearMonth(pageKey) {
 
 function setAssignSelectedDay(day, pageKey) {
   getAssignPicker(pageKey).day = day;
+  saveUiState();
   updateAssignDateTitle(pageKey);
   renderAssignTable(pageKey);
 }
@@ -6368,12 +6406,14 @@ function initAssignDateControls(pageKey) {
     syncAssignPickerFromControls(pageKey);
     saveUiState();
     updateAssignDateTitle(pageKey);
+    renderAssignCalendars(pageKey);
     renderAssignTable(pageKey);
   });
   monthEl.addEventListener("change", function () {
     syncAssignPickerFromControls(pageKey);
     saveUiState();
     updateAssignDateTitle(pageKey);
+    renderAssignCalendars(pageKey);
     renderAssignTable(pageKey);
   });
 
@@ -6383,7 +6423,10 @@ function initAssignDateControls(pageKey) {
       var idx = yearEl.selectedIndex + delta;
       if (idx >= 0 && idx < yearEl.options.length) {
         yearEl.selectedIndex = idx;
+        syncAssignPickerFromControls(pageKey);
+        saveUiState();
         updateAssignDateTitle(pageKey);
+        renderAssignCalendars(pageKey);
         renderAssignTable(pageKey);
       }
     });
@@ -6395,7 +6438,10 @@ function initAssignDateControls(pageKey) {
       var idx = monthEl.selectedIndex + delta;
       if (idx >= 0 && idx < monthEl.options.length) {
         monthEl.selectedIndex = idx;
+        syncAssignPickerFromControls(pageKey);
+        saveUiState();
         updateAssignDateTitle(pageKey);
+        renderAssignCalendars(pageKey);
         renderAssignTable(pageKey);
       }
     });
@@ -7919,6 +7965,7 @@ function initOrderOpenPage(screen) {
   syncOpenActionFilterFromControls();
   syncAssignPickerFromControls("open");
   updateAssignDateTitle("open");
+  renderAssignCalendars("open");
   renderAssignTable("open");
 }
 

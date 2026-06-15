@@ -467,6 +467,8 @@ function applyMobileAssignPickerTodayInitial(pageKeys) {
     picker.month = today.month;
     picker.day = today.day;
   });
+  saveUiState();
+  scheduleCloudSync();
 }
 
 var NAV_ITEMS = [];
@@ -1950,9 +1952,7 @@ function hasOrderScopeActionCompleted(order, scopeKey) {
 
 function isOrderScopeOpenForStats(order, scopeKey) {
   if (!isOrderOpen(order)) return false;
-  var info = normalizeOrderScopeWorkInfo(order);
-  var type = ((info[scopeKey] && info[scopeKey].accidentType) || "").trim();
-  return !!type && type !== "선택";
+  return hasScopeAccidentTypeRegistered(order, scopeKey);
 }
 
 function getStatsOpenRatioNumerator(order, scopeKey) {
@@ -2235,8 +2235,15 @@ function navigateToAssignScreenForOrder(pageKey, orderIndex) {
   if (!order) return;
 
   applyAssignPickerForOrder(pageKey, order);
+  if (pageKey === "open") {
+    syncOpenActionFilterFromControls();
+  }
+  saveUiState();
   showScreen(pageKey === "assign" ? "order-assign" : "order-open");
   window.requestAnimationFrame(function () {
+    updateAssignDateTitle(pageKey);
+    renderAssignCalendars(pageKey);
+    renderAssignTable(pageKey);
     focusAssignTableOrderRow(pageKey, orderIndex);
   });
 }
@@ -2635,6 +2642,28 @@ function getStoredOrders() {
 }
 
 function saveStoredOrders(orders) {
+  var now = new Date().toISOString();
+  var prev = [];
+  try {
+    var prevRaw = localStorage.getItem(ORDERS_STORAGE_KEY);
+    if (prevRaw) prev = JSON.parse(prevRaw);
+  } catch (e) {
+    prev = [];
+  }
+  var prevMap = {};
+  prev.forEach(function (o) {
+    if (o && o.orderNo) prevMap[o.orderNo] = JSON.stringify(o);
+  });
+  orders.forEach(function (o) {
+    if (!o) return;
+    if (!o.createdAt) o.createdAt = now;
+    var ser = JSON.stringify(o);
+    if (!prevMap[o.orderNo] || prevMap[o.orderNo] !== ser) {
+      o.updatedAt = now;
+    } else if (!o.updatedAt) {
+      o.updatedAt = o.createdAt || now;
+    }
+  });
   localStorage.setItem(ORDERS_STORAGE_KEY, JSON.stringify(orders));
   localStorage.setItem(EFFEX_CLOUD_REV_KEY, String(Date.now()));
   saveUiState();
@@ -2692,8 +2721,52 @@ function buildCloudPayload() {
   return {
     orders: getStoredOrders(),
     users: getRegisteredUsers(),
+    uiState: {
+      assign: assignPickerStates,
+    },
     updatedAt: Date.now(),
   };
+}
+
+function applyRemoteAssignPickerState(remoteAssign) {
+  if (!remoteAssign || isMobileLayout()) return false;
+  var changed = false;
+  ["assign", "status", "open"].forEach(function (key) {
+    var saved = remoteAssign[key];
+    var picker = assignPickerStates[key];
+    if (!saved || !picker) return;
+    if (saved.year != null) {
+      var year = clampOrderYear(saved.year);
+      if (picker.year !== year) {
+        picker.year = year;
+        changed = true;
+      }
+    }
+    if (saved.month != null) {
+      var month = parseInt(saved.month, 10) || picker.month;
+      if (picker.month !== month) {
+        picker.month = month;
+        changed = true;
+      }
+    }
+    if (saved.day != null) {
+      var day = parseInt(saved.day, 10) || picker.day;
+      if (picker.day !== day) {
+        picker.day = day;
+        changed = true;
+      }
+    }
+    if (saved.actionFilter != null && key === "open" && picker.actionFilter !== saved.actionFilter) {
+      picker.actionFilter = saved.actionFilter;
+      changed = true;
+    }
+    if (saved.workerFilter != null && key === "status" && picker.workerFilter !== saved.workerFilter) {
+      picker.workerFilter = saved.workerFilter;
+      changed = true;
+    }
+  });
+  if (changed) saveUiState();
+  return changed;
 }
 
 function orderRecordTime(order) {
@@ -2777,7 +2850,29 @@ function mergeCloudIntoLocal(remote) {
   if (!remote) return false;
   var mergedOrders = mergeOrderLists(getStoredOrders(), remote.orders || []);
   var mergedUsers = mergeUserLists(getRegisteredUsers(), remote.users || []);
-  return saveMergedCloudData(mergedOrders, mergedUsers, remote.updatedAt || Date.now());
+  var dataChanged = saveMergedCloudData(mergedOrders, mergedUsers, remote.updatedAt || Date.now());
+  var pickerChanged = false;
+  if (remote.uiState && remote.uiState.assign) {
+    pickerChanged = applyRemoteAssignPickerState(remote.uiState.assign);
+  }
+  if (pickerChanged) {
+    applyUiStateToControls();
+    var active = document.querySelector(".screen.is-active");
+    if (active) {
+      if (active.id === "screen-order-assign") {
+        updateAssignDateTitle("assign");
+        renderAssignTable("assign");
+      } else if (active.id === "screen-order-status") {
+        updateAssignDateTitle("status");
+        renderAssignTable("status");
+      } else if (active.id === "screen-order-open") {
+        syncOpenActionFilterFromControls();
+        updateAssignDateTitle("open");
+        renderAssignTable("open");
+      }
+    }
+  }
+  return dataChanged || pickerChanged;
 }
 
 function fetchCloudData() {
@@ -2838,6 +2933,9 @@ function pushCloudData() {
       var payload = {
         orders: mergedOrders,
         users: mergedUsers,
+        uiState: {
+          assign: assignPickerStates,
+        },
         updatedAt: Date.now(),
       };
       saveMergedCloudData(mergedOrders, mergedUsers, payload.updatedAt);
@@ -4079,12 +4177,16 @@ function renderAssignWorkerCell(order, idx, useStack, scopeKeys, readonly) {
 }
 
 function getOrderAccidentScopeKeys(order) {
+  if (!order) return [];
   var keys = getOrderScopeKeys(order.scope);
-  var info = normalizeOrderScopeWorkInfo(order);
-  return keys.filter(function (key) {
-    var type = ((info[key] && info[key].accidentType) || "").trim();
-    return !!type && type !== "선택";
+  var registered = keys.filter(function (key) {
+    return hasScopeAccidentTypeRegistered(order, key);
   });
+  if (registered.length) return registered;
+  if (hasScopeAccidentTypeRegistered(order, "")) {
+    return keys.length ? keys : [""];
+  }
+  return [];
 }
 
 function pad2(n) {
@@ -4116,21 +4218,7 @@ function isOrderClosed(order) {
 }
 
 function hasOrderScopeAccidentType(order) {
-  var keys = getOrderScopeKeys(order.scope);
-  var info = order.scopeWorkInfo;
-  var i;
-  var type;
-
-  if (info && typeof info === "object" && keys.length) {
-    for (i = 0; i < keys.length; i++) {
-      type = ((info[keys[i]] && info[keys[i]].accidentType) || "").trim();
-      if (type && type !== "선택") return true;
-    }
-    return false;
-  }
-
-  type = (order.accidentType || "").trim();
-  return !!type && type !== "선택";
+  return hasAnyOrderScopeAccidentRegistered(order);
 }
 
 function isOrderOpen(order) {

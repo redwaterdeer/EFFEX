@@ -10,7 +10,7 @@ var EFFEX_CORS_PROXIES = [
   "https://corsproxy.io/?",
   "https://api.codetabs.com/v1/proxy?quest=",
 ];
-var EFFEX_CLOUD_PULL_MS = 5000;
+var EFFEX_CLOUD_PULL_MS = 2000;
 var LOGO_URL = "https://i.ibb.co/8DW6cys2/3.png";
 var LOGO_URL_INACTIVE = "https://i.ibb.co/5WH4s329/3.png";
 var currentProjectId = null;
@@ -645,6 +645,23 @@ function getRegisteredUsers() {
 }
 
 function saveRegisteredUsers(users) {
+  var now = new Date().toISOString();
+  var prev = getRegisteredUsers();
+  var prevMap = {};
+  prev.forEach(function (u) {
+    if (u && u.userId) prevMap[u.userId.toLowerCase()] = JSON.stringify(u);
+  });
+  users.forEach(function (u) {
+    if (!u) return;
+    var key = (u.userId || "").toLowerCase();
+    if (!u.createdAt) u.createdAt = now;
+    var ser = JSON.stringify(u);
+    if (!prevMap[key] || prevMap[key] !== ser) {
+      u.updatedAt = now;
+    } else if (!u.updatedAt) {
+      u.updatedAt = u.createdAt || now;
+    }
+  });
   localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(users));
   localStorage.setItem(EFFEX_CLOUD_REV_KEY, String(Date.now()));
   notifyEffexDataChanged();
@@ -1008,8 +1025,7 @@ function showScreen(page, params) {
       "order-stats",
     ].indexOf(page) >= 0
   ) {
-    pullCloudData(true);
-    refreshDataFromStorage();
+    pullCloudAndRefresh();
   }
 
   window.scrollTo(0, 0);
@@ -2867,22 +2883,72 @@ function userRecordVersion(user) {
   return isNaN(t) ? 0 : t;
 }
 
-function mergeUserLists(localUsers, remoteUsers) {
-  var map = {};
-  (localUsers || []).forEach(function (user) {
-    if (user && user.userId) map[user.userId.toLowerCase()] = user;
+function mergeUserRecords(local, remote) {
+  if (!local) return remote;
+  if (!remote) return local;
+  var localTime = userRecordVersion(local);
+  var remoteTime = userRecordVersion(remote);
+  var primary = remoteTime >= localTime ? remote : local;
+  var secondary = primary === remote ? local : remote;
+  var merged = JSON.parse(JSON.stringify(primary));
+  var keys = {};
+  Object.keys(local).forEach(function (key) {
+    keys[key] = true;
   });
-  (remoteUsers || []).forEach(function (user) {
-    if (!user || !user.userId) return;
-    var key = user.userId.toLowerCase();
-    var existing = map[key];
-    if (!existing) {
-      map[key] = user;
+  Object.keys(remote).forEach(function (key) {
+    keys[key] = true;
+  });
+  Object.keys(keys).forEach(function (key) {
+    if (key === "updatedAt") return;
+    if (key === "createdAt") {
+      merged.createdAt =
+        pickPreferredMergeFieldValue(local.createdAt, remote.createdAt) || merged.createdAt;
       return;
     }
-    map[key] =
-      userRecordVersion(user) >= userRecordVersion(existing) ? user : existing;
+    if (key === "scope") {
+      var scopeSet = {};
+      (local.scope || []).forEach(function (scopeVal) {
+        scopeSet[scopeVal] = true;
+      });
+      (remote.scope || []).forEach(function (scopeVal) {
+        scopeSet[scopeVal] = true;
+      });
+      merged.scope = Object.keys(scopeSet);
+      return;
+    }
+    var primaryVal = merged[key];
+    var secondaryVal = secondary[key];
+    if (
+      (primaryVal == null ||
+        primaryVal === "" ||
+        (Array.isArray(primaryVal) && !primaryVal.length)) &&
+      secondaryVal != null &&
+      secondaryVal !== "" &&
+      !(Array.isArray(secondaryVal) && !secondaryVal.length)
+    ) {
+      merged[key] = secondaryVal;
+    }
   });
+  merged.updatedAt =
+    localTime > remoteTime
+      ? local.updatedAt || local.createdAt
+      : remote.updatedAt || remote.createdAt;
+  if (!merged.updatedAt) merged.updatedAt = new Date().toISOString();
+  if (!merged.createdAt) {
+    merged.createdAt = pickPreferredMergeFieldValue(local.createdAt, remote.createdAt) || merged.updatedAt;
+  }
+  return merged;
+}
+
+function mergeUserLists(localUsers, remoteUsers) {
+  var map = {};
+  function upsert(user) {
+    if (!user || !user.userId) return;
+    var key = user.userId.toLowerCase();
+    map[key] = map[key] ? mergeUserRecords(map[key], user) : user;
+  }
+  (localUsers || []).forEach(upsert);
+  (remoteUsers || []).forEach(upsert);
   return Object.keys(map).map(function (key) {
     return map[key];
   });
@@ -2905,6 +2971,8 @@ function saveMergedCloudData(mergedOrders, mergedUsers, updatedAt) {
   }
   if (ordersChanged || usersChanged) {
     refreshDataFromStorage();
+    refreshOpenAssignModalsFromStorage();
+    notifyEffexDataChanged();
     scheduleCloudSync();
   }
   return ordersChanged || usersChanged;
@@ -2932,10 +3000,43 @@ function putCloudData(payload) {
   });
 }
 
+function mergeRemoteCloudPayload(remote) {
+  return {
+    orders: mergeOrderLists(getStoredOrders(), remote && remote.orders ? remote.orders : []),
+    users: mergeUserLists(getRegisteredUsers(), remote && remote.users ? remote.users : []),
+  };
+}
+
+function syncCloudPayload(retriesLeft) {
+  if (!getAuth()) return Promise.resolve();
+  return fetchCloudData()
+    .then(function (remote) {
+      var merged = mergeRemoteCloudPayload(remote);
+      var payload = {
+        orders: merged.orders,
+        users: merged.users,
+        updatedAt: Date.now(),
+      };
+      saveMergedCloudData(merged.orders, merged.users, payload.updatedAt);
+      return putCloudData(payload).then(function (res) {
+        if (!res.ok) {
+          if (retriesLeft > 0) return syncCloudPayload(retriesLeft - 1);
+          return;
+        }
+        localStorage.setItem(EFFEX_CLOUD_REV_KEY, String(payload.updatedAt));
+      });
+    })
+    .catch(function () {
+      if (retriesLeft > 0) return syncCloudPayload(retriesLeft - 1);
+    });
+}
+
 function scheduleCloudSync() {
   if (!getAuth()) return;
   clearTimeout(cloudSyncTimer);
-  cloudSyncTimer = setTimeout(pushCloudData, 400);
+  cloudSyncTimer = setTimeout(function () {
+    syncCloudPayload(2);
+  }, 300);
 }
 
 function runCloudSync() {
@@ -2943,7 +3044,7 @@ function runCloudSync() {
   cloudSyncRunning = true;
   return pullCloudData(true)
     .then(function () {
-      return pushCloudData();
+      return syncCloudPayload(2);
     })
     .finally(function () {
       cloudSyncRunning = false;
@@ -2964,32 +3065,7 @@ function pullCloudData(silent) {
 }
 
 function pushCloudData() {
-  if (!getAuth()) return Promise.resolve();
-  return fetchCloudData()
-    .then(function (remote) {
-      var mergedOrders = mergeOrderLists(getStoredOrders(), remote && remote.orders ? remote.orders : []);
-      var mergedUsers = mergeUserLists(
-        getRegisteredUsers(),
-        remote && remote.users ? remote.users : []
-      );
-      var payload = {
-        orders: mergedOrders,
-        users: mergedUsers,
-        updatedAt: Date.now(),
-      };
-      saveMergedCloudData(mergedOrders, mergedUsers, payload.updatedAt);
-      return putCloudData(payload).then(function (res) {
-        if (!res.ok) return;
-        localStorage.setItem(EFFEX_CLOUD_REV_KEY, String(payload.updatedAt));
-      });
-    })
-    .catch(function () {
-      var payload = buildCloudPayload();
-      return putCloudData(payload).then(function (res) {
-        if (!res.ok) return;
-        localStorage.setItem(EFFEX_CLOUD_REV_KEY, String(payload.updatedAt));
-      });
-    });
+  return syncCloudPayload(2);
 }
 
 function pullCloudAndRefresh() {
@@ -3210,6 +3286,8 @@ function refreshDataFromStorage() {
     renderAssignTable("open");
   } else if (page === "signup") {
     refreshWorkerPartnerSelect();
+  } else if (page === "order") {
+    updateOrderFieldFilledStates();
   }
 }
 

@@ -8234,7 +8234,11 @@ function initLoginScreen() {
     var result = authenticateLogin(id, pw);
 
     if (!result.ok) {
-      alert(result.message);
+      if (isMobileLayout() && id && pw && result.message !== "ID와 PW를 입력해 주세요.") {
+        alert("ID 또는 PW가 올바르지 않습니다.");
+      } else {
+        alert(result.message);
+      }
       return;
     }
 

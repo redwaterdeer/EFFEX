@@ -8859,3 +8859,17 @@
     top: calc(env(safe-area-inset-top, 0px) + clamp(52px, 11vh, 76px)) !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   모바일 v43 — 1번 로그인: 전체 구성 추가 하향
+   (PC 미변경 · 구조·기능 유지)
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  #screen-login .login-screen {
+    padding-top: calc(env(safe-area-inset-top, 0px) + clamp(120px, 22vh, 168px)) !important;
+  }
+
+  #screen-login .login-screen__page-num {
+    top: calc(env(safe-area-inset-top, 0px) + clamp(120px, 22vh, 168px)) !important;
+  }
+}

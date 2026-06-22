@@ -9714,3 +9714,56 @@
     display: none !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   모바일 v47 — 7번 통계 4선 정렬 (X축·구분·시공협력사·합계)
+   (PC 미변경 · 구조·기능 유지)
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* ②③ 구분(시공협력사) 열 우측 세로선 — 차트·헤더·본문 동일 */
+  #screen-order-stats .stats-chart-row__scope,
+  #screen-order-stats .stats-table th.stats-table__scope-col,
+  #screen-order-stats .stats-table td.assign-table__td--scope {
+    border-right: 1px solid #333 !important;
+    box-sizing: border-box !important;
+  }
+
+  #screen-order-stats .stats-chart-row__scope::after {
+    content: none !important;
+    display: none !important;
+  }
+
+  /* ④ 합계 열 우측 세로선 — 차트·헤더·본문 동일 */
+  #screen-order-stats .stats-chart-row__total.stats-table__total-col,
+  #screen-order-stats .stats-table th.stats-table__total-col,
+  #screen-order-stats .stats-table td.stats-table__total-col {
+    border-right: 1px solid #333 !important;
+    box-sizing: border-box !important;
+  }
+
+  /* ① X축선 — ②(구분 우측)부터 ④(합계 우측)까지 일치 */
+  #screen-order-stats .stats-chart-row th.stats-chart-row__cell.stats-table__month-col:nth-child(3) {
+    position: relative !important;
+  }
+
+  #screen-order-stats .stats-chart-row th.stats-chart-row__cell.stats-table__month-col:nth-child(3)::after {
+    content: "" !important;
+    display: block !important;
+    position: absolute !important;
+    left: 0 !important;
+    width: calc(12 * var(--stats-mob-month-w) + var(--stats-mob-total-w)) !important;
+    bottom: 0 !important;
+    height: 1px !important;
+    background: #333 !important;
+    z-index: 21 !important;
+    pointer-events: none !important;
+  }
+
+  #screen-order-stats .stats-table thead .stats-chart-row .assign-table__th,
+  #screen-order-stats .stats-chart-row__rank,
+  #screen-order-stats .stats-chart-row__scope,
+  #screen-order-stats .stats-chart-row th.stats-chart-row__cell,
+  #screen-order-stats .stats-chart-row__total.stats-table__total-col {
+    border-bottom: none !important;
+  }
+}

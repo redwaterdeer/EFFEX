@@ -1,4 +1,4 @@
-﻿/* EFFEX 모바일 전용 (2~8번). PC(769px+)는 이 파일을 로드하지 않습니다. */
+/* EFFEX 모바일 전용 (2~8번). PC(769px+)는 이 파일을 로드하지 않습니다. */
 
 @media (max-width: 768px) {
   html {
@@ -8839,51 +8839,5 @@
     width: auto !important;
     min-width: 0 !important;
     table-layout: fixed !important;
-  }
-}
-
-/* ═══════════════════════════════════════════════════════════
-   모바일 v42 — 1번 로그인: 전체 구성 아래로 이동
-   (PC 미변경 · 구조·기능 유지)
-   ═══════════════════════════════════════════════════════════ */
-@media (max-width: 768px) {
-  #screen-login .login-screen {
-    padding-top: calc(env(safe-area-inset-top, 0px) + clamp(52px, 11vh, 76px)) !important;
-  }
-
-  #screen-login .login-screen__logo {
-    margin-top: 0 !important;
-  }
-
-  #screen-login .login-screen__page-num {
-    top: calc(env(safe-area-inset-top, 0px) + clamp(52px, 11vh, 76px)) !important;
-  }
-}
-
-/* ═══════════════════════════════════════════════════════════
-   모바일 v43 — 1번 로그인: 전체 구성 추가 하향
-   (PC 미변경 · 구조·기능 유지)
-   ═══════════════════════════════════════════════════════════ */
-@media (max-width: 768px) {
-  #screen-login .login-screen {
-    padding-top: calc(env(safe-area-inset-top, 0px) + clamp(120px, 22vh, 168px)) !important;
-  }
-
-  #screen-login .login-screen__page-num {
-    top: calc(env(safe-area-inset-top, 0px) + clamp(120px, 22vh, 168px)) !important;
-  }
-}
-
-/* ═══════════════════════════════════════════════════════════
-   모바일 v44 — 1번 로그인: 전체 구성 소폭 상향
-   (PC 미변경 · 구조·기능 유지)
-   ═══════════════════════════════════════════════════════════ */
-@media (max-width: 768px) {
-  #screen-login .login-screen {
-    padding-top: calc(env(safe-area-inset-top, 0px) + clamp(96px, 17vh, 140px)) !important;
-  }
-
-  #screen-login .login-screen__page-num {
-    top: calc(env(safe-area-inset-top, 0px) + clamp(96px, 17vh, 140px)) !important;
   }
 }

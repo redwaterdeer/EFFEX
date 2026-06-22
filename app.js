@@ -4,13 +4,6 @@ var AUTH_KEY = "efex_auth";
 var USERS_STORAGE_KEY = "efex_users";
 var ORDERS_STORAGE_KEY = "efex_orders";
 var UI_STATE_KEY = "efex_ui_state";
-var EFFEX_CLOUD_REV_KEY = "efex_cloud_rev";
-var EFFEX_CLOUD_BLOB_ID = "019eb50c-03b8-7a44-a43e-3be0a42e285a";
-var EFFEX_CORS_PROXIES = [
-  "https://corsproxy.io/?",
-  "https://api.codetabs.com/v1/proxy?quest=",
-];
-var EFFEX_CLOUD_PULL_MS = 1500;
 var LOGO_URL = "https://i.ibb.co/8DW6cys2/3.png";
 var LOGO_URL_INACTIVE = "https://i.ibb.co/5WH4s329/3.png";
 var currentProjectId = null;
@@ -645,27 +638,8 @@ function getRegisteredUsers() {
 }
 
 function saveRegisteredUsers(users) {
-  var now = new Date().toISOString();
-  var prev = getRegisteredUsers();
-  var prevMap = {};
-  prev.forEach(function (u) {
-    if (u && u.userId) prevMap[u.userId.toLowerCase()] = JSON.stringify(u);
-  });
-  users.forEach(function (u) {
-    if (!u) return;
-    var key = (u.userId || "").toLowerCase();
-    if (!u.createdAt) u.createdAt = now;
-    var ser = JSON.stringify(u);
-    if (!prevMap[key] || prevMap[key] !== ser) {
-      u.updatedAt = now;
-    } else if (!u.updatedAt) {
-      u.updatedAt = u.createdAt || now;
-    }
-  });
   localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(users));
-  localStorage.setItem(EFFEX_CLOUD_REV_KEY, String(Date.now()));
   notifyEffexDataChanged();
-  scheduleCloudSync();
 }
 
 function isUserIdTaken(userId) {
@@ -1013,20 +987,6 @@ function showScreen(page, params) {
 
   screen.classList.add("is-active");
   document.title = (screen.getAttribute("data-title") || "EFFEX") + " - EFFEX 시공관리";
-
-  if (
-    getAuth() &&
-    [
-      "order",
-      "order-summary",
-      "order-assign",
-      "order-status",
-      "order-open",
-      "order-stats",
-    ].indexOf(page) >= 0
-  ) {
-    pullCloudAndRefresh();
-  }
 
   window.scrollTo(0, 0);
   document.documentElement.scrollTop = 0;
@@ -2657,40 +2617,13 @@ function getStoredOrders() {
 }
 
 function saveStoredOrders(orders) {
-  var now = new Date().toISOString();
-  var prev = [];
-  try {
-    var prevRaw = localStorage.getItem(ORDERS_STORAGE_KEY);
-    if (prevRaw) prev = JSON.parse(prevRaw);
-  } catch (e) {
-    prev = [];
-  }
-  var prevMap = {};
-  prev.forEach(function (o) {
-    if (o && o.orderNo) prevMap[o.orderNo] = JSON.stringify(o);
-  });
-  orders.forEach(function (o) {
-    if (!o) return;
-    if (!o.createdAt) o.createdAt = now;
-    var ser = JSON.stringify(o);
-    if (!prevMap[o.orderNo] || prevMap[o.orderNo] !== ser) {
-      o.updatedAt = now;
-    } else if (!o.updatedAt) {
-      o.updatedAt = o.createdAt || now;
-    }
-  });
   localStorage.setItem(ORDERS_STORAGE_KEY, JSON.stringify(orders));
-  localStorage.setItem(EFFEX_CLOUD_REV_KEY, String(Date.now()));
   saveUiState();
   notifyEffexDataChanged();
-  scheduleCloudSync();
 }
 
 var effexDataChannel =
   typeof BroadcastChannel !== "undefined" ? new BroadcastChannel("effex-data") : null;
-var cloudSyncTimer = null;
-var cloudPullTimer = null;
-var cloudSyncChain = Promise.resolve();
 
 function notifyEffexDataChanged() {
   window.dispatchEvent(new CustomEvent("effex-data-changed"));
@@ -2703,539 +2636,20 @@ function notifyEffexDataChanged() {
   }
 }
 
-function cloudBlobUrl() {
-  return "https://jsonblob.com/api/jsonBlob/" + EFFEX_CLOUD_BLOB_ID;
-}
-
-function cloudFetch(url, options) {
-  options = options || {};
-
-  function attempt(index) {
-    if (index >= EFFEX_CORS_PROXIES.length) {
-      return Promise.reject(new Error("cloud fetch failed"));
-    }
-    return fetch(EFFEX_CORS_PROXIES[index] + encodeURIComponent(url), options)
-      .then(function (res) {
-        if (!res.ok && index + 1 < EFFEX_CORS_PROXIES.length) {
-          return attempt(index + 1);
-        }
-        return res;
-      })
-      .catch(function () {
-        if (index + 1 < EFFEX_CORS_PROXIES.length) {
-          return attempt(index + 1);
-        }
-        throw new Error("cloud fetch failed");
-      });
-  }
-
-  return attempt(0);
-}
-
-function buildCloudPayload() {
-  return {
-    orders: getStoredOrders(),
-    users: getRegisteredUsers(),
-    updatedAt: Date.now(),
-  };
-}
-
-var ORDER_SCOPE_WORK_MERGE_FIELDS = [
-  "accidentType",
-  "worker",
-  "partner",
-  "actionResult",
-  "actionSchedule",
-  "actionContent",
-  "progress",
-  "actionWorker",
-];
-
-function pickPreferredMergeFieldValue(a, b) {
-  var av = (a == null ? "" : String(a)).trim();
-  var bv = (b == null ? "" : String(b)).trim();
-  if (bv && bv !== "선택") return b;
-  if (av && av !== "선택") return a;
-  return bv || av || "";
-}
-
-function mergeScopeWorkFields(a, b) {
-  var out = {};
-  var i;
-  var field;
-  for (i = 0; i < ORDER_SCOPE_WORK_MERGE_FIELDS.length; i++) {
-    field = ORDER_SCOPE_WORK_MERGE_FIELDS[i];
-    out[field] = pickPreferredMergeFieldValue(a[field], b[field]);
-  }
-  return out;
-}
-
-function mergeOrderScopeWorkInfoRecords(localOrder, remoteOrder) {
-  var left = normalizeOrderScopeWorkInfo(localOrder);
-  var right = normalizeOrderScopeWorkInfo(remoteOrder);
-  var keys = {};
-  var combined = {};
-  Object.keys(left).forEach(function (key) {
-    keys[key] = true;
-  });
-  Object.keys(right).forEach(function (key) {
-    keys[key] = true;
-  });
-  Object.keys(keys).forEach(function (key) {
-    combined[key] = mergeScopeWorkFields(left[key] || {}, right[key] || {});
-  });
-  return combined;
-}
-
-function mergeAssignedPartnersMaps(a, b) {
-  var out = {};
-  var keys = {};
-  Object.keys(a || {}).forEach(function (key) {
-    keys[key] = true;
-  });
-  Object.keys(b || {}).forEach(function (key) {
-    keys[key] = true;
-  });
-  Object.keys(keys).forEach(function (key) {
-    out[key] = pickPreferredMergeFieldValue((a || {})[key], (b || {})[key]);
-  });
-  return out;
-}
-
-function prepareOrdersForMerge(orders) {
-  var now = new Date().toISOString();
-  return (orders || [])
-    .map(function (order) {
-      if (!order || !order.orderNo) return null;
-      var copy = JSON.parse(JSON.stringify(order));
-      if (!copy.createdAt) copy.createdAt = now;
-      if (!copy.updatedAt) copy.updatedAt = copy.createdAt;
-      copy.scope = mergeScopeArrays(copy.scope, []);
-      return copy;
-    })
-    .filter(Boolean);
-}
-
-function prepareUsersForMerge(users) {
-  var now = new Date().toISOString();
-  return (users || [])
-    .map(function (user) {
-      if (!user || !user.userId) return null;
-      var copy = JSON.parse(JSON.stringify(user));
-      if (!copy.createdAt) copy.createdAt = now;
-      if (!copy.updatedAt) copy.updatedAt = copy.createdAt;
-      return copy;
-    })
-    .filter(Boolean);
-}
-
-function mergePlainObjects(a, b) {
-  var out = {};
-  var keys = {};
-  Object.keys(a || {}).forEach(function (key) {
-    keys[key] = true;
-  });
-  Object.keys(b || {}).forEach(function (key) {
-    keys[key] = true;
-  });
-  Object.keys(keys).forEach(function (key) {
-    out[key] = pickPreferredMergeFieldValue((a || {})[key], (b || {})[key]);
-  });
-  return out;
-}
-
-function normalizeScopeArray(scope) {
-  if (!scope) return [];
-  if (Array.isArray(scope)) return scope.filter(Boolean);
-  if (typeof scope === "object") {
-    return Object.keys(scope)
-      .sort(function (a, b) {
-        return parseInt(a, 10) - parseInt(b, 10);
-      })
-      .map(function (key) {
-        return scope[key];
-      })
-      .filter(Boolean);
-  }
-  return [];
-}
-
-function mergeScopeArrays(primary, secondary) {
-  var out = [];
-  var seen = {};
-  normalizeScopeArray(primary)
-    .concat(normalizeScopeArray(secondary))
-    .forEach(function (value) {
-      if (!value || seen[value]) return;
-      seen[value] = true;
-      out.push(value);
-    });
-  return out;
-}
-
-function mergeOrderTopLevelFields(local, remote, merged, primary, secondary) {
-  var scalarFields = [
-    "siteName",
-    "constructDate",
-    "city",
-    "district",
-    "address",
-    "issue",
-    "sales",
-    "salesAmount",
-    "progressStatus",
-    "constructionWorker",
-    "createdBy",
-    "drawing1",
-    "drawing2",
-    "drawing3",
-    "drawing1Data",
-    "drawing2Data",
-    "drawing3Data",
-  ];
-  var i;
-  for (i = 0; i < scalarFields.length; i++) {
-    merged[scalarFields[i]] = pickPreferredMergeFieldValue(
-      secondary[scalarFields[i]],
-      primary[scalarFields[i]]
-    );
-  }
-  merged.scope = mergeScopeArrays(primary.scope, secondary.scope);
-  merged.scopeSales = mergePlainObjectsPreferPrimary(primary.scopeSales, secondary.scopeSales);
-  if (local.scopePhotos || remote.scopePhotos) {
-    merged.scopePhotos = mergePlainObjectsPreferPrimary(primary.scopePhotos, secondary.scopePhotos);
-  }
-}
-
-function mergePlainObjectsPreferPrimary(primary, secondary) {
-  var out = {};
-  var keys = {};
-  Object.keys(primary || {}).forEach(function (key) {
-    keys[key] = true;
-  });
-  Object.keys(secondary || {}).forEach(function (key) {
-    keys[key] = true;
-  });
-  Object.keys(keys).forEach(function (key) {
-    out[key] = pickPreferredMergeFieldValue((secondary || {})[key], (primary || {})[key]);
-  });
-  return out;
-}
-
-function orderDataRichness(order) {
-  if (!order) return 0;
-  var score = 0;
-  var info = normalizeOrderScopeWorkInfo(order);
-  Object.keys(info).forEach(function (key) {
-    var data = info[key] || {};
-    if ((data.accidentType || "").trim() && data.accidentType !== "선택") score += 10;
-    if ((data.worker || "").trim()) score += 4;
-    if ((data.actionResult || "").trim()) score += 4;
-    if ((data.actionSchedule || "").trim()) score += 2;
-    if ((data.actionContent || "").trim()) score += 2;
-  });
-  if ((order.accidentType || "").trim() && order.accidentType !== "선택") score += 5;
-  if ((order.assignedPartner || "").trim()) score += 3;
-  return score;
-}
-
-function mergeOrderRecords(local, remote) {
-  if (!local) return remote;
-  if (!remote) return local;
-  var localTime = orderRecordTime(local);
-  var remoteTime = orderRecordTime(remote);
-  var primary;
-  var secondary;
-  if (remoteTime > localTime) {
-    primary = remote;
-    secondary = local;
-  } else if (localTime > remoteTime) {
-    primary = local;
-    secondary = remote;
-  } else {
-    primary = orderDataRichness(remote) >= orderDataRichness(local) ? remote : local;
-    secondary = primary === remote ? local : remote;
-  }
-  var merged = JSON.parse(JSON.stringify(primary));
-  mergeOrderTopLevelFields(local, remote, merged, primary, secondary);
-  merged.scopeWorkInfo = mergeOrderScopeWorkInfoRecords(local, remote);
-  merged.assignedPartners = mergeAssignedPartnersMaps(
-    normalizeOrderAssignedPartners(local),
-    normalizeOrderAssignedPartners(remote)
-  );
-  syncOrderAssignedPartner(merged);
-  merged.accidentType = pickPreferredMergeFieldValue(local.accidentType, remote.accidentType);
-  if (remoteTime > localTime) {
-    merged.updatedAt = remote.updatedAt || remote.createdAt || merged.updatedAt;
-  } else if (localTime > remoteTime) {
-    merged.updatedAt = local.updatedAt || local.createdAt || merged.updatedAt;
-  } else {
-    merged.updatedAt =
-      primary.updatedAt || secondary.updatedAt || primary.createdAt || secondary.createdAt;
-  }
-  applyComputedProgressStatusToOrder(merged);
-  merged.scope = mergeScopeArrays(merged.scope, []);
-  return merged;
-}
-
-function orderRecordTime(order) {
-  var raw = (order && (order.updatedAt || order.createdAt)) || "";
-  var t = Date.parse(raw);
-  return isNaN(t) ? 0 : t;
-}
-
-function mergeOrderLists(localOrders, remoteOrders) {
-  var map = {};
-  function upsert(order) {
-    if (!order || !order.orderNo) return;
-    var existing = map[order.orderNo];
-    map[order.orderNo] = existing ? mergeOrderRecords(existing, order) : order;
-  }
-  (localOrders || []).forEach(upsert);
-  (remoteOrders || []).forEach(upsert);
-  return Object.keys(map).map(function (key) {
-    return map[key];
-  });
-}
-
-function userRecordVersion(user) {
-  var t = Date.parse((user && user.updatedAt) || "");
-  if (!isNaN(t)) return t;
-  t = Date.parse((user && user.createdAt) || "");
-  return isNaN(t) ? 0 : t;
-}
-
-function mergeUserRecords(local, remote) {
-  if (!local) return remote;
-  if (!remote) return local;
-  var localTime = userRecordVersion(local);
-  var remoteTime = userRecordVersion(remote);
-  var primary = remoteTime >= localTime ? remote : local;
-  var secondary = primary === remote ? local : remote;
-  var merged = JSON.parse(JSON.stringify(primary));
-  var keys = {};
-  Object.keys(local).forEach(function (key) {
-    keys[key] = true;
-  });
-  Object.keys(remote).forEach(function (key) {
-    keys[key] = true;
-  });
-  Object.keys(keys).forEach(function (key) {
-    if (key === "updatedAt") return;
-    if (key === "createdAt") {
-      merged.createdAt =
-        pickPreferredMergeFieldValue(local.createdAt, remote.createdAt) || merged.createdAt;
-      return;
-    }
-    if (key === "scope") {
-      var scopeSet = {};
-      (local.scope || []).forEach(function (scopeVal) {
-        scopeSet[scopeVal] = true;
-      });
-      (remote.scope || []).forEach(function (scopeVal) {
-        scopeSet[scopeVal] = true;
-      });
-      merged.scope = Object.keys(scopeSet);
-      return;
-    }
-    var primaryVal = merged[key];
-    var secondaryVal = secondary[key];
-    if (
-      (primaryVal == null ||
-        primaryVal === "" ||
-        (Array.isArray(primaryVal) && !primaryVal.length)) &&
-      secondaryVal != null &&
-      secondaryVal !== "" &&
-      !(Array.isArray(secondaryVal) && !secondaryVal.length)
-    ) {
-      merged[key] = secondaryVal;
-    }
-  });
-  merged.updatedAt =
-    localTime > remoteTime
-      ? local.updatedAt || local.createdAt
-      : remote.updatedAt || remote.createdAt;
-  if (!merged.updatedAt) merged.updatedAt = new Date().toISOString();
-  if (!merged.createdAt) {
-    merged.createdAt = pickPreferredMergeFieldValue(local.createdAt, remote.createdAt) || merged.updatedAt;
-  }
-  merged.partnerCompany = pickPreferredMergeFieldValue(secondary.partnerCompany, primary.partnerCompany);
-  merged.name = pickPreferredMergeFieldValue(secondary.name, primary.name);
-  merged.phone = pickPreferredMergeFieldValue(secondary.phone, primary.phone);
-  return merged;
-}
-
-function mergeUserLists(localUsers, remoteUsers) {
-  var map = {};
-  function upsert(user) {
-    if (!user || !user.userId) return;
-    var key = user.userId.toLowerCase();
-    map[key] = map[key] ? mergeUserRecords(map[key], user) : user;
-  }
-  (localUsers || []).forEach(upsert);
-  (remoteUsers || []).forEach(upsert);
-  return Object.keys(map).map(function (key) {
-    return map[key];
-  });
-}
-
-function saveMergedCloudData(mergedOrders, mergedUsers, updatedAt, options) {
-  var localOrders = getStoredOrders();
-  var localUsers = getRegisteredUsers();
-  var ordersChanged = JSON.stringify(mergedOrders) !== JSON.stringify(localOrders);
-  var usersChanged = JSON.stringify(mergedUsers) !== JSON.stringify(localUsers);
-
-  if (ordersChanged) {
-    localStorage.setItem(ORDERS_STORAGE_KEY, JSON.stringify(mergedOrders));
-  }
-  if (usersChanged) {
-    localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(mergedUsers));
-  }
-  if (updatedAt) {
-    localStorage.setItem(EFFEX_CLOUD_REV_KEY, String(updatedAt));
-  }
-  if (ordersChanged || usersChanged) {
-    refreshDataFromStorage();
-    refreshOpenAssignModalsFromStorage();
-    notifyEffexDataChanged();
-    if (!options || !options.skipPushSchedule) {
-      scheduleCloudSync();
-    }
-  }
-  return ordersChanged || usersChanged;
-}
-
-function fetchCloudData() {
-  return cloudFetch(cloudBlobUrl(), { cache: "no-store" }).then(function (res) {
-    if (!res.ok) return null;
-    return res.json();
-  });
-}
-
-function putCloudData(payload) {
-  return cloudFetch(cloudBlobUrl(), {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
-  });
-}
-
-function mergeRemoteCloudPayload(remote) {
-  return {
-    orders: mergeOrderLists(
-      prepareOrdersForMerge(getStoredOrders()),
-      prepareOrdersForMerge(remote && remote.orders ? remote.orders : [])
-    ),
-    users: mergeUserLists(
-      prepareUsersForMerge(getRegisteredUsers()),
-      prepareUsersForMerge(remote && remote.users ? remote.users : [])
-    ),
-  };
-}
-
-function uploadMergedCloudPayload(remote, retriesLeft) {
-  var merged = mergeRemoteCloudPayload(remote);
-  var payload = {
-    orders: merged.orders,
-    users: merged.users,
-    updatedAt: Date.now(),
-  };
-  saveMergedCloudData(merged.orders, merged.users, payload.updatedAt, { skipPushSchedule: true });
-  return putCloudData(payload).then(function (res) {
-    if (!res.ok && retriesLeft > 0) {
-      return shareAllDataWithCloud(retriesLeft - 1);
-    }
-    if (res.ok) {
-      localStorage.setItem(EFFEX_CLOUD_REV_KEY, String(payload.updatedAt));
-    }
-  });
-}
-
-function shareAllDataWithCloudInner(retriesLeft) {
-  return fetchCloudData()
-    .then(function (remote) {
-      return uploadMergedCloudPayload(remote, retriesLeft);
-    })
-    .catch(function () {
-      if (retriesLeft > 0) return shareAllDataWithCloudInner(retriesLeft - 1);
-      return uploadMergedCloudPayload(null, 0);
-    });
-}
-
-function shareAllDataWithCloud(retriesLeft) {
-  if (!getAuth()) return Promise.resolve();
-  cloudSyncChain = cloudSyncChain
-    .catch(function () {
-      /* 이전 동기화 실패 후에도 다음 작업 계속 */
-    })
-    .then(function () {
-      return shareAllDataWithCloudInner(retriesLeft);
-    });
-  return cloudSyncChain;
-}
-
-function mergeCloudIntoLocal(remote) {
-  if (!remote) return false;
-  var merged = mergeRemoteCloudPayload(remote);
-  return saveMergedCloudData(merged.orders, merged.users, remote.updatedAt || Date.now(), {
-    skipPushSchedule: true,
-  });
-}
-
-function scheduleCloudSync() {
-  if (!getAuth()) return;
-  clearTimeout(cloudSyncTimer);
-  cloudSyncTimer = setTimeout(function () {
-    shareAllDataWithCloud(2);
-  }, 150);
-}
-
-function runCloudSync() {
-  if (!getAuth()) return Promise.resolve();
-  return shareAllDataWithCloud(2);
-}
-
-function pullCloudData(silent) {
-  if (!getAuth()) return Promise.resolve();
-  return fetchCloudData()
-    .then(function (remote) {
-      if (remote) mergeCloudIntoLocal(remote);
-    })
-    .catch(function () {
-      if (!silent) {
-        /* offline */
-      }
-    });
-}
-
-function pushCloudData() {
-  return shareAllDataWithCloud(2);
-}
-
-function pullCloudAndRefresh() {
-  return pullCloudData(true).then(function () {
-    refreshDataFromStorage();
-    refreshOpenAssignModalsFromStorage();
-  });
+function refreshDataFromOtherTab() {
+  refreshDataFromStorage();
+  refreshOpenAssignModalsFromStorage();
 }
 
 function bindEffexDataListeners() {
   window.addEventListener("effex-data-changed", function () {
-    refreshDataFromStorage();
-    refreshOpenAssignModalsFromStorage();
+    refreshDataFromOtherTab();
   });
   if (effexDataChannel) {
     effexDataChannel.onmessage = function () {
-      pullCloudAndRefresh();
+      refreshDataFromOtherTab();
     };
   }
-}
-
-function startCloudPullInterval() {
-  if (cloudPullTimer) return;
-  cloudPullTimer = setInterval(function () {
-    if (getAuth()) pullCloudAndRefresh();
-  }, EFFEX_CLOUD_PULL_MS);
 }
 
 function loadUiState() {
@@ -3470,16 +2884,16 @@ function bindCrossTabDataSync() {
   lastMobileLayoutState = isMobileLayout();
 
   window.addEventListener("focus", function () {
-    pullCloudAndRefresh();
+    refreshDataFromOtherTab();
   });
   document.addEventListener("visibilitychange", function () {
     if (!document.hidden) {
-      pullCloudAndRefresh();
+      refreshDataFromOtherTab();
     }
   });
   window.addEventListener("pageshow", function (e) {
     if (e.persisted) {
-      pullCloudAndRefresh();
+      refreshDataFromOtherTab();
     }
   });
   window.addEventListener("resize", function () {
@@ -3493,7 +2907,6 @@ function bindCrossTabDataSync() {
         loadUiState();
         applyUiStateToControls();
       }
-      pullCloudAndRefresh();
     }
     ensureAssignSavePlacement();
   });
@@ -8279,18 +7692,12 @@ function initLoginScreen() {
     var result = authenticateLogin(id, pw);
 
     if (!result.ok) {
-      if (isMobileLayout() && id && pw && result.message !== "ID와 PW를 입력해 주세요.") {
-        alert("ID 또는 PW가 올바르지 않습니다.");
-      } else {
-        alert(result.message);
-      }
+      alert(result.message);
       return;
     }
 
     setAuth(result.user);
-    startCloudPullInterval();
     showScreen(ROLES[result.user.role].home);
-    runCloudSync();
   });
 }
 
@@ -8625,10 +8032,6 @@ window.addEventListener("popstate", function () {
 });
 
 window.addEventListener("storage", function (e) {
-  if (e.key === EFFEX_CLOUD_REV_KEY) {
-    pullCloudAndRefresh();
-    return;
-  }
   if (
     e.key !== ORDERS_STORAGE_KEY &&
     e.key !== UI_STATE_KEY &&
@@ -8640,7 +8043,7 @@ window.addEventListener("storage", function (e) {
     loadUiState();
     applyUiStateToControls();
   }
-  pullCloudAndRefresh();
+  refreshDataFromOtherTab();
 });
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -8673,12 +8076,5 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   ensureAssignSavePlacement();
-
-  if (getAuth()) {
-    startCloudPullInterval();
-    showScreen(page, parsed.params);
-    runCloudSync();
-  } else {
-    showScreen(page, parsed.params);
-  }
+  showScreen(page, parsed.params);
 });

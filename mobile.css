@@ -11631,3 +11631,65 @@
     box-sizing: border-box !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   모바일 v65 — 7번 막대그래프 구분·합계 텍스트 확대 · 합계행 배경 고정
+   (PC 미변경 · 구조·기능 유지)
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  #screen-order-stats {
+    --stats-mob-label-fs: clamp(11px, 2.75vw, 13px);
+    --stats-mob-label-bg: #666666;
+  }
+
+  /* 헤더 구분 · 합계 — 텍스트 조금 확대 */
+  #screen-order-stats .stats-table thead tr:not(.stats-chart-row) th.assign-table__th.stats-table__scope-col,
+  #screen-order-stats .stats-table thead tr:not(.stats-chart-row) th.assign-table__th.stats-table__total-col,
+  #screen-order-stats .stats-table thead tr:not(.stats-chart-row) th.assign-table__th--total.stats-table__total-col {
+    font-size: var(--stats-mob-label-fs) !important;
+    font-weight: 600 !important;
+    line-height: 1.2 !important;
+    color: #fff !important;
+    background: var(--stats-mob-label-bg) !important;
+    background-color: var(--stats-mob-label-bg) !important;
+    -webkit-text-fill-color: #fff !important;
+  }
+
+  /* 월별 합계 행(#statsTableBody) — sticky 흰 배경 덮어쓰기 · Rank와 동일 */
+  #screen-order-stats #statsTableBody > tr.stats-table__totals-row > td.stats-table__rank-col,
+  #screen-order-stats #statsTableBody > tr.stats-table__totals-row > td.assign-table__td--scope,
+  #screen-order-stats #statsTableBody > tr.stats-table__totals-row > td.stats-table__total-col,
+  #screen-order-stats #statsTableBody > tr.stats-table__totals-row > td.assign-table__td--total.stats-table__total-col {
+    background: var(--stats-mob-label-bg) !important;
+    background-color: var(--stats-mob-label-bg) !important;
+    color: #fff !important;
+    -webkit-text-fill-color: #fff !important;
+    font-size: var(--stats-mob-label-fs) !important;
+    font-weight: 600 !important;
+    text-align: center !important;
+    border-top: 1px solid #333 !important;
+    min-height: 28px !important;
+    height: 28px !important;
+    padding: 5px 2px !important;
+    line-height: 1.2 !important;
+    vertical-align: middle !important;
+    box-sizing: border-box !important;
+  }
+
+  /* 월별 합계 행 — 월 열만 흰 배경 유지 */
+  #screen-order-stats #statsTableBody > tr.stats-table__totals-row > td.stats-table__month-col {
+    background: #fff !important;
+    background-color: #fff !important;
+    color: #333 !important;
+    -webkit-text-fill-color: #333 !important;
+    font-size: var(--stats-mob-label-fs) !important;
+    font-weight: 600 !important;
+    text-align: center !important;
+    border-top: 1px solid #333 !important;
+    min-height: 28px !important;
+    padding: 5px 2px !important;
+    line-height: 1.2 !important;
+    vertical-align: middle !important;
+    box-sizing: border-box !important;
+  }
+}

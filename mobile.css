@@ -9767,3 +9767,87 @@
     border-bottom: none !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   모바일 v48 — 7번 통계 X·구분 교차 정렬 · 구분 세로선 고정
+   (PC 미변경 · 구조·기능 유지)
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* ② 시공협력사(구분) · 합계 열 우측 세로선 — 차트·헤더·본문 동일 위치 */
+  #screen-order-stats .stats-chart-row__scope,
+  #screen-order-stats .stats-table th.stats-table__scope-col,
+  #screen-order-stats .stats-table td.assign-table__td--scope {
+    width: var(--stats-mob-scope-w) !important;
+    min-width: var(--stats-mob-scope-w) !important;
+    max-width: var(--stats-mob-scope-w) !important;
+    border-right: 1px solid #333 !important;
+    box-sizing: border-box !important;
+  }
+
+  #screen-order-stats .stats-chart-row__total.stats-table__total-col,
+  #screen-order-stats .stats-table th.stats-table__total-col,
+  #screen-order-stats .stats-table td.stats-table__total-col {
+    width: var(--stats-mob-total-w) !important;
+    min-width: var(--stats-mob-total-w) !important;
+    max-width: var(--stats-mob-total-w) !important;
+    border-right: 1px solid #333 !important;
+    box-sizing: border-box !important;
+  }
+
+  /* 회색바 구분 열 — 세로선 고정(sticky) */
+  #screen-order-stats .stats-chart-row__scope {
+    position: sticky !important;
+    left: var(--stats-mob-rank-w) !important;
+    z-index: 22 !important;
+    background: #ececec !important;
+    background-clip: padding-box !important;
+    border-right: 1px solid #333 !important;
+    border-bottom: none !important;
+    overflow: visible !important;
+  }
+
+  #screen-order-stats .stats-chart-row__scope::after {
+    content: none !important;
+    display: none !important;
+  }
+
+  /* ① X축선 — 구분 우측 세로선(고정)과 교차 · 합계 우측까지 */
+  #screen-order-stats .stats-chart-row__scope::before {
+    content: "" !important;
+    display: block !important;
+    position: absolute !important;
+    left: 100% !important;
+    bottom: 0 !important;
+    width: calc(12 * var(--stats-mob-month-w) + var(--stats-mob-total-w)) !important;
+    height: 1px !important;
+    background: #333 !important;
+    z-index: 23 !important;
+    pointer-events: none !important;
+  }
+
+  /* 1월 셀 X축선 제거 — scope 기준선 사용 */
+  #screen-order-stats .stats-chart-row th.stats-chart-row__cell.stats-table__month-col:nth-child(3)::after {
+    content: none !important;
+    display: none !important;
+  }
+
+  #screen-order-stats .stats-table thead .stats-chart-row .assign-table__th,
+  #screen-order-stats .stats-chart-row__rank,
+  #screen-order-stats .stats-chart-row th.stats-chart-row__cell,
+  #screen-order-stats .stats-chart-row__total.stats-table__total-col {
+    border-bottom: none !important;
+  }
+
+  /* 본문 구분 열도 차트 세로선과 동일하게 고정 */
+  #screen-order-stats .stats-table .stats-table__scope-col,
+  #screen-order-stats .stats-table tbody .assign-table__td--scope {
+    position: sticky !important;
+    left: var(--stats-mob-rank-w) !important;
+    z-index: 18 !important;
+    background-clip: padding-box !important;
+  }
+
+  #screen-order-stats .stats-table thead tr:not(.stats-chart-row) .stats-table__scope-col {
+    z-index: 19 !important;
+  }
+}

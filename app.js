@@ -7339,13 +7339,9 @@ function renderStatsChart() {
   var ratioScale = null;
   var scopeCell = row.querySelector(".stats-chart-row__scope");
   var totalCell = row.querySelector(".stats-chart-row__total");
-  var mobileChart = isMobileLayout();
 
   for (m = 0; m < months.length; m++) {
     if (months[m] > max) max = months[m];
-  }
-  if (mobileChart && statsShowsTotals() && result.grandTotal > max) {
-    max = result.grandTotal;
   }
 
   if (filters.metric === "ratio") {
@@ -7364,15 +7360,7 @@ function renderStatsChart() {
   }
 
   if (totalCell) {
-    if (mobileChart && statsShowsTotals()) {
-      totalCell.innerHTML = buildStatsChartBarCellHtml(
-        result.grandTotal,
-        axisMax,
-        filters
-      );
-    } else {
-      totalCell.innerHTML = "";
-    }
+    totalCell.innerHTML = "";
   }
 }
 
@@ -7457,9 +7445,7 @@ function renderStatsTable() {
     totalsHtml += "</tr>";
   }
 
-  tbody.innerHTML = isMobileLayout()
-    ? totalsHtml + dataHtml
-    : dataHtml + totalsHtml;
+  tbody.innerHTML = dataHtml + totalsHtml;
   updateStatsTotalsVisibility(filters);
 }
 

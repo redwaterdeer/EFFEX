@@ -9655,3 +9655,62 @@
     vertical-align: middle !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   모바일 v46 — 7번 통계 X축선 우측 이동 · 테두리 하단 확장
+   (PC 미변경 · 구조·기능 유지)
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  #screen-order-stats {
+    --stats-mob-x-line-shift: 4px;
+    --stats-mob-chart-wrap-pad-b: 8px;
+  }
+
+  /* 외곽 테두리 — 막대그래프 하단 아래까지 여유 */
+  #screen-order-stats .stats-body .assign-table-wrap {
+    overflow-y: visible !important;
+    max-height: none !important;
+    height: auto !important;
+    padding-top: 2px !important;
+    padding-bottom: var(--stats-mob-chart-wrap-pad-b) !important;
+    box-sizing: border-box !important;
+  }
+
+  /* 회색 차트 영역 하단 X축선 — 구분|1월 경계에서 소폭 우측 */
+  #screen-order-stats .stats-chart-row th.stats-chart-row__cell.stats-table__month-col:nth-child(3) {
+    position: relative !important;
+  }
+
+  #screen-order-stats .stats-chart-row th.stats-chart-row__cell.stats-table__month-col:nth-child(3)::after {
+    content: "" !important;
+    display: block !important;
+    position: absolute !important;
+    left: var(--stats-mob-x-line-shift) !important;
+    width: calc(
+      12 * var(--stats-mob-month-w) + var(--stats-mob-total-w) -
+        var(--stats-mob-x-line-shift)
+    ) !important;
+    bottom: 0 !important;
+    height: 1px !important;
+    background: #333 !important;
+    z-index: 21 !important;
+    pointer-events: none !important;
+  }
+
+  #screen-order-stats .stats-table thead .stats-chart-row .assign-table__th {
+    border-bottom: none !important;
+  }
+
+  #screen-order-stats .stats-chart-row__rank,
+  #screen-order-stats .stats-chart-row__scope,
+  #screen-order-stats .stats-chart-row th.stats-chart-row__cell,
+  #screen-order-stats .stats-chart-row__total.stats-table__total-col {
+    border-bottom: none !important;
+  }
+
+  /* v19 등 월 라벨용 ::after 비활성 — X축선과 충돌 방지 (1월 셀 제외) */
+  #screen-order-stats .stats-chart-row th.stats-table__month-col:not(:nth-child(3))::after {
+    content: none !important;
+    display: none !important;
+  }
+}

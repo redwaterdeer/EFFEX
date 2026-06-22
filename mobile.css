@@ -10878,3 +10878,128 @@
     box-shadow: 4px 0 6px -4px rgba(0, 0, 0, 0.12) !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   모바일 v58 — 7번 구분|1월 기준 슬라이드 · 테두리 합계 하단 확장
+   (PC 미변경 · 구조·기능 유지)
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  #screen-order-stats {
+    --stats-mob-wrap-pad-b: 64px;
+    --stats-mob-scroll-w: calc(
+      12 * var(--stats-mob-month-w) + var(--stats-mob-total-w)
+    );
+  }
+
+  /* 테두리 하단 — 합계 아래 여백 확대 */
+  #screen-order-stats .stats-main {
+    padding-bottom: calc(var(--stats-mob-border-pad, 8px) + var(--stats-mob-wrap-pad-b)) !important;
+  }
+
+  #screen-order-stats .stats-body .assign-table-wrap {
+    padding-bottom: var(--stats-mob-wrap-pad-b) !important;
+  }
+
+  /* ── 막대그래프: 구분|1월 세로선 기준 좌 고정 · 1월~합계 슬라이드 ── */
+  #screen-order-stats .stats-table thead tr.stats-chart-row th.stats-chart-row__rank.stats-table__rank-col,
+  #screen-order-stats .stats-chart-row__rank.stats-table__rank-col {
+    position: -webkit-sticky !important;
+    position: sticky !important;
+    left: 0 !important;
+    z-index: 42 !important;
+    background: #fff !important;
+    background-clip: padding-box !important;
+  }
+
+  #screen-order-stats .stats-table thead tr.stats-chart-row th.stats-chart-row__scope.stats-table__scope-col,
+  #screen-order-stats .stats-chart-row__scope.stats-table__scope-col {
+    position: -webkit-sticky !important;
+    position: sticky !important;
+    left: var(--stats-mob-rank-w) !important;
+    z-index: 41 !important;
+    background: #ececec !important;
+    background-clip: padding-box !important;
+    border-right: 1px solid #333 !important;
+    box-shadow: 4px 0 6px -4px rgba(0, 0, 0, 0.12) !important;
+    overflow: hidden !important;
+  }
+
+  /* 구분 열 내부 — 1월 영역 침범 방지 */
+  #screen-order-stats .stats-chart-row__scope .stats-chart-scope {
+    position: static !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    left: auto !important;
+    right: auto !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+  }
+
+  /* 고정 구분 열에 붙은 X축 가상선 제거 → 1월~합계와 함께 슬라이드 */
+  #screen-order-stats .stats-chart-row__scope::before,
+  #screen-order-stats .stats-chart-row__scope::after {
+    content: none !important;
+    display: none !important;
+  }
+
+  /* 1월 ~ 합계 — 구분 세로선 오른쪽만 좌우 스크롤 */
+  #screen-order-stats .stats-chart-row th.stats-chart-row__cell.stats-table__month-col,
+  #screen-order-stats .stats-chart-row__total.stats-table__total-col {
+    position: static !important;
+    left: auto !important;
+    z-index: auto !important;
+    box-shadow: none !important;
+  }
+
+  /* X축선 — 슬라이드 영역(1월~합계) 하단, 구분 세로선과 맞닿음 */
+  #screen-order-stats .stats-chart-row th.stats-chart-row__cell.stats-table__month-col:nth-child(3) {
+    position: relative !important;
+  }
+
+  #screen-order-stats .stats-chart-row th.stats-chart-row__cell.stats-table__month-col:nth-child(3)::after {
+    content: "" !important;
+    display: block !important;
+    position: absolute !important;
+    left: 0 !important;
+    bottom: 0 !important;
+    width: var(--stats-mob-scroll-w) !important;
+    height: 1px !important;
+    background: #333 !important;
+    z-index: 2 !important;
+    pointer-events: none !important;
+  }
+
+  #screen-order-stats .stats-chart-row th.stats-table__month-col:not(:nth-child(3))::after {
+    content: none !important;
+    display: none !important;
+  }
+
+  /* 헤더·본문 — 구분|1월 세로선 기준 동일 고정 */
+  #screen-order-stats .stats-table .stats-table__rank-col,
+  #screen-order-stats .stats-table td.stats-table__rank-col {
+    position: sticky !important;
+    left: 0 !important;
+    z-index: 28 !important;
+    background-clip: padding-box !important;
+  }
+
+  #screen-order-stats .stats-table .stats-table__scope-col,
+  #screen-order-stats .stats-table td.assign-table__td--scope {
+    position: sticky !important;
+    left: var(--stats-mob-rank-w) !important;
+    z-index: 27 !important;
+    border-right: 1px solid #333 !important;
+    background-clip: padding-box !important;
+    box-shadow: 4px 0 6px -4px rgba(0, 0, 0, 0.12) !important;
+  }
+
+  #screen-order-stats .stats-table th.stats-table__month-col,
+  #screen-order-stats .stats-table td.stats-table__month-col,
+  #screen-order-stats .stats-table th.stats-table__total-col,
+  #screen-order-stats .stats-table td.stats-table__total-col {
+    position: static !important;
+    left: auto !important;
+    z-index: auto !important;
+  }
+}

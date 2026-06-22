@@ -8841,3 +8841,21 @@
     table-layout: fixed !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   모바일 v42 — 1번 로그인: 전체 구성 아래로 이동
+   (PC 미변경 · 구조·기능 유지)
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  #screen-login .login-screen {
+    padding-top: calc(env(safe-area-inset-top, 0px) + clamp(52px, 11vh, 76px)) !important;
+  }
+
+  #screen-login .login-screen__logo {
+    margin-top: 0 !important;
+  }
+
+  #screen-login .login-screen__page-num {
+    top: calc(env(safe-area-inset-top, 0px) + clamp(52px, 11vh, 76px)) !important;
+  }
+}

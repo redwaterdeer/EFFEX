@@ -6128,8 +6128,9 @@
     box-sizing: border-box !important;
   }
 
-  /* 월 헤더 행(X축) 텍스트 가독성 — Rank·합계 동일 두께 */
+  /* 월 헤더 행(X축) 텍스트 가독성 — Rank·구분·합계 동일 두께 */
   #screen-order-stats .stats-table thead tr:not(.stats-chart-row) .stats-table__rank-col,
+  #screen-order-stats .stats-table thead tr:not(.stats-chart-row) .stats-table__scope-col,
   #screen-order-stats .stats-table thead tr:not(.stats-chart-row) .stats-table__month-col,
   #screen-order-stats .stats-table thead tr:not(.stats-chart-row) .stats-table__total-col {
     overflow: visible !important;
@@ -11573,5 +11574,60 @@
   #screen-order-stats table.stats-table tbody tr.stats-table__totals-row td.assign-table__td.stats-table__month-col {
     background: #fff !important;
     color: #333 !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   모바일 v64 — 7번 막대그래프 구분·합계 행 텍스트·스타일
+   (PC 미변경 · 구조·기능 유지)
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* 헤더 구분 — 합계와 동일 텍스트 크기·스타일 */
+  #screen-order-stats table.stats-table thead tr:not(.stats-chart-row) th.assign-table__th.stats-table__scope-col {
+    min-height: 28px !important;
+    height: 28px !important;
+    padding: 5px 2px !important;
+    line-height: 1.2 !important;
+    vertical-align: middle !important;
+    text-align: center !important;
+    font-weight: 600 !important;
+    font-size: clamp(9px, 2.35vw, 11px) !important;
+    background: var(--color-btn) !important;
+    color: #fff !important;
+    white-space: nowrap !important;
+    box-sizing: border-box !important;
+    border-bottom: 1px solid #333 !important;
+  }
+
+  /* 월별 합계 행(마지막 합계행) — Rank 열과 동일 검은 바탕·흰 글씨 */
+  #screen-order-stats table.stats-table tbody tr.stats-table__totals-row td.assign-table__td.stats-table__rank-col,
+  #screen-order-stats table.stats-table tbody tr.stats-table__totals-row td.assign-table__td.assign-table__td--scope,
+  #screen-order-stats table.stats-table tbody tr.stats-table__totals-row td.assign-table__td.assign-table__td--total.stats-table__total-col {
+    background: var(--color-btn) !important;
+    color: #fff !important;
+    font-weight: 600 !important;
+    font-size: clamp(9px, 2.35vw, 11px) !important;
+    text-align: center !important;
+    border-top: 1px solid #333 !important;
+    min-height: 28px !important;
+    height: 28px !important;
+    padding: 5px 2px !important;
+    line-height: 1.2 !important;
+    vertical-align: middle !important;
+    box-sizing: border-box !important;
+  }
+
+  #screen-order-stats table.stats-table tbody tr.stats-table__totals-row td.assign-table__td.stats-table__month-col {
+    background: #fff !important;
+    color: #333 !important;
+    font-weight: 600 !important;
+    font-size: clamp(9px, 2.35vw, 11px) !important;
+    text-align: center !important;
+    border-top: 1px solid #333 !important;
+    min-height: 28px !important;
+    padding: 5px 2px !important;
+    line-height: 1.2 !important;
+    vertical-align: middle !important;
+    box-sizing: border-box !important;
   }
 }

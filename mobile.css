@@ -9851,3 +9851,133 @@
     z-index: 19 !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   모바일 v49 — 7번 막대그래프 구분 세로선 기준 좌 고정·우 슬라이드
+   (PC 미변경 · 구조·기능 유지)
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* 가로 슬라이드 컨테이너 */
+  #screen-order-stats .stats-body .assign-table-wrap {
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+    -webkit-overflow-scrolling: touch !important;
+    touch-action: pan-x pan-y !important;
+    contain: none !important;
+  }
+
+  #screen-order-stats .stats-table {
+    display: table !important;
+    width: var(--stats-mob-table-min-w) !important;
+    min-width: var(--stats-mob-table-min-w) !important;
+    max-width: var(--stats-mob-table-min-w) !important;
+    table-layout: fixed !important;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+  }
+
+  #screen-order-stats .stats-table thead {
+    display: table-header-group !important;
+  }
+
+  #screen-order-stats .stats-table tbody {
+    display: table-row-group !important;
+  }
+
+  /* ── 막대그래프 행: Rank·구분(세로선) 좌측 고정 ── */
+  #screen-order-stats .stats-chart-row__rank {
+    position: sticky !important;
+    left: 0 !important;
+    z-index: 24 !important;
+    background: #fff !important;
+    background-clip: padding-box !important;
+  }
+
+  #screen-order-stats .stats-chart-row__scope {
+    position: sticky !important;
+    left: var(--stats-mob-rank-w) !important;
+    z-index: 23 !important;
+    background: #ececec !important;
+    background-clip: padding-box !important;
+    border-right: 1px solid #333 !important;
+    overflow: visible !important;
+    box-shadow: 4px 0 6px -4px rgba(0, 0, 0, 0.12) !important;
+  }
+
+  /* 고정 영역에 붙은 X축선 제거 → 우측(월·합계)과 함께 슬라이드 */
+  #screen-order-stats .stats-chart-row__scope::before {
+    content: none !important;
+    display: none !important;
+  }
+
+  #screen-order-stats .stats-chart-row__scope::after {
+    content: none !important;
+    display: none !important;
+  }
+
+  /* ── 막대그래프 행: 구분 세로선 오른쪽(월·합계) 슬라이드 ── */
+  #screen-order-stats .stats-chart-row th.stats-chart-row__cell.stats-table__month-col,
+  #screen-order-stats .stats-chart-row__total.stats-table__total-col {
+    position: static !important;
+    left: auto !important;
+    z-index: auto !important;
+    box-shadow: none !important;
+  }
+
+  /* X축선 — 슬라이드 영역(1월~합계) 하단, 구분 세로선과 맞닿음 */
+  #screen-order-stats .stats-chart-row th.stats-chart-row__cell.stats-table__month-col:nth-child(3) {
+    position: relative !important;
+  }
+
+  #screen-order-stats .stats-chart-row th.stats-chart-row__cell.stats-table__month-col:nth-child(3)::after {
+    content: "" !important;
+    display: block !important;
+    position: absolute !important;
+    left: 0 !important;
+    bottom: 0 !important;
+    width: calc(12 * var(--stats-mob-month-w) + var(--stats-mob-total-w)) !important;
+    height: 1px !important;
+    background: #333 !important;
+    z-index: 1 !important;
+    pointer-events: none !important;
+  }
+
+  #screen-order-stats .stats-chart-row th.stats-table__month-col:not(:nth-child(3))::after {
+    content: none !important;
+    display: none !important;
+  }
+
+  #screen-order-stats .stats-table thead .stats-chart-row .assign-table__th,
+  #screen-order-stats .stats-chart-row__rank,
+  #screen-order-stats .stats-chart-row th.stats-chart-row__cell,
+  #screen-order-stats .stats-chart-row__total.stats-table__total-col {
+    border-bottom: none !important;
+  }
+
+  /* 본문·헤더도 동일 — 구분 세로선 기준 좌 고정 */
+  #screen-order-stats .stats-table .stats-table__rank-col,
+  #screen-order-stats .stats-table .stats-chart-row__rank {
+    position: sticky !important;
+    left: 0 !important;
+    z-index: 20 !important;
+    background-clip: padding-box !important;
+  }
+
+  #screen-order-stats .stats-table .stats-table__scope-col,
+  #screen-order-stats .stats-table tbody .assign-table__td--scope {
+    position: sticky !important;
+    left: var(--stats-mob-rank-w) !important;
+    z-index: 19 !important;
+    border-right: 1px solid #333 !important;
+    background-clip: padding-box !important;
+    box-shadow: 4px 0 6px -4px rgba(0, 0, 0, 0.12) !important;
+  }
+
+  #screen-order-stats .stats-table thead tr:not(.stats-chart-row) .stats-table__rank-col {
+    z-index: 21 !important;
+  }
+
+  #screen-order-stats .stats-table thead tr:not(.stats-chart-row) .stats-table__scope-col {
+    z-index: 20 !important;
+  }
+}

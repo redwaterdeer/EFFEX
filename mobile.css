@@ -11245,3 +11245,81 @@
     z-index: auto !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   모바일 v60 — 7번 막대그래프 Rank·합계 열 너비·스타일 통일
+   (PC 미변경 · 구조·기능 유지)
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* Rank 열 너비 = 합계 열 너비 */
+  #screen-order-stats {
+    --stats-mob-rank-w: var(--stats-mob-total-w);
+    --stats-mob-fixed-w: calc(var(--stats-mob-rank-w) + var(--stats-mob-scope-w));
+    --stats-mob-table-min-w: calc(
+      var(--stats-mob-fixed-w) + var(--stats-mob-total-w) +
+        12 * var(--stats-mob-month-w)
+    );
+  }
+
+  /* Rank · 합계 열 — 차트·헤더·본문 동일 너비 */
+  #screen-order-stats .stats-table .stats-table__rank-col,
+  #screen-order-stats .stats-table th.stats-chart-row__rank,
+  #screen-order-stats .stats-table td.stats-table__rank-col,
+  #screen-order-stats #statsChartRow > th.stats-chart-row__rank {
+    width: var(--stats-mob-rank-w) !important;
+    min-width: var(--stats-mob-rank-w) !important;
+    max-width: var(--stats-mob-rank-w) !important;
+  }
+
+  /* 헤더 Rank 행 — 합계 행과 동일 두께(높이)·스타일 */
+  #screen-order-stats .stats-table thead tr:not(.stats-chart-row) .stats-table__rank-col {
+    min-height: 28px !important;
+    padding: 5px 2px !important;
+    line-height: 1.2 !important;
+    vertical-align: middle !important;
+    text-align: center !important;
+    font-weight: 600 !important;
+    font-size: clamp(9px, 2.35vw, 11px) !important;
+    background: var(--color-btn) !important;
+    color: #fff !important;
+    box-sizing: border-box !important;
+    white-space: nowrap !important;
+  }
+
+  /* 헤더 합계 — Rank와 동일 검은 바탕·흰 글씨·두께 */
+  #screen-order-stats .stats-table thead tr:not(.stats-chart-row) .stats-table__total-col {
+    min-height: 28px !important;
+    padding: 5px 2px !important;
+    line-height: 1.2 !important;
+    vertical-align: middle !important;
+    text-align: center !important;
+    font-weight: 600 !important;
+    font-size: clamp(9px, 2.35vw, 11px) !important;
+    background: var(--color-btn) !important;
+    color: #fff !important;
+    box-sizing: border-box !important;
+    white-space: nowrap !important;
+  }
+
+  /* 월별 합계 행 — Rank·합계 열 동일 두께·스타일 */
+  #screen-order-stats .stats-table tbody tr.stats-table__totals-row .stats-table__rank-col {
+    min-height: 28px !important;
+    padding: 5px 2px !important;
+    line-height: 1.2 !important;
+    vertical-align: middle !important;
+    box-sizing: border-box !important;
+  }
+
+  #screen-order-stats .stats-table tbody tr.stats-table__totals-row .stats-table__total-col {
+    background: var(--color-btn) !important;
+    color: #fff !important;
+    font-weight: 600 !important;
+    text-align: center !important;
+    border-top: 1px solid #333 !important;
+    min-height: 28px !important;
+    padding: 5px 2px !important;
+    line-height: 1.2 !important;
+    vertical-align: middle !important;
+    box-sizing: border-box !important;
+  }
+}

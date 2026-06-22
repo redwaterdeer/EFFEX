@@ -10213,3 +10213,230 @@
     z-index: 23 !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   모바일 v52 — 7번 Rank·구분 sticky 확실히 고정 · 테두리 하단 추가
+   (PC 미변경 · 구조·기능 유지)
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  #screen-order-stats {
+    --stats-mob-wrap-pad-b: 32px;
+  }
+
+  /* sticky 차단하는 상위 overflow-x 해제 — 스크롤은 표 래퍼만 */
+  #screen-order-stats.order-page > .assign-body {
+    overflow-x: visible !important;
+    overflow-y: auto !important;
+  }
+
+  #screen-order-stats .assign-panel,
+  #screen-order-stats .assign-panel.stats-panel,
+  #screen-order-stats .stats-main,
+  #screen-order-stats .stats-content,
+  #screen-order-stats .stats-body {
+    overflow: visible !important;
+    overflow-x: visible !important;
+    min-height: 0 !important;
+  }
+
+  #screen-order-stats .stats-body .assign-table-wrap {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    max-height: none !important;
+    height: auto !important;
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+    border: 1px solid #b0b0b0 !important;
+    background: #fff !important;
+    box-sizing: border-box !important;
+    padding: 2px 3px var(--stats-mob-wrap-pad-b) !important;
+    -webkit-overflow-scrolling: touch !important;
+    touch-action: pan-x pan-y !important;
+    contain: none !important;
+  }
+
+  #screen-order-stats .stats-table {
+    display: table !important;
+    width: var(--stats-mob-table-min-w) !important;
+    min-width: var(--stats-mob-table-min-w) !important;
+    max-width: var(--stats-mob-table-min-w) !important;
+    table-layout: fixed !important;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+  }
+
+  #screen-order-stats .stats-table thead {
+    display: table-header-group !important;
+  }
+
+  #screen-order-stats .stats-table tbody {
+    display: table-row-group !important;
+  }
+
+  #screen-order-stats .stats-table thead tr.stats-chart-row,
+  #screen-order-stats .stats-table thead tr:not(.stats-chart-row),
+  #screen-order-stats .stats-table tbody tr {
+    display: table-row !important;
+  }
+
+  /* 막대그래프 회색바 — Rank·구분 절대 좌우 고정 */
+  #screen-order-stats .stats-table thead tr.stats-chart-row th.stats-chart-row__rank,
+  #screen-order-stats .stats-chart-row__rank {
+    position: sticky !important;
+    left: 0 !important;
+    z-index: 30 !important;
+    width: var(--stats-mob-rank-w) !important;
+    min-width: var(--stats-mob-rank-w) !important;
+    max-width: var(--stats-mob-rank-w) !important;
+    background: #fff !important;
+    background-clip: padding-box !important;
+    box-shadow: none !important;
+  }
+
+  #screen-order-stats .stats-table thead tr.stats-chart-row th.stats-chart-row__scope,
+  #screen-order-stats .stats-chart-row__scope {
+    position: sticky !important;
+    left: var(--stats-mob-rank-w) !important;
+    z-index: 29 !important;
+    width: var(--stats-mob-scope-w) !important;
+    min-width: var(--stats-mob-scope-w) !important;
+    max-width: var(--stats-mob-scope-w) !important;
+    background: #ececec !important;
+    background-clip: padding-box !important;
+    border-right: 1px solid #333 !important;
+    box-shadow: 4px 0 6px -4px rgba(0, 0, 0, 0.12) !important;
+    overflow: visible !important;
+  }
+
+  /* 월별·합계 — 좌우 스크롤 */
+  #screen-order-stats .stats-chart-row th.stats-chart-row__cell.stats-table__month-col,
+  #screen-order-stats .stats-chart-row__total.stats-table__total-col {
+    position: static !important;
+    left: auto !important;
+    z-index: auto !important;
+  }
+
+  /* 헤더·본문 Rank·구분 동일 고정 */
+  #screen-order-stats .stats-table .stats-table__rank-col,
+  #screen-order-stats .stats-table td.stats-table__rank-col {
+    position: sticky !important;
+    left: 0 !important;
+    z-index: 22 !important;
+    background-clip: padding-box !important;
+  }
+
+  #screen-order-stats .stats-table .stats-table__scope-col,
+  #screen-order-stats .stats-table td.assign-table__td--scope {
+    position: sticky !important;
+    left: var(--stats-mob-rank-w) !important;
+    z-index: 21 !important;
+    border-right: 1px solid #333 !important;
+    background-clip: padding-box !important;
+    box-shadow: 4px 0 6px -4px rgba(0, 0, 0, 0.12) !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   모바일 v53 — 7번 Rank·구분 고정(sticky) · 테두리 하단 추가
+   (PC 미변경 · 구조·기능 유지)
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  #screen-order-stats {
+    --stats-mob-wrap-pad-b: 40px;
+  }
+
+  /* sticky 상위 overflow-x 차단 해제 */
+  #screen-order-stats.is-active,
+  #screen-order-stats.order-page {
+    overflow-x: visible !important;
+  }
+
+  #screen-order-stats.order-page > .assign-body,
+  #screen-order-stats .assign-body {
+    overflow-x: visible !important;
+    overflow-y: auto !important;
+  }
+
+  #screen-order-stats .assign-panel,
+  #screen-order-stats .assign-panel.stats-panel,
+  #screen-order-stats .stats-main,
+  #screen-order-stats .stats-content,
+  #screen-order-stats .stats-body {
+    overflow: visible !important;
+    overflow-x: visible !important;
+  }
+
+  #screen-order-stats .stats-body .assign-table-wrap {
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+    border: 1px solid #b0b0b0 !important;
+    padding: 2px 3px var(--stats-mob-wrap-pad-b) !important;
+    box-sizing: border-box !important;
+    contain: none !important;
+    -webkit-overflow-scrolling: touch !important;
+    touch-action: pan-x pan-y !important;
+  }
+
+  #screen-order-stats .stats-table thead {
+    display: table-header-group !important;
+  }
+
+  /* v42 position:static 덮어쓰기 — 막대그래프 Rank·구분 고정 */
+  #screen-order-stats .stats-table thead tr.stats-chart-row th.stats-chart-row__rank,
+  #screen-order-stats .stats-chart-row__rank {
+    position: sticky !important;
+    left: 0 !important;
+    z-index: 30 !important;
+    background: #fff !important;
+    background-clip: padding-box !important;
+  }
+
+  #screen-order-stats .stats-table thead tr.stats-chart-row th.stats-chart-row__scope,
+  #screen-order-stats .stats-chart-row__scope {
+    position: sticky !important;
+    left: var(--stats-mob-rank-w) !important;
+    z-index: 29 !important;
+    background: #ececec !important;
+    background-clip: padding-box !important;
+    border-right: 1px solid #333 !important;
+  }
+
+  #screen-order-stats .stats-chart-row__total {
+    position: static !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   모바일 v54 — 7번 Rank·구분 고정 · 테두리 하단 추가 (v53 보강)
+   (PC 미변경 · 구조·기능 유지)
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  #screen-order-stats {
+    --stats-mob-wrap-pad-b: 48px;
+  }
+
+  #screen-order-stats.is-active {
+    overflow-x: visible !important;
+  }
+
+  #screen-order-stats.order-page > .assign-body {
+    overflow-x: visible !important;
+  }
+
+  #screen-order-stats .stats-body .assign-table-wrap {
+    padding-bottom: var(--stats-mob-wrap-pad-b) !important;
+  }
+
+  #screen-order-stats .stats-table thead tr.stats-chart-row th.stats-chart-row__rank {
+    position: sticky !important;
+    left: 0 !important;
+    z-index: 31 !important;
+  }
+
+  #screen-order-stats .stats-table thead tr.stats-chart-row th.stats-chart-row__scope {
+    position: sticky !important;
+    left: var(--stats-mob-rank-w) !important;
+    z-index: 30 !important;
+  }
+}

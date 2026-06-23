@@ -12886,3 +12886,113 @@
     max-height: calc(var(--stats-mob-chart-h) - var(--stats-mob-chart-pad-top, 4px)) !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   모바일 v75 — 7번 막대영역 흰배경 · 세로스크롤로 그래프 전체 표시
+   (PC 미변경 · 구조·기능 유지)
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  #screen-order-stats {
+    --stats-mob-chart-h: clamp(108px, 18vh, 148px);
+    --stats-mob-chart-pad-top: 6px;
+    --stats-mob-table-scroll-h: min(50vh, 48dvh);
+  }
+
+  /* 표 영역 — 세로 스크롤로 막대그래프 전체 확인 */
+  #screen-order-stats .stats-body .assign-table-wrap {
+    display: block !important;
+    max-height: var(--stats-mob-table-scroll-h) !important;
+    height: auto !important;
+    overflow-x: auto !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    touch-action: pan-x pan-y !important;
+    overscroll-behavior: contain !important;
+    contain: none !important;
+  }
+
+  #screen-order-stats .stats-table {
+    display: table !important;
+    overflow: visible !important;
+  }
+
+  #screen-order-stats .stats-table thead {
+    display: table-header-group !important;
+  }
+
+  #screen-order-stats .stats-table tbody {
+    display: table-row-group !important;
+    overflow: visible !important;
+    max-height: none !important;
+  }
+
+  /* 막대그래프 행 — 내용 높이만큼 확장 (잘림 방지) */
+  #screen-order-stats #statsChartRow,
+  #screen-order-stats #statsChartRow > th,
+  #screen-order-stats #statsChartRow > th.assign-table__th,
+  #screen-order-stats .stats-table thead tr.stats-chart-row th.assign-table__th {
+    height: auto !important;
+    min-height: var(--stats-mob-chart-h) !important;
+    max-height: none !important;
+    padding-top: var(--stats-mob-chart-pad-top) !important;
+    padding-bottom: 0 !important;
+    overflow: visible !important;
+    box-sizing: border-box !important;
+    vertical-align: bottom !important;
+  }
+
+  #screen-order-stats #statsChartRow > th.stats-chart-row__rank,
+  #screen-order-stats #statsChartRow > th.stats-chart-row__scope,
+  #screen-order-stats #statsChartRow > th.stats-chart-row__cell,
+  #screen-order-stats #statsChartRow > th.stats-chart-row__total {
+    height: auto !important;
+    min-height: var(--stats-mob-chart-h) !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  /* 막대영역 배경 — 회색 → 흰색 */
+  #screen-order-stats #statsChartRow > th.stats-chart-row__scope,
+  #screen-order-stats .stats-table thead tr.stats-chart-row th.stats-chart-row__scope,
+  #screen-order-stats #statsChartRow > th.stats-chart-row__cell,
+  #screen-order-stats #statsChartRow > th.stats-chart-row__total,
+  #screen-order-stats .stats-chart-row__cell.stats-table__month-col,
+  #screen-order-stats .stats-chart-row__total.stats-table__total-col {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+  }
+
+  #screen-order-stats #statsChartRow .stats-chart-scope,
+  #screen-order-stats #statsChartRow .stats-chart-yaxis,
+  #screen-order-stats #statsChartRow .stats-chart-yaxis__ticks,
+  #screen-order-stats #statsChartRow .stats-chart__plot,
+  #screen-order-stats #statsChartRow .stats-chart__bar-area {
+    min-height: calc(var(--stats-mob-chart-h) - var(--stats-mob-chart-pad-top)) !important;
+    max-height: none !important;
+    height: 100% !important;
+    overflow: visible !important;
+  }
+
+  #screen-order-stats #statsChartRow .stats-chart-scope {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    margin: 0 !important;
+  }
+
+  #screen-order-stats #statsChartRow .stats-chart__plot,
+  #screen-order-stats #statsChartRow .stats-chart-row__total .stats-chart__plot {
+    min-height: calc(var(--stats-mob-chart-h) - var(--stats-mob-chart-pad-top)) !important;
+    max-height: none !important;
+    height: 100% !important;
+    padding: 4px 2px 0 !important;
+    overflow: visible !important;
+    box-sizing: border-box !important;
+  }
+
+  #screen-order-stats #statsChartRow .stats-chart-yaxis__tick-label,
+  #screen-order-stats #statsChartRow .stats-chart__bar-value {
+    font-size: clamp(9px, 2.2vw, 11px) !important;
+    line-height: 1 !important;
+  }
+}

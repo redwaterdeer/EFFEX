@@ -12842,3 +12842,47 @@
     line-height: 1 !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   모바일 v74 — 7번 모드탭·필터 간격 · 막대영역 높이 확대
+   (PC 미변경 · 구조·기능 유지)
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  #screen-order-stats {
+    --stats-mob-chart-h: clamp(96px, 15vh, 120px);
+    --stats-mob-mode-filter-gap: 14px;
+  }
+
+  /* 배정·미마감·비율 ↔ 시공연도 행 간격 */
+  #screen-order-stats .stats-mode-nav.stats-mode-nav--top {
+    margin-bottom: var(--stats-mob-mode-filter-gap) !important;
+  }
+
+  #screen-order-stats .stats-main > .stats-content {
+    margin-top: 0 !important;
+  }
+
+  /* 막대그래프 행 높이 — v73 변수 확대 반영 */
+  #screen-order-stats #statsChartRow,
+  #screen-order-stats #statsChartRow > th,
+  #screen-order-stats #statsChartRow > th.assign-table__th,
+  #screen-order-stats .stats-table thead tr.stats-chart-row th.assign-table__th {
+    height: var(--stats-mob-chart-h) !important;
+    min-height: var(--stats-mob-chart-h) !important;
+    max-height: var(--stats-mob-chart-h) !important;
+  }
+
+  #screen-order-stats #statsChartRow > th.stats-chart-row__rank,
+  #screen-order-stats #statsChartRow > th.stats-chart-row__scope,
+  #screen-order-stats #statsChartRow > th.stats-chart-row__cell,
+  #screen-order-stats #statsChartRow > th.stats-chart-row__total {
+    height: var(--stats-mob-chart-h) !important;
+    min-height: var(--stats-mob-chart-h) !important;
+    max-height: var(--stats-mob-chart-h) !important;
+  }
+
+  #screen-order-stats #statsChartRow .stats-chart-scope {
+    height: calc(var(--stats-mob-chart-h) - var(--stats-mob-chart-pad-top, 4px)) !important;
+    max-height: calc(var(--stats-mob-chart-h) - var(--stats-mob-chart-pad-top, 4px)) !important;
+  }
+}

@@ -11693,3 +11693,91 @@
     box-sizing: border-box !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   모바일 v66 — 7번 막대그래프 전체 잘림 방지
+   (PC 미변경 · 구조·기능 유지)
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  #screen-order-stats {
+    --stats-mob-chart-h: clamp(120px, 22vh, 180px);
+    --stats-mob-chart-pad-top: 14px;
+  }
+
+  /* 바깥 래퍼·표 — 세로 잘림 해제 */
+  #screen-order-stats .stats-body,
+  #screen-order-stats .stats-body .assign-table-wrap,
+  #screen-order-stats .stats-table,
+  #screen-order-stats .stats-table thead {
+    overflow: visible !important;
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+    max-height: none !important;
+    height: auto !important;
+    contain: none !important;
+  }
+
+  #screen-order-stats .stats-body .assign-table-wrap {
+    display: block !important;
+    -webkit-overflow-scrolling: touch !important;
+    touch-action: pan-x pan-y !important;
+  }
+
+  /* 막대그래프 행(#statsChartRow) — 높이·overflow 잘림 해제 */
+  #screen-order-stats #statsChartRow,
+  #screen-order-stats #statsChartRow > th,
+  #screen-order-stats #statsChartRow > th.assign-table__th {
+    overflow: visible !important;
+    max-height: none !important;
+    height: auto !important;
+    min-height: var(--stats-mob-chart-h) !important;
+    padding-top: var(--stats-mob-chart-pad-top) !important;
+    padding-bottom: 0 !important;
+    box-sizing: border-box !important;
+    vertical-align: bottom !important;
+  }
+
+  #screen-order-stats #statsChartRow > th.stats-chart-row__cell,
+  #screen-order-stats #statsChartRow > th.stats-chart-row__total,
+  #screen-order-stats #statsChartRow > th.stats-chart-row__rank,
+  #screen-order-stats #statsChartRow > th.stats-chart-row__scope {
+    overflow: visible !important;
+    max-height: none !important;
+  }
+
+  /* Y축·막대 영역 — v49/v59 hidden 덮어쓰기 */
+  #screen-order-stats #statsChartRow .stats-chart-scope,
+  #screen-order-stats #statsChartRow .stats-chart-yaxis,
+  #screen-order-stats #statsChartRow .stats-chart-yaxis__ticks,
+  #screen-order-stats #statsChartRow .stats-chart__plot,
+  #screen-order-stats #statsChartRow .stats-chart__bar-area,
+  #screen-order-stats #statsChartRow .stats-chart__bar,
+  #screen-order-stats #statsChartRow .stats-chart__bar-value {
+    overflow: visible !important;
+    max-height: none !important;
+  }
+
+  #screen-order-stats #statsChartRow .stats-chart-scope {
+    position: static !important;
+    inset: auto !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: calc(var(--stats-mob-chart-h) - var(--stats-mob-chart-pad-top)) !important;
+    margin: 0 !important;
+  }
+
+  #screen-order-stats #statsChartRow .stats-chart__plot,
+  #screen-order-stats #statsChartRow .stats-chart-row__total .stats-chart__plot {
+    height: 100% !important;
+    min-height: calc(var(--stats-mob-chart-h) - var(--stats-mob-chart-pad-top)) !important;
+    max-height: none !important;
+    padding: var(--stats-chart-plot-pad, 4px) 2px 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  #screen-order-stats #statsChartRow .stats-chart__bar-value {
+    overflow: visible !important;
+    white-space: nowrap !important;
+    z-index: 3 !important;
+  }
+}

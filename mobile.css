@@ -12418,3 +12418,67 @@
     border-right: 1px solid #333333 !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   모바일 v70 — 7번 차트 합계열 흰배경 · 외곽테두리 마지막행까지
+   (PC 미변경 · 구조·기능 유지)
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* 차트 1행 합계 열 — 회색 → 흰색 (Rank 열과 동일) */
+  #screen-order-stats #statsChartRow > th.stats-chart-row__total,
+  #screen-order-stats #statsChartRow > th.stats-chart-row__total.stats-table__total-col,
+  #screen-order-stats .stats-chart-row__total.stats-table__total-col,
+  #screen-order-stats .stats-table thead tr.stats-chart-row th.stats-chart-row__total {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+  }
+
+  /* 외곽 테두리 — 차트~하단 합계행 전체 포함 (하단 여백 제거) */
+  #screen-order-stats .stats-body .assign-table-wrap {
+    border: 1px solid #c9c9c9 !important;
+    border-radius: 0 !important;
+    box-sizing: border-box !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+    max-height: none !important;
+    height: auto !important;
+    contain: none !important;
+  }
+
+  #screen-order-stats .stats-table {
+    display: table !important;
+    width: 100% !important;
+    min-width: var(--stats-mob-table-min-w, 678px) !important;
+    table-layout: fixed !important;
+    border-collapse: collapse !important;
+    border-spacing: 0 !important;
+    margin: 0 !important;
+  }
+
+  #screen-order-stats .stats-table thead {
+    display: table-header-group !important;
+  }
+
+  #screen-order-stats .stats-body .assign-table-wrap .stats-table tbody,
+  #screen-order-stats .stats-table tbody {
+    display: table-row-group !important;
+    overflow: visible !important;
+    overflow-x: visible !important;
+    overflow-y: visible !important;
+    max-height: none !important;
+    height: auto !important;
+    width: auto !important;
+  }
+
+  #screen-order-stats .stats-table tbody tr {
+    display: table-row !important;
+  }
+
+  /* 마지막 합계 행 하단 — 외곽 테두리와 맞닿도록 */
+  #screen-order-stats #statsTableBody > tr.stats-table__totals-row:last-child > td,
+  #screen-order-stats .stats-table tbody tr.stats-table__totals-row:last-child td {
+    border-bottom: 1px solid #c9c9c9 !important;
+  }
+}

@@ -12067,3 +12067,354 @@
     display: none !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   모바일 v68 — 7번 합계 행 전체 헤더색 · Y축 눈금 표시
+   (v22/v60/v65 월열 흰배경 덮어쓰기 · PC 미변경)
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* 하단 합계 행 — 월·합계·Rank·구분 전체 #666 바탕·흰 글씨 (첨부 이미지) */
+  #screen-order-stats #statsTableBody > tr.stats-table__totals-row > td.stats-table__month-col,
+  #screen-order-stats #statsTableBody > tr.stats-table__totals-row > td.stats-table__total-col,
+  #screen-order-stats #statsTableBody > tr.stats-table__totals-row > td.stats-table__rank-col,
+  #screen-order-stats #statsTableBody > tr.stats-table__totals-row > td.assign-table__td--scope,
+  #screen-order-stats .stats-table tbody tr.stats-table__totals-row .assign-table__td.stats-table__month-col,
+  #screen-order-stats .stats-table tbody tr.stats-table__totals-row .assign-table__td.stats-table__total-col,
+  #screen-order-stats .stats-table tbody tr.stats-table__totals-row .assign-table__td.stats-table__rank-col,
+  #screen-order-stats .stats-table tbody tr.stats-table__totals-row .assign-table__td.assign-table__td--scope,
+  #screen-order-stats table.stats-table tbody tr.stats-table__totals-row td.assign-table__td.stats-table__month-col,
+  #screen-order-stats table.stats-table tbody tr.stats-table__totals-row td.assign-table__td.stats-table__total-col,
+  #screen-order-stats table.stats-table tbody tr.stats-table__totals-row td.assign-table__td.stats-table__rank-col,
+  #screen-order-stats table.stats-table tbody tr.stats-table__totals-row td.assign-table__td.assign-table__td--scope {
+    background: #666666 !important;
+    background-color: #666666 !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    font-weight: 600 !important;
+    text-align: center !important;
+    border-top: 1px solid #333 !important;
+  }
+
+  /* Y축 눈금 1·2·3·4 전부 표시 (v49 등 overflow:hidden 덮어쓰기) */
+  #screen-order-stats #statsChartRow .stats-chart-yaxis,
+  #screen-order-stats #statsChartRow .stats-chart-yaxis__ticks,
+  #screen-order-stats #statsChartRow .stats-chart-yaxis__tick,
+  #screen-order-stats #statsChartRow .stats-chart-yaxis__tick-label {
+    overflow: visible !important;
+    max-height: none !important;
+  }
+
+  #screen-order-stats #statsChartRow .stats-chart-yaxis__ticks {
+    padding: var(--stats-chart-plot-pad, 4px) 0 0 4px !important;
+    min-height: calc(var(--stats-mob-chart-h) - var(--stats-mob-chart-pad-top)) !important;
+    height: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  #screen-order-stats #statsChartRow .stats-chart-yaxis__tick-label {
+    max-width: none !important;
+    text-overflow: clip !important;
+    white-space: nowrap !important;
+    font-size: var(--stats-mob-label-fs, clamp(11px, 2.75vw, 13px)) !important;
+    font-weight: 600 !important;
+    color: #333333 !important;
+  }
+
+  #screen-order-stats #statsChartRow .stats-chart__plot {
+    padding: var(--stats-chart-plot-pad, 4px) 2px 0 !important;
+    box-sizing: border-box !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   모바일 v69 — 7번 통계 막대그래프 첨부 이미지 구조·색상 (최종)
+   (v12~v68 충돌 규칙 전부 덮어쓰기 · PC/HTML/JS 미변경)
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  #screen-order-stats {
+    --stats-mob-img-dark: #666666;
+    --stats-mob-img-grey: #ececec;
+    --stats-mob-img-border: #c9c9c9;
+    --stats-mob-img-bar: #4a7ec8;
+    --stats-mob-img-hdr-h: 28px;
+    --stats-mob-chart-h: clamp(108px, 20vh, 156px);
+    --stats-mob-chart-pad-top: 12px;
+    --stats-mob-label-fs: clamp(11px, 2.75vw, 13px);
+    --stats-mob-rank-w: 46px;
+    --stats-mob-total-w: 46px;
+    --stats-mob-scope-w: 64px;
+    --stats-mob-month-w: 48px;
+  }
+
+  /* ── 표 외곽·셀 테두리 ── */
+  #screen-order-stats .stats-body .assign-table-wrap {
+    border: 1px solid var(--stats-mob-img-border) !important;
+    padding: 0 0 16px 0 !important;
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+    max-height: none !important;
+  }
+
+  #screen-order-stats .stats-table th,
+  #screen-order-stats .stats-table td {
+    border: 1px solid var(--stats-mob-img-border) !important;
+    box-sizing: border-box !important;
+  }
+
+  /* ── 1. 막대그래프 행 (차트 → 헤더 → 본문) ── */
+  #screen-order-stats #statsChartRow > th {
+    height: var(--stats-mob-chart-h) !important;
+    min-height: var(--stats-mob-chart-h) !important;
+    padding: var(--stats-mob-chart-pad-top) 0 0 !important;
+    vertical-align: bottom !important;
+    overflow: visible !important;
+    border-bottom: 1px solid #333333 !important;
+  }
+
+  /* Rank — 흰 배경 */
+  #screen-order-stats #statsChartRow > th.stats-chart-row__rank,
+  #screen-order-stats .stats-table thead tr.stats-chart-row th.stats-chart-row__rank {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    position: sticky !important;
+    left: 0 !important;
+    z-index: 40 !important;
+    width: var(--stats-mob-rank-w) !important;
+    min-width: var(--stats-mob-rank-w) !important;
+    max-width: var(--stats-mob-rank-w) !important;
+  }
+
+  /* 구분 — Y축 회색 영역 + 세로축선(구분|1월 경계) */
+  #screen-order-stats #statsChartRow > th.stats-chart-row__scope,
+  #screen-order-stats .stats-table thead tr.stats-chart-row th.stats-chart-row__scope {
+    background: var(--stats-mob-img-grey) !important;
+    background-color: var(--stats-mob-img-grey) !important;
+    position: sticky !important;
+    left: var(--stats-mob-rank-w) !important;
+    z-index: 39 !important;
+    width: var(--stats-mob-scope-w) !important;
+    min-width: var(--stats-mob-scope-w) !important;
+    max-width: var(--stats-mob-scope-w) !important;
+    border-right: none !important;
+    overflow: visible !important;
+  }
+
+  #screen-order-stats #statsChartRow > th.stats-chart-row__scope::after,
+  #screen-order-stats .stats-chart-row__scope::after {
+    content: "" !important;
+    display: block !important;
+    position: absolute !important;
+    top: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 1px !important;
+    background: #333333 !important;
+    z-index: 6 !important;
+    pointer-events: none !important;
+  }
+
+  /* 월·합계 열 — 회색 플롯 영역 */
+  #screen-order-stats #statsChartRow > th.stats-chart-row__cell,
+  #screen-order-stats #statsChartRow > th.stats-chart-row__total,
+  #screen-order-stats .stats-chart-row__cell.stats-table__month-col,
+  #screen-order-stats .stats-chart-row__total.stats-table__total-col {
+    background: var(--stats-mob-img-grey) !important;
+    background-color: var(--stats-mob-img-grey) !important;
+    overflow: visible !important;
+    padding: 0 !important;
+    vertical-align: bottom !important;
+  }
+
+  #screen-order-stats #statsChartRow .stats-chart-scope {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: calc(var(--stats-mob-chart-h) - var(--stats-mob-chart-pad-top)) !important;
+    margin: 0 !important;
+    overflow: visible !important;
+  }
+
+  #screen-order-stats #statsChartRow .stats-chart-yaxis,
+  #screen-order-stats #statsChartRow .stats-chart-yaxis__ticks,
+  #screen-order-stats #statsChartRow .stats-chart-yaxis__tick,
+  #screen-order-stats #statsChartRow .stats-chart-yaxis__tick-label,
+  #screen-order-stats #statsChartRow .stats-chart__plot,
+  #screen-order-stats #statsChartRow .stats-chart__bar-area,
+  #screen-order-stats #statsChartRow .stats-chart__bar-value {
+    overflow: visible !important;
+    max-height: none !important;
+  }
+
+  #screen-order-stats #statsChartRow .stats-chart-yaxis__ticks {
+    padding: 4px 0 0 4px !important;
+    min-height: calc(var(--stats-mob-chart-h) - var(--stats-mob-chart-pad-top)) !important;
+    height: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  #screen-order-stats #statsChartRow .stats-chart-yaxis__tick {
+    justify-content: flex-end !important;
+    transform: translateY(-50%) !important;
+  }
+
+  #screen-order-stats #statsChartRow .stats-chart-yaxis__tick-label {
+    margin-right: 4px !important;
+    max-width: none !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    white-space: nowrap !important;
+    font-size: var(--stats-mob-label-fs) !important;
+    font-weight: 600 !important;
+    color: #333333 !important;
+  }
+
+  #screen-order-stats #statsChartRow .stats-chart-yaxis__tick-mark {
+    width: 8px !important;
+    height: 1px !important;
+    background: #333333 !important;
+    flex-shrink: 0 !important;
+  }
+
+  #screen-order-stats #statsChartRow .stats-chart__plot,
+  #screen-order-stats #statsChartRow .stats-chart-row__total .stats-chart__plot {
+    height: 100% !important;
+    min-height: calc(var(--stats-mob-chart-h) - var(--stats-mob-chart-pad-top)) !important;
+    padding: 4px 2px 0 !important;
+    box-sizing: border-box !important;
+    overflow: visible !important;
+  }
+
+  /* 막대 — 중간 파란색 · 값 라벨 검은색 */
+  #screen-order-stats #statsChartRow .stats-chart__bar {
+    background: var(--stats-mob-img-bar) !important;
+    background-color: var(--stats-mob-img-bar) !important;
+  }
+
+  #screen-order-stats #statsChartRow .stats-chart__bar-value {
+    color: #333333 !important;
+    font-weight: 600 !important;
+    white-space: nowrap !important;
+  }
+
+  /* X축 월 라벨 — 헤더 행 사용 (::after 제거) */
+  #screen-order-stats .stats-chart-row th.stats-table__month-col::after {
+    content: none !important;
+    display: none !important;
+  }
+
+  /* ── 2. 헤더 행 — 전체 #666 · 흰 글씨 ── */
+  #screen-order-stats .stats-table thead tr:not(.stats-chart-row) th.assign-table__th,
+  #screen-order-stats .stats-table thead tr:not(.stats-chart-row) th.stats-table__rank-col,
+  #screen-order-stats .stats-table thead tr:not(.stats-chart-row) th.stats-table__scope-col,
+  #screen-order-stats .stats-table thead tr:not(.stats-chart-row) th.stats-table__month-col,
+  #screen-order-stats .stats-table thead tr:not(.stats-chart-row) th.stats-table__total-col {
+    background: var(--stats-mob-img-dark) !important;
+    background-color: var(--stats-mob-img-dark) !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    min-height: var(--stats-mob-img-hdr-h) !important;
+    height: var(--stats-mob-img-hdr-h) !important;
+    padding: 5px 2px !important;
+    font-size: var(--stats-mob-label-fs) !important;
+    font-weight: 600 !important;
+    line-height: 1.2 !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+    white-space: nowrap !important;
+    border-top: none !important;
+    border-bottom: 1px solid #333333 !important;
+  }
+
+  #screen-order-stats .stats-table thead tr:not(.stats-chart-row) th.stats-table__rank-col {
+    position: sticky !important;
+    left: 0 !important;
+    z-index: 38 !important;
+  }
+
+  #screen-order-stats .stats-table thead tr:not(.stats-chart-row) th.stats-table__scope-col {
+    position: sticky !important;
+    left: var(--stats-mob-rank-w) !important;
+    z-index: 37 !important;
+    border-right: 1px solid #333333 !important;
+  }
+
+  /* ── 3. 본문 행 — Rank·구분 회색 · 월·행합계 흰색 ── */
+  #screen-order-stats #statsTableBody > tr:not(.stats-table__totals-row) > td.stats-table__rank-col,
+  #screen-order-stats #statsTableBody > tr:not(.stats-table__totals-row) > td.assign-table__td--scope,
+  #screen-order-stats .stats-table tbody tr:not(.stats-table__totals-row) td.stats-table__rank-col,
+  #screen-order-stats .stats-table tbody tr:not(.stats-table__totals-row) td.assign-table__td--scope {
+    background: var(--stats-mob-img-grey) !important;
+    background-color: var(--stats-mob-img-grey) !important;
+    color: #333333 !important;
+    font-weight: 600 !important;
+    text-align: center !important;
+    position: sticky !important;
+    z-index: 20 !important;
+  }
+
+  #screen-order-stats #statsTableBody > tr:not(.stats-table__totals-row) > td.stats-table__rank-col,
+  #screen-order-stats .stats-table tbody tr:not(.stats-table__totals-row) td.stats-table__rank-col {
+    left: 0 !important;
+  }
+
+  #screen-order-stats #statsTableBody > tr:not(.stats-table__totals-row) > td.assign-table__td--scope,
+  #screen-order-stats .stats-table tbody tr:not(.stats-table__totals-row) td.assign-table__td--scope {
+    left: var(--stats-mob-rank-w) !important;
+    border-right: 1px solid #333333 !important;
+    box-shadow: 4px 0 6px -4px rgba(0, 0, 0, 0.1) !important;
+  }
+
+  #screen-order-stats #statsTableBody > tr:not(.stats-table__totals-row) > td.stats-table__month-col,
+  #screen-order-stats #statsTableBody > tr:not(.stats-table__totals-row) > td.stats-table__total-col,
+  #screen-order-stats .stats-table tbody tr:not(.stats-table__totals-row) td.stats-table__month-col,
+  #screen-order-stats .stats-table tbody tr:not(.stats-table__totals-row) td.stats-table__total-col {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    color: #333333 !important;
+    font-weight: 600 !important;
+    text-align: center !important;
+    position: static !important;
+  }
+
+  /* ── 4. 하단 합계 행 — 헤더와 동일 #666 · 흰 글씨 (전체 열) ── */
+  #screen-order-stats #statsTableBody > tr.stats-table__totals-row > td,
+  #screen-order-stats #statsTableBody > tr.stats-table__totals-row > td.stats-table__month-col,
+  #screen-order-stats #statsTableBody > tr.stats-table__totals-row > td.stats-table__total-col,
+  #screen-order-stats #statsTableBody > tr.stats-table__totals-row > td.stats-table__rank-col,
+  #screen-order-stats #statsTableBody > tr.stats-table__totals-row > td.assign-table__td--scope,
+  #screen-order-stats .stats-table tbody tr.stats-table__totals-row td.assign-table__td,
+  #screen-order-stats .stats-table tbody tr.stats-table__totals-row .assign-table__td.stats-table__month-col,
+  #screen-order-stats .stats-table tbody tr.stats-table__totals-row .assign-table__td.stats-table__total-col,
+  #screen-order-stats .stats-table tbody tr.stats-table__totals-row .assign-table__td.stats-table__rank-col,
+  #screen-order-stats .stats-table tbody tr.stats-table__totals-row .assign-table__td.assign-table__td--scope,
+  #screen-order-stats table.stats-table tbody tr.stats-table__totals-row td.assign-table__td.stats-table__month-col,
+  #screen-order-stats table.stats-table tbody tr.stats-table__totals-row td.assign-table__td.stats-table__total-col {
+    background: var(--stats-mob-img-dark) !important;
+    background-color: var(--stats-mob-img-dark) !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    font-size: var(--stats-mob-label-fs) !important;
+    font-weight: 600 !important;
+    text-align: center !important;
+    min-height: var(--stats-mob-img-hdr-h) !important;
+    height: var(--stats-mob-img-hdr-h) !important;
+    padding: 5px 2px !important;
+    line-height: 1.2 !important;
+    vertical-align: middle !important;
+    border-top: 1px solid #333333 !important;
+  }
+
+  #screen-order-stats #statsTableBody > tr.stats-table__totals-row > td.stats-table__rank-col {
+    position: sticky !important;
+    left: 0 !important;
+    z-index: 22 !important;
+  }
+
+  #screen-order-stats #statsTableBody > tr.stats-table__totals-row > td.assign-table__td--scope {
+    position: sticky !important;
+    left: var(--stats-mob-rank-w) !important;
+    z-index: 21 !important;
+    border-right: 1px solid #333333 !important;
+  }
+}

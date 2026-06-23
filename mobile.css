@@ -12482,3 +12482,95 @@
     border-bottom: 1px solid #c9c9c9 !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   모바일 v71 — 7번 본문 합계열 회색 · 외곽테두리 세로스크롤 제거
+   (PC 미변경 · 구조·기능 유지)
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* 본문 합계 열 — 구분(시공협력사) 열과 동일 옅은 회색 */
+  #screen-order-stats #statsTableBody > tr:not(.stats-table__totals-row) > td.stats-table__total-col,
+  #screen-order-stats .stats-table tbody tr:not(.stats-table__totals-row) td.stats-table__total-col,
+  #screen-order-stats .stats-table tbody tr:not(.stats-table__totals-row) td.assign-table__td.stats-table__total-col {
+    background: #ececec !important;
+    background-color: #ececec !important;
+    color: #333333 !important;
+    font-weight: 600 !important;
+    text-align: center !important;
+    position: static !important;
+  }
+
+  /* 본문 월 열 — 흰색 유지 (합계 열과 분리) */
+  #screen-order-stats #statsTableBody > tr:not(.stats-table__totals-row) > td.stats-table__month-col,
+  #screen-order-stats .stats-table tbody tr:not(.stats-table__totals-row) td.stats-table__month-col {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    color: #333333 !important;
+  }
+
+  /* 외곽 테두리 — 표 전체 높이까지 (내부 세로 스크롤 제거) */
+  #screen-order-stats .stats-body {
+    flex: 0 0 auto !important;
+    min-height: auto !important;
+    overflow: visible !important;
+  }
+
+  #screen-order-stats .stats-body .assign-table-wrap {
+    display: block !important;
+    flex: 0 0 auto !important;
+    min-height: auto !important;
+    max-height: none !important;
+    height: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 1px solid #c9c9c9 !important;
+    box-sizing: border-box !important;
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+    contain: none !important;
+  }
+
+  #screen-order-stats .stats-body .assign-table-wrap .stats-table,
+  #screen-order-stats .stats-table {
+    display: table !important;
+    flex: none !important;
+    min-height: auto !important;
+    max-height: none !important;
+    height: auto !important;
+    width: 100% !important;
+    min-width: var(--stats-mob-table-min-w, 678px) !important;
+    table-layout: fixed !important;
+    border-collapse: collapse !important;
+    border-spacing: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+  }
+
+  #screen-order-stats .stats-table thead {
+    display: table-header-group !important;
+    flex: none !important;
+    overflow: visible !important;
+    position: static !important;
+    top: auto !important;
+  }
+
+  #screen-order-stats .stats-body .assign-table-wrap .stats-table tbody,
+  #screen-order-stats .stats-table tbody {
+    display: table-row-group !important;
+    flex: none !important;
+    min-height: auto !important;
+    max-height: none !important;
+    height: auto !important;
+    overflow: visible !important;
+    overflow-x: visible !important;
+    overflow-y: visible !important;
+    width: auto !important;
+  }
+
+  #screen-order-stats .stats-table thead tr,
+  #screen-order-stats .stats-table tbody tr {
+    display: table-row !important;
+    width: auto !important;
+    order: unset !important;
+  }
+}

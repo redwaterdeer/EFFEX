@@ -12666,3 +12666,179 @@
     white-space: nowrap !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   모바일 v73 — 7번 막대그래프 세로스크롤 제거 (근본 수정)
+   style.css min-height 120px · 래퍼 max-height · tbody 스크롤 해제
+   (PC 미변경 · 구조·기능 유지)
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  #screen-order-stats {
+    --stats-mob-chart-h: 80px;
+    --stats-mob-chart-pad-top: 4px;
+    --stats-chart-plot-pad: 2px;
+  }
+
+  /* 상위 flex 압축·내부 세로 스크롤 차단 */
+  #screen-order-stats .stats-main,
+  #screen-order-stats .stats-content,
+  #screen-order-stats .stats-body {
+    display: block !important;
+    flex: 0 0 auto !important;
+    flex-grow: 0 !important;
+    flex-shrink: 0 !important;
+    min-height: auto !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    overflow-y: visible !important;
+    contain: none !important;
+  }
+
+  #screen-order-stats .stats-body .assign-table-wrap {
+    display: block !important;
+    flex: none !important;
+    min-height: auto !important;
+    max-height: none !important;
+    height: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+    -webkit-overflow-scrolling: auto !important;
+    touch-action: pan-x !important;
+    overscroll-behavior-y: none !important;
+    contain: none !important;
+  }
+
+  #screen-order-stats .stats-body .assign-table-wrap .stats-table,
+  #screen-order-stats .stats-table {
+    display: table !important;
+    flex: none !important;
+    flex-direction: unset !important;
+    min-height: auto !important;
+    max-height: none !important;
+    height: auto !important;
+    overflow: visible !important;
+    overflow-y: visible !important;
+  }
+
+  #screen-order-stats .stats-table thead {
+    display: table-header-group !important;
+    position: static !important;
+    top: auto !important;
+    overflow: visible !important;
+    max-height: none !important;
+    flex: none !important;
+  }
+
+  #screen-order-stats .stats-table tbody {
+    display: table-row-group !important;
+    flex: none !important;
+    order: unset !important;
+    min-height: auto !important;
+    max-height: none !important;
+    height: auto !important;
+    overflow: visible !important;
+    overflow-x: visible !important;
+    overflow-y: visible !important;
+    width: auto !important;
+  }
+
+  #screen-order-stats .stats-table thead tr,
+  #screen-order-stats .stats-table tbody tr {
+    display: table-row !important;
+    order: unset !important;
+  }
+
+  /* style.css·v12 plot/yaxis min-height 100~120px 강제 해제 */
+  #screen-order-stats #statsChartRow .stats-chart__plot,
+  #screen-order-stats #statsChartRow .stats-chart-scope,
+  #screen-order-stats #statsChartRow .stats-chart-yaxis,
+  #screen-order-stats #statsChartRow .stats-chart-yaxis__ticks,
+  #screen-order-stats #statsChartRow .stats-chart__bar-area,
+  #screen-order-stats .stats-chart-row .stats-chart__plot,
+  #screen-order-stats .stats-chart-row .stats-chart-scope,
+  #screen-order-stats .stats-chart__plot,
+  #screen-order-stats .stats-chart-scope {
+    min-height: 0 !important;
+    max-height: none !important;
+  }
+
+  /* 막대그래프 행 — 고정 높이 (style.css padding-top 20px 덮어쓰기) */
+  #screen-order-stats #statsChartRow,
+  #screen-order-stats #statsChartRow > th,
+  #screen-order-stats #statsChartRow > th.assign-table__th,
+  #screen-order-stats .stats-table thead tr.stats-chart-row th.assign-table__th {
+    height: var(--stats-mob-chart-h) !important;
+    min-height: var(--stats-mob-chart-h) !important;
+    max-height: var(--stats-mob-chart-h) !important;
+    padding-top: var(--stats-mob-chart-pad-top) !important;
+    padding-bottom: 0 !important;
+    overflow: visible !important;
+    box-sizing: border-box !important;
+    vertical-align: bottom !important;
+  }
+
+  #screen-order-stats #statsChartRow > th.stats-chart-row__rank,
+  #screen-order-stats #statsChartRow > th.stats-chart-row__scope,
+  #screen-order-stats #statsChartRow > th.stats-chart-row__cell,
+  #screen-order-stats #statsChartRow > th.stats-chart-row__total {
+    height: var(--stats-mob-chart-h) !important;
+    min-height: var(--stats-mob-chart-h) !important;
+    max-height: var(--stats-mob-chart-h) !important;
+    overflow: visible !important;
+  }
+
+  #screen-order-stats #statsChartRow .stats-chart-scope {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: calc(var(--stats-mob-chart-h) - var(--stats-mob-chart-pad-top)) !important;
+    min-height: 0 !important;
+    max-height: calc(var(--stats-mob-chart-h) - var(--stats-mob-chart-pad-top)) !important;
+    margin: 0 !important;
+    overflow: visible !important;
+  }
+
+  #screen-order-stats #statsChartRow .stats-chart-yaxis__ticks {
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    padding: 2px 0 0 3px !important;
+    overflow: visible !important;
+    box-sizing: border-box !important;
+  }
+
+  #screen-order-stats #statsChartRow .stats-chart-yaxis__tick-label {
+    font-size: 9px !important;
+    line-height: 1 !important;
+  }
+
+  #screen-order-stats #statsChartRow .stats-chart__plot,
+  #screen-order-stats #statsChartRow .stats-chart-row__total .stats-chart__plot {
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    padding: var(--stats-chart-plot-pad, 2px) 2px 0 !important;
+    overflow: visible !important;
+    box-sizing: border-box !important;
+  }
+
+  #screen-order-stats #statsChartRow .stats-chart__bar-area {
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    overflow: visible !important;
+  }
+
+  #screen-order-stats #statsChartRow .stats-chart__bar {
+    width: min(65%, 20px) !important;
+    max-width: calc(var(--stats-mob-month-w, 48px) - 14px) !important;
+  }
+
+  #screen-order-stats #statsChartRow .stats-chart__bar-value {
+    font-size: 9px !important;
+    line-height: 1 !important;
+  }
+}

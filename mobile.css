@@ -12996,3 +12996,69 @@
     line-height: 1 !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   모바일 v76 — 7번 표 세로스크롤 되튐(자동 복귀) 방지
+   (PC 미변경 · 구조·기능 유지)
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* 부모 assign-body 세로 스크롤 차단 → 표 래퍼만 스크롤 */
+  #screen-order-stats.order-page > .assign-body,
+  #screen-order-stats .assign-body {
+    overflow-y: hidden !important;
+    overscroll-behavior-y: none !important;
+  }
+
+  #screen-order-stats .assign-panel.stats-panel,
+  #screen-order-stats .stats-main,
+  #screen-order-stats .stats-content {
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+  }
+
+  #screen-order-stats .stats-mode-nav.stats-mode-nav--top,
+  #screen-order-stats .stats-filters,
+  #screen-order-stats .stats-unit-label {
+    flex: 0 0 auto !important;
+    flex-shrink: 0 !important;
+  }
+
+  #screen-order-stats .stats-body {
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+  }
+
+  #screen-order-stats .stats-body .assign-table-wrap {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    height: auto !important;
+    overflow-x: auto !important;
+    overflow-y: auto !important;
+    overscroll-behavior: none !important;
+    overflow-anchor: none !important;
+    scroll-behavior: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    touch-action: pan-x pan-y !important;
+    contain: none !important;
+  }
+
+  /* thead 상단 sticky 해제 — 내부 스크롤 시 위로 튕김 방지 */
+  #screen-order-stats .stats-table thead {
+    position: static !important;
+    top: auto !important;
+    z-index: auto !important;
+  }
+
+  #screen-order-stats .stats-table thead tr.stats-chart-row,
+  #screen-order-stats .stats-table thead tr:not(.stats-chart-row) {
+    position: static !important;
+    top: auto !important;
+  }
+}

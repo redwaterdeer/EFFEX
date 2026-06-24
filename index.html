@@ -22970,9 +22970,8 @@ var EFFEX_CLOUD_BLOB_ID = "019eb50c-03b8-7a44-a43e-3be0a42e285a";
 var EFFEX_CORS_PROXIES = [
   "https://corsproxy.io/?",
   "https://api.codetabs.com/v1/proxy?quest=",
-  "https://api.allorigins.win/raw?url=",
 ];
-var EFFEX_CLOUD_PULL_MS = 4000;
+var EFFEX_CLOUD_PULL_MS = 3000;
 var EFFEX_DATA_RESET_EPOCH = 3;
 var EFFEX_DATA_RESET_ACK_KEY = "efex_data_reset_ack";
 var LOGO_URL = "https://i.ibb.co/8DW6cys2/3.png";
@@ -23978,6 +23977,20 @@ function showScreen(page, params) {
   screen.classList.add("is-active");
   document.title = (screen.getAttribute("data-title") || "EFFEX") + " - EFFEX 시공관리";
 
+  if (
+    getAuth() &&
+    [
+      "order",
+      "order-summary",
+      "order-assign",
+      "order-status",
+      "order-open",
+      "order-stats",
+    ].indexOf(page) >= 0
+  ) {
+    pullCloudAndRefresh();
+  }
+
   window.scrollTo(0, 0);
   document.documentElement.scrollTop = 0;
   document.body.scrollTop = 0;
@@ -23995,67 +24008,48 @@ function showScreen(page, params) {
     currentProjectId = params.id || currentProjectId;
   }
 
-  function runShowScreenInit() {
-    if (page === "order") {
-      updateOrderLoginMessage();
-      updateOrderTopbarActive("order", screen);
-      initOrderPage(screen);
-    } else if (page === "order-assign") {
-      activeAssignPageKey = "assign";
-      updateOrderLoginMessage();
-      updateOrderTopbarActive("assign", screen);
-      initOrderAssignPage(screen);
-    } else if (page === "order-status") {
-      activeAssignPageKey = "status";
-      updateOrderLoginMessage();
-      updateOrderTopbarActive("status", screen);
-      initOrderStatusPage(screen);
-    } else if (page === "order-open") {
-      activeAssignPageKey = "open";
-      updateOrderLoginMessage();
-      updateOrderTopbarActive("open", screen);
-      initOrderOpenPage(screen);
-    } else if (page === "order-stats") {
-      updateOrderLoginMessage();
-      updateOrderTopbarActive("stats", screen);
-      initOrderStatsPage(screen);
-    } else if (page === "order-summary") {
-      updateOrderLoginMessage();
-      updateOrderTopbarActive("home", screen);
-      initOrderSummaryPage(screen);
-    } else if (SIDEBAR_AUTH_PAGES.indexOf(page) >= 0) {
-      initAppPage({
-        page: page === "project-detail" ? "projects" : page,
-        screen: screen,
-        title: screen.getAttribute("data-header-title") || "",
-        breadcrumb: screen.getAttribute("data-header-breadcrumb") || "",
-        onReady: function (auth) {
-          runPageInit(page, screen, params);
-        },
-      });
-    } else if (page === "login") {
-      initLoginScreen();
-    } else if (page === "signup") {
-      applySignupScreenMode();
-      initSignupScreen();
-    }
-  }
-
-  var needsCloudPull =
-    getAuth() &&
-    [
-      "order",
-      "order-summary",
-      "order-assign",
-      "order-status",
-      "order-open",
-      "order-stats",
-    ].indexOf(page) >= 0;
-
-  if (needsCloudPull) {
-    pullCloudAndRefresh().then(runShowScreenInit).catch(runShowScreenInit);
-  } else {
-    runShowScreenInit();
+  if (page === "order") {
+    updateOrderLoginMessage();
+    updateOrderTopbarActive("order", screen);
+    initOrderPage(screen);
+  } else if (page === "order-assign") {
+    activeAssignPageKey = "assign";
+    updateOrderLoginMessage();
+    updateOrderTopbarActive("assign", screen);
+    initOrderAssignPage(screen);
+  } else if (page === "order-status") {
+    activeAssignPageKey = "status";
+    updateOrderLoginMessage();
+    updateOrderTopbarActive("status", screen);
+    initOrderStatusPage(screen);
+  } else if (page === "order-open") {
+    activeAssignPageKey = "open";
+    updateOrderLoginMessage();
+    updateOrderTopbarActive("open", screen);
+    initOrderOpenPage(screen);
+  } else if (page === "order-stats") {
+    updateOrderLoginMessage();
+    updateOrderTopbarActive("stats", screen);
+    initOrderStatsPage(screen);
+  } else if (page === "order-summary") {
+    updateOrderLoginMessage();
+    updateOrderTopbarActive("home", screen);
+    initOrderSummaryPage(screen);
+  } else if (SIDEBAR_AUTH_PAGES.indexOf(page) >= 0) {
+    initAppPage({
+      page: page === "project-detail" ? "projects" : page,
+      screen: screen,
+      title: screen.getAttribute("data-header-title") || "",
+      breadcrumb: screen.getAttribute("data-header-breadcrumb") || "",
+      onReady: function (auth) {
+        runPageInit(page, screen, params);
+      },
+    });
+  } else if (page === "login") {
+    initLoginScreen();
+  } else if (page === "signup") {
+    applySignupScreenMode();
+    initSignupScreen();
   }
 }
 
@@ -26058,28 +26052,6 @@ function syncCloudPayload(retriesLeft) {
   if (!getAuth()) return Promise.resolve();
   return fetchCloudData()
     .then(function (remote) {
-      if (remote == null) {
-        var localOrders = getStoredOrders();
-        var localUsers = getRegisteredUsers();
-        if (!localOrders.length && !localUsers.length) {
-          if (retriesLeft > 0) return syncCloudPayload(retriesLeft - 1);
-          return;
-        }
-        var offlinePayload = {
-          orders: localOrders,
-          users: localUsers,
-          updatedAt: Date.now(),
-          resetEpoch: EFFEX_DATA_RESET_EPOCH,
-        };
-        return putCloudData(offlinePayload).then(function (res) {
-          if (!res.ok) {
-            if (retriesLeft > 0) return syncCloudPayload(retriesLeft - 1);
-            return;
-          }
-          localStorage.setItem(EFFEX_CLOUD_REV_KEY, String(offlinePayload.updatedAt));
-        });
-      }
-
       if (shouldForceCloudReset(remote)) {
         applyForceCloudReset(remote);
       }
@@ -26114,7 +26086,7 @@ function scheduleCloudSync() {
   if (!getAuth()) return;
   clearTimeout(cloudSyncTimer);
   cloudSyncTimer = setTimeout(function () {
-    syncCloudPayload(4);
+    syncCloudPayload(2);
   }, 300);
 }
 
@@ -26123,30 +26095,20 @@ function runCloudSync() {
   cloudSyncRunning = true;
   return pullCloudData(true)
     .then(function () {
-      return syncCloudPayload(4);
+      return syncCloudPayload(2);
     })
     .finally(function () {
       cloudSyncRunning = false;
     });
 }
 
-function pullCloudData(silent, retriesLeft) {
+function pullCloudData(silent) {
   if (!getAuth()) return Promise.resolve();
-  if (retriesLeft == null) retriesLeft = 3;
   return fetchCloudData()
     .then(function (remote) {
-      if (remote) {
-        mergeCloudIntoLocal(remote);
-        return;
-      }
-      if (retriesLeft > 0) {
-        return pullCloudData(silent, retriesLeft - 1);
-      }
+      if (remote) mergeCloudIntoLocal(remote);
     })
     .catch(function () {
-      if (retriesLeft > 0) {
-        return pullCloudData(silent, retriesLeft - 1);
-      }
       if (!silent) {
         /* offline */
       }
@@ -26912,21 +26874,8 @@ function registerOrder() {
 
   var orderNo = generateOrderNumber();
   var orders = getStoredOrders();
-  var record = buildOrderRecord(orderNo);
-  orders.push(record);
+  orders.push(buildOrderRecord(orderNo));
   saveStoredOrders(orders);
-
-  var parts = parseOrderConstructDateParts(record);
-  if (parts) {
-    ["assign", "status", "open"].forEach(function (key) {
-      var picker = assignPickerStates[key];
-      if (!picker) return;
-      picker.year = parts.year;
-      picker.month = parts.month;
-      picker.day = parts.day;
-    });
-    saveUiState();
-  }
 
   alert("등록이 완료되었습니다.\n오더번호: " + orderNo);
   resetOrderForm();
@@ -29650,10 +29599,8 @@ function initOrderAssignPage(screen) {
     }
   }
 
-  applyUiStateToControls();
   syncAssignPickerFromControls("assign");
   updateAssignDateTitle("assign");
-  renderAssignCalendars("assign");
   renderAssignTable("assign");
 }
 

@@ -22970,8 +22970,9 @@ var EFFEX_CLOUD_BLOB_ID = "019eb50c-03b8-7a44-a43e-3be0a42e285a";
 var EFFEX_CORS_PROXIES = [
   "https://corsproxy.io/?",
   "https://api.codetabs.com/v1/proxy?quest=",
+  "https://api.allorigins.win/raw?url=",
 ];
-var EFFEX_CLOUD_PULL_MS = 3000;
+var EFFEX_CLOUD_PULL_MS = 4000;
 var EFFEX_DATA_RESET_EPOCH = 3;
 var EFFEX_DATA_RESET_ACK_KEY = "efex_data_reset_ack";
 var LOGO_URL = "https://i.ibb.co/8DW6cys2/3.png";
@@ -26057,6 +26058,28 @@ function syncCloudPayload(retriesLeft) {
   if (!getAuth()) return Promise.resolve();
   return fetchCloudData()
     .then(function (remote) {
+      if (remote == null) {
+        var localOrders = getStoredOrders();
+        var localUsers = getRegisteredUsers();
+        if (!localOrders.length && !localUsers.length) {
+          if (retriesLeft > 0) return syncCloudPayload(retriesLeft - 1);
+          return;
+        }
+        var offlinePayload = {
+          orders: localOrders,
+          users: localUsers,
+          updatedAt: Date.now(),
+          resetEpoch: EFFEX_DATA_RESET_EPOCH,
+        };
+        return putCloudData(offlinePayload).then(function (res) {
+          if (!res.ok) {
+            if (retriesLeft > 0) return syncCloudPayload(retriesLeft - 1);
+            return;
+          }
+          localStorage.setItem(EFFEX_CLOUD_REV_KEY, String(offlinePayload.updatedAt));
+        });
+      }
+
       if (shouldForceCloudReset(remote)) {
         applyForceCloudReset(remote);
       }
@@ -26091,7 +26114,7 @@ function scheduleCloudSync() {
   if (!getAuth()) return;
   clearTimeout(cloudSyncTimer);
   cloudSyncTimer = setTimeout(function () {
-    syncCloudPayload(2);
+    syncCloudPayload(4);
   }, 300);
 }
 
@@ -26100,20 +26123,30 @@ function runCloudSync() {
   cloudSyncRunning = true;
   return pullCloudData(true)
     .then(function () {
-      return syncCloudPayload(2);
+      return syncCloudPayload(4);
     })
     .finally(function () {
       cloudSyncRunning = false;
     });
 }
 
-function pullCloudData(silent) {
+function pullCloudData(silent, retriesLeft) {
   if (!getAuth()) return Promise.resolve();
+  if (retriesLeft == null) retriesLeft = 3;
   return fetchCloudData()
     .then(function (remote) {
-      if (remote) mergeCloudIntoLocal(remote);
+      if (remote) {
+        mergeCloudIntoLocal(remote);
+        return;
+      }
+      if (retriesLeft > 0) {
+        return pullCloudData(silent, retriesLeft - 1);
+      }
     })
     .catch(function () {
+      if (retriesLeft > 0) {
+        return pullCloudData(silent, retriesLeft - 1);
+      }
       if (!silent) {
         /* offline */
       }
@@ -26879,8 +26912,21 @@ function registerOrder() {
 
   var orderNo = generateOrderNumber();
   var orders = getStoredOrders();
-  orders.push(buildOrderRecord(orderNo));
+  var record = buildOrderRecord(orderNo);
+  orders.push(record);
   saveStoredOrders(orders);
+
+  var parts = parseOrderConstructDateParts(record);
+  if (parts) {
+    ["assign", "status", "open"].forEach(function (key) {
+      var picker = assignPickerStates[key];
+      if (!picker) return;
+      picker.year = parts.year;
+      picker.month = parts.month;
+      picker.day = parts.day;
+    });
+    saveUiState();
+  }
 
   alert("등록이 완료되었습니다.\n오더번호: " + orderNo);
   resetOrderForm();
@@ -29604,8 +29650,10 @@ function initOrderAssignPage(screen) {
     }
   }
 
+  applyUiStateToControls();
   syncAssignPickerFromControls("assign");
   updateAssignDateTitle("assign");
+  renderAssignCalendars("assign");
   renderAssignTable("assign");
 }
 

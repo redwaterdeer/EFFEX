@@ -23977,20 +23977,6 @@ function showScreen(page, params) {
   screen.classList.add("is-active");
   document.title = (screen.getAttribute("data-title") || "EFFEX") + " - EFFEX 시공관리";
 
-  if (
-    getAuth() &&
-    [
-      "order",
-      "order-summary",
-      "order-assign",
-      "order-status",
-      "order-open",
-      "order-stats",
-    ].indexOf(page) >= 0
-  ) {
-    pullCloudAndRefresh();
-  }
-
   window.scrollTo(0, 0);
   document.documentElement.scrollTop = 0;
   document.body.scrollTop = 0;
@@ -24008,48 +23994,67 @@ function showScreen(page, params) {
     currentProjectId = params.id || currentProjectId;
   }
 
-  if (page === "order") {
-    updateOrderLoginMessage();
-    updateOrderTopbarActive("order", screen);
-    initOrderPage(screen);
-  } else if (page === "order-assign") {
-    activeAssignPageKey = "assign";
-    updateOrderLoginMessage();
-    updateOrderTopbarActive("assign", screen);
-    initOrderAssignPage(screen);
-  } else if (page === "order-status") {
-    activeAssignPageKey = "status";
-    updateOrderLoginMessage();
-    updateOrderTopbarActive("status", screen);
-    initOrderStatusPage(screen);
-  } else if (page === "order-open") {
-    activeAssignPageKey = "open";
-    updateOrderLoginMessage();
-    updateOrderTopbarActive("open", screen);
-    initOrderOpenPage(screen);
-  } else if (page === "order-stats") {
-    updateOrderLoginMessage();
-    updateOrderTopbarActive("stats", screen);
-    initOrderStatsPage(screen);
-  } else if (page === "order-summary") {
-    updateOrderLoginMessage();
-    updateOrderTopbarActive("home", screen);
-    initOrderSummaryPage(screen);
-  } else if (SIDEBAR_AUTH_PAGES.indexOf(page) >= 0) {
-    initAppPage({
-      page: page === "project-detail" ? "projects" : page,
-      screen: screen,
-      title: screen.getAttribute("data-header-title") || "",
-      breadcrumb: screen.getAttribute("data-header-breadcrumb") || "",
-      onReady: function (auth) {
-        runPageInit(page, screen, params);
-      },
-    });
-  } else if (page === "login") {
-    initLoginScreen();
-  } else if (page === "signup") {
-    applySignupScreenMode();
-    initSignupScreen();
+  function runShowScreenInit() {
+    if (page === "order") {
+      updateOrderLoginMessage();
+      updateOrderTopbarActive("order", screen);
+      initOrderPage(screen);
+    } else if (page === "order-assign") {
+      activeAssignPageKey = "assign";
+      updateOrderLoginMessage();
+      updateOrderTopbarActive("assign", screen);
+      initOrderAssignPage(screen);
+    } else if (page === "order-status") {
+      activeAssignPageKey = "status";
+      updateOrderLoginMessage();
+      updateOrderTopbarActive("status", screen);
+      initOrderStatusPage(screen);
+    } else if (page === "order-open") {
+      activeAssignPageKey = "open";
+      updateOrderLoginMessage();
+      updateOrderTopbarActive("open", screen);
+      initOrderOpenPage(screen);
+    } else if (page === "order-stats") {
+      updateOrderLoginMessage();
+      updateOrderTopbarActive("stats", screen);
+      initOrderStatsPage(screen);
+    } else if (page === "order-summary") {
+      updateOrderLoginMessage();
+      updateOrderTopbarActive("home", screen);
+      initOrderSummaryPage(screen);
+    } else if (SIDEBAR_AUTH_PAGES.indexOf(page) >= 0) {
+      initAppPage({
+        page: page === "project-detail" ? "projects" : page,
+        screen: screen,
+        title: screen.getAttribute("data-header-title") || "",
+        breadcrumb: screen.getAttribute("data-header-breadcrumb") || "",
+        onReady: function (auth) {
+          runPageInit(page, screen, params);
+        },
+      });
+    } else if (page === "login") {
+      initLoginScreen();
+    } else if (page === "signup") {
+      applySignupScreenMode();
+      initSignupScreen();
+    }
+  }
+
+  var needsCloudPull =
+    getAuth() &&
+    [
+      "order",
+      "order-summary",
+      "order-assign",
+      "order-status",
+      "order-open",
+      "order-stats",
+    ].indexOf(page) >= 0;
+
+  if (needsCloudPull) {
+    pullCloudAndRefresh().then(runShowScreenInit).catch(runShowScreenInit);
+  } else {
+    runShowScreenInit();
   }
 }
 

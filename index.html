@@ -25921,6 +25921,7 @@ function shouldForceCloudReset(remote) {
 }
 
 function isCloudStaleForReset(remote) {
+  if (getDataResetAck() >= EFFEX_DATA_RESET_EPOCH) return false;
   if (!remote) return true;
   var remoteEpoch = parseInt(remote.resetEpoch || "0", 10);
   return remoteEpoch < EFFEX_DATA_RESET_EPOCH;
@@ -25969,6 +25970,7 @@ function getEmptyCloudPayload() {
 
 function pushEmptyCloudResetToCloud() {
   if (!getAuth() || !getAuth().isMaster) return Promise.resolve();
+  if (getDataResetAck() >= EFFEX_DATA_RESET_EPOCH) return Promise.resolve();
   clearRegisteredDataExceptMaster();
   var payload = getEmptyCloudPayload();
   return putCloudData(payload)

@@ -22966,16 +22966,18 @@ var USERS_STORAGE_KEY = "efex_users";
 var ORDERS_STORAGE_KEY = "efex_orders";
 var UI_STATE_KEY = "efex_ui_state";
 var EFFEX_CLOUD_REV_KEY = "efex_cloud_rev";
-var EFFEX_CLOUD_BLOB_ID = "019eb50c-03b8-7a44-a43e-3be0a42e285a";
-var EFFEX_KVDB_BUCKET = "MRuMSCHNcjUDcZeLt3dY83";
-var EFFEX_KVDB_KEY = "effex-data";
-var EFFEX_CORS_PROXIES = [
-  "https://corsproxy.io/?",
-  "https://api.codetabs.com/v1/proxy?quest=",
-];
-var EFFEX_CLOUD_PULL_MS = 8000;
-var EFFEX_CLOUD_FOCUS_MIN_MS = 1500;
+var EFFEX_GITHUB_REPO = "redwaterdeer/EFFEX";
+var EFFEX_GITHUB_BRANCH = "main";
+var EFFEX_SYNC_CONFIG_URL =
+  "https://raw.githubusercontent.com/redwaterdeer/EFFEX/main/effex-sync-config.json";
+var EFFEX_GITHUB_SYNC_FILE = "effex-sync.json";
+var EFFEX_JSONBIN_BIN_ID = "";
+var EFFEX_JSONBIN_ACCESS_KEY = "";
+var EFFEX_GITHUB_SYNC_TOKEN = "";
+var EFFEX_CLOUD_PULL_MS = 5000;
+var EFFEX_CLOUD_FOCUS_MIN_MS = 800;
 var EFFEX_CLOUD_SYNC_RETRIES = 3;
+var EFFEX_SYNC_CONFIG_TTL_MS = 300000;
 var LOGO_URL = "https://i.ibb.co/8DW6cys2/3.png";
 var LOGO_URL_INACTIVE = "https://i.ibb.co/5WH4s329/3.png";
 var currentProjectId = null;
@@ -25643,43 +25645,179 @@ var cloudSyncTimer = null;
 var cloudSyncRunning = false;
 var cloudPullTimer = null;
 var lastCloudPullAt = 0;
+var remoteSyncConfig = null;
+var remoteSyncConfigLoadedAt = 0;
+var remoteSyncConfigPromise = null;
 
-function cloudBlobUrl() {
-  return "https://jsonblob.com/api/jsonBlob/" + EFFEX_CLOUD_BLOB_ID;
+function getRemoteSyncConfig() {
+  return remoteSyncConfig || {};
 }
 
-function cloudKvdbUrl() {
-  return "https://kvdb.io/" + EFFEX_KVDB_BUCKET + "/" + EFFEX_KVDB_KEY;
-}
-
-function parseCloudPayloadText(text) {
-  if (!text) return null;
-  try {
-    return JSON.parse(text);
-  } catch (e) {
-    return null;
+function applyInlineSyncConfigDefaults(cfg) {
+  cfg = cfg || {};
+  if (EFFEX_JSONBIN_BIN_ID) cfg.jsonbinBinId = cfg.jsonbinBinId || EFFEX_JSONBIN_BIN_ID;
+  if (EFFEX_JSONBIN_ACCESS_KEY) {
+    cfg.jsonbinAccessKey = cfg.jsonbinAccessKey || EFFEX_JSONBIN_ACCESS_KEY;
   }
+  if (EFFEX_GITHUB_SYNC_TOKEN) {
+    cfg.githubSyncToken = cfg.githubSyncToken || EFFEX_GITHUB_SYNC_TOKEN;
+  }
+  return cfg;
 }
 
-function fetchKvdbCloudData() {
-  return fetch(cloudKvdbUrl(), { cache: "no-store" })
-    .then(function (res) {
-      if (!res.ok) return null;
-      return res.text().then(parseCloudPayloadText);
-    })
-    .catch(function () {
-      return null;
-    });
-}
+function ensureRemoteSyncConfig(force) {
+  var now = Date.now();
+  if (!force && remoteSyncConfig && now - remoteSyncConfigLoadedAt < EFFEX_SYNC_CONFIG_TTL_MS) {
+    return Promise.resolve(remoteSyncConfig);
+  }
+  if (!force && remoteSyncConfigPromise) return remoteSyncConfigPromise;
 
-function fetchJsonBlobCloudData() {
-  return cloudFetch(cloudBlobUrl(), { cache: "no-store" })
+  remoteSyncConfigPromise = fetch(EFFEX_SYNC_CONFIG_URL + "?t=" + now, { cache: "no-store" })
     .then(function (res) {
       if (!res.ok) return null;
       return res.json();
     })
     .catch(function () {
       return null;
+    })
+    .then(function (cfg) {
+      remoteSyncConfig = applyInlineSyncConfigDefaults(
+        cfg && typeof cfg === "object" ? cfg : {}
+      );
+      remoteSyncConfigLoadedAt = Date.now();
+      remoteSyncConfigPromise = null;
+      return remoteSyncConfig;
+    });
+
+  return remoteSyncConfigPromise;
+}
+
+function isCloudSyncConfigured() {
+  var cfg = getRemoteSyncConfig();
+  var hasJsonBin =
+    (cfg.jsonbinBinId || EFFEX_JSONBIN_BIN_ID) &&
+    (cfg.jsonbinAccessKey || EFFEX_JSONBIN_ACCESS_KEY);
+  var hasGithub = !!(cfg.githubSyncToken || EFFEX_GITHUB_SYNC_TOKEN);
+  return !!(hasJsonBin || hasGithub);
+}
+
+function getJsonBinBinId() {
+  var cfg = getRemoteSyncConfig();
+  return String(cfg.jsonbinBinId || EFFEX_JSONBIN_BIN_ID || "").trim();
+}
+
+function getJsonBinAccessKey() {
+  var cfg = getRemoteSyncConfig();
+  return String(cfg.jsonbinAccessKey || EFFEX_JSONBIN_ACCESS_KEY || "").trim();
+}
+
+function getGithubSyncToken() {
+  var cfg = getRemoteSyncConfig();
+  return String(cfg.githubSyncToken || EFFEX_GITHUB_SYNC_TOKEN || "").trim();
+}
+
+function jsonBinApiHeaders() {
+  return {
+    "Content-Type": "application/json",
+    "X-Access-Key": getJsonBinAccessKey(),
+  };
+}
+
+function fetchJsonBinCloudData() {
+  var binId = getJsonBinBinId();
+  if (!binId || !getJsonBinAccessKey()) return Promise.resolve(null);
+  return fetch("https://api.jsonbin.io/v3/b/" + binId + "/latest", {
+    headers: jsonBinApiHeaders(),
+    cache: "no-store",
+  })
+    .then(function (res) {
+      if (!res.ok) return null;
+      return res.json().then(function (data) {
+        return data && data.record ? data.record : data;
+      });
+    })
+    .catch(function () {
+      return null;
+    });
+}
+
+function putJsonBinCloudData(payload) {
+  var binId = getJsonBinBinId();
+  if (!binId || !getJsonBinAccessKey()) return Promise.resolve({ ok: false });
+  return fetch("https://api.jsonbin.io/v3/b/" + binId, {
+    method: "PUT",
+    headers: jsonBinApiHeaders(),
+    body: JSON.stringify(payload),
+  }).catch(function () {
+    return { ok: false };
+  });
+}
+
+function githubRawSyncUrl() {
+  return (
+    "https://raw.githubusercontent.com/" +
+    EFFEX_GITHUB_REPO +
+    "/" +
+    EFFEX_GITHUB_BRANCH +
+    "/" +
+    EFFEX_GITHUB_SYNC_FILE
+  );
+}
+
+function fetchGithubRawCloudData() {
+  return fetch(githubRawSyncUrl() + "?t=" + Date.now(), { cache: "no-store" })
+    .then(function (res) {
+      if (!res.ok) return null;
+      return res.json();
+    })
+    .catch(function () {
+      return null;
+    });
+}
+
+function encodeGithubContent(str) {
+  if (typeof TextEncoder !== "undefined") {
+    var bytes = new TextEncoder().encode(str);
+    var bin = "";
+    var i;
+    for (i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+    return btoa(bin);
+  }
+  return btoa(unescape(encodeURIComponent(str)));
+}
+
+function putGithubCloudData(payload) {
+  var token = getGithubSyncToken();
+  if (!token) return Promise.resolve({ ok: false });
+  var apiUrl =
+    "https://api.github.com/repos/" + EFFEX_GITHUB_REPO + "/contents/" + EFFEX_GITHUB_SYNC_FILE;
+  return fetch(apiUrl + "?ref=" + EFFEX_GITHUB_BRANCH, {
+    headers: {
+      Authorization: "Bearer " + token,
+      Accept: "application/vnd.github+json",
+    },
+  })
+    .then(function (res) {
+      return res.json().then(function (meta) {
+        var body = {
+          message: "EFFEX sync " + Date.now(),
+          content: encodeGithubContent(JSON.stringify(payload)),
+          branch: EFFEX_GITHUB_BRANCH,
+        };
+        if (meta && meta.sha) body.sha = meta.sha;
+        return fetch(apiUrl, {
+          method: "PUT",
+          headers: {
+            Authorization: "Bearer " + token,
+            Accept: "application/vnd.github+json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(body),
+        });
+      });
+    })
+    .catch(function () {
+      return { ok: false };
     });
 }
 
@@ -25692,31 +25830,6 @@ function mergeCloudRemotePayloads(a, b) {
     users: mergeCloudUserLists(a.users || [], b.users || []),
     updatedAt: Math.max(parseInt(a.updatedAt || "0", 10), parseInt(b.updatedAt || "0", 10)),
   };
-}
-
-function cloudFetch(url, options) {
-  options = options || {};
-
-  function attempt(index) {
-    if (index >= EFFEX_CORS_PROXIES.length) {
-      return Promise.reject(new Error("cloud fetch failed"));
-    }
-    return fetch(EFFEX_CORS_PROXIES[index] + encodeURIComponent(url), options)
-      .then(function (res) {
-        if (!res.ok && index + 1 < EFFEX_CORS_PROXIES.length) {
-          return attempt(index + 1);
-        }
-        return res;
-      })
-      .catch(function () {
-        if (index + 1 < EFFEX_CORS_PROXIES.length) {
-          return attempt(index + 1);
-        }
-        throw new Error("cloud fetch failed");
-      });
-  }
-
-  return attempt(0);
 }
 
 function cloudRecordTime(record) {
@@ -25824,31 +25937,22 @@ function mergeCloudIntoLocal(remote) {
 }
 
 function fetchCloudData() {
-  return Promise.all([fetchKvdbCloudData(), fetchJsonBlobCloudData()]).then(function (results) {
-    return mergeCloudRemotePayloads(results[0], results[1]);
+  return ensureRemoteSyncConfig(false).then(function () {
+    return Promise.all([fetchJsonBinCloudData(), fetchGithubRawCloudData()]).then(function (results) {
+      return mergeCloudRemotePayloads(results[0], results[1]);
+    });
   });
 }
 
 function putCloudData(payload) {
-  var body = JSON.stringify(payload);
-  var kvdbReq = fetch(cloudKvdbUrl(), {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: body,
-  }).catch(function () {
-    return { ok: false };
-  });
-  var blobReq = cloudFetch(cloudBlobUrl(), {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: body,
-  }).catch(function () {
-    return { ok: false };
-  });
-  return Promise.all([kvdbReq, blobReq]).then(function (results) {
-    if (results[0] && results[0].ok) return results[0];
-    if (results[1] && results[1].ok) return results[1];
-    return results[0] || results[1] || { ok: false };
+  return ensureRemoteSyncConfig(false).then(function () {
+    return Promise.all([putJsonBinCloudData(payload), putGithubCloudData(payload)]).then(
+      function (results) {
+        if (results[0] && results[0].ok) return results[0];
+        if (results[1] && results[1].ok) return results[1];
+        return results[0] || results[1] || { ok: false };
+      }
+    );
   });
 }
 
@@ -25861,26 +25965,29 @@ function mergeRemoteCloudPayload(remote) {
 
 function syncCloudPayload(retriesLeft) {
   if (!getAuth()) return Promise.resolve();
-  return fetchCloudData()
-    .then(function (remote) {
-      var merged = mergeRemoteCloudPayload(remote);
-      var payload = {
-        orders: merged.orders,
-        users: merged.users,
-        updatedAt: Date.now(),
-      };
-      saveMergedCloudData(merged.orders, merged.users, payload.updatedAt);
-      return putCloudData(payload).then(function (res) {
-        if (!res.ok) {
-          if (retriesLeft > 0) return syncCloudPayload(retriesLeft - 1);
-          return;
-        }
-        localStorage.setItem(EFFEX_CLOUD_REV_KEY, String(payload.updatedAt));
+  return ensureRemoteSyncConfig(false).then(function () {
+    if (!isCloudSyncConfigured()) return Promise.resolve();
+    return fetchCloudData()
+      .then(function (remote) {
+        var merged = mergeRemoteCloudPayload(remote);
+        var payload = {
+          orders: merged.orders,
+          users: merged.users,
+          updatedAt: Date.now(),
+        };
+        saveMergedCloudData(merged.orders, merged.users, payload.updatedAt);
+        return putCloudData(payload).then(function (res) {
+          if (!res || !res.ok) {
+            if (retriesLeft > 0) return syncCloudPayload(retriesLeft - 1);
+            return;
+          }
+          localStorage.setItem(EFFEX_CLOUD_REV_KEY, String(payload.updatedAt));
+        });
+      })
+      .catch(function () {
+        if (retriesLeft > 0) return syncCloudPayload(retriesLeft - 1);
       });
-    })
-    .catch(function () {
-      if (retriesLeft > 0) return syncCloudPayload(retriesLeft - 1);
-    });
+  });
 }
 
 function scheduleCloudSync() {
@@ -25905,29 +26012,34 @@ function runCloudSync() {
 
 function pullCloudData(silent) {
   if (!getAuth()) return Promise.resolve();
-  return fetchCloudData()
-    .then(function (remote) {
-      if (remote) mergeCloudIntoLocal(remote);
-    })
-    .catch(function () {
-      if (!silent) {
-        /* offline */
-      }
-    });
+  return ensureRemoteSyncConfig(false).then(function () {
+    if (!isCloudSyncConfigured()) return Promise.resolve();
+    return fetchCloudData()
+      .then(function (remote) {
+        if (remote) mergeCloudIntoLocal(remote);
+      })
+      .catch(function () {
+        if (!silent) {
+          /* offline */
+        }
+      });
+  });
 }
 
-function pullCloudAndRefresh() {
+function pullCloudAndRefresh(force) {
   if (!getAuth()) {
     refreshDataFromOtherTab();
     return Promise.resolve();
   }
   var now = Date.now();
-  if (now - lastCloudPullAt < EFFEX_CLOUD_FOCUS_MIN_MS) {
+  if (!force && now - lastCloudPullAt < EFFEX_CLOUD_FOCUS_MIN_MS) {
     refreshDataFromOtherTab();
     return Promise.resolve();
   }
   lastCloudPullAt = now;
-  return pullCloudData(true).then(function () {
+  return ensureRemoteSyncConfig(!!force).then(function () {
+    return pullCloudData(true);
+  }).then(function () {
     refreshDataFromStorage();
     refreshOpenAssignModalsFromStorage();
   });
@@ -29441,7 +29553,9 @@ function initOrderAssignPage(screen) {
   }
 
   if (getAuth()) {
-    pullCloudData(true).then(finishAssignInit).catch(finishAssignInit);
+    ensureRemoteSyncConfig(true).then(function () {
+      pullCloudAndRefresh(true).then(finishAssignInit).catch(finishAssignInit);
+    });
   } else {
     finishAssignInit();
   }
@@ -31020,8 +31134,10 @@ function initLoginScreen() {
     }
 
     setAuth(result.user);
-    runCloudSync();
-    startCloudPullInterval();
+    ensureRemoteSyncConfig(true).then(function () {
+      runCloudSync();
+      startCloudPullInterval();
+    });
     showScreen(ROLES[result.user.role].home);
   });
 }
@@ -31387,10 +31503,12 @@ document.addEventListener("DOMContentLoaded", function () {
   populateAllOrderYearSelects();
   applyUiStateToControls();
 
-  if (getAuth()) {
-    runCloudSync();
-    startCloudPullInterval();
-  }
+  ensureRemoteSyncConfig(true).then(function () {
+    if (getAuth()) {
+      runCloudSync();
+      startCloudPullInterval();
+    }
+  });
 
   var parsed = parseHash();
   var page = parsed.page;

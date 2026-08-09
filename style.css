@@ -287,6 +287,38 @@ table {
   transform: skewX(calc(-1 * var(--skew-angle)));
 }
 
+/* iOS/브라우저 암호 자동채우기 차단용: type=text + 디스크 마스킹 */
+.login-form__input-wrap input.login-form__pw-mask {
+  -webkit-text-security: disc;
+  text-security: disc;
+}
+
+.login-form__remember {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: -4px 0 0;
+  padding-left: 2px;
+  user-select: none;
+}
+
+.login-form__remember-input {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: var(--color-logo-blue);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.login-form__remember-text {
+  font-size: clamp(14px, 1.1vw, 16px);
+  font-weight: 500;
+  color: var(--color-text);
+  cursor: pointer;
+  line-height: 1.2;
+}
+
 .login-form__actions {
   display: flex;
   gap: 16px;
@@ -4116,19 +4148,19 @@ table {
     -webkit-overflow-scrolling: touch;
   }
 
-  .login-screen {
-    padding: 52px 14px 36px;
-    min-height: min(100%, 100dvh);
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
-    scrollbar-color: #9a9a9a #e8e8e8;
-  }
+.login-screen {
+  padding: 52px 14px 36px;
+  min-height: min(100%, 100dvh);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: #9a9a9a #e8e8e8;
+}
 
-  .login-screen__logo {
-    margin-top: 32px;
-    margin-bottom: 24px;
-  }
+.login-screen__logo {
+  margin-top: 0;
+  margin-bottom: 24px;
+}
 
   .login-screen__slogan {
     display: flex;

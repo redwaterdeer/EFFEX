@@ -1,6 +1,7 @@
 /* EFFEX 통합 JavaScript */
 
 var AUTH_KEY = "efex_auth";
+var SAVED_USER_ID_KEY = "efex_saved_user_id";
 var USERS_STORAGE_KEY = "efex_users";
 var ORDERS_STORAGE_KEY = "efex_orders";
 var UI_STATE_KEY = "efex_ui_state";
@@ -617,11 +618,34 @@ function clearAuth() {
   localStorage.removeItem(AUTH_KEY);
 }
 
-function clearLoginForm() {
+function getSavedUserId() {
+  try {
+    return localStorage.getItem(SAVED_USER_ID_KEY) || "";
+  } catch (e) {
+    return "";
+  }
+}
+
+function setSavedUserId(id) {
+  try {
+    var v = (id || "").trim();
+    if (v) localStorage.setItem(SAVED_USER_ID_KEY, v);
+    else localStorage.removeItem(SAVED_USER_ID_KEY);
+  } catch (e) {}
+}
+
+function applySavedLoginId() {
   var idEl = document.getElementById("userId");
+  var saveEl = document.getElementById("saveUserId");
+  var saved = getSavedUserId();
+  if (idEl) idEl.value = saved;
+  if (saveEl) saveEl.checked = !!saved;
+}
+
+function clearLoginForm() {
   var pwEl = document.getElementById("password");
-  if (idEl) idEl.value = "";
   if (pwEl) pwEl.value = "";
+  applySavedLoginId();
 }
 
 function canAccessNav(item, role) {
@@ -7659,6 +7683,7 @@ function initLoginScreen() {
   initializedScreens.login = true;
 
   initLogout(document.getElementById("screen-login"));
+  applySavedLoginId();
 
   var form = document.getElementById("loginForm");
   var btnSignup = document.getElementById("btnSignup");
@@ -7675,12 +7700,16 @@ function initLoginScreen() {
     e.preventDefault();
     var id = document.getElementById("userId").value.trim();
     var pw = document.getElementById("password").value;
+    var saveEl = document.getElementById("saveUserId");
     var result = authenticateLogin(id, pw);
 
     if (!result.ok) {
       alert(result.message);
       return;
     }
+
+    if (saveEl && saveEl.checked) setSavedUserId(id);
+    else setSavedUserId("");
 
     setAuth(result.user);
     showScreen(ROLES[result.user.role].home);

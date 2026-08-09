@@ -21,14 +21,25 @@
           <span class="login-screen__slogan-line2">성공을 약속하는 기업</span>
         </p>
 
-        <form class="login-form" id="loginForm">
+        <form class="login-form" id="loginForm" autocomplete="off" novalidate>
           <input type="hidden" id="loginRole" value="admin" />
 
           <div class="login-form__field">
             <label class="login-form__label" for="userId"><span>ID</span></label>
             <span class="login-form__divider" aria-hidden="true"></span>
             <div class="login-form__input-wrap">
-              <input type="text" id="userId" autocomplete="username" />
+              <input
+                type="text"
+                id="userId"
+                name="effex_login_id"
+                autocomplete="off"
+                autocorrect="off"
+                autocapitalize="off"
+                spellcheck="false"
+                data-lpignore="true"
+                data-1p-ignore="true"
+                data-form-type="other"
+              />
             </div>
           </div>
 
@@ -36,9 +47,26 @@
             <label class="login-form__label" for="password"><span>PW</span></label>
             <span class="login-form__divider" aria-hidden="true"></span>
             <div class="login-form__input-wrap">
-              <input type="password" id="password" autocomplete="current-password" />
+              <input
+                type="text"
+                id="password"
+                name="effex_login_pw"
+                class="login-form__pw-mask"
+                autocomplete="off"
+                autocorrect="off"
+                autocapitalize="off"
+                spellcheck="false"
+                data-lpignore="true"
+                data-1p-ignore="true"
+                data-form-type="other"
+              />
             </div>
           </div>
+
+          <label class="login-form__remember" for="saveUserId">
+            <input type="checkbox" id="saveUserId" class="login-form__remember-input" />
+            <span class="login-form__remember-text">아이디 저장</span>
+          </label>
 
           <div class="login-form__actions">
             <button type="button" class="login-form__btn" id="btnSignup">신규가입</button>

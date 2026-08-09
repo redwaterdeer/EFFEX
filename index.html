@@ -294,6 +294,38 @@ table {
   transform: skewX(calc(-1 * var(--skew-angle)));
 }
 
+/* iOS/브라우저 암호 자동채우기 차단용: type=text + 디스크 마스킹 */
+.login-form__input-wrap input.login-form__pw-mask {
+  -webkit-text-security: disc;
+  text-security: disc;
+}
+
+.login-form__remember {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: -4px 0 0;
+  padding-left: 2px;
+  user-select: none;
+}
+
+.login-form__remember-input {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: var(--color-logo-blue);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.login-form__remember-text {
+  font-size: clamp(14px, 1.1vw, 16px);
+  font-weight: 500;
+  color: var(--color-text);
+  cursor: pointer;
+  line-height: 1.2;
+}
+
 .login-form__actions {
   display: flex;
   gap: 16px;
@@ -4133,7 +4165,7 @@ table {
   }
 
   .login-screen__logo {
-    margin-top: 32px;
+    margin-top: 0;
     margin-bottom: 24px;
   }
 
@@ -7268,10 +7300,11 @@ table {
   }
 
   #screen-login .login-screen {
-    align-items: flex-start;
-    justify-content: flex-start;
+    align-items: center;
+    justify-content: center;
     min-height: min(100%, 100dvh);
-    padding: env(safe-area-inset-top, 0px) 16px 32px;
+    padding: env(safe-area-inset-top, 0px) 16px
+      calc(32px + env(safe-area-inset-bottom, 0px));
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: thin;
@@ -7287,9 +7320,9 @@ table {
     border-radius: 4px;
   }
 
-  /* 로고: 크기 유지, 최상단(노치 safe-area만) */
+  /* 로고: 크기 유지, 화면 세로 가운데 블록 내 배치 */
   #screen-login .login-screen__logo {
-    margin-top: env(safe-area-inset-top, 0px) !important;
+    margin-top: 0 !important;
     margin-bottom: 28px !important;
     width: 100%;
     display: flex;
@@ -20333,7 +20366,7 @@ table {
             <span class="login-screen__slogan-line1">꿈이 있는 사람의</span>
             <span class="login-screen__slogan-line2">성공을 약속하는 기업</span>
           </p>
-          <form class="login-form" id="loginForm">
+          <form class="login-form" id="loginForm" autocomplete="off" novalidate>
             <input type="hidden" id="loginRole" value="admin" />
             <div class="login-form__field">
               <label class="login-form__label" for="userId"
@@ -20341,7 +20374,18 @@ table {
               >
               <span class="login-form__divider" aria-hidden="true"></span>
               <div class="login-form__input-wrap">
-                <input type="text" id="userId" autocomplete="username" />
+                <input
+                  type="text"
+                  id="userId"
+                  name="effex_login_id"
+                  autocomplete="off"
+                  autocorrect="off"
+                  autocapitalize="off"
+                  spellcheck="false"
+                  data-lpignore="true"
+                  data-1p-ignore="true"
+                  data-form-type="other"
+                />
               </div>
             </div>
             <div class="login-form__field">
@@ -20351,12 +20395,28 @@ table {
               <span class="login-form__divider" aria-hidden="true"></span>
               <div class="login-form__input-wrap">
                 <input
-                  type="password"
+                  type="text"
                   id="password"
-                  autocomplete="current-password"
+                  name="effex_login_pw"
+                  class="login-form__pw-mask"
+                  autocomplete="off"
+                  autocorrect="off"
+                  autocapitalize="off"
+                  spellcheck="false"
+                  data-lpignore="true"
+                  data-1p-ignore="true"
+                  data-form-type="other"
                 />
               </div>
             </div>
+            <label class="login-form__remember" for="saveUserId">
+              <input
+                type="checkbox"
+                id="saveUserId"
+                class="login-form__remember-input"
+              />
+              <span class="login-form__remember-text">아이디 저장</span>
+            </label>
             <div class="login-form__actions">
               <button type="button" class="login-form__btn" id="btnSignup">
                 신규가입
@@ -22962,6 +23022,7 @@ table {
 /* EFFEX 통합 JavaScript */
 
 var AUTH_KEY = "efex_auth";
+var SAVED_USER_ID_KEY = "efex_saved_user_id";
 var USERS_STORAGE_KEY = "efex_users";
 var ORDERS_STORAGE_KEY = "efex_orders";
 var UI_STATE_KEY = "efex_ui_state";
@@ -23591,11 +23652,34 @@ function clearAuth() {
   localStorage.removeItem(AUTH_KEY);
 }
 
-function clearLoginForm() {
+function getSavedUserId() {
+  try {
+    return localStorage.getItem(SAVED_USER_ID_KEY) || "";
+  } catch (e) {
+    return "";
+  }
+}
+
+function setSavedUserId(id) {
+  try {
+    var v = (id || "").trim();
+    if (v) localStorage.setItem(SAVED_USER_ID_KEY, v);
+    else localStorage.removeItem(SAVED_USER_ID_KEY);
+  } catch (e) {}
+}
+
+function applySavedLoginId() {
   var idEl = document.getElementById("userId");
+  var saveEl = document.getElementById("saveUserId");
+  var saved = getSavedUserId();
+  if (idEl) idEl.value = saved;
+  if (saveEl) saveEl.checked = !!saved;
+}
+
+function clearLoginForm() {
   var pwEl = document.getElementById("password");
-  if (idEl) idEl.value = "";
   if (pwEl) pwEl.value = "";
+  applySavedLoginId();
 }
 
 function canAccessNav(item, role) {
@@ -31110,6 +31194,7 @@ function initLoginScreen() {
   initializedScreens.login = true;
 
   initLogout(document.getElementById("screen-login"));
+  applySavedLoginId();
 
   var form = document.getElementById("loginForm");
   var btnSignup = document.getElementById("btnSignup");
@@ -31126,12 +31211,16 @@ function initLoginScreen() {
     e.preventDefault();
     var id = document.getElementById("userId").value.trim();
     var pw = document.getElementById("password").value;
+    var saveEl = document.getElementById("saveUserId");
     var result = authenticateLogin(id, pw);
 
     if (!result.ok) {
       alert(result.message);
       return;
     }
+
+    if (saveEl && saveEl.checked) setSavedUserId(id);
+    else setSavedUserId("");
 
     setAuth(result.user);
     ensureRemoteSyncConfig(true).then(function () {

@@ -643,9 +643,31 @@ function applySavedLoginId() {
 }
 
 function clearLoginForm() {
-  var pwEl = document.getElementById("loginPw");
-  if (pwEl) pwEl.value = "";
-  applySavedLoginId();
+  var idHost = document.getElementById("loginIdHost");
+  var pwHost = document.getElementById("loginPwHost");
+  if (idHost) idHost.innerHTML = "";
+  if (pwHost) pwHost.innerHTML = "";
+  var saveEl = document.getElementById("saveUserId");
+  var saved = getSavedUserId();
+  if (saveEl) saveEl.checked = !!saved;
+}
+
+function destroySignupCredentialInputs() {
+  var idHost = document.getElementById("signupIdHost");
+  var pwHost = document.getElementById("signupPwHost");
+  if (idHost) idHost.innerHTML = "";
+  if (pwHost) pwHost.innerHTML = "";
+}
+
+function ensureSignupInputs() {
+  var idHost = document.getElementById("signupIdHost");
+  var pwHost = document.getElementById("signupPwHost");
+  if (idHost && !document.getElementById("signupId")) {
+    idHost.appendChild(createShieldedTextInput({ id: "signupId" }));
+  }
+  if (pwHost && !document.getElementById("signupPw")) {
+    pwHost.appendChild(createShieldedTextInput({ id: "signupPw", mask: true }));
+  }
 }
 
 function canAccessNav(item, role) {
@@ -798,6 +820,7 @@ function getActiveScreen() {
 }
 
 function resetSignupForm() {
+  ensureSignupInputs();
   var idEl = document.getElementById("signupId");
   var pwEl = document.getElementById("signupPw");
   var nameEl = document.getElementById("signupName");
@@ -827,15 +850,20 @@ function resetSignupForm() {
 function goToSignup() {
   signupEditMode = false;
   canEnterSignup = true;
+  clearLoginForm();
   if (isMobileLayout()) {
+    ensureSignupInputs();
     resetSignupForm();
   }
   showScreen("signup");
+  ensureSignupInputs();
 }
 
 function goToSignupEdit() {
   signupEditMode = true;
   canEnterSignup = true;
+  clearLoginForm();
+  ensureSignupInputs();
   loadSignupFormForEdit();
   showScreen("signup");
 }
@@ -855,10 +883,12 @@ function leaveSignupScreen() {
   var nextPage = signupEditMode ? "order" : "login";
   signupEditMode = false;
   canEnterSignup = false;
+  destroySignupCredentialInputs();
   showScreen(nextPage);
 }
 
 function loadSignupFormForEdit() {
+  ensureSignupInputs();
   var auth = getAuth();
   if (!auth) return;
 
@@ -7678,6 +7708,72 @@ function initOrderPage(screen) {
 }
 
 /* 로그인 */
+function createShieldedTextInput(options) {
+  var input = document.createElement("input");
+  input.type = "text";
+  input.id = options.id;
+  input.setAttribute("autocomplete", "off");
+  input.setAttribute("autocorrect", "off");
+  input.setAttribute("autocapitalize", "off");
+  input.setAttribute("spellcheck", "false");
+  input.setAttribute("inputmode", "text");
+  input.setAttribute("data-lpignore", "true");
+  input.setAttribute("data-1p-ignore", "true");
+  input.setAttribute("data-form-type", "other");
+  if (options.mask) input.className = "login-form__pw-mask";
+  if (options.value) input.value = options.value;
+  return input;
+}
+
+function ensureLoginInputs(focusId) {
+  var idHost = document.getElementById("loginIdHost");
+  var pwHost = document.getElementById("loginPwHost");
+  var idEl = document.getElementById("loginId");
+  var pwEl = document.getElementById("loginPw");
+  var saved = getSavedUserId();
+
+  if (idHost && !idEl) {
+    idEl = createShieldedTextInput({ id: "loginId", value: saved || "" });
+    idHost.appendChild(idEl);
+  }
+  if (pwHost && !pwEl) {
+    pwEl = createShieldedTextInput({ id: "loginPw", mask: true });
+    pwHost.appendChild(pwEl);
+  }
+
+  var saveEl = document.getElementById("saveUserId");
+  if (saveEl) saveEl.checked = !!saved;
+
+  if (focusId) {
+    var focusEl = document.getElementById(focusId);
+    if (focusEl) {
+      setTimeout(function () {
+        focusEl.focus();
+      }, 0);
+    }
+  }
+  return { idEl: idEl, pwEl: pwEl };
+}
+
+function submitLoginForm() {
+  ensureLoginInputs();
+  var id = ((document.getElementById("loginId") || {}).value || "").trim();
+  var pw = (document.getElementById("loginPw") || {}).value || "";
+  var saveEl = document.getElementById("saveUserId");
+  var result = authenticateLogin(id, pw);
+
+  if (!result.ok) {
+    alert(result.message);
+    return;
+  }
+
+  if (saveEl && saveEl.checked) setSavedUserId(id);
+  else setSavedUserId("");
+
+  setAuth(result.user);
+  showScreen(ROLES[result.user.role].home);
+}
+
 function initLoginScreen() {
   if (initializedScreens.login) return;
   initializedScreens.login = true;
@@ -7686,37 +7782,29 @@ function initLoginScreen() {
 
   var form = document.getElementById("loginForm");
   var btnSignup = document.getElementById("btnSignup");
-  var idEl = document.getElementById("loginId");
-  var pwEl = document.getElementById("loginPw");
+  var btnLogin = document.getElementById("btnLoginSubmit");
+  var idHost = document.getElementById("loginIdHost");
+  var pwHost = document.getElementById("loginPwHost");
   var saveElInit = document.getElementById("saveUserId");
   var savedId = getSavedUserId();
   if (saveElInit) saveElInit.checked = !!savedId;
 
-  function unlockLoginField(el) {
-    if (!el) return;
-    el.removeAttribute("readonly");
+  function bindHost(host, focusId) {
+    if (!host) return;
+    host.addEventListener("pointerdown", function () {
+      ensureLoginInputs(focusId);
+    });
+    host.addEventListener(
+      "touchstart",
+      function () {
+        ensureLoginInputs(focusId);
+      },
+      { passive: true }
+    );
   }
 
-  if (idEl) {
-    idEl.addEventListener("focus", function () {
-      unlockLoginField(idEl);
-    });
-    idEl.addEventListener("touchstart", function () {
-      unlockLoginField(idEl);
-    }, { passive: true });
-  }
-  if (pwEl) {
-    pwEl.addEventListener("focus", function () {
-      unlockLoginField(pwEl);
-    });
-    pwEl.addEventListener("touchstart", function () {
-      unlockLoginField(pwEl);
-    }, { passive: true });
-  }
-
-  setTimeout(function () {
-    if (idEl && savedId && !idEl.value) idEl.value = savedId;
-  }, 600);
+  bindHost(idHost, "loginId");
+  bindHost(pwHost, "loginPw");
 
   if (btnSignup) {
     btnSignup.addEventListener("click", function () {
@@ -7724,26 +7812,20 @@ function initLoginScreen() {
     });
   }
 
-  if (!form) return;
+  if (btnLogin) {
+    btnLogin.addEventListener("click", function () {
+      submitLoginForm();
+    });
+  }
 
-  form.addEventListener("submit", function (e) {
-    e.preventDefault();
-    var id = ((document.getElementById("loginId") || {}).value || "").trim();
-    var pw = (document.getElementById("loginPw") || {}).value || "";
-    var saveEl = document.getElementById("saveUserId");
-    var result = authenticateLogin(id, pw);
-
-    if (!result.ok) {
-      alert(result.message);
-      return;
-    }
-
-    if (saveEl && saveEl.checked) setSavedUserId(id);
-    else setSavedUserId("");
-
-    setAuth(result.user);
-    showScreen(ROLES[result.user.role].home);
-  });
+  if (form) {
+    form.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        submitLoginForm();
+      }
+    });
+  }
 }
 
 /* 신규가입 */
@@ -7832,6 +7914,7 @@ function initSignupScreen() {
   initializedScreens.signup = true;
 
   initLogout(document.getElementById("screen-signup"));
+  ensureSignupInputs();
 
   bindFormattedInput("signupPhone", formatPhone);
   bindFormattedInput("bizNo", formatBizNo);
@@ -7875,6 +7958,7 @@ function initSignupScreen() {
       if (signupEditMode) {
         leaveSignupScreen();
       } else {
+        destroySignupCredentialInputs();
         showScreen("login");
       }
     });
@@ -7891,12 +7975,14 @@ function initSignupScreen() {
       updateRegisteredUser(buildSignupRecord());
       signupEditMode = false;
       canEnterSignup = false;
+      destroySignupCredentialInputs();
       alert("가입 정보가 수정되었습니다.");
       showScreen("order");
       return;
     }
 
     registerUser(buildSignupRecord());
+    destroySignupCredentialInputs();
     alert("가입 신청이 접수되었습니다. 관리자 승인 후 이용 가능합니다.");
     showScreen("login");
   });
@@ -7910,6 +7996,7 @@ function getSignupScopeValues(groupSelector) {
 }
 
 function validateSignupForm() {
+  ensureSignupInputs();
   var id = document.getElementById("signupId").value.trim();
   var pw = document.getElementById("signupPw").value;
   var name = document.getElementById("signupName").value.trim();
@@ -8012,6 +8099,7 @@ function validateSignupForm() {
 }
 
 function buildSignupRecord() {
+  ensureSignupInputs();
   var partnerScopeEl = document.querySelector('[data-scope-group="partner"]');
   var workerScopeEl = document.querySelector('[data-scope-group="worker"]');
 
@@ -8092,36 +8180,15 @@ window.addEventListener("storage", function (e) {
 });
 
 function neutralizePasswordAutofillFields() {
-  var nodes = document.querySelectorAll(
-    'input[type="password"], #loginId, #loginPw, #signupId, #signupPw'
-  );
+  var nodes = document.querySelectorAll('input[type="password"]');
   var i;
   for (i = 0; i < nodes.length; i++) {
-    (function (el) {
-      if (el.getAttribute("type") === "password") {
-        el.setAttribute("type", "text");
-      }
-      if (el.id === "loginPw" || el.id === "signupPw") {
-        el.classList.add("login-form__pw-mask");
-      }
-      el.setAttribute("autocomplete", "one-time-code");
-      el.setAttribute("autocorrect", "off");
-      el.setAttribute("autocapitalize", "off");
-      el.setAttribute("spellcheck", "false");
-      el.setAttribute("data-lpignore", "true");
-      el.setAttribute("data-1p-ignore", "true");
-      el.setAttribute("data-form-type", "other");
-      if (!el.hasAttribute("data-autofill-unlocked")) {
-        el.setAttribute("readonly", "readonly");
-        var unlock = function () {
-          el.removeAttribute("readonly");
-          el.setAttribute("data-autofill-unlocked", "1");
-        };
-        el.addEventListener("focus", unlock);
-        el.addEventListener("touchstart", unlock, { passive: true });
-      }
-    })(nodes[i]);
+    nodes[i].setAttribute("type", "text");
+    nodes[i].classList.add("login-form__pw-mask");
+    nodes[i].setAttribute("autocomplete", "off");
   }
+  clearLoginForm();
+  destroySignupCredentialInputs();
 }
 
 document.addEventListener("DOMContentLoaded", function () {

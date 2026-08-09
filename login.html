@@ -4,9 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>로그인 - EFFEX 시공관리</title>
-    <link rel="stylesheet" href="css/variables.css" />
-    <link rel="stylesheet" href="css/base.css" />
-    <link rel="stylesheet" href="css/login.css" />
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <span class="login-screen__page-num" aria-hidden="true">1</span>
@@ -21,50 +19,19 @@
           <span class="login-screen__slogan-line2">성공을 약속하는 기업</span>
         </p>
 
-        <form class="login-form" id="loginForm" autocomplete="off" novalidate>
+        <div class="login-form" id="loginForm">
           <input type="hidden" id="loginRole" value="admin" />
 
           <div class="login-form__field">
-            <label class="login-form__label" for="loginId"><span>ID</span></label>
+            <div class="login-form__label"><span>ID</span></div>
             <span class="login-form__divider" aria-hidden="true"></span>
-            <div class="login-form__input-wrap">
-              <input
-                type="text"
-                id="loginId"
-                name="effex_x1"
-                autocomplete="one-time-code"
-                autocorrect="off"
-                autocapitalize="off"
-                spellcheck="false"
-                inputmode="text"
-                readonly
-                data-lpignore="true"
-                data-1p-ignore="true"
-                data-form-type="other"
-              />
-            </div>
+            <div class="login-form__input-wrap" id="loginIdHost"></div>
           </div>
 
           <div class="login-form__field">
-            <label class="login-form__label" for="loginPw"><span>PW</span></label>
+            <div class="login-form__label"><span>PW</span></div>
             <span class="login-form__divider" aria-hidden="true"></span>
-            <div class="login-form__input-wrap">
-              <input
-                type="text"
-                id="loginPw"
-                name="effex_x2"
-                class="login-form__pw-mask"
-                autocomplete="one-time-code"
-                autocorrect="off"
-                autocapitalize="off"
-                spellcheck="false"
-                inputmode="text"
-                readonly
-                data-lpignore="true"
-                data-1p-ignore="true"
-                data-form-type="other"
-              />
-            </div>
+            <div class="login-form__input-wrap" id="loginPwHost"></div>
           </div>
 
           <label class="login-form__remember" for="saveUserId">
@@ -74,14 +41,12 @@
 
           <div class="login-form__actions">
             <button type="button" class="login-form__btn" id="btnSignup">신규가입</button>
-            <button type="submit" class="login-form__btn">로그인</button>
+            <button type="button" class="login-form__btn" id="btnLoginSubmit">로그인</button>
           </div>
-        </form>
+        </div>
       </div>
     </div>
 
-    <script src="js/auth.js"></script>
-    <script src="js/users.js"></script>
-    <script src="js/login.js"></script>
+    <script src="app.js"></script>
   </body>
 </html>

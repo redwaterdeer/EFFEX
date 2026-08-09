@@ -293,6 +293,27 @@ input.login-form__pw-mask {
   text-security: disc;
 }
 
+#loginIdHost,
+#loginPwHost,
+#signupIdHost,
+#signupPwHost {
+  cursor: text;
+  min-height: 100%;
+  width: 100%;
+}
+
+#loginIdHost input,
+#loginPwHost input,
+#signupIdHost input,
+#signupPwHost input {
+  width: 100%;
+  height: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  box-shadow: none;
+}
+
 .login-form__remember {
   display: flex;
   align-items: center;

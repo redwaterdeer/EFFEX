@@ -634,11 +634,29 @@ function setSavedUserId(id) {
   } catch (e) {}
 }
 
+function getShieldedFieldValue(el) {
+  if (!el) return "";
+  if (el.tagName === "INPUT" || el.tagName === "TEXTAREA") {
+    return el.value || "";
+  }
+  return (el.textContent || "").replace(/\u00a0/g, " ");
+}
+
+function setShieldedFieldValue(el, value) {
+  if (!el) return;
+  var v = value == null ? "" : String(value);
+  if (el.tagName === "INPUT" || el.tagName === "TEXTAREA") {
+    el.value = v;
+    return;
+  }
+  el.textContent = v;
+}
+
 function applySavedLoginId() {
   var idEl = document.getElementById("loginId");
   var saveEl = document.getElementById("saveUserId");
   var saved = getSavedUserId();
-  if (idEl) idEl.value = saved;
+  if (idEl) setShieldedFieldValue(idEl, saved);
   if (saveEl) saveEl.checked = !!saved;
 }
 
@@ -825,8 +843,8 @@ function resetSignupForm() {
   var pwEl = document.getElementById("signupPw");
   var nameEl = document.getElementById("signupName");
   var phoneEl = document.getElementById("signupPhone");
-  if (idEl) idEl.value = "";
-  if (pwEl) pwEl.value = "";
+  if (idEl) setShieldedFieldValue(idEl, "");
+  if (pwEl) setShieldedFieldValue(pwEl, "");
   if (nameEl) nameEl.value = "";
   if (phoneEl) phoneEl.value = "";
 
@@ -907,8 +925,8 @@ function loadSignupFormForEdit() {
     phone: "",
   };
 
-  document.getElementById("signupId").value = data.userId || "";
-  document.getElementById("signupPw").value = data.password || "";
+  setShieldedFieldValue(document.getElementById("signupId"), data.userId || "");
+  setShieldedFieldValue(document.getElementById("signupPw"), data.password || "");
   document.getElementById("signupName").value = data.name || "";
   document.getElementById("signupPhone").value = data.phone || "";
 
@@ -7709,20 +7727,51 @@ function initOrderPage(screen) {
 
 /* 로그인 */
 function createShieldedTextInput(options) {
-  var input = document.createElement("input");
-  input.type = "text";
-  input.id = options.id;
-  input.setAttribute("autocomplete", "off");
-  input.setAttribute("autocorrect", "off");
-  input.setAttribute("autocapitalize", "off");
-  input.setAttribute("spellcheck", "false");
-  input.setAttribute("inputmode", "text");
-  input.setAttribute("data-lpignore", "true");
-  input.setAttribute("data-1p-ignore", "true");
-  input.setAttribute("data-form-type", "other");
-  if (options.mask) input.className = "login-form__pw-mask";
-  if (options.value) input.value = options.value;
-  return input;
+  var el = document.createElement("div");
+  el.id = options.id;
+  el.className =
+    "login-shielded-field" + (options.mask ? " login-form__pw-mask" : "");
+  el.setAttribute("contenteditable", "true");
+  el.setAttribute("role", "textbox");
+  el.setAttribute("aria-multiline", "false");
+  el.setAttribute("spellcheck", "false");
+  el.setAttribute("autocapitalize", "off");
+  el.setAttribute("autocomplete", "off");
+  el.setAttribute("autocorrect", "off");
+  el.setAttribute("inputmode", "text");
+  el.setAttribute("enterkeyhint", options.mask ? "done" : "next");
+  el.setAttribute("data-lpignore", "true");
+  el.setAttribute("data-1p-ignore", "true");
+  el.setAttribute("data-form-type", "other");
+  if (options.value) el.textContent = options.value;
+
+  el.addEventListener("paste", function (e) {
+    e.preventDefault();
+    var text = "";
+    try {
+      text = (e.clipboardData || window.clipboardData).getData("text/plain") || "";
+    } catch (err) {
+      text = "";
+    }
+    text = text.replace(/\r?\n/g, "");
+    if (document.queryCommandSupported && document.queryCommandSupported("insertText")) {
+      document.execCommand("insertText", false, text);
+    } else {
+      setShieldedFieldValue(el, getShieldedFieldValue(el) + text);
+    }
+  });
+
+  el.addEventListener("keydown", function (e) {
+    if (e.key !== "Enter") return;
+    e.preventDefault();
+    if (options.id === "loginId") {
+      ensureLoginInputs("loginPw");
+    } else if (options.id === "loginPw") {
+      submitLoginForm();
+    }
+  });
+
+  return el;
 }
 
 function ensureLoginInputs(focusId) {
@@ -7757,8 +7806,8 @@ function ensureLoginInputs(focusId) {
 
 function submitLoginForm() {
   ensureLoginInputs();
-  var id = ((document.getElementById("loginId") || {}).value || "").trim();
-  var pw = (document.getElementById("loginPw") || {}).value || "";
+  var id = getShieldedFieldValue(document.getElementById("loginId")).trim();
+  var pw = getShieldedFieldValue(document.getElementById("loginPw"));
   var saveEl = document.getElementById("saveUserId");
   var result = authenticateLogin(id, pw);
 
@@ -7935,7 +7984,7 @@ function initSignupScreen() {
   var idInput = document.getElementById("signupId");
   if (idInput) {
     idInput.addEventListener("blur", function () {
-      var id = idInput.value.trim();
+      var id = getShieldedFieldValue(idInput).trim();
       if (!id) return;
       if (isSignupIdTakenForEdit(id)) {
         alert("이미 등록된 ID입니다. 다른 ID를 입력해 주세요.");
@@ -7997,8 +8046,8 @@ function getSignupScopeValues(groupSelector) {
 
 function validateSignupForm() {
   ensureSignupInputs();
-  var id = document.getElementById("signupId").value.trim();
-  var pw = document.getElementById("signupPw").value;
+  var id = getShieldedFieldValue(document.getElementById("signupId")).trim();
+  var pw = getShieldedFieldValue(document.getElementById("signupPw"));
   var name = document.getElementById("signupName").value.trim();
   var phoneRaw = signupDigitsOnly(document.getElementById("signupPhone").value);
 
@@ -8104,8 +8153,8 @@ function buildSignupRecord() {
   var workerScopeEl = document.querySelector('[data-scope-group="worker"]');
 
   var record = {
-    userId: document.getElementById("signupId").value.trim(),
-    password: document.getElementById("signupPw").value,
+    userId: getShieldedFieldValue(document.getElementById("signupId")).trim(),
+    password: getShieldedFieldValue(document.getElementById("signupPw")),
     name: document.getElementById("signupName").value.trim(),
     phone: formatPhone(document.getElementById("signupPhone").value),
     role: signupCurrentRole,

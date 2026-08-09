@@ -4,6 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>EFFEX 시공관리</title>
+    <link
+      rel="icon"
+      type="image/png"
+      href="https://i.ibb.co/wZ4mNscs/3.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      href="https://i.ibb.co/wZ4mNscs/3.png"
+    />
+    <meta name="apple-mobile-web-app-title" content="EFFEX" />
     <style>
 /* EFFEX 통합 스타일 */
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap");
@@ -7391,6 +7401,22 @@ table {
 
   #screen-login .order-mobile-footer--auth {
     display: none !important;
+  }
+
+  /* ID/PW: 커서를 입력칸 세로 중앙에 맞춤 */
+  #screen-login #loginIdHost,
+  #screen-login #loginPwHost {
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  #screen-login #loginIdHost .login-shielded-field,
+  #screen-login #loginPwHost .login-shielded-field {
+    height: auto !important;
+    min-height: 0 !important;
+    line-height: 1.25 !important;
+    display: block !important;
+    width: 100% !important;
   }
 
   /* ── 2번 신규가입 ── */

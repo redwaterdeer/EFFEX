@@ -54,6 +54,22 @@
     display: none !important;
   }
 
+  /* ID/PW: 커서를 입력칸 세로 중앙에 맞춤 */
+  #screen-login #loginIdHost,
+  #screen-login #loginPwHost {
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  #screen-login #loginIdHost .login-shielded-field,
+  #screen-login #loginPwHost .login-shielded-field {
+    height: auto !important;
+    min-height: 0 !important;
+    line-height: 1.25 !important;
+    display: block !important;
+    width: 100% !important;
+  }
+
   /* ── 2번 신규가입 ── */
   #screen-signup.is-active {
     display: flex !important;

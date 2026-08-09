@@ -288,7 +288,7 @@ table {
 }
 
 /* iOS/브라우저 암호 자동채우기 차단용: type=text + 디스크 마스킹 */
-.login-form__input-wrap input.login-form__pw-mask {
+input.login-form__pw-mask {
   -webkit-text-security: disc;
   text-security: disc;
 }

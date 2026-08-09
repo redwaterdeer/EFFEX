@@ -635,7 +635,7 @@ function setSavedUserId(id) {
 }
 
 function applySavedLoginId() {
-  var idEl = document.getElementById("userId");
+  var idEl = document.getElementById("loginId");
   var saveEl = document.getElementById("saveUserId");
   var saved = getSavedUserId();
   if (idEl) idEl.value = saved;
@@ -643,7 +643,7 @@ function applySavedLoginId() {
 }
 
 function clearLoginForm() {
-  var pwEl = document.getElementById("password");
+  var pwEl = document.getElementById("loginPw");
   if (pwEl) pwEl.value = "";
   applySavedLoginId();
 }
@@ -7683,10 +7683,40 @@ function initLoginScreen() {
   initializedScreens.login = true;
 
   initLogout(document.getElementById("screen-login"));
-  applySavedLoginId();
 
   var form = document.getElementById("loginForm");
   var btnSignup = document.getElementById("btnSignup");
+  var idEl = document.getElementById("loginId");
+  var pwEl = document.getElementById("loginPw");
+  var saveElInit = document.getElementById("saveUserId");
+  var savedId = getSavedUserId();
+  if (saveElInit) saveElInit.checked = !!savedId;
+
+  function unlockLoginField(el) {
+    if (!el) return;
+    el.removeAttribute("readonly");
+  }
+
+  if (idEl) {
+    idEl.addEventListener("focus", function () {
+      unlockLoginField(idEl);
+    });
+    idEl.addEventListener("touchstart", function () {
+      unlockLoginField(idEl);
+    }, { passive: true });
+  }
+  if (pwEl) {
+    pwEl.addEventListener("focus", function () {
+      unlockLoginField(pwEl);
+    });
+    pwEl.addEventListener("touchstart", function () {
+      unlockLoginField(pwEl);
+    }, { passive: true });
+  }
+
+  setTimeout(function () {
+    if (idEl && savedId && !idEl.value) idEl.value = savedId;
+  }, 600);
 
   if (btnSignup) {
     btnSignup.addEventListener("click", function () {
@@ -7698,8 +7728,8 @@ function initLoginScreen() {
 
   form.addEventListener("submit", function (e) {
     e.preventDefault();
-    var id = document.getElementById("userId").value.trim();
-    var pw = document.getElementById("password").value;
+    var id = ((document.getElementById("loginId") || {}).value || "").trim();
+    var pw = (document.getElementById("loginPw") || {}).value || "";
     var saveEl = document.getElementById("saveUserId");
     var result = authenticateLogin(id, pw);
 
@@ -8061,7 +8091,41 @@ window.addEventListener("storage", function (e) {
   refreshDataFromOtherTab();
 });
 
+function neutralizePasswordAutofillFields() {
+  var nodes = document.querySelectorAll(
+    'input[type="password"], #loginId, #loginPw, #signupId, #signupPw'
+  );
+  var i;
+  for (i = 0; i < nodes.length; i++) {
+    (function (el) {
+      if (el.getAttribute("type") === "password") {
+        el.setAttribute("type", "text");
+      }
+      if (el.id === "loginPw" || el.id === "signupPw") {
+        el.classList.add("login-form__pw-mask");
+      }
+      el.setAttribute("autocomplete", "one-time-code");
+      el.setAttribute("autocorrect", "off");
+      el.setAttribute("autocapitalize", "off");
+      el.setAttribute("spellcheck", "false");
+      el.setAttribute("data-lpignore", "true");
+      el.setAttribute("data-1p-ignore", "true");
+      el.setAttribute("data-form-type", "other");
+      if (!el.hasAttribute("data-autofill-unlocked")) {
+        el.setAttribute("readonly", "readonly");
+        var unlock = function () {
+          el.removeAttribute("readonly");
+          el.setAttribute("data-autofill-unlocked", "1");
+        };
+        el.addEventListener("focus", unlock);
+        el.addEventListener("touchstart", unlock, { passive: true });
+      }
+    })(nodes[i]);
+  }
+}
+
 document.addEventListener("DOMContentLoaded", function () {
+  neutralizePasswordAutofillFields();
   initModals();
   bindEffexDataListeners();
   bindCrossTabDataSync();

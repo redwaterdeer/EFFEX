@@ -25,17 +25,19 @@
           <input type="hidden" id="loginRole" value="admin" />
 
           <div class="login-form__field">
-            <label class="login-form__label" for="userId"><span>ID</span></label>
+            <label class="login-form__label" for="loginId"><span>ID</span></label>
             <span class="login-form__divider" aria-hidden="true"></span>
             <div class="login-form__input-wrap">
               <input
                 type="text"
-                id="userId"
-                name="effex_login_id"
-                autocomplete="off"
+                id="loginId"
+                name="effex_x1"
+                autocomplete="one-time-code"
                 autocorrect="off"
                 autocapitalize="off"
                 spellcheck="false"
+                inputmode="text"
+                readonly
                 data-lpignore="true"
                 data-1p-ignore="true"
                 data-form-type="other"
@@ -44,18 +46,20 @@
           </div>
 
           <div class="login-form__field">
-            <label class="login-form__label" for="password"><span>PW</span></label>
+            <label class="login-form__label" for="loginPw"><span>PW</span></label>
             <span class="login-form__divider" aria-hidden="true"></span>
             <div class="login-form__input-wrap">
               <input
                 type="text"
-                id="password"
-                name="effex_login_pw"
+                id="loginPw"
+                name="effex_x2"
                 class="login-form__pw-mask"
-                autocomplete="off"
+                autocomplete="one-time-code"
                 autocorrect="off"
                 autocapitalize="off"
                 spellcheck="false"
+                inputmode="text"
+                readonly
                 data-lpignore="true"
                 data-1p-ignore="true"
                 data-form-type="other"
